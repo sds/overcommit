@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+CHECKS = %w[syntax]
+
+def modified_files
+  @modified_files ||= `git diff --cached --name-only`.split
+end
+
+def check_syntax
+  clean = true
+  output = []
+  modified_files.each do |file|
+    next unless file =~ /.*\.rb/
+    syntax = `ruby -c #{file} 2>&1`
+    unless $? == 0
+      output += syntax.to_a
+      clean = false
+    end
+  end
+  return clean, output
+end
+
+exit unless modified_files.any?
+
+puts "Running pre-commit checks"
+clean = true
+CHECKS.each do |check|
+  print "  Checking #{check}..."
+  good, output = send("check_#{check}")
+  if good
+    puts "\033[32mOK\033[0m"
+  else
+    puts "\033[31mFAILED\033[0m"
+    puts output.map{|line| "    #{line}"}
+    clean = false
+  end
+end
+if clean
+  puts "All checks passed"
+else
+  puts "Check failed"
+  exit 1
+end
