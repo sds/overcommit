@@ -12,11 +12,12 @@ if (typeof JSHINT === "undefined") {
 
 var i, j, file, source, result, error,
   options = {
-    boss:    true,
-    curly:   true,
-    eqeqeq:  true,
-    forin:   true,
-    newcap:  true,
+    boss:   true,
+    curly:  true,
+    eqeqeq: true,
+    forin:  true,
+    newcap: true,
+    onevar: true
   };
 
 for (i = 0; i < arguments.length; i++) {
