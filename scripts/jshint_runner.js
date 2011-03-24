@@ -16,8 +16,7 @@ var i, j, file, source, result, error,
     curly:  true,
     eqeqeq: true,
     forin:  true,
-    newcap: true,
-    onevar: true
+    newcap: true
   };
 
 for (i = 0; i < arguments.length; i++) {
