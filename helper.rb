@@ -4,7 +4,7 @@ module Helper
 
 
   def error(str)
-    $stderr.puts "\033[31m#{str}\033[0m"
+    puts "\033[31m#{str}\033[0m"
   end
 
   def success(str)
