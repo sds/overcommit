@@ -14,6 +14,7 @@ task :install do
       next
     end
     copy_hooks(repo)
+    copy_scripts(repo)
   end
   puts
 end

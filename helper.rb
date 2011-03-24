@@ -2,7 +2,10 @@ module Helper
   DEFAULT_REPOS = ['causes']
   DEFAULT_SRC_PATH = '~/src/'
   GITHUB_ROOT = 'git@github.com:causes'
+
   HOOKS = Dir['hooks/*'].map{|path| path.split('/').last}
+  SCRIPTS = 'scripts/'
+
   HOOKS_PATH = '.git/hooks/'
 
 
@@ -29,13 +32,19 @@ module Helper
   end
 
   def copy_hooks(repo)
-    puts "  Installing hooks for #{repo}:"
+    puts "  Installing hooks to #{repo}..."
     HOOKS.each do |hook|
-      print "    #{hook} "
+      print "    #{hook}..."
       FileUtils.cp hook_path(hook), target_hook_path(repo, hook)
       FileUtils.chmod 0775, target_hook_path(repo, hook)
       success "OK"
     end
+  end
+
+  def copy_scripts(repo)
+    print "    helper scripts..."
+    FileUtils.cp_r SCRIPTS, target_script_path(repo)
+    success "OK"
   end
 
   def git_repo?(dir)
@@ -60,5 +69,9 @@ module Helper
 
   def target_hook_path(repo, hook)
     File.join(repo_path(repo), HOOKS_PATH, hook)
+  end
+
+  def target_script_path(repo)
+    File.join(repo_path(repo), HOOKS_PATH)
   end
 end

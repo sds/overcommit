@@ -1,16 +1,43 @@
 #!/usr/bin/env ruby
 
-CHECKS = %w[syntax]
+CHECKS = %w[js_syntax ruby_syntax]
+SCRIPTS_PATH = '.git/hooks/scripts/'
 
-def modified_files
-  @modified_files ||= `git diff --cached --name-only`.split
+def error(str)
+  puts "\033[31m#{str}\033[0m"
 end
 
-def check_syntax
+def success(str)
+  puts "\033[32m#{str}\033[0m"
+end
+
+def warning(str)
+  puts "\033[33m#{str}\033[0m"
+end
+
+def modified_files(type=nil)
+  @modified_files ||= `git diff --cached --name-only`.split
+  type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
+end
+
+JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
+JS_HINT_RUNNER_PATH = File.join(SCRIPTS_PATH, 'jshint_runner.js')
+def check_js_syntax
+  unless system('which rhino > /dev/null 2> /dev/null')
+    return nil, "Rhino is not installed"
+  end
+
+  files = modified_files('js')
+  return true, nil unless files.any?
+
+  output = `rhino -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{files.join(' ')}`
+  return output !~ /^ERROR/, output
+end
+
+def check_ruby_syntax
   clean = true
   output = []
-  modified_files.each do |file|
-    next unless file =~ /.*\.rb/
+  modified_files('rb').each do |file|
     syntax = `ruby -c #{file} 2>&1`
     unless $? == 0
       output += syntax.to_a
@@ -27,17 +54,21 @@ clean = true
 CHECKS.each do |check|
   print "  Checking #{check}..."
   good, output = send("check_#{check}")
-  if good
-    puts "\033[32mOK\033[0m"
+  if good.nil?
+    warning output
+  elsif good
+    success "OK"
   else
-    puts "\033[31mFAILED\033[0m"
+    error "FAILED"
     puts output.map{|line| "    #{line}"}
     clean = false
   end
 end
+
+puts
 if clean
-  puts "All checks passed"
+  success "+++ All pre-commit checks passed"
 else
-  puts "Check failed"
+  error "!!! One or more pre-commit checks failed"
   exit 1
 end
