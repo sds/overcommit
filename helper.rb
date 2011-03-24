@@ -1,4 +1,7 @@
 module Helper
+  DEFAULT_REPOS = ['causes']
+  DEFAULT_SRC_PATH = '~/src/'
+  GITHUB_ROOT = 'git@github.com:causes'
   HOOKS = Dir['hooks/*'].map{|path| path.split('/').last}
   HOOKS_PATH = '.git/hooks/'
 
@@ -19,7 +22,7 @@ module Helper
       `cd #{dir} &&
        (git remote -v 2> /dev/null) |
          grep origin |
-         grep git@github.com:causes`
+         grep #{GITHUB_ROOT}`
       causes_repos << dir if $? == 0
     end
     causes_repos.map{|repo| repo.split('/').last}
@@ -44,7 +47,7 @@ module Helper
   end
 
   def repos
-    ENV['REPOS'] ? ENV['REPOS'].split(',') : ['causes']
+    ENV['REPOS'] ? ENV['REPOS'].split(',') : DEFAULT_REPOS
   end
 
   def repo_path(repo)
@@ -52,7 +55,7 @@ module Helper
   end
 
   def source_dir
-    File.expand_path(ENV['SOURCE_DIR'] || '~/src/') + File::SEPARATOR
+    File.expand_path(ENV['SOURCE_DIR'] || DEFAULT_SRC_PATH) + File::SEPARATOR
   end
 
   def target_hook_path(repo, hook)
