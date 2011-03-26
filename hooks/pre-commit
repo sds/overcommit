@@ -73,6 +73,7 @@ def check_restricted_paths
       return :stop, "changes staged under #{path}"
     end
   end
+  return :good
 end
 
 puts "Running pre-commit checks"
@@ -95,6 +96,9 @@ CHECKS.each do |check|
   when :stop
     warning output if output
     stop = true
+  else
+    error "???"
+    clean = false
   end
 end
 
