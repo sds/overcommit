@@ -28,7 +28,9 @@ def print_report(*report)
   puts report.flatten.map{|line| "    #{line}"}.join("\n")
 end
 
-def print_incremental_result(status, output)
+WIDTH = 60 - CHECKS.map{|s| s.length}.max
+def print_incremental_result(title, status, output)
+  print '.'*(WIDTH - title.length)
   case status
   when :good
     success("OK")
@@ -127,9 +129,10 @@ end
 puts "Running pre-commit checks"
 results = []
 CHECKS.each do |check|
-  print "  Checking #{check}..."
+  title = "  Checking #{check}..."
+  print title
   status, output = send("check_#{check}")
   results << [status, output]
-  print_incremental_result(status, output)
+  print_incremental_result(title, status, output)
 end
 print_result(results)
