@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-CHECKS = %w[js_syntax ruby_syntax]
+CHECKS = %w[js_syntax ruby_syntax restricted_paths]
 SCRIPTS_PATH = '.git/hooks/scripts/'
 
 def error(str)
@@ -24,14 +24,14 @@ JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
 JS_HINT_RUNNER_PATH = File.join(SCRIPTS_PATH, 'jshint_runner.js')
 def check_js_syntax
   unless system('which rhino > /dev/null 2> /dev/null')
-    return nil, "Rhino is not installed"
+    return :warn, "Rhino is not installed"
   end
 
   files = modified_files('js')
-  return true, nil unless files.any?
+  return :good, nil unless files.any?
 
   output = `rhino -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{files.join(' ')}`
-  return output !~ /^ERROR/, output
+  return (output !~ /^ERROR/ ? :good : :bad), output
 end
 
 def check_ruby_syntax
@@ -44,31 +44,53 @@ def check_ruby_syntax
       clean = false
     end
   end
-  return clean, output
+  return (clean ? :good : :bad), output
 end
 
 exit unless modified_files.any?
 
+RESTRICTED_PATHS = %w[
+  vendor
+]
+def check_restricted_paths
+  RESTRICTED_PATHS.each do |path|
+    if !system("git diff --cached --quiet -- #{path}")
+      return :stop, "changes staged under #{path}"
+    end
+  end
+end
+
 puts "Running pre-commit checks"
 clean = true
+stop = false
 CHECKS.each do |check|
   print "  Checking #{check}..."
-  good, output = send("check_#{check}")
-  if good.nil?
-    warning output
-  elsif good
+  status, output = send("check_#{check}")
+  case status
+  when :good
     success "OK"
-  else
+  when :bad
     error "FAILED"
-    puts output.map{|line| "    #{line}"}
+    if output
+      puts output.map{|line| "    #{line}"}
+    end
     clean = false
+  when :warn
+    warning output if output
+  when :stop
+    warning output if output
+    stop = true
   end
 end
 
 puts
-if clean
+if clean && !stop
   success "+++ All pre-commit checks passed"
-else
+elsif !clean
   error "!!! One or more pre-commit checks failed"
+  exit 1
+else
+  warning "*** One or more pre-commit hooks stopped the commit"
+  warning "*** If you really want to commit this state, use --no-verify"
   exit 1
 end
