@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
+require 'yaml'
 
-CHECKS = %w[js_syntax ruby_syntax restricted_paths]
+CHECKS = %w[braided_paths js_syntax ruby_syntax restricted_paths]
 SCRIPTS_PATH = '.git/hooks/scripts/'
 
 def error(str)
@@ -18,6 +19,20 @@ end
 def modified_files(type=nil)
   @modified_files ||= `git diff --cached --name-only`.split
   type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
+end
+
+def check_braided_paths
+  return :good unless File.exists?('.braids')
+  braids = YAML.load_file('.braids')
+  modified_braids = []
+  braids.keys.each do |path|
+    if !system("git diff --cached --quiet -- #{path}")
+      modified_braids << path
+    end
+  end
+  return :good if modified_braids.empty?
+  return :bad, ["Braided plugins can only be updated with Braid",
+                *modified_braids]
 end
 
 JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
