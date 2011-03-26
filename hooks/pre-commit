@@ -16,6 +16,54 @@ def warning(str)
   puts "\033[33m#{str}\033[0m"
 end
 
+
+def final_result(results)
+  states = results.transpose.first.uniq
+  return :bad  if states.include?(:bad)
+  return :stop if states.include?(:stop)
+  return :good
+end
+
+def print_report(*report)
+  puts report.flatten.map{|line| "    #{line}"}.join("\n")
+end
+
+def print_incremental_result(status, output)
+  case status
+  when :good
+    success("OK")
+  when :bad
+    error("FAILED")
+    print_report(output)
+  when :warn
+    warning output
+  when :stop
+    warning "UH OH"
+    print_report(output)
+  else
+    error "???"
+    print_report("Check didn't return a status")
+    exit(1)
+  end
+end
+
+def print_result(results)
+  puts
+  case final_result(results)
+  when :good
+    success "+++ All pre-commit checks passed"
+    exit 0
+  when :bad
+    error "!!! One or more pre-commit checks failed"
+    exit 1
+  when :stop
+    warning "*** One or more pre-commit checks needs attention"
+    warning "*** If you really want to commit, use --no-verify"
+    exit 1
+  end
+end
+
+
 def modified_files(type=nil)
   @modified_files ||= `git diff --cached --name-only`.split
   type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
@@ -77,39 +125,11 @@ def check_restricted_paths
 end
 
 puts "Running pre-commit checks"
-clean = true
-stop = false
+results = []
 CHECKS.each do |check|
   print "  Checking #{check}..."
   status, output = send("check_#{check}")
-  case status
-  when :good
-    success "OK"
-  when :bad
-    error "FAILED"
-    if output
-      puts output.map{|line| "    #{line}"}
-    end
-    clean = false
-  when :warn
-    warning output if output
-  when :stop
-    warning output if output
-    stop = true
-  else
-    error "???"
-    clean = false
-  end
+  results << [status, output]
+  print_incremental_result(status, output)
 end
-
-puts
-if clean && !stop
-  success "+++ All pre-commit checks passed"
-elsif !clean
-  error "!!! One or more pre-commit checks failed"
-  exit 1
-else
-  warning "*** One or more pre-commit hooks stopped the commit"
-  warning "*** If you really want to commit this state, use --no-verify"
-  exit 1
-end
+print_result(results)
