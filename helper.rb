@@ -22,6 +22,7 @@ module Helper
     dirs = Dir["#{source_dir}*"]
     causes_repos = []
     dirs.each do |dir|
+      next unless File.directory? dir
       `cd #{dir} &&
        (git remote -v 2> /dev/null) |
          grep origin |
