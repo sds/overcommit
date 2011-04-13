@@ -6,6 +6,7 @@ CHECKS = %w[
   js_syntax
   restricted_paths
   ruby_syntax
+  whitespace
 ]
 SCRIPTS_PATH = '.git/hooks/scripts/'
 
@@ -127,6 +128,12 @@ def check_ruby_syntax
     end
   end
   return (clean ? :good : :bad), output
+end
+
+# catches trailing whitespace, conflict markers etc
+def check_whitespace
+  output = `git diff --check --cached`
+  return ($?.exitstatus.zero? ? :good : :stop), output
 end
 
 exit unless modified_files.any?
