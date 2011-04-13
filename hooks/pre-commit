@@ -112,8 +112,6 @@ def check_ruby_syntax
   return (clean ? :good : :bad), output
 end
 
-exit unless modified_files.any?
-
 RESTRICTED_PATHS = %w[
   vendor
 ]
@@ -125,6 +123,8 @@ def check_restricted_paths
   end
   return :good
 end
+
+exit unless modified_files.any?
 
 puts "Running pre-commit checks"
 results = []
