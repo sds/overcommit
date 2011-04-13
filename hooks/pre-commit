@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
 require 'yaml'
 
-CHECKS = %w[braided_paths js_syntax ruby_syntax restricted_paths]
+CHECKS = %w[
+  braided_paths
+  js_syntax
+  restricted_paths
+  ruby_syntax
+]
 SCRIPTS_PATH = '.git/hooks/scripts/'
 
 def error(str)
@@ -99,6 +104,18 @@ def check_js_syntax
   return (output !~ /^ERROR/ ? :good : :bad), output
 end
 
+RESTRICTED_PATHS = %w[
+  vendor
+]
+def check_restricted_paths
+  RESTRICTED_PATHS.each do |path|
+    if !system("git diff --cached --quiet -- #{path}")
+      return :stop, "changes staged under #{path}"
+    end
+  end
+  return :good
+end
+
 def check_ruby_syntax
   clean = true
   output = []
@@ -110,18 +127,6 @@ def check_ruby_syntax
     end
   end
   return (clean ? :good : :bad), output
-end
-
-RESTRICTED_PATHS = %w[
-  vendor
-]
-def check_restricted_paths
-  RESTRICTED_PATHS.each do |path|
-    if !system("git diff --cached --quiet -- #{path}")
-      return :stop, "changes staged under #{path}"
-    end
-  end
-  return :good
 end
 
 exit unless modified_files.any?
