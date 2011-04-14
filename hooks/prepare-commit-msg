@@ -61,7 +61,11 @@ case "$SOURCE" in
     fi
     append_submodule_changes
     ;;
-  merge|message)
+  merge)
+    # no recording done for merge commits (we assume that the parent commits
+    # in the merge will have had their submodule changes recorded in them)
+    ;;
+  message)
     append_submodule_changes
     ;;
   squash|template)
