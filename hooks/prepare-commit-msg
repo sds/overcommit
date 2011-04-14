@@ -22,10 +22,16 @@ FILE="$1"
 SOURCE=$2
 SHA1=$3
 
-# do nothing if there are no submodule changes staged
-git diff-index --cached HEAD | grep -q -e '^:160000' || exit 0
+if [ -n "$SHA1" ]; then
+  OTHER="$SHA1~1"
+else
+  OTHER=HEAD
+fi
 
-SUBMODULE_CHANGES=$(git submodule summary --cached)
+# do nothing if there are no submodule changes staged
+git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
+
+SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
 TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
 
 prepend_submodule_changes() {
@@ -40,8 +46,22 @@ append_submodule_changes() {
 $SUBMODULE_CHANGES" >> "$FILE"
 }
 
+strip_submodule_changes() {
+  # looking to remove listing that looks like:
+  #
+  #     * path abbreviated-SHA1...abbreivated-SHA1 (count):
+  #       > oneline commit message
+  true
+}
+
 case "$SOURCE" in
-  commit|merge|message)
+  commit)
+    if [ -n "$SHA1" ]; then
+      strip_submodule_changes
+    fi
+    append_submodule_changes
+    ;;
+  merge|message)
     append_submodule_changes
     ;;
   squash|template)
