@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# prepare-commit-msg
+#
+# Called with 2 or 3 parameters: FILE SOURCE [SHA1]
+#
+# FILE    name of file containing the commit log message
+# SOURCE  source of the message, which can be:
+#         - message (if -m or -F option was given)
+#         - template (via -t option or commit.template configuration)
+#         - merge (if commit is a merge or .git/MERGE_MSG file exists)
+#         - squash (if a .git/SQUASH_MSG file exists)
+#         - commit
+# SHA1    only present if SOURCE is "commit" and -c, -C or --amend option was given
+
+# if submodule changes staged
+# (may need to list all submodules)
+# get revs via:
+
+
+FILE="$1"
+SOURCE=$2
+SHA1=$3
+
+# do nothing if there are no submodule changes staged
+git diff-index --cached HEAD | grep -q -e '^:160000' || exit 0
+
+SUBMODULE_CHANGES=$(git submodule summary --cached)
+TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
+
+prepend_submodule_changes() {
+  # note trailing newline after submodule changes
+  echo "$SUBMODULE_CHANGES
+" | cat - "$FILE" > $TMP_FILE && cp $TMP_FILE "$FILE"
+}
+
+append_submodule_changes() {
+  # note leading newline before submodule changes
+  echo "
+$SUBMODULE_CHANGES" >> "$FILE"
+}
+
+case "$SOURCE" in
+  commit|merge|message)
+    append_submodule_changes
+    ;;
+  squash|template)
+    prepend_submodule_changes
+    ;;
+  *)
+    ;;
+esac
