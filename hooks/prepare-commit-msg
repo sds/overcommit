@@ -53,11 +53,39 @@ $SUBMODULE_CHANGES" >> "$FILE"
 }
 
 strip_submodule_changes() {
-  # looking to remove listing that looks like:
+  # looking to remove listing(s) that look like:
   #
   #     * path abbreviated-SHA1...abbreivated-SHA1 (count):
   #       > oneline commit message
-  true
+  cat "$FILE" | ruby -e '
+    class ParseError < RuntimeError; end
+
+    begin
+      while STDIN.readline
+        if $_ =~ /^\* .+ [a-f0-9]+\.\.\.[a-f0-9]+ \(\d+\):$/
+
+          # expect a minimum of one commit to follow
+          raise ParseError unless STDIN.readline =~ /^  [<>] .+$/
+
+          while STDIN.readline
+            if $_ =~ /^  [<>] .+$/  # a commit
+              next
+            elsif $_ == "\n"        # an empty (separator) line
+              break
+            else                    # unexpected input
+              raise ParseError
+            end
+          end
+        else
+          puts $_
+        end
+      end
+    rescue EOFError
+      # normal exit
+    rescue ParseError
+      exit 1 # effectively aborts overwriting of file
+    end
+  ' > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
 
 case "$SOURCE" in
