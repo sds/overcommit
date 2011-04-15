@@ -93,7 +93,7 @@ case "$SOURCE" in
     if [ -n "$SHA1" ]; then
       strip_submodule_changes
     fi
-    append_submodule_changes
+    prepend_submodule_changes
     ;;
   merge)
     # no recording done for merge commits (we assume that the parent commits
