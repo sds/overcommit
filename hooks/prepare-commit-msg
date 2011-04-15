@@ -24,6 +24,12 @@ SHA1=$3
 
 if [ -n "$SHA1" ]; then
   OTHER="$SHA1~1"
+
+  # beware of --amend/-c/-C commits which are really merges
+  SHA1_AND_PARENTS=$(git rev-list -n 1 --parents $SHA1 | wc -w | tr -d ' ')
+  if [ "$SHA1_AND_PARENTS" != "2" ]; then
+    SOURCE=merge
+  fi
 else
   OTHER=HEAD
 fi
