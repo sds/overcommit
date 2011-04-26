@@ -10,8 +10,8 @@
 #         - template (via -t option or commit.template configuration)
 #         - merge (if commit is a merge or .git/MERGE_MSG file exists)
 #         - squash (if a .git/SQUASH_MSG file exists)
-#         - commit
-# SHA1    only present if SOURCE is "commit" and -c, -C or --amend option was given
+#         - commit (if a -c, -C or --amend option was given)
+# SHA1    only present if SOURCE is "commit"
 
 # if submodule changes staged
 # (may need to list all submodules)
@@ -106,5 +106,6 @@ case "$SOURCE" in
     prepend_submodule_changes
     ;;
   *)
+    prepend_submodule_changes
     ;;
 esac
