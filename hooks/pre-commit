@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'tempfile'
 require 'yaml'
 
 CHECKS = %w[
@@ -9,6 +10,30 @@ CHECKS = %w[
   whitespace
 ]
 SCRIPTS_PATH = '.git/hooks/scripts/'
+
+# We run syntax checks against the version of the file that is staged in
+# the index, not the one in the work tree. This class is a simple wrapper
+# to make working with staged files easier.
+class StagedFile
+  def initialize path
+    @original_path  = path
+    @tempfile       = Tempfile.new(path.gsub('/', '_'))
+    @tempfile.write(`git show :#{@original_path}`)
+    @tempfile.flush
+  end
+
+  # Given error output from a syntax checker, replace references to the
+  # temporary file path with the orignal path.
+  def filter_string string
+    string.gsub(path, @original_path)
+  end
+
+  # The path of the temporary file on disk, suitable for feeding in to a
+  # syntax checker.
+  def path
+    @tempfile.path
+  end
+end
 
 def error(str)
   puts "\033[31m#{str}\033[0m"
@@ -21,7 +46,6 @@ end
 def warning(str)
   puts "\033[33m#{str}\033[0m"
 end
-
 
 def final_result(results)
   states = results.transpose.first.uniq
@@ -71,7 +95,6 @@ def print_result(results)
   end
 end
 
-
 def modified_files(type=nil)
   @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
   type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
@@ -100,8 +123,11 @@ def check_js_syntax
 
   files = modified_files('js')
   return :good, nil unless files.any?
+  staged = files.map { |file| StagedFile.new(file) }
+  paths = staged.map { |s| s.path }.join(' ')
 
-  output = `rhino -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{files.join(' ')}`
+  output = `rhino -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths}`
+  staged.each { |s| output = s.filter_string(output) }
   return (output !~ /^ERROR/ ? :good : :bad), output
 end
 
@@ -121,9 +147,10 @@ def check_ruby_syntax
   clean = true
   output = []
   modified_files('rb').each do |file|
-    syntax = `ruby -c #{file} 2>&1`
+    staged = StagedFile.new(file)
+    syntax = `ruby -c #{staged.path} 2>&1`
     unless $? == 0
-      output += syntax.to_a
+      output += staged.filter_string(syntax).to_a
       clean = false
     end
   end
