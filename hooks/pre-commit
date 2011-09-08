@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
+require 'erb'
 require 'tempfile'
 require 'yaml'
 
 CHECKS = %w[
   braided_paths
+  erb_syntax
   js_syntax
   restricted_paths
   ruby_syntax
@@ -15,15 +17,16 @@ SCRIPTS_PATH = '.git/hooks/scripts/'
 # the index, not the one in the work tree. This class is a simple wrapper
 # to make working with staged files easier.
 class StagedFile
+  attr_reader :contents
+
   def initialize path
     @original_path  = path
     @tempfile       = Tempfile.new(path.gsub('/', '_'))
-    @tempfile.write(`git show :#{@original_path}`)
-    @tempfile.flush
+    self.contents   = `git show :#{@original_path}`
   end
 
   # Given error output from a syntax checker, replace references to the
-  # temporary file path with the orignal path.
+  # temporary file path with the original path.
   def filter_string string
     string.gsub(path, @original_path)
   end
@@ -32,6 +35,17 @@ class StagedFile
   # syntax checker.
   def path
     @tempfile.path
+  end
+
+  # Set or overwrite the temporary file's contents.
+  #
+  # This is used by the ERB syntax checker, for example, to compile
+  # the template before checking.
+  def contents=(contents)
+    @contents = contents
+    @tempfile.seek 0
+    @tempfile.write @contents
+    @tempfile.flush
   end
 end
 
@@ -112,6 +126,21 @@ def check_braided_paths
   return :good if modified_braids.empty?
   return :bad, ["Braided plugins can only be updated with Braid",
                 *modified_braids]
+end
+
+def check_erb_syntax
+  clean = true
+  output = []
+  modified_files('erb').each do |file|
+    staged = StagedFile.new(file)
+    staged.contents = ERB.new(staged.contents).src
+    syntax = `ruby -c #{staged.path} 2>&1`
+    unless $? == 0
+      output += staged.filter_string(syntax).to_a
+      clean = false
+    end
+  end
+  return (clean ? :good : :bad), output
 end
 
 JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
