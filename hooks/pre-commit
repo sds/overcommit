@@ -133,7 +133,7 @@ def check_erb_syntax
   output = []
   modified_files('erb').each do |file|
     staged = StagedFile.new(file)
-    staged.contents = ERB.new(staged.contents).src
+    staged.contents = ERB.new(staged.contents, nil, '-').src
     syntax = `ruby -c #{staged.path} 2>&1`
     unless $? == 0
       output += staged.filter_string(syntax).to_a
