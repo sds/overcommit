@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+submodule_status = `git submodule status`
+updated_submodules = []
+
+submodule_status.each do |line|
+  # Submodules that are not updated start with a + in the submodule status
+  # output.
+  
+  if line.match(/^\+/)
+    # The second word is the submodule directory.
+    updated_submodules << line.split(" ")[1]
+  end
+end
+
+if updated_submodules.length > 0
+  puts "The following git submodules are out of date:"
+  updated_submodules.each do |submodule|
+    puts "\t#{submodule}"
+  end
+  puts
+  puts "Suggest: 'git submodule update'."
+end
+
+# Run migrations if necessary. Untested code.
+# `rake db:migrate && rake db:test:prepare` if `git diff HEAD^`.index("db/migrations")

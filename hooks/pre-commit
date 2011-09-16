@@ -10,6 +10,7 @@ CHECKS = %w[
   restricted_paths
   ruby_syntax
   whitespace
+  yaml_syntax
 ]
 SCRIPTS_PATH = '.git/hooks/scripts/'
 
@@ -190,6 +191,21 @@ end
 def check_whitespace
   output = `git diff --check --cached`
   return ($?.exitstatus.zero? ? :good : :stop), output
+end
+
+def check_yaml_syntax
+  clean = true
+  output = []
+  modified_files('yml').each do |file|
+    staged = StagedFile.new(file)
+    begin
+      YAML.load_file(staged.path)
+    rescue ArgumentError => e
+      output << "#{e.message} parsing #{file}"
+      clean = false
+    end
+  end
+  return (clean ? :good : :bad), output
 end
 
 exit unless modified_files.any?
