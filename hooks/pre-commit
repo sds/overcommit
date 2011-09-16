@@ -155,7 +155,7 @@ def check_js_syntax
   staged = files.map { |file| StagedFile.new(file) }
   paths = staged.map { |s| s.path }.join(' ')
 
-  output = `rhino -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths}`
+  output = `rhino -strict -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths}`
   staged.each { |s| output = s.filter_string(output) }
   return (output !~ /^ERROR/ ? :good : :bad), output
 end
