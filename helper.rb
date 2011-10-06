@@ -2,6 +2,7 @@ module Helper
   DEFAULT_REPOS = ['causes']
   DEFAULT_SRC_PATH = '~/src/'
   GITHUB_ROOT = 'git@github.com:causes'
+  GERRIT_REMOTE = 'gerrit.causes.com'
 
   HOOKS = Dir['hooks/*'].map{|path| path.split('/').last}
   SCRIPTS = 'scripts/'
@@ -26,7 +27,7 @@ module Helper
       `cd #{dir} &&
        (git remote -v 2> /dev/null) |
          grep origin |
-         grep #{GITHUB_ROOT}`
+         egrep '#{GITHUB_ROOT}|#{GERRIT_REMOTE}'`
       causes_repos << dir if $? == 0
     end
     causes_repos.map{|repo| repo.split('/').last}
