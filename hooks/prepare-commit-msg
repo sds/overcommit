@@ -13,11 +13,6 @@
 #         - commit (if a -c, -C or --amend option was given)
 # SHA1    only present if SOURCE is "commit"
 
-# if submodule changes staged
-# (may need to list all submodules)
-# get revs via:
-
-
 FILE="$1"
 SOURCE=$2
 SHA1=$3
