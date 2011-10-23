@@ -35,20 +35,34 @@ git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
 SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
 TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
 
-prepend_submodule_changes() {
-  strip_submodule_changes
+insert_submodule_changes() {
+  # we want to insert before any release notes or Change-Ids (etc)
+  cat "$FILE" | ruby -e '
+    $done = false
 
-  # note trailing newline after submodule changes
-  echo "$SUBMODULE_CHANGES
-" | cat - "$FILE" > $TMP_FILE && cp $TMP_FILE "$FILE"
-}
+    def insert
+      puts "#{ARGV.first}\n\n" unless $done
+      $done = true
+    end
 
-append_submodule_changes() {
-  strip_submodule_changes
-
-  # note leading newline before submodule changes
-  echo "
-$SUBMODULE_CHANGES" >> "$FILE"
+    begin
+      while STDIN.readline
+        case $_
+        when /^#/,
+             /^Change-Id: I/,
+             /^Reviewed-(on|by): /,
+             /^(Acked|Signed-off|Tested)-by: /,
+             /^[\s=*-]*release notes?\s*[:.]?[\s=*-]*.*$/i
+          insert
+        end
+        puts $_
+      end
+    rescue EOFError
+      # normal exit
+    ensure
+      insert # just in case no lines matched
+    end
+  ' "$SUBMODULE_CHANGES" > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
 
 strip_submodule_changes() {
@@ -88,20 +102,12 @@ strip_submodule_changes() {
 }
 
 case "$SOURCE" in
-  commit)
-    prepend_submodule_changes
-    ;;
   merge)
     # no recording done for merge commits (we assume that the parent commits
     # in the merge will have had their submodule changes recorded in them)
     ;;
-  message)
-    append_submodule_changes
-    ;;
-  squash|template)
-    prepend_submodule_changes
-    ;;
   *)
-    prepend_submodule_changes
+    strip_submodule_changes
+    insert_submodule_changes
     ;;
 esac
