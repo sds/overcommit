@@ -69,7 +69,7 @@ strip_submodule_changes() {
           while STDIN.readline
             if $_ =~ /^  [<>] .+$/  # a commit
               next
-            elsif $_ == "\n"        # an empty (separator) line
+            elsif $_ =~ /\A\s*\z/   # an empty (separator) line
               break
             else                    # unexpected input
               raise ParseError
