@@ -36,12 +36,16 @@ SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
 TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
 
 prepend_submodule_changes() {
+  strip_submodule_changes
+
   # note trailing newline after submodule changes
   echo "$SUBMODULE_CHANGES
 " | cat - "$FILE" > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
 
 append_submodule_changes() {
+  strip_submodule_changes
+
   # note leading newline before submodule changes
   echo "
 $SUBMODULE_CHANGES" >> "$FILE"
@@ -85,9 +89,6 @@ strip_submodule_changes() {
 
 case "$SOURCE" in
   commit)
-    if [ -n "$SHA1" ]; then
-      strip_submodule_changes
-    fi
     prepend_submodule_changes
     ;;
   merge)
