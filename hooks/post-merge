@@ -21,6 +21,3 @@ if updated_submodules.length > 0
   puts
   puts "Suggest: 'git submodule update'."
 end
-
-# Run migrations if necessary. Untested code.
-# `rake db:migrate && rake db:test:prepare` if `git diff HEAD^`.index("db/migrations")
