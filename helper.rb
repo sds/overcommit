@@ -2,7 +2,7 @@ module Helper
   DEFAULT_REPOS = ['causes']
   DEFAULT_SRC_PATH = '~/src/'
   GITHUB_ROOT = 'git@github.com:causes'
-  GERRIT_REMOTE = 'gerrit.causes.com'
+  GERRIT_REMOTE = 'gerrit(.causes.com)?:29418'
 
   HOOKS = Dir['hooks/*'].map{|path| path.split('/').last}
   SCRIPTS = 'scripts/'
