@@ -29,11 +29,47 @@ else
   OTHER=HEAD
 fi
 
-# do nothing if there are no submodule changes staged
+TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
+
+note_author_when_pairing() {
+  CURRENT_NAME=$(git config user.name) || return
+  CURRENT_EMAIL=$(git config user.email) || return
+  SOLO_NAME=$(git config solo.name) || return
+  SOLO_EMAIL=$(git config solo.email) || return
+  test "$CURRENT_NAME" != "$SOLO_NAME" \
+    -o "$CURRENT_EMAIL" != "$SOLO_EMAIL" || return
+  AUTHOR="$CURRENT_NAME <$CURRENT_EMAIL>"
+
+  cat "$FILE" | ruby -e '
+    $done = false
+
+    def insert
+      puts "# Author: #{ARGV.first}\n#\n" unless $done
+      $done = true
+    end
+
+    begin
+      while STDIN.readline
+        case $_
+        when /^#/
+          insert
+        end
+        puts $_
+      end
+    rescue EOFError
+      # normal exit
+    ensure
+      insert # just in case no lines matched
+    end
+  ' "$AUTHOR" > $TMP_FILE && cp $TMP_FILE "$FILE"
+}
+
+note_author_when_pairing
+
+# do nothing else if there are no submodule changes staged
 git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
 
 SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
-TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
 
 insert_submodule_changes() {
   # we want to insert before any release notes or Change-Ids (etc)
