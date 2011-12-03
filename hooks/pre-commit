@@ -229,7 +229,7 @@ def check_test_history
   end
 
   begin
-    good_tests = File.open(TEST_RESULTS_FILE, 'r').readlines.map(&:strip)
+    good_tests = File.open(TEST_RESULTS_FILE, 'r').readlines
   rescue Errno::ENOENT
     good_tests = []
   end
