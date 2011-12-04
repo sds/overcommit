@@ -7,6 +7,7 @@ CHECKS = %w[
   braided_paths
   erb_syntax
   js_syntax
+  js_console_log
   restricted_paths
   ruby_syntax
   whitespace
@@ -171,6 +172,18 @@ def check_js_syntax
   output = `rhino -strict -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths}`
   staged.each { |s| output = s.filter_string(output) }
   return (output !~ /^ERROR/ ? :good : :bad), output
+end
+
+# https://www.pivotaltracker.com/story/show/18119495
+def check_js_console_log
+  files = modified_files('js')
+  return :good, nil unless files.any?
+
+  staged = files.map { |file| StagedFile.new(file) }
+  paths = staged.map { |s| s.path }.join(' ')
+  output = `grep -n -e 'console\\.log' #{paths}`
+  staged.each { |s| output = s.filter_string(output) }
+  return (!$?.exitstatus.zero? ? :good : :bad), output
 end
 
 RESTRICTED_PATHS = %w[
