@@ -4,7 +4,6 @@ require 'tempfile'
 require 'yaml'
 
 CHECKS = %w[
-  braided_paths
   erb_syntax
   js_syntax
   js_console_log
@@ -126,20 +125,6 @@ end
 def modified_files(type=nil)
   @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
   type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
-end
-
-def check_braided_paths
-  return :good unless File.exists?('.braids')
-  braids = YAML.load_file('.braids')
-  modified_braids = []
-  braids.keys.each do |path|
-    if !system("git diff --cached --quiet -- #{path}")
-      modified_braids << path
-    end
-  end
-  return :good if modified_braids.empty?
-  return :bad, ["Braided plugins can only be updated with Braid",
-                *modified_braids]
 end
 
 def check_erb_syntax
