@@ -11,6 +11,7 @@ CHECKS = %w[
   ruby_syntax
   whitespace
   yaml_syntax
+  css_linter
 ]
 # Only check test history if repo supports it
 if FileTest.exist?('spec/support/record_results_formatter.rb')
@@ -169,6 +170,23 @@ def check_js_console_log
   output = `grep -n -e 'console\\.log' #{paths}`
   staged.each { |s| output = s.filter_string(output) }
   return (!$?.exitstatus.zero? ? :good : :bad), output
+end
+
+CSS_LINTER_PATH = File.join(SCRIPTS_PATH, 'csslint-rhino.js')
+def check_css_linter
+  files = modified_files('css')
+  return :good, nil unless files.any?
+
+  unless system('which rhino 1>/dev/null 2>&1')
+    return :warn, "Rhino is not installed"
+  end
+
+  staged = files.map { |file| StagedFile.new(file) }
+  paths = staged.map { |s| s.path }.join(' ')
+
+  output = `rhino #{CSS_LINTER_PATH} --quiet --format=compact #{paths} | grep 'Error - '`
+  staged.each { |s| output = s.filter_string(output) }
+  return (output !~ /Error - / ? :good : :bad), output
 end
 
 RESTRICTED_PATHS = %w[
