@@ -12,7 +12,7 @@ CHECKS = %w[
   whitespace
   yaml_syntax
   css_linter
-]
+] - ENV.fetch('SKIP_CHECKS', '').split
 # Only check test history if repo supports it
 if FileTest.exist?('spec/support/record_results_formatter.rb')
   CHECKS << 'test_history'
@@ -186,7 +186,7 @@ def check_css_linter
 
   output = `rhino #{CSS_LINTER_PATH} --quiet --format=compact #{paths} | grep 'Error - '`
   staged.each { |s| output = s.filter_string(output) }
-  return (output !~ /Error - / ? :good : :bad), output
+  return (output !~ /Error - (?!Unknown @ rule)/ ? :good : :bad), output
 end
 
 RESTRICTED_PATHS = %w[
