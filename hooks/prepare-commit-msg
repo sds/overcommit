@@ -104,17 +104,22 @@ insert_submodule_changes() {
 strip_submodule_changes() {
   # looking to remove listing(s) that look like:
   #
-  #     * path abbreviated-SHA1...abbreivated-SHA1 (count):
+  #     * path abbreviated-SHA1...abbreviated-SHA1 (count):
   #       > oneline commit message
+  #
+  # or:
+  #
+  #     * path abbreviated-SHA1...abbreviated-SHA1:
+  #
   cat "$FILE" | ruby -e '
     class ParseError < RuntimeError; end
 
     begin
       while STDIN.readline
-        if $_ =~ /^\* .+ [a-f0-9]+\.\.\.[a-f0-9]+ \(\d+\):$/
+        if $_ =~ /^\* .+ [a-f0-9]+\.\.\.[a-f0-9]+( \(\d+\))?:$/
 
-          # expect a minimum of one commit to follow
-          raise ParseError unless STDIN.readline =~ /^  [<>] .+$/
+          # check for at least one trailing commit (if applicable)
+          raise ParseError if $~[1] && STDIN.readline !~ /^  [<>] .+$/
 
           while STDIN.readline
             if $_ =~ /^  [<>] .+$/  # a commit
