@@ -170,9 +170,12 @@ def check_js_console_log
 
   staged = files.map { |file| StagedFile.new(file) }
   paths = staged.map { |s| s.path }.join(' ')
-  output = `grep -n -e 'console\\.log' #{paths}`
+  output = `grep -n -e 'console\\.log' #{paths}`.split("\n").reject do |line|
+    /^\d+:\s*\/\// =~ line ||     # Skip comments
+      /ALLOW_CONSOLE_LOG/ =~ line # and lines with ALLOW_CONSOLE_LOG
+  end.join("\n")
   staged.each { |s| output = s.filter_string(output) }
-  return (!$?.exitstatus.zero? ? :good : :bad), output
+  return (output.empty? ? :good : :bad), output
 end
 
 CSS_LINTER_PATH = File.join(SCRIPTS_PATH, 'csslint-rhino.js')
