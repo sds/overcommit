@@ -32,6 +32,11 @@ fi
 TMP_FILE=$(mktemp /tmp/$USER.prepare-commit-msg.XXXXXX)
 
 note_author_when_pairing() {
+  # as a heuristic, don't insert comments unless there are already comments in
+  # the file (this is the most reliable way to detect when Git is going to dump
+  # us into an editor)
+  grep -E '^#' "$FILE" > /dev/null || return
+
   CURRENT_NAME=$(git config user.name) || return
   CURRENT_EMAIL=$(git config user.email) || return
   SOLO_NAME=$(git config solo.name) || return
@@ -54,7 +59,7 @@ note_author_when_pairing() {
         when /^#/
           insert
         end
-        puts $_
+        puts $_ unless $_ =~ /^# Author: /
       end
     rescue EOFError
       # normal exit
@@ -63,13 +68,6 @@ note_author_when_pairing() {
     end
   ' "$AUTHOR" > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
-
-note_author_when_pairing
-
-# do nothing else if there are no submodule changes staged
-git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
-
-SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
 
 insert_submodule_changes() {
   # we want to insert before any release notes or Change-Ids (etc)
@@ -142,12 +140,20 @@ strip_submodule_changes() {
   ' > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
 
+note_author_when_pairing
+
 case "$SOURCE" in
   merge)
-    # no recording done for merge commits (we assume that the parent commits
-    # in the merge will have had their submodule changes recorded in them)
+    # no submodule recording done for merge commits (we assume that the parent
+    # commits in the merge will have had their submodule changes recorded in
+    # them)
     ;;
   *)
+    # do nothing else if there are no submodule changes staged
+    git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
+
+    SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
+
     strip_submodule_changes
     insert_submodule_changes
     ;;
