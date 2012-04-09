@@ -135,6 +135,14 @@ def modified_files(type=nil)
   type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
 end
 
+def staged_files(*args)
+  modified_files(*args).map { |filename| StagedFile.new(filename) }
+end
+
+def in_path?(cmd)
+  system("which #{cmd} > /dev/null 2> /dev/null")
+end
+
 def check_erb_syntax
   clean = true
   output = []
@@ -153,13 +161,10 @@ end
 JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
 JS_HINT_RUNNER_PATH = File.join(SCRIPTS_PATH, 'jshint_runner.js')
 def check_js_syntax
-  unless system('which rhino > /dev/null 2> /dev/null')
-    return :warn, "Rhino is not installed"
-  end
+  return :warn, "Rhino is not installed" unless in_path? 'rhino'
 
-  files = modified_files('js')
-  return :good, nil unless files.any?
-  staged = files.map { |file| StagedFile.new(file) }
+  staged = staged_files('js')
+  return :good, nil if staged.empty?
   paths = staged.map { |s| s.path }.join(' ')
 
   output = `rhino -strict -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths} 2>&1 | grep -v warning`
@@ -169,10 +174,9 @@ end
 
 # https://www.pivotaltracker.com/story/show/18119495
 def check_js_console_log
-  files = modified_files('js')
-  return :good, nil unless files.any?
+  staged = staged_files('js')
+  return :good, nil if staged.empty?
 
-  staged = files.map { |file| StagedFile.new(file) }
   paths = staged.map { |s| s.path }.join(' ')
   output = `grep -n -e 'console\\.log' #{paths}`.split("\n").reject do |line|
     /^\d+:\s*\/\// =~ line ||     # Skip comments
@@ -184,14 +188,11 @@ end
 
 CSS_LINTER_PATH = File.join(SCRIPTS_PATH, 'csslint-rhino.js')
 def check_css_linter
-  files = modified_files('css')
-  return :good, nil unless files.any?
+  staged = staged_files('css')
+  return :good, nil if staged.empty?
 
-  unless system('which rhino 1>/dev/null 2>&1')
-    return :warn, "Rhino is not installed"
-  end
+  return :warn, "Rhino is not installed" unless in_path? 'rhino'
 
-  staged = files.map { |file| StagedFile.new(file) }
   paths = staged.map { |s| s.path }.join(' ')
 
   output = `rhino #{CSS_LINTER_PATH} --quiet --format=compact #{paths} | grep 'Error - '`
@@ -214,8 +215,7 @@ end
 def check_ruby_syntax
   clean = true
   output = []
-  modified_files('rb').each do |file|
-    staged = StagedFile.new(file)
+  staged_files('rb').each do |staged|
     syntax = `ruby -c #{staged.path} 2>&1`
     unless $? == 0
       output += staged.filter_string(syntax).to_a
