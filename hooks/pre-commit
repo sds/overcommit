@@ -3,6 +3,8 @@ require 'erb'
 require 'tempfile'
 require 'yaml'
 
+skip_checks = ENV.fetch('SKIP_CHECKS', '').split
+
 CHECKS = %w[
   erb_syntax
   js_syntax
@@ -13,7 +15,9 @@ CHECKS = %w[
   yaml_syntax
   css_linter
   test_history
-] - ENV.fetch('SKIP_CHECKS', '').split
+] - skip_checks
+
+CHECKS.clear if skip_checks.include? 'all'
 
 # Only check test history if repo supports it
 unless FileTest.exist?('spec/support/record_results_formatter.rb')
@@ -79,7 +83,7 @@ def notice(str)
 end
 
 def final_result(results)
-  states = results.transpose.first.uniq
+  states = (results.transpose.first || []).uniq
   return :bad  if states.include?(:bad)
   return :stop if states.include?(:stop)
   return :good
@@ -89,7 +93,7 @@ def print_report(*report)
   puts report.flatten.map{|line| "    #{line}"}.join("\n")
 end
 
-WIDTH = 60 - CHECKS.map{|s| s.length}.max
+WIDTH = 60 - (CHECKS.map{|s| s.length}.max || 0)
 def print_incremental_result(title, status, output)
   print '.'*(WIDTH - title.length)
   case status
