@@ -143,19 +143,18 @@ def in_path?(cmd)
   system("which #{cmd} > /dev/null 2> /dev/null")
 end
 
+ERB_CHECKER = 'bin/check-rails-erb'
 def check_erb_syntax
-  clean = true
-  output = []
-  modified_files('erb').each do |file|
-    staged = StagedFile.new(file)
-    staged.contents = ERB.new(staged.contents, nil, '-').src
-    syntax = `ruby -c #{staged.path} 2>&1`
-    unless $? == 0
-      output += staged.filter_string(syntax).to_a
-      clean = false
-    end
+  return :warn, 'Bundler is not installed' unless in_path? 'bundle'
+  unless File.executable? ERB_CHECKER
+    return :warn, "Can't find/execute #{ERB_CHECKER}"
   end
-  return (clean ? :good : :bad), output
+
+  staged = staged_files('erb')
+
+  output = `bundle exec #{ERB_CHECKER} #{staged.map(&:path).join(' ')}`
+  staged.each { |s| output = s.filter_string(output) }
+  return (output !~ /: compile error$/ ? :good : :bad), output
 end
 
 JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
