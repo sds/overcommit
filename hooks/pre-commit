@@ -151,6 +151,7 @@ def check_erb_syntax
   end
 
   staged = staged_files('erb')
+  return :good, nil if staged.empty?
 
   output = `bundle exec #{ERB_CHECKER} #{staged.map(&:path).join(' ')}`
   staged.each { |s| output = s.filter_string(output) }
