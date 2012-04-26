@@ -10,6 +10,9 @@ if (typeof JSHINT === "undefined") {
   quit();
 }
 
+// Options:
+// https://gist.github.com/1489652
+
 var i, j, file, source, result, error,
   options = {
     boss:   true,
