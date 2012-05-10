@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 require 'erb'
+require 'rubygems'
+begin
+  require 'haml'
+rescue LoadError => e
+  puts '"haml" gem not available; use "gem install haml"'
+end
 require 'tempfile'
 require 'yaml'
 
@@ -7,6 +13,7 @@ skip_checks = ENV.fetch('SKIP_CHECKS', '').split
 
 CHECKS = %w[
   erb_syntax
+  haml_syntax
   js_syntax
   js_console_log
   restricted_paths
@@ -156,6 +163,24 @@ def check_erb_syntax
   output = `bundle exec #{ERB_CHECKER} #{staged.map(&:path).join(' ')}`
   staged.each { |s| output = s.filter_string(output) }
   return (output !~ /: compile error$/ ? :good : :bad), output
+end
+
+def check_haml_syntax
+  staged = staged_files('haml')
+  return :good, nil if staged.empty?
+
+  unless defined? Haml
+    return :warn, "Can't find Haml gem"
+  end
+
+  staged.map { |s| s.path }.each do |path|
+    begin
+      Haml::Engine.new(File.read(path), :check_syntax => true)
+    rescue Haml::Error => e
+      return :bad, e.message
+    end
+  end
+  return :good, nil
 end
 
 JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
