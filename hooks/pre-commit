@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 require 'erb'
-require 'rubygems'
 begin
+  require 'rubygems'
   require 'haml'
 rescue LoadError => e
-  puts '"haml" gem not available; use "gem install haml"'
+  missing = e.message.split(' ').last
+  puts "'#{missing}' gem not available"
 end
 require 'tempfile'
 require 'yaml'
