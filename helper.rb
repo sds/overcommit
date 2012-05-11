@@ -1,6 +1,6 @@
 module Helper
   DEFAULT_REPOS = ['causes']
-  DEFAULT_SRC_PATH = '~/src/'
+  DEFAULT_SRC_PATH = '..'
   GITHUB_ROOT = 'git@github.com:causes'
   GERRIT_REMOTE = 'gerrit(.|.causes.com)?:29418'
 
