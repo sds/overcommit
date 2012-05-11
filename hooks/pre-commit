@@ -250,13 +250,14 @@ TEST_RESULTS_FILE = '.spec-results'
 def check_test_history
   output = []
   relevant_tests = `relevant-tests -- #{modified_files.join(' ')}`.split("\n")
+  relevant_tests = relevant_tests.map { |r| File.expand_path r }
   unless relevant_tests.any?
     return :warn, 'No relevant tests for this change...write some?'
   end
 
   begin
     good_tests = File.open(TEST_RESULTS_FILE, 'r').readlines.map do |spec_file|
-      spec_file.strip
+      File.expand_path spec_file.strip
     end
   rescue Errno::ENOENT
     good_tests = []
