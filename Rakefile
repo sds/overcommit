@@ -1,5 +1,5 @@
 require 'rake'
-require 'helper'
+require './helper'
 
 include Helper
 
