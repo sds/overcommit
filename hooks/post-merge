@@ -3,10 +3,10 @@
 submodule_status = `git submodule status`
 updated_submodules = []
 
-submodule_status.each do |line|
+submodule_status.each_line do |line|
   # Submodules that are not updated start with a + in the submodule status
   # output.
-  
+
   if line.match(/^\+/)
     # The second word is the submodule directory.
     updated_submodules << line.split(" ")[1]
