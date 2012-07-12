@@ -11,7 +11,10 @@ require 'tempfile'
 require 'yaml'
 
 real_hook = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-require File.expand_path('../base', real_hook)
+
+%w[git_hook staged_file].each do |dep|
+  require File.expand_path("../../lib/#{dep}", real_hook)
+end
 
 SCRIPTS_PATH = File.expand_path('../scripts/', real_hook)
 

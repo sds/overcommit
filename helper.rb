@@ -9,7 +9,6 @@ module Helper
 
   HOOKS_PATH = '.git/hooks/'
 
-
   def error(str)
     puts "\033[31m#{str}\033[0m"
   end
@@ -17,7 +16,6 @@ module Helper
   def success(str)
     puts "\033[32m#{str}\033[0m"
   end
-
 
   def all_repos
     Dir["#{source_dir}*"].map do |dir|
