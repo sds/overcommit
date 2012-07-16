@@ -15,12 +15,9 @@ module Causes::GitHook
       attr_accessor :filetype
     end
 
-    def self.file_type(type)
-      self.filetype = type
-    end
 
     def name
-      self.class.name.to_s.split('::').last
+      Causes.underscorize self.class.name.to_s.split('::').last
     end
 
     def skip?
@@ -33,6 +30,12 @@ module Causes::GitHook
 
     def run_check
       [:bad, 'No checks defined!']
+    end
+
+  protected
+
+    def self.file_type(type)
+      self.filetype = type
     end
   end
 end
