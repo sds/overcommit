@@ -6,7 +6,7 @@ module Causes::GitHook
     def run_check
       clean = true
       output = []
-      staged_files('rb').each do |staged|
+      staged.each do |staged|
         syntax = `ruby -c #{staged.path} 2>&1`
         unless $?.success?
           output += staged.filter_string(syntax).lines.to_a
