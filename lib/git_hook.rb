@@ -1,12 +1,18 @@
+require 'erb'
+
+require 'tempfile'
+require 'yaml'
+
 module Causes
-  class GitHook
-    # override me, s'il vous plaît
-    @@friendly_name = "base git-hook [somebody forgot to set me]"
+  module GitHook
+    def load_and_run
+      load_hooks and run
+    end
 
     def run
       exit unless modified_files.any?
 
-      puts "Running #{@@friendly_name} checks"
+      puts "Running #{Causes.hook_name} checks"
       results = []
       @checks.each do |check|
         title = "  Checking #{check}..."
@@ -35,7 +41,7 @@ module Causes
       else
         error "???"
         print_report("Check didn't return a status")
-        exit(1)
+        exit 1
       end
     end
 
@@ -43,36 +49,16 @@ module Causes
       puts
       case final_result(results)
       when :good
-        success "+++ All #{@@friendly_name} checks passed"
+        success "+++ All #{Causes.hook_name} checks passed"
         exit 0
       when :bad
-        error "!!! One or more #{@@friendly_name} checks failed"
+        error "!!! One or more #{Causes.hook_name} checks failed"
         exit 1
       when :stop
-        warning "*** One or more #{@@friendly_name} checks needs attention"
+        warning "*** One or more #{Causes.hook_name} checks needs attention"
         warning "*** If you really want to commit, use --no-verify"
         exit 1
       end
-    end
-
-    def bold(str)
-      puts "\033[1;37m#{str}\033[0m"
-    end
-
-    def error(str)
-      puts "\033[31m#{str}\033[0m"
-    end
-
-    def success(str)
-      puts "\033[32m#{str}\033[0m"
-    end
-
-    def warning(str)
-      puts "\033[33m#{str}\033[0m"
-    end
-
-    def notice(str)
-      puts "\033[1;33m#{str}\033[0m"
     end
 
     def final_result(results)
