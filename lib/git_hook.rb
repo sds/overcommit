@@ -36,7 +36,7 @@ module Causes
     end
 
     def checks
-      HookSpecificCheck.checks
+      HookRegistry.checks
     end
 
     def run
@@ -46,6 +46,10 @@ module Causes
       results = checks.map do |check_class|
         check = check_class.new
         next if check.skip?
+
+        # Ignore a check if it only applies to a specific file type and there
+        # are no staged files of that type in the tree
+        next if check_class.filetype && check.staged.empty?
 
         title = "  Checking #{check.name}..."
         print title

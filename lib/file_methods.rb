@@ -1,17 +1,19 @@
 
-module Causes::GitHook
-  module FileMethods
-    def modified_files(type=nil)
-      @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
-      type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
-    end
+module Causes
+  module GitHook
+    module FileMethods
+      def modified_files(type=nil)
+        @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
+        type ? @modified_files.select { |f| f =~ /\.#{type}$/ } : @modified_files
+      end
 
-    def staged_files(*args)
-      modified_files(*args).map { |filename| StagedFile.new(filename) }
-    end
+      def staged_files(*args)
+        modified_files(*args).map { |filename| StagedFile.new(filename) }
+      end
 
-    def in_path?(cmd)
-      system("which #{cmd} > /dev/null 2> /dev/null")
+      def in_path?(cmd)
+        system("which #{cmd} 2> /dev/null")
+      end
     end
   end
 end

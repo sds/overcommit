@@ -1,13 +1,22 @@
 module Causes::GitHook
-  module HookSpecificCheck
-    include FileMethods
+  module HookRegistry
     @checks = []
-
     class << self
       attr_reader :checks
       def included(base)
         @checks << base
       end
+    end
+  end
+
+  class HookSpecificCheck
+    include FileMethods
+    class << self
+      attr_accessor :filetype
+    end
+
+    def self.file_type(type)
+      self.filetype = type
     end
 
     def name
@@ -16,6 +25,10 @@ module Causes::GitHook
 
     def skip?
       false
+    end
+
+    def staged
+      staged_files(self.class.filetype)
     end
   end
 end

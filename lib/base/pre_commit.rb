@@ -1,6 +1,5 @@
 begin
   require 'rubygems'
-  require 'haml'
 rescue LoadError => e
   missing = e.message.split(' ').last
   puts "'#{missing}' gem not available"
@@ -24,23 +23,6 @@ module Causes
       # end
     end
 
-    def check_haml_syntax
-      staged = staged_files('haml')
-      return :good, nil if staged.empty?
-
-      unless defined? Haml
-        return :warn, "Can't find Haml gem"
-      end
-
-      staged.map { |s| s.path }.each do |path|
-        begin
-          Haml::Engine.new(File.read(path), :check_syntax => true)
-        rescue Haml::Error => e
-          return :bad, e.message
-        end
-      end
-      return :good, nil
-    end
 
     JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
     JS_HINT_RUNNER_PATH = File.join(SCRIPTS_PATH, 'jshint_runner.js')
