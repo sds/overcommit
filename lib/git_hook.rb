@@ -1,5 +1,4 @@
 require 'erb'
-
 require 'tempfile'
 require 'yaml'
 
@@ -59,8 +58,7 @@ module Causes
         print_incremental_result(title, status, output)
         [status, output]
       end.compact
-
-      print_result(results)
+      print_result results
     end
 
   protected
