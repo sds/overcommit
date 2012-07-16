@@ -12,7 +12,7 @@ module Causes
       end
 
       def in_path?(cmd)
-        system("which #{cmd} 2> /dev/null")
+        system("which #{cmd} &> /dev/null")
       end
     end
   end
