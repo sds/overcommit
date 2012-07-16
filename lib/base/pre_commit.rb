@@ -17,44 +17,11 @@ module Causes
     include GitHook
 
     def initialize
-      skip_checks = ENV.fetch('SKIP_CHECKS', '').split
-
-      @checks = %w[
-        erb_syntax
-        haml_syntax
-        js_syntax
-        js_console_log
-        restricted_paths
-        ruby_syntax
-        whitespace
-        yaml_syntax
-        css_linter
-        test_history
-      ] - skip_checks
-
+      super
       # Only check test history if repo supports it
-      unless FileTest.exist?('spec/support/record_results_formatter.rb')
-        @checks.delete 'test_history'
-      end
-
-      @checks.clear if skip_checks.include? 'all'
-
-      @width = 60 - (@checks.map{|s| s.length}.max || 0)
-    end
-
-    ERB_CHECKER = 'bin/check-rails-erb'
-    def check_erb_syntax
-      return :warn, 'Bundler is not installed' unless in_path? 'bundle'
-      unless File.executable? ERB_CHECKER
-        return :warn, "Can't find/execute #{ERB_CHECKER}"
-      end
-
-      staged = staged_files('erb')
-      return :good, nil if staged.empty?
-
-      output = `bundle exec #{ERB_CHECKER} #{staged.map{|file| file.path}.join(' ')}`
-      staged.each { |s| output = s.filter_string(output) }
-      return (output !~ /: compile error$/ ? :good : :bad), output
+      # unless FileTest.exist?('spec/support/record_results_formatter.rb')
+      #   @checks.delete 'test_history'
+      # end
     end
 
     def check_haml_syntax

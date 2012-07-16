@@ -21,19 +21,6 @@ module Causes
     end
   end
 
-  module GitHook
-    include ConsoleMethods
-    @@extensions = []
-
-    def self.included(base)
-      @@extensions << base
-    end
-
-    def self.run_hooks
-      @@extensions.each { |ext| ext.new.run }
-    end
-  end
-
   class << self
     include ConsoleMethods
 

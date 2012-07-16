@@ -24,7 +24,7 @@ module Helper
        (git remote -v 2> /dev/null) |
          grep origin |
          egrep '#{GITHUB_ROOT}|#{GERRIT_REMOTE}'`
-      dir.split('/').last if $? == 0
+      dir.split('/').last if $?.success?
     end.compact
   end
 

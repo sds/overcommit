@@ -6,7 +6,7 @@ unless File.symlink?(__FILE__)
 end
 
 %W[causes_hook git_hook].each do |dep|
-  require File.expand_path("../#{dep}", File.realpath(__FILE__))
+  require File.expand_path "../#{dep}", File.realpath(__FILE__)
 end
 
 Causes.load_hooks

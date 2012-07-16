@@ -3,43 +3,78 @@ require 'erb'
 require 'tempfile'
 require 'yaml'
 
+%w[file_methods staged_file hook_specific_check].each do |dep|
+  require File.expand_path "../#{dep}", __FILE__
+end
+
 module Causes
   module GitHook
-    def load_and_run
-      load_hooks and run
+    include ConsoleMethods
+    include FileMethods
+    @@extensions = []
+
+    def self.included(base)
+      @@extensions << base
+    end
+
+    def self.run_hooks
+      @@extensions.each { |ext| ext.new.run }
+    end
+
+    def initialize
+      skip_checks = ENV.fetch('SKIP_CHECKS', '').split
+      return if skip_checks.include? 'all'
+
+      # Relative paths + symlinks == great fun
+      plugins_dir = File.join(File.dirname(File.realpath(__FILE__)),
+                              'plugins', Causes.hook_name, '*')
+      Dir[plugins_dir].each do |plugin|
+        require plugin unless skip_checks.include? File.basename(plugin, '.rb')
+      end
+
+      @width = 60 - (checks.map { |s| s.name.length }.max || 0)
+    end
+
+    def checks
+      HookSpecificCheck.checks
     end
 
     def run
       exit unless modified_files.any?
 
       puts "Running #{Causes.hook_name} checks"
-      results = []
-      @checks.each do |check|
-        title = "  Checking #{check}..."
+      results = checks.map do |check_class|
+        check = check_class.new
+        next if check.skip?
+
+        title = "  Checking #{check.name}..."
         print title
-        status, output = send("check_#{check}")
-        results << [status, output]
+
+        status, output = check.run_check
+
         print_incremental_result(title, status, output)
-      end
+        [status, output]
+      end.compact
+
       print_result(results)
     end
 
   protected
     def print_incremental_result(title, status, output)
-      print '.'*(@width - title.length)
+      print '.' * (@width - title.length)
       case status
       when :good
-        success("OK")
+        success('OK')
       when :bad
-        error("FAILED")
+        error('FAILED')
         print_report(output)
       when :warn
         warning output
       when :stop
-        warning "UH OH"
+        warning 'UH OH'
         print_report(output)
       else
-        error "???"
+        error '???'
         print_report("Check didn't return a status")
         exit 1
       end
@@ -69,20 +104,7 @@ module Causes
     end
 
     def print_report(*report)
-      puts report.flatten.map{|line| "    #{line}"}.join("\n")
-    end
-
-    def modified_files(type=nil)
-      @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
-      type ? @modified_files.select{|f| f =~ /\.#{type}$/} : @modified_files
-    end
-
-    def staged_files(*args)
-      modified_files(*args).map { |filename| StagedFile.new(filename) }
-    end
-
-    def in_path?(cmd)
-      system("which #{cmd} > /dev/null 2> /dev/null")
+      puts report.flatten.map{ |line| "    #{line}" }.join("\n")
     end
   end
 end
