@@ -30,5 +30,9 @@ module Causes::GitHook
     def staged
       staged_files(self.class.filetype)
     end
+
+    def run_check
+      [:bad, 'No checks defined!']
+    end
   end
 end

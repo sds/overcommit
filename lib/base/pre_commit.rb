@@ -23,35 +23,6 @@ module Causes
       # end
     end
 
-
-    JS_HINT_PATH = File.join(SCRIPTS_PATH, 'jshint.js')
-    JS_HINT_RUNNER_PATH = File.join(SCRIPTS_PATH, 'jshint_runner.js')
-    def check_js_syntax
-      return :warn, "Rhino is not installed" unless in_path? 'rhino'
-
-      staged = staged_files('js')
-      return :good, nil if staged.empty?
-      paths = staged.map { |s| s.path }.join(' ')
-
-      output = `rhino -strict -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths} 2>&1 | grep -v warning | grep -v -e '^js: '`
-      staged.each { |s| output = s.filter_string(output) }
-      return (output !~ /^ERROR/ ? :good : :bad), output
-    end
-
-    # https://www.pivotaltracker.com/story/show/18119495
-    def check_js_console_log
-      staged = staged_files('js')
-      return :good, nil if staged.empty?
-
-      paths = staged.map { |s| s.path }.join(' ')
-      output = `grep -n -e 'console\\.log' #{paths}`.split("\n").reject do |line|
-        /^\d+:\s*\/\// =~ line ||     # Skip comments
-          /ALLOW_CONSOLE_LOG/ =~ line # and lines with ALLOW_CONSOLE_LOG
-      end.join("\n")
-      staged.each { |s| output = s.filter_string(output) }
-      return (output.empty? ? :good : :bad), output
-    end
-
     CSS_LINTER_PATH = File.join(SCRIPTS_PATH, 'csslint-rhino.js')
     def check_css_linter
       staged = staged_files('css')
