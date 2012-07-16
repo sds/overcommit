@@ -34,5 +34,9 @@ module Causes
       error "No hook definition found for #{hook_name}"
       exit 1
     end
+
+    def scripts_path
+      File.expand_path('../../scripts', __FILE__)
+    end
   end
 end

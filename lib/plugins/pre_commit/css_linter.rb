@@ -3,7 +3,7 @@ module Causes::GitHook
     include HookRegistry
     file_type :css
 
-    CSS_LINTER_PATH = File.join(SCRIPTS_PATH, 'csslint-rhino.js')
+    CSS_LINTER_PATH = File.join(Causes.scripts_path, 'csslint-rhino.js')
 
     def run_check
       return :warn, "Rhino is not installed" unless in_path? 'rhino'
