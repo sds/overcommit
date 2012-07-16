@@ -8,6 +8,11 @@ end
 
 module Causes
   module GitHook
+    # File.expand_path takes one more '..' than you're used to... we want to
+    # go two directories up from the caller (which will be .git/hooks/something)
+    # to the root of the git repo, then down into .githooks
+    REPO_SPECIFIC_DIR = File.expand_path('../../../.githooks', $0)
+
     include ConsoleMethods
     include FileMethods
     @@extensions = []
@@ -25,10 +30,13 @@ module Causes
       return if skip_checks.include? 'all'
 
       # Relative paths + symlinks == great fun
-      plugins_dir = File.join(File.dirname(File.realpath(__FILE__)),
-                              'plugins', Causes.hook_name, '*')
-      Dir[plugins_dir].each do |plugin|
-        require plugin unless skip_checks.include? File.basename(plugin, '.rb')
+      plugins_dir = [File.join(File.dirname(File.realpath(__FILE__)), 'plugins')]
+      plugins_dir << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
+
+      plugins_dir.each do |plugins|
+        Dir[File.join(plugins, Causes.hook_name, '*')].each do |plugin|
+          require plugin unless skip_checks.include? File.basename(plugin, '.rb')
+        end
       end
 
       @width = 70 - (checks.map { |s| s.name.length }.max || 0)
