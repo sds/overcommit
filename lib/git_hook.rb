@@ -32,7 +32,7 @@ module Causes
         require plugin unless skip_checks.include? File.basename(plugin, '.rb')
       end
 
-      @width = 60 - (checks.map { |s| s.name.length }.max || 0)
+      @width = 70 - (checks.map { |s| s.name.length }.max || 0)
     end
 
     def checks

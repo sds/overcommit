@@ -37,18 +37,6 @@ module Causes
       return (output !~ /Error - (?!Unknown @ rule)/ ? :good : :bad), output
     end
 
-    RESTRICTED_PATHS = %w[
-      vendor
-    ]
-    def check_restricted_paths
-      RESTRICTED_PATHS.each do |path|
-        if !system("git diff --cached --quiet -- #{path}")
-          return :stop, "changes staged under #{path}"
-        end
-      end
-      return :good
-    end
-
     def check_ruby_syntax
       clean = true
       output = []
