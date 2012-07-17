@@ -1,5 +1,6 @@
 require 'erb'
 require 'tempfile'
+require 'pathname'
 require 'yaml'
 
 %w[file_methods staged_file hook_specific_check].each do |dep|
@@ -30,7 +31,7 @@ module Causes
       return if skip_checks.include? 'all'
 
       # Relative paths + symlinks == great fun
-      plugins_dir = [File.join(File.dirname(File.realpath(__FILE__)), 'plugins')]
+      plugins_dir = [File.join(File.dirname(Pathname.new(__FILE__).realpath), 'plugins')]
       plugins_dir << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
 
       plugins_dir.each do |plugins|

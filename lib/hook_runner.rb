@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'pathname'
 
 unless File.symlink?(__FILE__)
   STDERR.puts "This file is not meant to be called directly."
@@ -6,7 +7,7 @@ unless File.symlink?(__FILE__)
 end
 
 %W[causes_hook git_hook].each do |dep|
-  require File.expand_path "../#{dep}", File.realpath(__FILE__)
+  require File.expand_path "../#{dep}", Pathname.new(__FILE__).realpath
 end
 
 Causes.load_hooks
