@@ -1,4 +1,3 @@
-
 module Causes
   module GitHook
     module FileMethods

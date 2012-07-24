@@ -6,12 +6,11 @@ module Causes::GitHook
     def run_check
       clean = true
       output = []
-      modified_files('yml').each do |file|
-        staged = StagedFile.new(file)
+      staged.each do |staged_file|
         begin
-          YAML.load_file(staged.path)
+          YAML.load_file(staged_file.path)
         rescue ArgumentError => e
-          output << "#{e.message} parsing #{file}"
+          output << "#{e.message} parsing #{staged_file.path}"
           clean = false
         end
       end
