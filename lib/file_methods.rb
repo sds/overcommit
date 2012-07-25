@@ -1,8 +1,9 @@
 module Causes
   module GitHook
     module FileMethods
-      def modified_files(type=nil)
-        @modified_files ||= `git diff --cached --name-only --diff-filter=ACM`.split
+      def modified_files(type=nil, path=nil)
+        @modified_files ||=
+          `git diff --cached --name-only --diff-filter=ACM -- #{path}`.split "\n"
         type ? @modified_files.select { |f| f =~ /\.#{type}$/ } : @modified_files
       end
 
