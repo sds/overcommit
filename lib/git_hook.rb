@@ -35,7 +35,7 @@ module Causes
       plugins_dir << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
 
       plugins_dir.each do |plugins|
-        Dir[File.join(plugins, Causes.hook_name, '*')].each do |plugin|
+        Dir[File.join(plugins, Causes.hook_name, '*.rb')].each do |plugin|
           require plugin unless skip_checks.include? File.basename(plugin, '.rb')
         end
       end
