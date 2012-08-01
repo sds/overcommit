@@ -1,8 +1,12 @@
 module Helper
   DEFAULT_REPOS    = ['causes']
   DEFAULT_SRC_PATH = '..'
-  GITHUB_ROOT      = 'git@github.com:causes'
-  GERRIT_REMOTE    = 'gerrit(.|.causes.com)?:29418'
+  CAUSES_REMOTES   = %w[
+    git@github.com:causes
+    git://git
+    gerrit(.|.causes.com)?:29418
+  ].join '|'
+
 
   HOOKS   = Dir['hooks/*'].map { |path| path.split('/').last }
   SCRIPTS = 'scripts/'
@@ -23,7 +27,7 @@ module Helper
       `cd #{dir} &&
        (git remote -v 2> /dev/null) |
          grep origin |
-         egrep '#{GITHUB_ROOT}|#{GERRIT_REMOTE}'`
+         egrep '#{CAUSES_REMOTES}'`
       dir.split('/').last if $?.success?
     end.compact
   end
