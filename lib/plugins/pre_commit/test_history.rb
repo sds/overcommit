@@ -4,7 +4,7 @@ module Causes::GitHook
 
     def relevant_tests
       @relevant_test ||=
-        `relevant-tests -- #{modified_files.join(' ')}`.
+        `relevant-tests 2> /dev/null -- #{modified_files.join(' ')}`.
         split("\n").map { |r| File.expand_path r }
     end
 
