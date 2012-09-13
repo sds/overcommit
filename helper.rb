@@ -36,7 +36,7 @@ module Helper
     puts "  Installing hooks to #{repo}..."
     HOOKS.each do |hook|
       print "    #{hook}..."
-      FileUtils.rm target_hook_path(repo, hook)
+      FileUtils.rm_f target_hook_path(repo, hook)
       if options[:method] == :copy
         FileUtils.cp    hook_path(hook), target_hook_path(repo, hook)
       else
