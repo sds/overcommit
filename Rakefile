@@ -12,7 +12,7 @@ def install_repos(options = {})
       next
     end
     copy_hooks(repo, options)
-    copy_scripts(repo) if options[:method] == :copy
+    copy_scripts(repo, options)
   end
   puts
 end

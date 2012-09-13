@@ -36,6 +36,7 @@ module Helper
     puts "  Installing hooks to #{repo}..."
     HOOKS.each do |hook|
       print "    #{hook}..."
+      FileUtils.rm target_hook_path(repo, hook)
       if options[:method] == :copy
         FileUtils.cp    hook_path(hook), target_hook_path(repo, hook)
       else
@@ -46,9 +47,14 @@ module Helper
     end
   end
 
-  def copy_scripts(repo)
+  def copy_scripts(repo, options = {})
     print '    helper scripts...'
-    FileUtils.cp_r SCRIPTS, target_script_path(repo)
+    FileUtils.rm_rf target_script_path(repo)
+    if options[:method] == :copy
+      FileUtils.cp_r SCRIPTS, target_script_path(repo)
+    else
+      FileUtils.ln_sf scripts_path, target_script_path(repo)
+    end
     success 'OK'
   end
 
@@ -58,6 +64,10 @@ module Helper
 
   def hook_path(hook)
     File.expand_path(File.join('hooks', hook))
+  end
+
+  def scripts_path
+    File.expand_path(SCRIPTS)
   end
 
   def repos
@@ -77,6 +87,6 @@ module Helper
   end
 
   def target_script_path(repo)
-    File.join(repo_path(repo), HOOKS_PATH)
+    File.join(repo_path(repo), HOOKS_PATH, 'scripts')
   end
 end
