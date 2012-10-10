@@ -102,7 +102,8 @@ module Causes
         exit 1
       when :stop
         warning "*** One or more #{Causes.hook_name} checks needs attention"
-        warning "*** If you really want to commit, use --no-verify"
+        warning "*** If you really want to commit, use SKIP_CHECKS"
+        warning "*** (takes a space-separated list of checks to skip, or 'all')"
         exit 1
       end
     end
