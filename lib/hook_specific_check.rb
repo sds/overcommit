@@ -25,7 +25,7 @@ module Causes::GitHook
     end
 
     def staged
-      staged_files(self.class.filetype)
+      @staged ||= staged_files(self.class.filetype)
     end
 
     def run_check
