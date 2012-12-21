@@ -5,7 +5,7 @@ module Causes::GitHook
 
     def run_check
       begin
-        require 'scss-lint'
+        require 'scss_lint'
       rescue LoadError
         return :warn, 'scss-lint not installed -- run `gem install scss-lint`'
       end
