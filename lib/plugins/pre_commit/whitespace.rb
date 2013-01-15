@@ -6,7 +6,7 @@ module Causes::GitHook
       paths = staged.map { |s| s.path }.join(' ')
 
       # Catches hard tabs
-      output = `grep -Pnl "\t" #{paths}`
+      output = `grep -nl "\t" #{paths}`
       staged.each { |s| output = s.filter_string(output) }
       unless output.empty?
         return :stop, "Don't use hard tabs:\n#{output}"
