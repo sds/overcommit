@@ -3,9 +3,20 @@ module Causes::GitHook
     include HookRegistry
 
     def run_check
+      paths = staged.map { |s| s.path }.join(' ')
+
+      # Catches hard tabs
+      output = `grep -Pnl "\t" #{paths}`
+      staged.each { |s| output = s.filter_string(output) }
+      unless output.empty?
+        return :stop, "Don't use hard tabs:\n#{output}"
+      end
+
       # Catches trailing whitespace, conflict markers etc
       output = `git diff --check --cached`
-      return ($?.exitstatus.zero? ? :good : :stop), output
+      return :stop, output unless $?.exitstatus.zero?
+
+      :good
     end
   end
 end
