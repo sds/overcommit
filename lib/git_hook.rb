@@ -27,7 +27,7 @@ module Causes
     end
 
     def initialize
-      skip_checks = ENV.fetch('SKIP_CHECKS', '').split
+      skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
       return if skip_checks.include? 'all'
 
       # Relative paths + symlinks == great fun
