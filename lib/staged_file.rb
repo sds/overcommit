@@ -8,7 +8,7 @@ module Causes
 
     def initialize path
       @original_path  = path
-      @tempfile       = Tempfile.new(path.gsub('/', '_'))
+      @tempfile       = Tempfile.new([path.gsub('/', '_'), File.extname(path)])
       self.contents   = `git show :#{@original_path}`
     end
 
