@@ -22,8 +22,8 @@ module Causes
       @@extensions << base
     end
 
-    def self.run_hooks
-      @@extensions.each { |ext| ext.new.run }
+    def self.run_hooks(*args)
+      @@extensions.each { |ext| ext.new.run(*args) }
     end
 
     def initialize
@@ -47,12 +47,12 @@ module Causes
       HookRegistry.checks
     end
 
-    def run
-      exit unless modified_files.any?
+    def run(*args)
+      exit if requires_modified_files? && modified_files.empty?
 
       puts "Running #{Causes.hook_name} checks"
       results = checks.map do |check_class|
-        check = check_class.new
+        check = check_class.new(*args)
         next if check.skip?
 
         # Ignore a check if it only applies to a specific file type and there
@@ -71,6 +71,12 @@ module Causes
     end
 
   protected
+
+    # If true, only run this check when there are modified files.
+    def requires_modified_files?
+      false
+    end
+
     def print_incremental_result(title, status, output)
       print '.' * (@width - title.length)
       case status

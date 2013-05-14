@@ -11,4 +11,4 @@ end
 end
 
 Causes.load_hooks
-Causes::GitHook.run_hooks
+Causes::GitHook.run_hooks(*ARGV)

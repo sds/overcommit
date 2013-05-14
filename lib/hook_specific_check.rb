@@ -15,6 +15,9 @@ module Causes::GitHook
       attr_accessor :filetype
     end
 
+    def initialize(*args)
+      @arguments = args
+    end
 
     def name
       Causes.underscorize self.class.name.to_s.split('::').last
@@ -33,6 +36,16 @@ module Causes::GitHook
     end
 
   protected
+
+    def commit_message
+      @commit_message ||= begin
+        unless @arguments[0] && ::File.exist?(@arguments[0])
+          fail 'Not running in the context of a commit message'
+        end
+
+        File.readlines(@arguments[0])
+      end
+    end
 
     def self.file_type(type)
       self.filetype = type
