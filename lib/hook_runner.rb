@@ -2,7 +2,7 @@
 require 'pathname'
 
 unless File.symlink?(__FILE__)
-  STDERR.puts "This file is not meant to be called directly."
+  STDERR.puts 'This file is not meant to be called directly.'
   exit 2
 end
 
