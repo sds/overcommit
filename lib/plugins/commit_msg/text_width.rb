@@ -4,7 +4,7 @@ module Causes::GitHook
 
     def run_check
       if commit_message[0].size > 60
-        return :warn, "Please keep the subject < ~60 characters"
+        return :warn, 'Please keep the subject < ~60 characters'
       end
 
       commit_message.each do |line|
