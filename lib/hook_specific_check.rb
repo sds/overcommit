@@ -47,6 +47,13 @@ module Causes::GitHook
       end
     end
 
+    # Strip comments and diff (from git-commit --verbose)
+    def user_commit_message
+      @user_commit_message ||= commit_message.
+        reject     { |line| line =~ /^#/ }.
+        take_while { |line| !line.start_with?('diff --git') }
+    end
+
     def self.file_type(type)
       self.filetype = type
     end

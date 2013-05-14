@@ -3,13 +3,11 @@ module Causes::GitHook
     include HookRegistry
 
     def run_check
-      if commit_message[0].size > 60
+      if user_commit_message.first.size > 60
         return :warn, 'Please keep the subject < ~60 characters'
       end
 
-      commit_message.each do |line|
-        next if line.start_with?('#')
-
+      user_commit_message.each do |line|
         chomped = line.chomp
         if chomped.size > 72
           return :warn, "> 72 characters, please hard wrap: '#{chomped}'"
