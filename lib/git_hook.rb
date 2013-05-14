@@ -64,11 +64,11 @@ module Causes
           next if check_class.filetype && check.staged.empty?
 
           title = "  Checking #{check.name}..."
-          print title
+          print title unless check.stealth?
 
           status, output = check.run_check
 
-          print_incremental_result(title, status, output)
+          print_incremental_result(title, status, output, check.stealth?)
           [status, output]
         end.compact
         print_result results
@@ -81,7 +81,12 @@ module Causes
         false
       end
 
-      def print_incremental_result(title, status, output)
+      def print_incremental_result(title, status, output, stealth = false)
+        if stealth
+          return if status == :good
+          print title
+        end
+
         print '.' * (@width - title.length)
         case status
         when :good

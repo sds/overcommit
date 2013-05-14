@@ -14,6 +14,11 @@ module Causes
       include FileMethods
       class << self
         attr_accessor :filetype
+        attr_accessor :stealth
+
+        def stealth!
+          self.stealth = true
+        end
       end
 
       def initialize(*args)
@@ -26,6 +31,10 @@ module Causes
 
       def skip?
         false
+      end
+
+      def stealth?
+        self.class.stealth
       end
 
       def staged
