@@ -5,7 +5,6 @@ Gem::Specification.new do |s|
   s.name              = 'overcommit'
   s.version           = Overcommit::VERSION
   s.license           = 'MIT'
-  s.date              = '2013-05-15'
 
   s.summary     = 'Opinionated git hook manager'
   s.description = 'Overcommit is a utility to install and extend git hooks'
