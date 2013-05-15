@@ -31,7 +31,8 @@ module Overcommit
         return if skip_checks.include? 'all'
 
         # Relative paths + symlinks == great fun
-        plugin_dirs = [File.join(File.dirname(Pathname.new(__FILE__).realpath), 'plugins')]
+        plugin_dirs = [File.join(File.dirname(Pathname.new(__FILE__).realpath),
+                                 'plugins')]
         plugin_dirs << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
 
         plugin_dirs.each do |dir|
@@ -40,18 +41,14 @@ module Overcommit
           end
         end
 
-        @width = 70 - (checks.map { |s| s.name.length }.max || 0)
-      end
-
-      def checks
-        HookRegistry.checks
+        @width = 70 - (HookRegistry.checks.map { |s| s.name.length }.max || 0)
       end
 
       def run(*args)
         exit if requires_modified_files? && modified_files.empty?
 
         puts "Running #{hook_name} checks"
-        results = checks.map do |check_class|
+        results = HookRegistry.checks.map do |check_class|
           check = check_class.new(*args)
           next if check.skip?
 
@@ -67,6 +64,7 @@ module Overcommit
           print_incremental_result(title, status, output, check.stealth?)
           [status, output]
         end.compact
+
         print_result results
       end
 
