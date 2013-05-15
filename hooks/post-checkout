@@ -4,5 +4,5 @@
 # the top-level directory of the git repository for which this hook was fired.
 
 # Run in the background since even though it takes just over a second for a
-# large repo like Causes, it's a noticeable delay.
+# large repo, it's a noticeable delay.
 exec .git/hooks/scripts/index-tags &
