@@ -3,5 +3,5 @@ module Overcommit
     # No special behavior
   end
 
-  GitHook.register_hook(CommitMessageHook)
+  Utils.register_hook(CommitMessageHook)
 end

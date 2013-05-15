@@ -7,18 +7,6 @@ module Overcommit
     # to the root of the git repo, then down into .githooks
     REPO_SPECIFIC_DIR = File.expand_path('../../../.githooks', $0)
 
-    @@extensions = []
-
-    class << self
-      def register_hook(base)
-        @@extensions << base
-      end
-
-      def run_hooks(*args)
-        @@extensions.each { |ext| ext.new.run(*args) }
-      end
-    end
-
     class BaseHook
       include FileMethods
       include ConsoleMethods

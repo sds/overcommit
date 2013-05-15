@@ -5,5 +5,5 @@ module Overcommit
     end
   end
 
-  GitHook.register_hook(PreCommitHook)
+  Utils.register_hook(PreCommitHook)
 end
