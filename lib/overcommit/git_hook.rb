@@ -37,7 +37,14 @@ module Overcommit
 
         plugin_dirs.each do |dir|
           Dir[File.join(dir, hook_name, '*.rb')].each do |plugin|
-            require plugin unless skip_checks.include? File.basename(plugin, '.rb')
+            unless skip_checks.include? File.basename(plugin, '.rb')
+              begin
+                require plugin
+              rescue NameError => ex
+                error "Couldn't load #{plugin}: #{ex}"
+                exit 0
+              end
+            end
           end
         end
 
