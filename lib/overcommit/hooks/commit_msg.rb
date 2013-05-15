@@ -1,5 +1,3 @@
-require 'rubygems'
-
 module Overcommit
   class CommitMessageHook < GitHook::BaseHook
     # No special behavior
