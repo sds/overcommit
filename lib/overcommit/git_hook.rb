@@ -1,7 +1,4 @@
-require 'erb'
-require 'tempfile'
 require 'pathname'
-require 'yaml'
 
 module Overcommit
   module GitHook

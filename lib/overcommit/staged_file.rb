@@ -1,3 +1,4 @@
+require 'tempfile'
 # We run syntax checks against the version of the file that is staged in
 # the index, not the one in the work tree. This class is a simple wrapper
 # to make working with staged files easier.

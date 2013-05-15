@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Overcommit::GitHook
   class YamlSyntax < HookSpecificCheck
     include HookRegistry

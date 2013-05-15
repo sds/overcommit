@@ -1,3 +1,5 @@
+require 'erb'
+
 module Overcommit::GitHook
   class ErbSyntax < HookSpecificCheck
     include HookRegistry
