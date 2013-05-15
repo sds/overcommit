@@ -26,7 +26,7 @@ module Overcommit
       end
 
       def name
-        Overcommit.underscorize self.class.name.to_s.split('::').last
+        Overcommit::Utils.underscorize self.class.name.to_s.split('::').last
       end
 
       def skip?

@@ -1,1 +1,7 @@
+require 'overcommit/console_methods'
+require 'overcommit/file_methods'
+require 'overcommit/git_hook'
+require 'overcommit/hook_specific_check'
+require 'overcommit/staged_file'
+require 'overcommit/utils'
 require 'overcommit/version'

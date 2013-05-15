@@ -8,8 +8,8 @@ module Helper
   ].join '|'
 
 
-  HOOKS   = Dir['hooks/*'].map { |path| path.split('/').last }
-  SCRIPTS = 'scripts/'
+  HOOKS   = Dir['bin/hooks/*'].map { |path| path.split('/').last }
+  SCRIPTS = 'bin/scripts/'
 
   HOOKS_PATH = '.git/hooks/'
 
@@ -63,7 +63,7 @@ module Helper
   end
 
   def hook_path(hook)
-    File.expand_path(File.join('hooks', hook))
+    File.expand_path(File.join('bin/hooks', hook))
   end
 
   def scripts_path

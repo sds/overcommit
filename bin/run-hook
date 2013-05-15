@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 require 'pathname'
 
+$: << File.expand_path('../../lib', Pathname.new(__FILE__).realpath)
+require 'overcommit'
+
 unless File.symlink?(__FILE__)
   STDERR.puts 'This file is not meant to be called directly.'
   exit 2
 end
 
-%W[causes_hook git_hook].each do |dep|
-  require File.expand_path "../#{dep}", Pathname.new(__FILE__).realpath
-end
-
-Overcommit.load_hooks
+Overcommit::Utils.load_hooks
 Overcommit::GitHook.run_hooks(*ARGV)

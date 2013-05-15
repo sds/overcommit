@@ -3,7 +3,7 @@ module Overcommit::GitHook
     include HookRegistry
     file_type :css
 
-    CSS_LINTER_PATH = File.join(Overcommit.scripts_path, 'csslint-rhino.js')
+    CSS_LINTER_PATH = Overcommit::Utils.script_path 'csslint-rhino.js'
 
     def run_check
       return :warn, "Rhino is not installed" unless in_path? 'rhino'
