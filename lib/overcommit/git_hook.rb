@@ -53,7 +53,7 @@ module Overcommit
 
         reporter.print_header
 
-        results = HookRegistry.checks.map do |check_class|
+        HookRegistry.checks.each do |check_class|
           check = check_class.new(*args)
           next if check.skip?
 
@@ -61,16 +61,12 @@ module Overcommit
           # are no staged files of that type in the tree
           next if check_class.filetype && check.staged.empty?
 
-          title = "  Checking #{check.name}..."
-          print title unless check.stealth?
+          reporter.with_status(check) do
+            check.run_check
+          end
+        end
 
-          status, output = check.run_check
-
-          reporter.print_incremental_result(title, status, output, check.stealth?)
-          [status, output]
-        end.compact
-
-        reporter.print_result results
+        reporter.print_result
       end
 
     private
