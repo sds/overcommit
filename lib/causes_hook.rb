@@ -1,4 +1,4 @@
-module Causes
+module Overcommit
   module ConsoleMethods
     def bold(str)
       puts "\033[1;37m#{str}\033[0m"

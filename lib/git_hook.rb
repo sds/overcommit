@@ -7,7 +7,7 @@ require 'yaml'
   require File.expand_path "../#{dep}", __FILE__
 end
 
-module Causes
+module Overcommit
   module GitHook
     # File.expand_path takes one more '..' than you're used to... we want to
     # go two directories up from the caller (which will be .git/hooks/something)
@@ -39,7 +39,7 @@ module Causes
         plugin_dirs << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
 
         plugin_dirs.each do |dir|
-          Dir[File.join(dir, Causes.hook_name, '*.rb')].each do |plugin|
+          Dir[File.join(dir, Overcommit.hook_name, '*.rb')].each do |plugin|
             require plugin unless skip_checks.include? File.basename(plugin, '.rb')
           end
         end
@@ -54,7 +54,7 @@ module Causes
       def run(*args)
         exit if requires_modified_files? && modified_files.empty?
 
-        puts "Running #{Causes.hook_name} checks"
+        puts "Running #{Overcommit.hook_name} checks"
         results = checks.map do |check_class|
           check = check_class.new(*args)
           next if check.skip?
@@ -110,13 +110,13 @@ module Causes
         puts
         case final_result(results)
         when :good
-          success "+++ All #{Causes.hook_name} checks passed"
+          success "+++ All #{Overcommit.hook_name} checks passed"
           exit 0
         when :bad
-          error "!!! One or more #{Causes.hook_name} checks failed"
+          error "!!! One or more #{Overcommit.hook_name} checks failed"
           exit 1
         when :stop
-          warning "*** One or more #{Causes.hook_name} checks needs attention"
+          warning "*** One or more #{Overcommit.hook_name} checks needs attention"
           warning "*** If you really want to commit, use SKIP_CHECKS"
           warning "*** (takes a space-separated list of checks to skip, or 'all')"
           exit 1

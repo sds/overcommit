@@ -10,5 +10,5 @@ end
   require File.expand_path "../#{dep}", Pathname.new(__FILE__).realpath
 end
 
-Causes.load_hooks
-Causes::GitHook.run_hooks(*ARGV)
+Overcommit.load_hooks
+Overcommit::GitHook.run_hooks(*ARGV)

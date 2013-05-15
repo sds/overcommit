@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class ReleaseNote < HookSpecificCheck
     include HookRegistry
 

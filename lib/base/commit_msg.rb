@@ -1,6 +1,6 @@
 require 'rubygems'
 
-module Causes
+module Overcommit
   class CommitMessageHook < GitHook::BaseHook
     # No special behavior
   end

@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class RubySyntax < HookSpecificCheck
     include HookRegistry
     file_type :rb

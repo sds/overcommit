@@ -1,4 +1,4 @@
-module Causes
+module Overcommit
   module FileMethods
     def modified_files(type=nil, path=nil)
       @modified_files ||=

@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class TextWidth < HookSpecificCheck
     include HookRegistry
 

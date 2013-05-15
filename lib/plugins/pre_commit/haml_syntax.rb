@@ -4,7 +4,7 @@ rescue LoadError => e
   puts "'haml' gem not available"
 end
 
-module Causes::GitHook
+module Overcommit::GitHook
   class HamlSyntax < HookSpecificCheck
     include HookRegistry
     file_type :haml

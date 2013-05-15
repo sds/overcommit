@@ -1,10 +1,10 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class JSSyntax < HookSpecificCheck
     include HookRegistry
     file_type :js
 
-    JS_HINT_PATH = File.join(Causes.scripts_path, 'jshint.js')
-    JS_HINT_RUNNER_PATH = File.join(Causes.scripts_path, 'jshint_runner.js')
+    JS_HINT_PATH = File.join(Overcommit.scripts_path, 'jshint.js')
+    JS_HINT_RUNNER_PATH = File.join(Overcommit.scripts_path, 'jshint_runner.js')
 
     def run_check
       return :warn, "Rhino is not installed" unless in_path? 'rhino'

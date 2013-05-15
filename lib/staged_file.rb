@@ -2,7 +2,7 @@
 # the index, not the one in the work tree. This class is a simple wrapper
 # to make working with staged files easier.
 
-module Causes
+module Overcommit
   class StagedFile
     attr_reader :contents
 

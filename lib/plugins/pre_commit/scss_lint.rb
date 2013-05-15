@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class ScssLint < HookSpecificCheck
     include HookRegistry
     file_type :scss

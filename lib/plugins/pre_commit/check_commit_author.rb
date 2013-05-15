@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class CheckCommitAuthor < HookSpecificCheck
     include HookRegistry
 

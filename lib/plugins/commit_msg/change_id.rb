@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class ChangeID < HookSpecificCheck
     include HookRegistry
 

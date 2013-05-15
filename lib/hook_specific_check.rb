@@ -1,4 +1,4 @@
-module Causes
+module Overcommit
   module GitHook
     module HookRegistry
       @checks = []
@@ -26,7 +26,7 @@ module Causes
       end
 
       def name
-        Causes.underscorize self.class.name.to_s.split('::').last
+        Overcommit.underscorize self.class.name.to_s.split('::').last
       end
 
       def skip?

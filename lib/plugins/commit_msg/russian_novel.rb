@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class RussianNovel < HookSpecificCheck
     include HookRegistry
 

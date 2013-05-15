@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class ErbSyntax < HookSpecificCheck
     include HookRegistry
     file_type :erb

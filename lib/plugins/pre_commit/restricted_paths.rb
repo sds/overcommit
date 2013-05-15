@@ -1,4 +1,4 @@
-module Causes::GitHook
+module Overcommit::GitHook
   class RestrictedPaths < HookSpecificCheck
     include HookRegistry
     RESTRICTED_PATHS = %w[vendor]
