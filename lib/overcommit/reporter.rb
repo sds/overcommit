@@ -23,6 +23,25 @@ module Overcommit
       puts "Running #{@name} checks"
     end
 
+    def print_result
+      puts
+      case final_result
+      when :good
+        success "+++ All #{@name} checks passed"
+        exit 0
+      when :bad
+        error "!!! One or more #{@name} checks failed"
+        exit 1
+      when :stop
+        warning "*** One or more #{@name} checks needs attention"
+        warning "*** If you really want to commit, use SKIP_CHECKS"
+        warning "*** (takes a space-separated list of checks to skip, or 'all')"
+        exit 1
+      end
+    end
+
+  private
+
     def print_incremental_result(title, status, output, stealth = false)
       if stealth
         return if status == :good
@@ -47,25 +66,6 @@ module Overcommit
         exit 1
       end
     end
-
-    def print_result
-      puts
-      case final_result
-      when :good
-        success "+++ All #{@name} checks passed"
-        exit 0
-      when :bad
-        error "!!! One or more #{@name} checks failed"
-        exit 1
-      when :stop
-        warning "*** One or more #{@name} checks needs attention"
-        warning "*** If you really want to commit, use SKIP_CHECKS"
-        warning "*** (takes a space-separated list of checks to skip, or 'all')"
-        exit 1
-      end
-    end
-
-  private
 
     def final_result
       return :bad  if @results.include?(:bad)
