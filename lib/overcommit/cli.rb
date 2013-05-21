@@ -2,7 +2,6 @@ require 'optparse'
 
 module Overcommit
   class CLI
-
     def initialize(arguments = [])
       @arguments = arguments
       @options   = {}
@@ -20,6 +19,38 @@ module Overcommit
           puts VERSION
           exit 0
         end
+
+        opts.on('-a', '--all', 'Include all git hooks') do
+          @options[:template] = 'all'
+        end
+
+        opts.on('-t', '--template template',
+                'Specify a template of hooks') do |template|
+          @options[:template] = template
+        end
+
+        opts.on('-e', '--exclude hook_name,...', Array,
+                'Exclude hooks from installation') do |excludes|
+          # Transform from:
+          #
+          #   pre_commit/test_history,commit_msg/change_id
+          #
+          # Into:
+          #
+          #   {
+          #     'commit_msg' => ['change_id'],
+          #     'pre_commit' => ['test_history']
+          #   }
+          @options[:excludes] = excludes.inject({}) do |memo, exclude|
+            parts = exclude.split(%r{[:/.]})
+            next memo unless parts.size == 2
+
+            memo[parts.first] ||= []
+            memo[parts.first] << parts.last
+
+            memo
+          end
+        end
       end
 
       begin
@@ -33,7 +64,24 @@ module Overcommit
     end
 
     def run
-      raise NotImplementedError, 'Nothing to see here yet'
+      if @options[:targets].nil? || @options[:targets].empty?
+        puts 'You must supply at least one directory to install into.'
+        puts 'For example:', ''
+        puts "  #{File.basename($0)} <target directory>"
+        exit 2
+      end
+
+      installer = Installer.new(@options)
+
+      @options[:targets].each do |target|
+        installer.install(target)
+      end
+
+      puts 'Installation complete.'
+
+    rescue ArgumentError => ex
+      puts "Installation failed: #{ex}"
+      exit 3
     end
 
   private

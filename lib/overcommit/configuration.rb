@@ -8,8 +8,7 @@ module Overcommit
     attr_reader :templates
 
     def initialize
-      @templates = YAML::load_file(File.join(File.dirname(
-        File.expand_path(__FILE__)), '..', '..', 'config', 'templates.yml'))
+      @templates = YAML::load_file(Utils.absolute_path('config/templates.yml'))
     end
   end
 

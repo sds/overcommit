@@ -28,6 +28,10 @@ module Overcommit
         File.join(File.expand_path('../../hooks/scripts', $0), script)
       end
 
+      def absolute_path(path)
+        File.join(File.expand_path('../../..', __FILE__), path)
+      end
+
       # Shamelessly stolen from:
       # http://stackoverflow.com/questions/1509915/converting-camel-case-to-underscore-case-in-ruby
       def underscorize(str)

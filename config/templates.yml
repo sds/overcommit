@@ -1,3 +1,4 @@
+---
 default:
   excludes:
     pre_commit:
@@ -6,3 +7,5 @@ default:
       - restricted_paths
     commit_msg:
       - change_id
+all:
+  excludes:
