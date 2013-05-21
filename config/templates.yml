@@ -1,0 +1,8 @@
+default:
+  excludes:
+    pre_commit:
+      - causes_email
+      - test_history
+      - restricted_paths
+    commit_msg:
+      - change_id
