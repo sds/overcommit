@@ -34,13 +34,17 @@ module Overcommit
       end
 
       def run(*args)
+        # Support 'bare' installation where we don't have any hooks yet.
+        # Silently pass.
+        exit unless (checks = HookRegistry.checks) && checks.any?
+
         exit if requires_modified_files? && Utils.modified_files.empty?
 
-        reporter = Reporter.new(Overcommit::Utils.hook_name, HookRegistry.checks)
+        reporter = Reporter.new(Overcommit::Utils.hook_name, checks)
 
         reporter.print_header
 
-        HookRegistry.checks.each do |check_class|
+        checks.each do |check_class|
           check = check_class.new(*args)
           next if check.skip?
 
