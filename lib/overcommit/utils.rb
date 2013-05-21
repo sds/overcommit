@@ -3,6 +3,16 @@ module Overcommit
     class << self
       include ConsoleMethods
 
+      @@hooks = []
+
+      def register_hook(hook)
+        @@hooks << hook
+      end
+
+      def run_hooks(*args)
+        @@hooks.each { |hook| hook.new.run(*args) }
+      end
+
       def hook_name
         File.basename($0).tr('-', '_')
       end
