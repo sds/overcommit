@@ -37,6 +37,13 @@ module Overcommit
             tr('-', '_').
             downcase
       end
+
+      # Get a list of staged Added, Copied, or Modified files (ignore renames
+      # and deletions, since there should be nothing to check).
+      def modified_files
+        @modified_files ||=
+          `git diff --cached --name-only --diff-filter=ACM`.split "\n"
+      end
     end
   end
 end

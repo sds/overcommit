@@ -9,10 +9,9 @@ module Overcommit::GitHook
     def run_check
       return :warn, "Rhino is not installed" unless in_path? 'rhino'
 
-      paths = staged.map { |s| s.path }.join(' ')
+      paths = staged.join(' ')
 
       output = `rhino -strict -f #{JS_HINT_PATH} #{JS_HINT_RUNNER_PATH} #{paths} 2>&1 | grep -v warning | grep -v -e '^js: '`
-      staged.each { |s| output = s.filter_string(output) }
       return (output !~ /^ERROR/ ? :good : :bad), output
     end
   end

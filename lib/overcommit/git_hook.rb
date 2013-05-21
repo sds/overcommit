@@ -8,7 +8,6 @@ module Overcommit
     REPO_SPECIFIC_DIR = File.expand_path('../../../.githooks', $0)
 
     class BaseHook
-      include FileMethods
       include ConsoleMethods
 
       def initialize
@@ -35,7 +34,7 @@ module Overcommit
       end
 
       def run(*args)
-        exit if requires_modified_files? && modified_files.empty?
+        exit if requires_modified_files? && Utils.modified_files.empty?
 
         reporter = Reporter.new(Overcommit::Utils.hook_name, HookRegistry.checks)
 

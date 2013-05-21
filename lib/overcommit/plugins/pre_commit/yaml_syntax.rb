@@ -8,11 +8,11 @@ module Overcommit::GitHook
     def run_check
       clean = true
       output = []
-      staged.each do |staged_file|
+      staged.each do |path|
         begin
-          YAML.load_file(staged_file.path)
+          YAML.load_file(path)
         rescue ArgumentError => e
-          output << "#{e.message} parsing #{staged_file.path}"
+          output << "#{e.message} parsing #{path}"
           clean = false
         end
       end

@@ -10,11 +10,10 @@ module Overcommit::GitHook
         return :warn, 'scss-lint not installed -- run `gem install scss-lint`'
       end
 
-      paths = staged.map { |s| s.path }.join(' ')
+      paths = staged.join(' ')
 
       output = `scss-lint #{paths} 2>&1`
 
-      staged.each { |s| output = s.filter_string(output) }
       return (output.empty? ? :good : :bad), output
     end
   end

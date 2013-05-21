@@ -11,7 +11,6 @@ module Overcommit
     end
 
     class HookSpecificCheck
-      include FileMethods
       class << self
         attr_accessor :filetype
         attr_accessor :stealth
@@ -38,14 +37,20 @@ module Overcommit
       end
 
       def staged
-        @staged ||= staged_files(self.class.filetype)
+        @staged ||= Utils.modified_files.select do |filename|
+          filename.end_with?(".#{self.class.filetype}")
+        end
       end
 
       def run_check
         [:bad, 'No checks defined!']
       end
 
-    protected
+    private
+
+      def in_path?(cmd)
+        system("which #{cmd} &> /dev/null")
+      end
 
       def commit_message
         @commit_message ||= begin

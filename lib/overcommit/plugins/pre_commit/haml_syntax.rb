@@ -16,7 +16,7 @@ module Overcommit::GitHook
     end
 
     def run_check
-      staged.map { |s| s.path }.each do |path|
+      staged.each do |path|
         begin
           Haml::Engine.new(File.read(path), :check_syntax => true)
         rescue Haml::Error => e
