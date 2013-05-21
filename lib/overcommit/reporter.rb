@@ -74,7 +74,7 @@ module Overcommit
     end
 
     def print_report(*report)
-      puts report.flatten.map{ |line| "    #{line}" }.join("\n")
+      puts report.flatten.map { |line| "    #{line}" }.join("\n")
     end
   end
 end
