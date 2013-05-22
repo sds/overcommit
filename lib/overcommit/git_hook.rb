@@ -4,26 +4,12 @@ module Overcommit
       include ConsoleMethods
 
       def initialize
-        skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
-        return if skip_checks.include? 'all'
-
-        plugin_dirs   = [File.expand_path('../plugins', __FILE__)]
-        repo_specific = Utils.repo_path('.githooks')
-
-        plugin_dirs << repo_specific if File.directory?(repo_specific)
-
-        plugin_dirs.each do |dir|
-          Dir[File.join(dir, Utils.hook_name, '*.rb')].each do |plugin|
-            unless skip_checks.include? File.basename(plugin, '.rb')
-              begin
-                require plugin
-              rescue NameError => ex
-                error "Couldn't load #{plugin}: #{ex}"
-                exit 0
-              end
-            end
-          end
+        Overcommit.config.desired_plugins.each do |plugin|
+          require plugin
         end
+      rescue NameError => ex
+        error "Couldn't load plugin: #{ex}"
+        exit 0
       end
 
       def run(*args)
