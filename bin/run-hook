@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
-require 'pathname'
 
-$: << File.expand_path('../../lib', Pathname.new(__FILE__).realpath)
 require 'overcommit'
 
 Overcommit::Utils.load_hooks
