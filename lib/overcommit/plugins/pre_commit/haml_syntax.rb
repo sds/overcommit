@@ -1,21 +1,15 @@
-begin
-  require 'haml'
-rescue LoadError => e
-  puts "'haml' gem not available"
-end
-
 module Overcommit::GitHook
   class HamlSyntax < HookSpecificCheck
     include HookRegistry
     file_type :haml
 
-    def skip?
-      unless defined? Haml
-        return :warn, "Can't find Haml gem"
-      end
-    end
-
     def run_check
+      begin
+        require 'haml'
+      rescue LoadError
+        return :warn, "'haml' gem not installed -- run `gem install haml`"
+      end
+
       staged.each do |path|
         begin
           Haml::Engine.new(File.read(path), :check_syntax => true)
