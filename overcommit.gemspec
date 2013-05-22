@@ -17,5 +17,7 @@ Gem::Specification.new do |s|
 
   s.executables = ['overcommit']
 
-  s.files = `git ls-files -- lib`.split("\n")
+  s.files = Dir['lib/**/*.rb'] +
+            Dir['bin/**/*'] +
+            Dir['config/*.yml']
 end
