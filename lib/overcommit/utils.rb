@@ -34,7 +34,7 @@ module Overcommit
 
       # File.expand_path takes one more '..' than you're used to... we want to
       # go two directories up from the caller (which will be .git/hooks/something)
-      # to the root of the git repo, then down into .githooks
+      # to the root of the git repo.
       def repo_path(path)
         File.join(File.expand_path('../../..', $0), path)
       end
