@@ -1,12 +1,5 @@
-require 'pathname'
-
 module Overcommit
   module GitHook
-    # File.expand_path takes one more '..' than you're used to... we want to
-    # go two directories up from the caller (which will be .git/hooks/something)
-    # to the root of the git repo, then down into .githooks
-    REPO_SPECIFIC_DIR = File.expand_path('../../../.githooks', $0)
-
     class BaseHook
       include ConsoleMethods
 
@@ -14,13 +7,13 @@ module Overcommit
         skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
         return if skip_checks.include? 'all'
 
-        # Relative paths + symlinks == great fun
-        plugin_dirs = [File.join(File.dirname(Pathname.new(__FILE__).realpath),
-                                 'plugins')]
-        plugin_dirs << REPO_SPECIFIC_DIR if File.directory?(REPO_SPECIFIC_DIR)
+        plugin_dirs   = [File.expand_path('../plugins', __FILE__)]
+        repo_specific = Utils.repo_path('.githooks')
+
+        plugin_dirs << repo_specific if File.directory?(repo_specific)
 
         plugin_dirs.each do |dir|
-          Dir[File.join(dir, Overcommit::Utils.hook_name, '*.rb')].each do |plugin|
+          Dir[File.join(dir, Utils.hook_name, '*.rb')].each do |plugin|
             unless skip_checks.include? File.basename(plugin, '.rb')
               begin
                 require plugin
