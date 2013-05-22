@@ -7,5 +7,6 @@ default:
       - restricted_paths
     commit_msg:
       - change_id
+      - release_note
 all:
   excludes:
