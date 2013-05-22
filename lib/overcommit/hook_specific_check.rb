@@ -48,6 +48,10 @@ module Overcommit
 
     private
 
+      def modified_files
+        Overcommit::Utils.modified_files
+      end
+
       def in_path?(cmd)
         system("which #{cmd} &> /dev/null")
       end
