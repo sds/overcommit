@@ -76,7 +76,7 @@ module Overcommit
 
     def run
       if @options[:targets].nil? || @options[:targets].empty?
-        warning 'You must supply at least one directory to install into.'
+        warning 'You must supply at least one directory to install into'
         puts @parser.help
         exit 2
       end
@@ -87,7 +87,7 @@ module Overcommit
         installer.install(target)
       end
 
-      puts 'Installation complete.'
+      success 'Installation complete'
 
     rescue ArgumentError => ex
       error "Installation failed: #{ex}"
