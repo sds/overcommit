@@ -50,6 +50,7 @@ module Overcommit::GitHook
   class FoodCritic < HookSpecificCheck
     include HookRegistroy
     COOKBOOKS = 'cookbooks'
+    @@options = { :tags => %w[~readme ~fc001] }
 
     def run_check
       begin
