@@ -1,7 +1,7 @@
 # Overcommit
 
 A gem to install and manage a configurable (but opinionated) set of Git hooks.
-Originally written for use at [Causes](https://www.github.com/causes).
+Originally written for use at [Causes](https://github.com/causes).
 
 In addition to supporting global hooks, it also allows teams to define plugins
 specific to a repository (installed in the `.githooks` directory).
@@ -21,6 +21,52 @@ You can then run the `overcommit` command to install hooks into repositories:
 
 `overcommit` also accepts a handful of arguments, which can be enumerated by
 running `overcommit --help`.
+
+At [Causes](https://github.com/causes), we install all of the hooks via the
+`--all` flag. In absence of this flag, you will be given the `default` template.
+For more information, try `overcommit --list-templates`.
+
+## Built-in hooks
+
+There are two types of hooks installed by this utility. `post-checkout`,
+`post-merge`, and `prepare-commit-msg` are all simple shell scripts rolled by
+hand for use at Causes. We think other people may find them useful.
+
+The second, more interesting type is the Ruby-based, extensible checks. These
+are currently `pre-commit` and `commit-msg`. These are used for checking the
+validity of the code to be comitted and checking the content of the commit
+message, respectively.
+
+You can see the various sub-hooks available in the `lib/overcommit/plugins`
+directory:
+
+    >> tree lib/overcommit/plugins
+    lib/overcommit/plugins
+    ├── commit_msg
+    │   ├── change_id.rb
+    │   ├── release_note.rb
+    │   ├── russian_novel.rb
+    │   ├── text_width.rb
+    │   └── trailing_period.rb
+    └── pre_commit
+        ├── author_name.rb
+        ├── causes_email.rb
+        ├── css_linter.rb
+        ├── erb_syntax.rb
+        ├── haml_syntax.rb
+        ├── js_console_log.rb
+        ├── js_syntax.rb
+        ├── restricted_paths.rb
+        ├── ruby_syntax.rb
+        ├── scss_lint.rb
+        ├── test_history.rb
+        ├── whitespace.rb
+        └── yaml_syntax.rb
+
+Most of them are straightforward lints, with an easter egg or two thrown in for
+good measure. Because some of these are Causes-specific (for instance, we
+insert a 'Change-Id' at the end of each commit message for Gerrit code review),
+the default installation will skip loading some of these checks.
 
 ## Repo-specific hooks
 
