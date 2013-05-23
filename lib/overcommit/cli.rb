@@ -22,6 +22,14 @@ module Overcommit
           exit 0
         end
 
+        opts.on('-l', '--list-templates', 'List built-in templates') do
+          Overcommit.config.templates.each_pair do |name, configuration|
+            bold name
+            puts YAML.dump(configuration), ''
+          end
+          exit 0
+        end
+
         opts.on('-a', '--all', 'Include all git hooks') do
           @options[:template] = 'all'
         end
