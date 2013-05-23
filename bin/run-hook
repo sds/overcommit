@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Required for Ruby 1.8 compatibility (e.g. OS X), as sad as this makes me
+require 'rubygems'
 require 'overcommit'
 
 Overcommit::Utils.load_hooks
