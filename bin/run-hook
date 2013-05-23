@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'overcommit'
+
+Overcommit::Utils.load_hooks
+Overcommit::Utils.run_hooks(*ARGV)
