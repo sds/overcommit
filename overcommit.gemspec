@@ -20,4 +20,6 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*.rb'] +
             Dir['bin/**/*'] +
             Dir['config/*.yml']
+
+  s.add_development_dependency 'rspec'
 end

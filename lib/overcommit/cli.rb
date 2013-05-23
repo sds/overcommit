@@ -3,6 +3,7 @@ require 'optparse'
 module Overcommit
   class CLI
     include ConsoleMethods
+    attr_reader :options
 
     def initialize(arguments = [])
       @arguments = arguments
