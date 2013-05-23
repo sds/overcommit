@@ -2,13 +2,15 @@ require 'optparse'
 
 module Overcommit
   class CLI
+    include ConsoleMethods
+
     def initialize(arguments = [])
       @arguments = arguments
       @options   = {}
     end
 
     def parse_arguments
-      parser = OptionParser.new do |opts|
+      @parser = OptionParser.new do |opts|
         opts.banner = "Usage: #{opts.program_name} [options] target"
 
         opts.on_tail('-h', '--help', 'Show this message') do
@@ -54,20 +56,19 @@ module Overcommit
       end
 
       begin
-        parser.parse!(@arguments)
+        @parser.parse!(@arguments)
 
         # Unconsumed arguments are our targets
         @options[:targets] = @arguments
       rescue OptionParser::InvalidOption => ex
-        print_help parser.help, ex
+        print_help @parser.help, ex
       end
     end
 
     def run
       if @options[:targets].nil? || @options[:targets].empty?
-        puts 'You must supply at least one directory to install into.'
-        puts 'For example:', ''
-        puts "  #{File.basename($0)} <target directory>"
+        warning 'You must supply at least one directory to install into.'
+        puts @parser.help
         exit 2
       end
 
@@ -80,14 +81,14 @@ module Overcommit
       puts 'Installation complete.'
 
     rescue ArgumentError => ex
-      puts "Installation failed: #{ex}"
+      error "Installation failed: #{ex}"
       exit 3
     end
 
   private
 
     def print_help(message, ex = nil)
-      puts ex, '' if ex
+      error ex, '' if ex
       puts message
       exit 0
     end
