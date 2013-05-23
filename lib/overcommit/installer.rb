@@ -9,9 +9,12 @@ module Overcommit
 
     def install(target)
       absolute_target = File.expand_path(target)
-      unless File.directory?(File.join(absolute_target, '.git'))
+      unless File.directory? absolute_target
+        raise NotAGitRepoError, 'is a directory'
+      end
 
-        raise ArgumentError, "#{target} does not appear to be a git repository"
+      unless File.directory?(File.join(absolute_target, '.git'))
+        raise NotAGitRepoError, 'does not appear to be a git repository'
       end
 
       puts "Installing hooks into #{target}"

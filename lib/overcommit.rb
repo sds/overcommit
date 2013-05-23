@@ -1,5 +1,6 @@
 require 'overcommit/configuration'
 require 'overcommit/console_methods'
+require 'overcommit/errors'
 require 'overcommit/git_hook'
 require 'overcommit/hook_specific_check'
 require 'overcommit/installer'

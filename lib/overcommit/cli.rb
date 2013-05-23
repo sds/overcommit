@@ -84,7 +84,11 @@ module Overcommit
       installer = Installer.new(@options)
 
       @options[:targets].each do |target|
-        installer.install(target)
+        begin
+          installer.install(target)
+        rescue NotAGitRepoError => e
+          warning "Skipping #{target}: #{e}"
+        end
       end
 
       success 'Installation complete'

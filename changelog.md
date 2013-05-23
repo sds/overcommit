@@ -1,5 +1,6 @@
 0.1.1
 
+* Make installer more robust
 * Improve readme documentation
 * Add template listing (-l) to CLI
 * Add rspec and super-basic spec coverage
