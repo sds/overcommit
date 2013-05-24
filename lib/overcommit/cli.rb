@@ -101,7 +101,7 @@ module Overcommit
   private
 
     def print_help(message, ex = nil)
-      error ex, '' if ex
+      error ex.to_s + "\n" if ex
       puts message
       exit 0
     end
