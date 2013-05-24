@@ -1,3 +1,7 @@
+0.1.2
+
+* Add uninstall (-u) option
+
 0.1.1
 
 * Make installer more robust

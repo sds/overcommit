@@ -40,6 +40,10 @@ module Overcommit
           @options[:template] = template
         end
 
+        opts.on('--uninstall', 'Remove overcommit from target') do
+          @options[:uninstall] = true
+        end
+
         opts.on('-e', '--exclude hook_name,...', Array,
                 'Exclude hooks from installation') do |excludes|
           # Transform from:
@@ -76,22 +80,20 @@ module Overcommit
 
     def run
       if @options[:targets].nil? || @options[:targets].empty?
-        warning 'You must supply at least one directory to install into'
+        warning 'You must supply at least one directory'
         puts @parser.help
         exit 2
       end
 
-      installer = Installer.new(@options)
-
       @options[:targets].each do |target|
         begin
-          installer.install(target)
+          Installer.new(@options, target).run
         rescue NotAGitRepoError => e
           warning "Skipping #{target}: #{e}"
         end
       end
 
-      success 'Installation complete'
+      success "#{@options[:uninstall] ? 'Removal' : 'Installation'} complete"
 
     rescue ArgumentError => ex
       error "Installation failed: #{ex}"
