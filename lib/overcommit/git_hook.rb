@@ -15,7 +15,7 @@ module Overcommit
       def run(*args)
         # Support 'bare' installation where we don't have any hooks yet.
         # Silently pass.
-        exit unless (checks = HookRegistry.checks) && checks.any?
+        exit unless (checks = registered_checks) && checks.any?
 
         exit if requires_modified_files? && Utils.modified_files.empty?
 
@@ -40,6 +40,10 @@ module Overcommit
       end
 
     private
+
+      def registered_checks
+        HookRegistry.checks
+      end
 
       # If true, only run this check when there are modified files.
       def requires_modified_files?
