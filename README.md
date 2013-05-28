@@ -116,3 +116,13 @@ module Overcommit::GitHook
   end
 end
 ```
+
+## Contributing
+
+Pull requests and issues are welcome. Although spec coverage is minimal at the
+moment, new features should ship with tests so that we can avoid breaking them
+in the future.
+
+## License
+
+Released under the MIT License.
