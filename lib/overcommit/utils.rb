@@ -1,8 +1,6 @@
 module Overcommit
   module Utils
     class << self
-      include ConsoleMethods
-
       @@hooks = []
 
       def register_hook(hook)
@@ -20,7 +18,7 @@ module Overcommit
       def load_hooks
         require File.expand_path("../hooks/#{hook_name}", __FILE__)
       rescue LoadError
-        error "No hook definition found for #{hook_name}"
+        log.error "No hook definition found for #{hook_name}"
         exit 1
       end
 
@@ -54,6 +52,12 @@ module Overcommit
       def modified_files
         @modified_files ||=
           `git diff --cached --name-only --diff-filter=ACM`.split "\n"
+      end
+
+    private
+
+      def log
+        Logger.instance
       end
     end
   end

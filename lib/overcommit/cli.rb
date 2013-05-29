@@ -2,7 +2,6 @@ require 'optparse'
 
 module Overcommit
   class CLI
-    include ConsoleMethods
     attr_reader :options
 
     def initialize(arguments = [])
@@ -19,14 +18,14 @@ module Overcommit
         end
 
         opts.on_tail('-v', '--version', 'Show version') do
-          puts VERSION
+          log.log VERSION
           exit 0
         end
 
         opts.on('-l', '--list-templates', 'List built-in templates') do
           Overcommit.config.templates.each_pair do |name, configuration|
             bold name
-            puts YAML.dump(configuration), ''
+            log.log YAML.dump(configuration), ''
           end
           exit 0
         end
@@ -80,8 +79,8 @@ module Overcommit
 
     def run
       if @options[:targets].nil? || @options[:targets].empty?
-        warning 'You must supply at least one directory'
-        puts @parser.help
+        log.warning 'You must supply at least one directory'
+        log.log @parser.help
         exit 2
       end
 
@@ -89,11 +88,11 @@ module Overcommit
         begin
           Installer.new(@options, target).run
         rescue NotAGitRepoError => e
-          warning "Skipping #{target}: #{e}"
+          log.warning "Skipping #{target}: #{e}"
         end
       end
 
-      success "#{@options[:uninstall] ? 'Removal' : 'Installation'} complete"
+      log.success "#{@options[:uninstall] ? 'Removal' : 'Installation'} complete"
 
     rescue ArgumentError => ex
       error "Installation failed: #{ex}"
@@ -102,9 +101,13 @@ module Overcommit
 
   private
 
+    def log
+      Logger.instance
+    end
+
     def print_help(message, ex = nil)
-      error ex.to_s + "\n" if ex
-      puts message
+      log.error ex.to_s + "\n" if ex
+      log.log message
       exit 0
     end
   end

@@ -1,7 +1,5 @@
 module Overcommit
   class Reporter
-    include ConsoleMethods
-
     def initialize(name, checks)
       @name    = name
       @checks  = checks
@@ -11,7 +9,7 @@ module Overcommit
 
     def with_status(check, &block)
       title = "  Checking #{check.name}..."
-      print title unless check.stealth?
+      log.partial title unless check.stealth?
 
       status, output = yield
 
@@ -20,48 +18,53 @@ module Overcommit
     end
 
     def print_header
-      puts "Running #{@name} checks"
+      log.log "Running #{@name} checks"
     end
 
     def print_result
-      puts
+      log.log # Newline
+
       case final_result
       when :good
-        success "+++ All #{@name} checks passed"
+        log.success "+++ All #{@name} checks passed"
         exit 0
       when :bad
-        error "!!! One or more #{@name} checks failed"
+        log.error "!!! One or more #{@name} checks failed"
         exit 1
       when :stop
-        warning "*** One or more #{@name} checks needs attention"
-        warning "*** If you really want to commit, use SKIP_CHECKS"
-        warning "*** (takes a space-separated list of checks to skip, or 'all')"
+        log.warning "*** One or more #{@name} checks needs attention"
+        log.warning "*** If you really want to commit, use SKIP_CHECKS"
+        log.warning "*** (takes a space-separated list of checks to skip, or 'all')"
         exit 1
       end
     end
 
   private
 
+    def log
+      Overcommit::Logger.instance
+    end
+
     def print_incremental_result(title, status, output, stealth = false)
       if stealth
         return if status == :good
-        print title
+        log.partial title
       end
 
       print '.' * (@width - title.length)
       case status
       when :good
-        success 'OK'
+        log.success 'OK'
       when :bad
-        error 'FAILED'
+        log.error 'FAILED'
         print_report output
       when :warn
-        warning output
+        log.warning output
       when :stop
-        warning 'UH OH'
+        log.warning 'UH OH'
         print_report output
       else
-        error '???'
+        log.error '???'
         print_report "Check didn't return a status"
         exit 1
       end
@@ -74,7 +77,7 @@ module Overcommit
     end
 
     def print_report(*report)
-      puts report.flatten.map { |line| "    #{line}" }.join("\n")
+      log.log report.flatten.map { |line| "    #{line}" }.join("\n")
     end
   end
 end

@@ -14,7 +14,7 @@ module Overcommit
     end
 
     def install
-      puts "Installing hooks into #{@target}"
+      log.log "Installing hooks into #{@target}"
 
       install_scripts
       install_hooks
@@ -22,7 +22,7 @@ module Overcommit
     end
 
     def uninstall
-      puts "Removing hooks from #{@target}"
+      log.log "Removing hooks from #{@target}"
 
       uninstall_scripts
       uninstall_hooks
@@ -30,6 +30,10 @@ module Overcommit
     end
 
   private
+
+    def log
+      Logger.instance
+    end
 
     def hook_path
       absolute_target = File.expand_path @target

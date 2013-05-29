@@ -1,14 +1,12 @@
 module Overcommit
   module GitHook
     class BaseHook
-      include ConsoleMethods
-
       def initialize
         Overcommit.config.desired_plugins.each do |plugin|
           require plugin
         end
       rescue LoadError, NameError => ex
-        error "Couldn't load plugin: #{ex}"
+        log.error "Couldn't load plugin: #{ex}"
         exit 0
       end
 
@@ -40,6 +38,10 @@ module Overcommit
       end
 
     private
+
+      def log
+        Logger.instance
+      end
 
       # Return all loaded plugins, skipping those that are skippable and have
       # been asked to be skipped by the environment variable SKIP_CHECKS.
