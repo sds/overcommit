@@ -49,5 +49,41 @@ describe Overcommit::GitHook::BaseHook do
         end
       end
     end
+
+    context 'with a required hook registered' do
+      class RequiredHook < Overcommit::GitHook::HookSpecificCheck
+        include Overcommit::GitHook::HookRegistry
+        required!
+      end
+
+      # This one will be skipped via the environment variable
+      class OptionalHook < Overcommit::GitHook::HookSpecificCheck
+        include Overcommit::GitHook::HookRegistry
+      end
+
+      let!(:required_hook) { RequiredHook.new }
+      let!(:optional_hook) { OptionalHook.new }
+
+      before do
+        @old_skip = ENV['SKIP_CHECKS']
+        ENV['SKIP_CHECKS'] = 'all'
+        RequiredHook.stub(:new).and_return(required_hook)
+        OptionalHook.stub(:new).and_return(optional_hook)
+      end
+
+      after do
+        ENV['SKIP_CHECKS'] = @old_skip
+      end
+
+      it 'runs the required hook' do
+        required_hook.should_receive(:run_check)
+        subject.run
+      end
+
+      it 'skips the non-required hook' do
+        optional_hook.should_not_receive(:run_check)
+        subject.run
+      end
+    end
   end
 end

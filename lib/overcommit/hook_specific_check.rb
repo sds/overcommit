@@ -4,6 +4,7 @@ module Overcommit
       @checks = []
       class << self
         attr_reader :checks
+
         def included(base)
           @checks << base
         end
@@ -12,11 +13,20 @@ module Overcommit
 
     class HookSpecificCheck
       class << self
-        attr_accessor :filetype
-        attr_accessor :stealth
+        attr_accessor :filetype, :stealth, :required
 
         def stealth!
           self.stealth = true
+        end
+
+        def required!
+          self.required = true
+        end
+
+        # Can the check be skipped by environment variables? This can always be
+        # overriden with `--no-verify`.
+        def skippable?
+          !required
         end
       end
 

@@ -1,3 +1,8 @@
+0.1.3
+
+* Add un-skippable checks (not skipped via SKIP_CHECKS)
+* Improve spec coverage
+
 0.1.2
 
 * Add uninstall (-u) option

@@ -41,8 +41,21 @@ module Overcommit
 
     private
 
+      # Return all loaded plugins, skipping those that are skippable and have
+      # been asked to be skipped by the environment variable SKIP_CHECKS.
+      #
+      # Note that required checks are not skipped even if
+      # `ENV['SKIP_CHECKS'] == 'all'`
       def registered_checks
-        HookRegistry.checks
+        @registered_checks ||= begin
+          skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
+          skip_all    = skip_checks.include? 'all'
+          HookRegistry.checks.reject do |check|
+            hook_name = Utils.underscorize check.name
+
+            check.skippable? && (skip_all || skip_checks.include?(hook_name))
+          end
+        end
       end
 
       # If true, only run this check when there are modified files.

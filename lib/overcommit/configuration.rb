@@ -22,16 +22,12 @@ module Overcommit
     # Given the current configuration, return a set of paths which should be
     # loaded as plugins (`require`d)
     def desired_plugins
-      excludes    = repo_settings['excludes']
-      skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
-
-      return [] if skip_checks.include? 'all'
+      excludes = repo_settings['excludes']
 
       plugin_directories.map do |dir|
         Dir[File.join(dir, Utils.hook_name, '*.rb')].map do |plugin|
           basename = File.basename(plugin, '.rb')
-          if !skip_checks.include?(basename) &&
-             !(excludes[Utils.hook_name] || []).include?(basename)
+          if !(excludes[Utils.hook_name] || []).include?(basename)
             plugin
           end
         end.compact
