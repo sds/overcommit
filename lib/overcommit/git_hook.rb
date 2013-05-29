@@ -7,7 +7,7 @@ module Overcommit
         Overcommit.config.desired_plugins.each do |plugin|
           require plugin
         end
-      rescue NameError => ex
+      rescue LoadError, NameError => ex
         error "Couldn't load plugin: #{ex}"
         exit 0
       end

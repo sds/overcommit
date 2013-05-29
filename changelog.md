@@ -1,3 +1,7 @@
+0.1.4 (unreleased)
+
+* Improve error handling when loading custom hooks
+
 0.1.3
 
 * Add un-skippable checks (not skipped via SKIP_CHECKS)
