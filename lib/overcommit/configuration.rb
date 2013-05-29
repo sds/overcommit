@@ -22,7 +22,7 @@ module Overcommit
     # Given the current configuration, return a set of paths which should be
     # loaded as plugins (`require`d)
     def desired_plugins
-      excludes = repo_settings['excludes']
+      excludes = repo_settings['excludes'] || {}
 
       plugin_directories.map do |dir|
         Dir[File.join(dir, Utils.hook_name, '*.rb')].map do |plugin|
