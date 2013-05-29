@@ -1,4 +1,4 @@
-0.1.4 (unreleased)
+0.1.4
 
 * Fix SKIP_CHECKS for namespaced hooks
 * Make hooks work when repo-specific configuration file is missing
