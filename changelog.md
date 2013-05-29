@@ -1,5 +1,6 @@
 0.1.4 (unreleased)
 
+* Fix SKIP_CHECKS for namespaced hooks
 * Make hooks work when repo-specific configuration file is missing
 * Improve error handling when loading custom hooks
 

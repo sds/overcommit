@@ -37,6 +37,10 @@ module Overcommit
         reporter.print_result
       end
 
+      def skip_checks
+        @skip_checks ||= ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
+      end
+
     private
 
       def log
@@ -50,10 +54,9 @@ module Overcommit
       # `ENV['SKIP_CHECKS'] == 'all'`
       def registered_checks
         @registered_checks ||= begin
-          skip_checks = ENV.fetch('SKIP_CHECKS', '').split(/[:, ]/)
-          skip_all    = skip_checks.include? 'all'
+          skip_all = skip_checks.include? 'all'
           HookRegistry.checks.reject do |check|
-            hook_name = Utils.underscorize check.name
+            hook_name = Utils.underscorize(check.name).split('/').last
 
             check.skippable? && (skip_all || skip_checks.include?(hook_name))
           end

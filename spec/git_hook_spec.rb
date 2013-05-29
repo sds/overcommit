@@ -65,14 +65,9 @@ describe Overcommit::GitHook::BaseHook do
       let!(:optional_hook) { OptionalHook.new }
 
       before do
-        @old_skip = ENV['SKIP_CHECKS']
-        ENV['SKIP_CHECKS'] = 'all'
+        subject.stub(:skip_checks).and_return(['all'])
         RequiredHook.stub(:new).and_return(required_hook)
         OptionalHook.stub(:new).and_return(optional_hook)
-      end
-
-      after do
-        ENV['SKIP_CHECKS'] = @old_skip
       end
 
       it 'runs the required hook' do
@@ -83,6 +78,26 @@ describe Overcommit::GitHook::BaseHook do
       it 'skips the non-required hook' do
         optional_hook.should_not_receive(:run_check)
         subject.run
+      end
+
+      context 'with a namespaced hook' do
+        module DummyNamespace
+          class DumbHook < Overcommit::GitHook::HookSpecificCheck
+            include Overcommit::GitHook::HookRegistry
+          end
+        end
+
+        let!(:dumb_hook) { DummyNamespace::DumbHook.new }
+
+        before do
+          subject.stub(:skip_checks).and_return(['dumb_hook'])
+          DummyNamespace::DumbHook.stub(:new).and_return(dumb_hook)
+        end
+
+        it 'ignores the namespace' do
+          dumb_hook.should_not_receive(:run_check)
+          subject.run
+        end
       end
     end
   end
