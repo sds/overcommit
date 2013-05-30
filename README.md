@@ -6,6 +6,9 @@ Originally written for use at [Causes](https://github.com/causes).
 In addition to supporting global hooks, it also allows teams to define plugins
 specific to a repository (installed in the `.githooks` directory).
 
+[Read more](http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/)
+about overcommit on our [engineering blog](http://causes.github.io).
+
 ## Installation
 
 The `overcommit` is installed as a binary via rubygems:
