@@ -117,6 +117,22 @@ module Overcommit::GitHook
 end
 ```
 
+## Other functionality
+
+In addition to the Ruby-based plugin system, `overcommit` also ships with a few
+handy shell scripts:
+
+- `post-checkout` runs `ctags` after checkouts to aid in tag-based navigation.
+  We use this in combination with Vim by adding `.git/tags` to the `tags`
+  configuration:
+
+        set tags=.git/tags,.tags
+
+- `post-merge` checks for updated submodules and prompts you to update them.
+
+- `prepare-commit-msg` sets up your commit message to include additional author
+  information and note submodule changes when updating.
+
 ## Contributing
 
 Pull requests and issues are welcome. Although spec coverage is minimal at the
