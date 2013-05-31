@@ -97,7 +97,7 @@ The meat of it looks like this:
 ```ruby
 module Overcommit::GitHook
   class FoodCritic < HookSpecificCheck
-    include HookRegistroy
+    include HookRegistry
     COOKBOOKS = 'cookbooks'
     @@options = { :tags => %w[~readme ~fc001] }
 
