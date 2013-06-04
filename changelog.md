@@ -1,5 +1,6 @@
 0.1.6 (unreleased)
 
+* Add Python linting via [flake8](http://flake8.readthedocs.org/en/latest/)
 * Add CoffeeScript linting via [coffeelint](http://www.coffeelint.org/)
 
 0.1.5
