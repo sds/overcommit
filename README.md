@@ -29,6 +29,13 @@ At [Causes](https://github.com/causes), we install all of the hooks via the
 `--all` flag. In absence of this flag, you will be given the `default` template.
 For more information, try `overcommit --list-templates`.
 
+## Uninstallation from a repo
+
+With `overcommit` installed as described above, you can remove `overcommit` from
+a specific repository:
+
+    overcommit --uninstall ~/src/important-project
+
 ## Built-in hooks
 
 There are two types of hooks installed by this utility. `post-checkout`,
@@ -37,7 +44,7 @@ hand for use at Causes. We think other people may find them useful.
 
 The second, more interesting type is the Ruby-based, extensible checks. These
 are currently `pre-commit` and `commit-msg`. These are used for checking the
-validity of the code to be comitted and checking the content of the commit
+validity of the code to be committed and checking the content of the commit
 message, respectively.
 
 You can see the various sub-hooks available in the `lib/overcommit/plugins`
