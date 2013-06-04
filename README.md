@@ -157,9 +157,8 @@ flag:
 
 ## Contributing
 
-Pull requests and issues are welcome. Although spec coverage is minimal at the
-moment, new features should ship with tests so that we can avoid breaking them
-in the future.
+Pull requests and issues are welcome. New features should ship with tests so
+that we can avoid breaking them in the future.
 
 ## License
 

@@ -1,7 +1,8 @@
 0.1.5 (unreleased)
 
+* Improve spec coverage
 * Use installed `jshint` if available instead of Rhino
-* Update readme
+* Update readme with dependencies, uninstall instructions
 
 0.1.4
 
