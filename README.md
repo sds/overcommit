@@ -49,7 +49,7 @@ hand for use at Causes. We think other people may find them useful.
 
 The second, more interesting type is the Ruby-based, extensible checks. These
 are currently `pre-commit` and `commit-msg`. These are used for checking the
-validity of the code to be comitted and checking the content of the commit
+validity of the code to be committed and checking the content of the commit
 message, respectively.
 
 You can see the various sub-hooks available in the `lib/overcommit/plugins`
@@ -147,6 +147,13 @@ handy shell scripts:
 
 - `prepare-commit-msg` sets up your commit message to include additional author
   information and note submodule changes when updating.
+
+## Uninstallation
+
+If you'd like to remove the hooks from a repository, just pass the `--uninstall`
+flag:
+
+    overcommit --uninstall important-project
 
 ## Contributing
 
