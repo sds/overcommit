@@ -1,4 +1,4 @@
-0.1.5 (unreleased)
+0.1.5
 
 * Improve spec coverage
 * Use installed `jshint` if available instead of Rhino
