@@ -66,6 +66,7 @@ directory:
     └── pre_commit
         ├── author_name.rb
         ├── causes_email.rb
+        ├── coffee_lint.rb
         ├── css_linter.rb
         ├── erb_syntax.rb
         ├── haml_syntax.rb
