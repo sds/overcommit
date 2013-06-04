@@ -1,3 +1,8 @@
+0.1.5 (unreleased)
+
+* Use installed `jshint` if available instead of Rhino
+* Update readme
+
 0.1.4
 
 * Fix SKIP_CHECKS for namespaced hooks

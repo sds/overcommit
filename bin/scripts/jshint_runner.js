@@ -28,19 +28,13 @@ for (i = 0; i < arguments.length; i++) {
   source = readFile(file);
   result = JSHINT(source, options);
 
-  if (result === true) {
-    print(arguments[i] + " -- OK");
-  }
-  else {
+  if (!result) {
     for (j = 0; j < JSHINT.errors.length; j++) {
       error = JSHINT.errors[j];
 
-      print("ERROR in " + file + " at " + error.line + ":" + error.character);
-      print("");
-      print("\t" + error.reason);
-      print("");
+      print(file + ": line " + error.line + ", col  " + error.character + ", " +
+            error.reason);
       print("\t" + error.evidence);
-      print("");
     }
   }
 }
