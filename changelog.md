@@ -1,4 +1,4 @@
-0.1.6 (unreleased)
+0.1.6
 
 * Strip out blank release note in addition to warning the committer
 * Add Python linting via [flake8](http://flake8.readthedocs.org/en/latest/)
