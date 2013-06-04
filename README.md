@@ -29,6 +29,18 @@ At [Causes](https://github.com/causes), we install all of the hooks via the
 `--all` flag. In absence of this flag, you will be given the `default` template.
 For more information, try `overcommit --list-templates`.
 
+## Dependencies
+
+Some of the lints have third-party dependencies. For example, to lint your
+[SCSS](http://sass-lang.com/) files, you're going to need our [scss-lint
+gem](https://github.com/causes/scss-lint):
+
+    gem install scss-lint
+
+Other useful utilities include `jshint`, which can be installed via `npm`:
+
+    npm install -g jshint
+
 ## Built-in hooks
 
 There are two types of hooks installed by this utility. `post-checkout`,
