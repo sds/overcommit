@@ -66,14 +66,16 @@ module Overcommit
         system("which #{cmd} &> /dev/null")
       end
 
-      def commit_message
-        @commit_message ||= begin
-          unless @arguments[0] && ::File.exist?(@arguments[0])
-            fail 'Not running in the context of a commit message'
-          end
-
-          File.readlines(@arguments[0])
+      def commit_message_file
+        unless @arguments[0] && ::File.exist?(@arguments[0])
+          fail 'Not running in the context of a commit message'
         end
+
+        @arguments[0]
+      end
+
+      def commit_message
+        @commit_message ||= ::IO.readlines(commit_message_file)
       end
 
       # Strip comments and diff (from git-commit --verbose)
