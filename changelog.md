@@ -1,3 +1,7 @@
+0.1.7
+
+* Fix crashing --list-templates flag
+
 0.1.6
 
 * Strip out blank release note in addition to warning the committer

@@ -24,7 +24,7 @@ module Overcommit
 
         opts.on('-l', '--list-templates', 'List built-in templates') do
           Overcommit.config.templates.each_pair do |name, configuration|
-            bold name
+            log.bold name
             log.log YAML.dump(configuration), ''
           end
           exit 0
