@@ -1,6 +1,7 @@
 0.1.7
 
 * Only colorize output when logging to a TTY
+* Add check to detect hard tabs in commit messages
 * Fix crashing --list-templates flag
 
 0.1.6

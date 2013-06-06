@@ -11,6 +11,10 @@ describe Overcommit::GitHook::BaseHook do
 
   describe '#run' do
     context 'with no hooks registered' do
+      before do
+        subject.stub(:registered_checks).and_return([])
+      end
+
       it 'does not raise' do
         expect { subject.run }.to_not raise_error
       end
@@ -65,6 +69,8 @@ describe Overcommit::GitHook::BaseHook do
       let!(:optional_hook) { OptionalHook.new }
 
       before do
+        Overcommit::GitHook::HookRegistry.stub(:checks).
+          and_return([RequiredHook, OptionalHook])
         subject.stub(:skip_checks).and_return(['all'])
         RequiredHook.stub(:new).and_return(required_hook)
         OptionalHook.stub(:new).and_return(optional_hook)
