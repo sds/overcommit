@@ -36,7 +36,7 @@ end
 
 # Can't call this `fail` since that is a reserved word in Ruby
 RSpec::Matchers.define :fail_check do |message|
-  check_matcher = CheckMatcher.new(status: :bad, message: message)
+  check_matcher = CheckMatcher.new(:status => :bad, :message => message)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -45,7 +45,7 @@ RSpec::Matchers.define :fail_check do |message|
   failure_message_for_should do
     check_matcher.failure_message(
       check.run_check,
-      'expected that the check would fail',
+      'expected that the check would fail'
     )
   end
 
@@ -57,7 +57,7 @@ RSpec::Matchers.define :fail_check do |message|
 end
 
 RSpec::Matchers.define :stop do |message|
-  check_matcher = CheckMatcher.new(status: :stop, message: message)
+  check_matcher = CheckMatcher.new(:status => :stop, :message => message)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -66,7 +66,7 @@ RSpec::Matchers.define :stop do |message|
   failure_message_for_should do
     check_matcher.failure_message(
       check.run_check,
-      'expected that the check would fail and halt further checking',
+      'expected that the check would fail and halt further checking'
     )
   end
 
@@ -78,7 +78,7 @@ RSpec::Matchers.define :stop do |message|
 end
 
 RSpec::Matchers.define :pass do |message|
-  check_matcher = CheckMatcher.new(status: :good, message: message)
+  check_matcher = CheckMatcher.new(:status => :good, :message => message)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -87,7 +87,7 @@ RSpec::Matchers.define :pass do |message|
   failure_message_for_should do
     check_matcher.failure_message(
       check.run_check,
-      'expected that the check would pass',
+      'expected that the check would pass'
     )
   end
 
@@ -99,7 +99,7 @@ RSpec::Matchers.define :pass do |message|
 end
 
 RSpec::Matchers.define :warn do |message|
-  check_matcher = CheckMatcher.new(status: :warn, message: message)
+  check_matcher = CheckMatcher.new(:status => :warn, :message => message)
 
   match do |check|
     check_matcher.matches?(check)
@@ -108,7 +108,7 @@ RSpec::Matchers.define :warn do |message|
   failure_message_for_should do |check|
     check_matcher.failure_message(
       check.run_check,
-      'expected that the check would report a warning',
+      'expected that the check would report a warning'
     )
   end
 
