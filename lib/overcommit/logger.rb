@@ -5,32 +5,44 @@ module Overcommit
   class Logger
     include Singleton
 
+    attr_accessor :output
+
     def partial(*args)
-      print *args
+      out.print *args
     end
 
     def log(*args)
-      puts *args
+      out.puts *args
     end
 
     def bold(str)
-      log "\033[1;37m#{str}\033[0m"
+      color('1;37', str)
     end
 
     def error(str)
-      log "\033[31m#{str}\033[0m"
+      color(31, str)
     end
 
     def success(str)
-      log "\033[32m#{str}\033[0m"
+      color(32, str)
     end
 
     def warning(str)
-      log "\033[33m#{str}\033[0m"
+      color(33, str)
     end
 
     def notice(str)
-      log "\033[1;33m#{str}\033[0m"
+      color('1;33', str)
+    end
+
+    def out
+      self.output ||= $stdout
+    end
+
+  private
+
+    def color(code, str)
+      log(out.isatty ? "\033[#{code}m#{str}\033[0m" : str)
     end
   end
 end
