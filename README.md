@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/overcommit.png)](https://badge.fury.io/rb/overcommit)
+
 # Overcommit
 
 A gem to install and manage a configurable (but opinionated) set of Git hooks.
