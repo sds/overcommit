@@ -1,5 +1,6 @@
 0.1.7
 
+* Omit periods from warning messages for consistency
 * Enforce single-line commit message subjects
 * Only colorize output when logging to a TTY
 * Add check to detect hard tabs in commit messages
