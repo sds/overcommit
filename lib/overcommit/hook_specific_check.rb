@@ -28,6 +28,10 @@ module Overcommit
         def skippable?
           !required
         end
+
+        def friendly_name
+          Overcommit::Utils.underscorize name.to_s.split('::').last
+        end
       end
 
       def initialize(*args)
@@ -35,7 +39,7 @@ module Overcommit
       end
 
       def name
-        Overcommit::Utils.underscorize self.class.name.to_s.split('::').last
+        self.class.friendly_name
       end
 
       def skip?

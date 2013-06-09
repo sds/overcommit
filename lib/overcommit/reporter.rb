@@ -3,12 +3,12 @@ module Overcommit
     def initialize(name, checks)
       @name    = name
       @checks  = checks
-      @width   = 70 - (@checks.map { |s| s.name.length }.max || 0)
+      @width   = 60 - (@checks.map { |s| s.friendly_name.length }.max || 0)
       @results = []
     end
 
     def with_status(check, &block)
-      title = "  Checking #{check.name}..."
+      title = "  Checking #{check.name}"
       log.partial title unless check.stealth?
 
       status, output = yield
