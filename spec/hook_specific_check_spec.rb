@@ -35,10 +35,10 @@ describe Overcommit::GitHook::HookSpecificCheck do
     end
   end
 
-  describe '#commit_message' do
+  describe '#raw_commit_message' do
     context 'when passed no arguments' do
       it 'fails' do
-        expect { subject.send(:commit_message) }.
+        expect { subject.send(:raw_commit_message) }.
           to raise_error
       end
     end
@@ -59,7 +59,7 @@ describe Overcommit::GitHook::HookSpecificCheck do
       end
 
       it 'reads the file' do
-        subject.send(:commit_message).join.should include message
+        subject.send(:raw_commit_message).join.should include message
       end
     end
   end

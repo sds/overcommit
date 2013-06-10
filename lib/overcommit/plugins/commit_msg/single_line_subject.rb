@@ -3,7 +3,7 @@ module Overcommit::GitHook
     include HookRegistry
 
     def run_check
-      unless user_commit_message[1].to_s.strip.empty?
+      unless commit_message[1].to_s.strip.empty?
         return :warn, 'Subject should be a single line'
       end
 

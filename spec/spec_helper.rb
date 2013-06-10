@@ -14,7 +14,7 @@ RSpec.configure do |config|
   # For commit message check tests, just specify the commit_msg for each context
   config.before :each,
                 :example_group => { :file_path => %r{\bspec/plugins/commit_msg/} } do
-    subject.stub(:commit_message).and_return(commit_msg.split("\n"))
+    subject.stub(:raw_commit_message).and_return(commit_msg.split("\n"))
   end
 end
 

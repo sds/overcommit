@@ -4,7 +4,7 @@ module Overcommit::GitHook
 
     def run_check
       # Catches hard tabs entered by the user (not auto-generated)
-      if user_commit_message.join.index /\t/
+      if commit_message.join.index /\t/
         return :warn, "Don't use hard tabs in commit messages"
       end
 

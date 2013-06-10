@@ -78,13 +78,13 @@ module Overcommit
         @arguments[0]
       end
 
-      def commit_message
-        @commit_message ||= ::IO.readlines(commit_message_file)
+      def raw_commit_message
+        @raw_commit_message ||= ::IO.readlines(commit_message_file)
       end
 
       # Strip comments and diff (from git-commit --verbose)
-      def user_commit_message
-        @user_commit_message ||= commit_message.
+      def commit_message
+        @commit_message ||= raw_commit_message.
           reject     { |line| line =~ /^#/ }.
           take_while { |line| !line.start_with?('diff --git') }
       end
