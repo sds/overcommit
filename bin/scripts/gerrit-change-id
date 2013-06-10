@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-CHANGE_ID_AFTER="Bug|Issue"
+CHANGE_ID_AFTER="Bug|Issue|Story"
 MSG="$1"
 
 # Check for, and add if missing, a unique Change-Id
