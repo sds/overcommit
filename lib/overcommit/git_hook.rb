@@ -59,7 +59,7 @@ module Overcommit
             hook_name = Utils.underscorize(check.name).split('/').last
 
             check.skippable? && (skip_all || skip_checks.include?(hook_name))
-          end
+          end.sort_by(&:name)
         end
       end
 
