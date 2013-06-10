@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.png)](https://badge.fury.io/rb/overcommit)
 [![Build Status](https://travis-ci.org/causes/overcommit.png)](https://travis-ci.org/causes/overcommit)
+[![Code Climate](https://codeclimate.com/github/causes/overcommit.png)](https://codeclimate.com/github/causes/overcommit)
 
 # Overcommit
 
