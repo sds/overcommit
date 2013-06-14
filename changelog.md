@@ -1,3 +1,7 @@
+0.1.8
+
+* Resurrect StagedFile for reading index contents rather than disk contents
+
 0.1.7
 
 * Sort plugins alphabetically
