@@ -4,13 +4,13 @@ module Overcommit::GitHook
     file_type :xml
 
     def run_check
-      cmd = 'tidy'
+      cmd = 'xmllint'
       unless in_path? cmd
         return :warn, 'Run `apt-get install #{cmd}`'
       end
 
-      output = `#{cmd} -m #{(staged.join(' '))}`.split("\n")
-      return ($?.success? ? :good : :bad), output
+      output = staged.each {|f| `XMLLINT="    " #{cmd} --format --output #{f} #{f}`}
+      return ($?.success? ? :good : :bad), output.join().split("\n")
     end
   end
 end
