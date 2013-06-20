@@ -1,3 +1,8 @@
+0.1.10
+
+* Fixed bug where `output` was expected to be a string but was an array in
+  js_syntax
+
 0.1.9
 
 * Fixed bug where `staged` helper in `HookSpecificCheck` wasn't returning
