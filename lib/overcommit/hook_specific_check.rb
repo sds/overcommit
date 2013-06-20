@@ -51,9 +51,11 @@ module Overcommit
       end
 
       def staged
-        @staged ||= Utils.modified_files.select do |filename|
-          filename.end_with?(".#{self.class.filetype}")
-        end
+        @staged ||= Utils.modified_files.map do |filename|
+          if self.class.filetype.nil? || filename.end_with?(".#{self.class.filetype}")
+            StagedFile.new(filename)
+          end
+        end.compact
       end
 
       def run_check
