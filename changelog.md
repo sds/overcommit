@@ -1,3 +1,8 @@
+0.1.9
+
+* Fixed bug where `staged` helper in `HookSpecificCheck` wasn't returning
+  `StagedFile`s
+
 0.1.8
 
 * Resurrect StagedFile for reading index contents rather than disk contents
