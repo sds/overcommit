@@ -1,3 +1,7 @@
+0.1.11
+
+* Added Ruby code style linting via RuboCop
+
 0.1.10
 
 * Fixed bug where `output` was expected to be a string but was an array in
