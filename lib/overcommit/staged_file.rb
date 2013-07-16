@@ -7,7 +7,7 @@ module Overcommit
   class StagedFile
     attr_reader :contents
 
-    def initialize path
+    def initialize(path)
       @original_path  = path
       @tempfile       = Tempfile.new([path.gsub('/', '_'), File.extname(path)])
       self.contents   = `git show :#{@original_path}`
@@ -15,7 +15,7 @@ module Overcommit
 
     # Given error output from a syntax checker, replace references to the
     # temporary file path with the original path.
-    def filter_string string
+    def filter_string(string)
       string.gsub(path, @original_path)
     end
 
