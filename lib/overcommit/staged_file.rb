@@ -1,8 +1,9 @@
+require 'set'
 require 'tempfile'
+
 # We run syntax checks against the version of the file that is staged in
 # the index, not the one in the work tree. This class is a simple wrapper
 # to make working with staged files easier.
-
 module Overcommit
   class StagedFile
     attr_reader :contents
@@ -34,6 +35,39 @@ module Overcommit
       @tempfile.seek 0
       @tempfile.write @contents
       @tempfile.flush
+    end
+
+    # Returns the set of line numbers corresponding to the lines that were
+    # changed in this file.
+    def modified_lines
+      @modified_lines ||= extract_modified_lines
+    end
+
+  private
+
+    DIFF_HUNK_REGEX = /
+      ^@@\s
+      [^\s]+\s           # Ignore old file range
+      \+(\d+)(?:,(\d+))? # Extract range of hunk containing start line and number of lines
+      \s@@.*$
+    /x
+
+    def extract_modified_lines
+      lines = Set.new
+
+      `git diff --cached -U0 -- #{@original_path}`.
+        scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
+
+        lines_added = (lines_added || 1).to_i # When blank, one line was added
+        cur_line    = start_line.to_i
+
+        lines_added.times do
+          lines.add cur_line
+          cur_line += 1
+        end
+      end
+
+      lines
     end
   end
 end

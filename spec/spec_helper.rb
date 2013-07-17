@@ -11,6 +11,8 @@ RSpec.configure do |config|
   config.tty = true
   config.formatter = :documentation
 
+  config.include GitSpecHelpers
+
   # For commit message check tests, just specify the commit_msg for each context
   config.before :each,
                 :example_group => { :file_path => %r{\bspec/plugins/commit_msg/} } do

@@ -1,3 +1,7 @@
+0.2.0 (unreleased)
+
+* Teach `StagedFile`s how to calculate which lines were actually added/modified
+
 0.1.11
 
 * Added Ruby code style linting via RuboCop
