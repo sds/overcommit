@@ -10,7 +10,7 @@ module Overcommit::GitHook
 
       paths = staged.map { |s| s.path }.join(' ')
 
-      output = `rubocop #{paths} 2>&1`
+      output = `rubocop --format=emacs --silent #{paths} 2>&1`
       return :good if $?.success?
 
       return :bad, output
