@@ -1,4 +1,4 @@
-0.2.0 (unreleased)
+0.2.0
 
 * Teach `StagedFile`s how to calculate which lines were actually added/modified
 * Checks no longer need to filter temporary staged file paths themselves
