@@ -7,7 +7,6 @@ module Overcommit::GitHook
 
       # Catches hard tabs
       output = `grep -Inl "\t" #{paths}`
-      staged.each { |s| output = s.filter_string(output) }
       unless output.empty?
         return :stop, "Don't use hard tabs:\n#{output}"
       end

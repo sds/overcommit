@@ -13,7 +13,6 @@ module Overcommit::GitHook
       output = `rubocop #{paths} 2>&1`
       return :good if $?.success?
 
-      staged.each { |s| output = s.filter_string(output) }
       return :bad, output
     end
   end

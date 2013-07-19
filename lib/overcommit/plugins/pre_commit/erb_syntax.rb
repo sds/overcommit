@@ -15,7 +15,6 @@ module Overcommit::GitHook
 
     def run_check
       output = `bundle exec #{ERB_CHECKER} #{staged.map{ |file| file.path }.join(' ')}`
-      staged.each { |s| output = s.filter_string(output) }
       return (output !~ /: compile error$/ ? :good : :bad), output
     end
   end

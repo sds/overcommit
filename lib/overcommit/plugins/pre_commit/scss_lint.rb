@@ -14,7 +14,6 @@ module Overcommit::GitHook
 
       output = `scss-lint #{paths} 2>&1`
 
-      staged.each { |s| output = s.filter_string(output) }
       return (output.empty? ? :good : :bad), output
     end
   end

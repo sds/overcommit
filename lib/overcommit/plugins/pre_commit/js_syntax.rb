@@ -8,7 +8,6 @@ module Overcommit::GitHook
 
       paths = staged.map { |s| s.path }.join(' ')
       output = runner.call(paths)
-      staged.each { |s| output = s.filter_string(output) }
 
       return (output.empty? ? :good : :bad), output
     end

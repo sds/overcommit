@@ -10,7 +10,6 @@ module Overcommit::GitHook
         /^\d+:\s*\/\// =~ line ||     # Skip comments
           /ALLOW_CONSOLE_LOG/ =~ line # and lines with ALLOW_CONSOLE_LOG
       end.join("\n")
-      staged.each { |s| output = s.filter_string(output) }
       return (output.empty? ? :good : :bad), output
     end
   end

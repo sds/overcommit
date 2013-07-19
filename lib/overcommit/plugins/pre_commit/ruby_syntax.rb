@@ -9,7 +9,7 @@ module Overcommit::GitHook
       staged.each do |staged|
         syntax = `ruby -c #{staged.path} 2>&1`
         unless $?.success?
-          output += staged.filter_string(syntax).lines.to_a
+          output += syntax.lines.to_a
           clean = false
         end
       end

@@ -1,6 +1,7 @@
 0.2.0 (unreleased)
 
 * Teach `StagedFile`s how to calculate which lines were actually added/modified
+* Checks no longer need to filter temporary staged file paths themselves
 
 0.1.11
 

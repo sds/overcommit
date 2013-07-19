@@ -30,7 +30,7 @@ module Overcommit
           next if check_class.filetype && check.staged.empty?
 
           reporter.with_status(check) do
-            check.run_check
+            run_and_filter_check(check)
           end
         end
 
@@ -66,6 +66,20 @@ module Overcommit
       # If true, only run this check when there are modified files.
       def requires_modified_files?
         false
+      end
+
+      # Filters temporary staged file names from the output of the check and
+      # replaces them with their original filenames.
+      def run_and_filter_check(check)
+        status, output = check.run_check
+
+        if output && !output.empty?
+          check.staged.each do |staged_file|
+            output = staged_file.filter_string(output)
+          end
+        end
+
+        [status, output]
       end
     end
   end
