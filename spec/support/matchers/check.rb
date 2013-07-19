@@ -42,7 +42,7 @@ RSpec::Matchers.define :fail_check do |message|
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do
+  failure_message_for_should do |check|
     check_matcher.failure_message(
       check.run_check,
       'expected that the check would fail'
@@ -63,7 +63,7 @@ RSpec::Matchers.define :stop do |message|
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do
+  failure_message_for_should do |check|
     check_matcher.failure_message(
       check.run_check,
       'expected that the check would fail and halt further checking'
@@ -84,7 +84,7 @@ RSpec::Matchers.define :pass do |message|
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do
+  failure_message_for_should do |check|
     check_matcher.failure_message(
       check.run_check,
       'expected that the check would pass'
