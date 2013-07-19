@@ -3,6 +3,7 @@
 * Teach `StagedFile`s how to calculate which lines were actually added/modified
 * Checks no longer need to filter temporary staged file paths themselves
 * Condense Ruby style check output
+* Teach Ruby style check to downgrade style lints on untouched lines as warnings
 
 0.1.11
 
