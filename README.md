@@ -63,8 +63,10 @@ directory:
     lib/overcommit/plugins
     ├── commit_msg
     │   ├── change_id.rb
+    │   ├── hard_tabs.rb
     │   ├── release_note.rb
     │   ├── russian_novel.rb
+    │   ├── single_line_subject.rb
     │   ├── text_width.rb
     │   └── trailing_period.rb
     └── pre_commit
@@ -78,6 +80,7 @@ directory:
         ├── js_syntax.rb
         ├── python_flake8.rb
         ├── restricted_paths.rb
+        ├── ruby_style.rb
         ├── ruby_syntax.rb
         ├── scss_lint.rb
         ├── test_history.rb
