@@ -73,7 +73,9 @@ module Overcommit
       def run_and_filter_check(check)
         status, output = check.run_check
 
-        if output && !output.empty?
+        output = output.to_s
+
+        unless output.empty?
           check.staged.each do |staged_file|
             output = staged_file.filter_string(output)
           end

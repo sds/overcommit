@@ -1,3 +1,7 @@
+0.2.1 (unreleased)
+
+* Fix bug where checks that didn't return strings for output would error
+
 0.2.0
 
 * Teach `StagedFile`s how to calculate which lines were actually added/modified
