@@ -73,7 +73,8 @@ module Overcommit
       def run_and_filter_check(check)
         status, output = check.run_check
 
-        output = output.to_s
+        # Some checks output a list of lines. Join those lines together with newlines.
+        output = Array[output].flatten.join("\n")
 
         unless output.empty?
           check.staged.each do |staged_file|
