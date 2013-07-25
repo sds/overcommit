@@ -13,7 +13,7 @@ module Overcommit
 
     class HookSpecificCheck
       class << self
-        attr_accessor :filetype, :stealth, :required
+        attr_accessor :filetypes, :stealth, :required
 
         def stealth!
           self.stealth = true
@@ -53,7 +53,7 @@ module Overcommit
       def staged
         @staged ||= modified_files.map do |filename|
           filetypes = Array(self.class.filetypes).map { |type| ".#{type}" }
-          if filetypes.empty? || filename.ends_with?(*filetypes)
+          if filetypes.empty? || filename.end_with?(*filetypes)
             StagedFile.new(filename)
           end
         end.compact
@@ -94,7 +94,7 @@ module Overcommit
 
       class << self
         def file_type(*types)
-          self.filetype = types
+          self.filetypes = types
         end
         alias file_types file_type
       end

@@ -27,7 +27,7 @@ module Overcommit
 
           # Ignore a check if it only applies to a specific file type and there
           # are no staged files of that type in the tree
-          next if check_class.filetype && check.staged.empty?
+          next if check_class.filetypes && check.staged.empty?
 
           reporter.with_status(check) do
             run_and_filter_check(check)
