@@ -52,7 +52,8 @@ module Overcommit
 
       def staged
         @staged ||= modified_files.map do |filename|
-          if self.class.filetype.nil? || filename.end_with?(".#{self.class.filetype}")
+          filetypes = Array(self.class.filetypes).map { |type| ".#{type}" }
+          if filetypes.empty? || filename.ends_with?(*filetypes)
             StagedFile.new(filename)
           end
         end.compact
@@ -91,8 +92,11 @@ module Overcommit
           take_while { |line| !line.start_with?('diff --git') }
       end
 
-      def self.file_type(type)
-        self.filetype = type
+      class << self
+        def file_type(*types)
+          self.filetype = types
+        end
+        alias file_types file_type
       end
     end
   end

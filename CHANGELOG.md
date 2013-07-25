@@ -1,3 +1,7 @@
+master
+
+* Allow specifying multiple file types for checks and syntax check rake files
+
 0.2.1
 
 * Fix bug where checks that didn't return strings for output would error

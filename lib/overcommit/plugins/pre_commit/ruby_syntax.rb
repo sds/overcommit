@@ -1,7 +1,7 @@
 module Overcommit::GitHook
   class RubySyntax < HookSpecificCheck
     include HookRegistry
-    file_type :rb
+    file_types :rb, :rake
 
     def run_check
       clean = true
