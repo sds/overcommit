@@ -33,7 +33,7 @@ module Overcommit
         exit 1
       when :stop
         log.warning "*** One or more #{@name} checks needs attention"
-        log.warning "*** If you really want to commit, use SKIP_CHECKS"
+        log.warning '*** If you really want to commit, use SKIP_CHECKS'
         log.warning "*** (takes a space-separated list of checks to skip, or 'all')"
         exit 1
       end
@@ -59,7 +59,8 @@ module Overcommit
         log.error 'FAILED'
         print_report output
       when :warn
-        log.warning output
+        log.warning 'WARNING'
+        print_report output
       when :stop
         log.warning 'UH OH'
         print_report output
@@ -76,8 +77,14 @@ module Overcommit
       return :good
     end
 
-    def print_report(*report)
-      log.log report.flatten.map { |line| "    #{line}" }.join("\n")
+    OUTPUT_INDENT = ' ' * 4
+    def print_report(output)
+      unless output.empty?
+        # Take each line of output and add indentation so it nests under check
+        # name (except for the last newline if there is one)
+        output = OUTPUT_INDENT + output.gsub(/\n(?!$)/, "\n#{OUTPUT_INDENT}")
+        log.log output
+      end
     end
   end
 end
