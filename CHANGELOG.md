@@ -1,4 +1,4 @@
-master
+0.2.2
 
 * Allow specifying multiple file types for checks and syntax check rake files
 * Fix bug where checks which returned lists of lines would output incorrectly
