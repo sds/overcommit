@@ -75,7 +75,8 @@ insert_submodule_changes() {
     $done = false
 
     def insert
-      puts "#{ARGV.first}\n\n" unless $done
+      ref = ARGV.first
+      puts `git submodule summary --cached #{ref}` unless $done
       $done = true
     end
 
@@ -96,7 +97,7 @@ insert_submodule_changes() {
     ensure
       insert # just in case no lines matched
     end
-  ' "$SUBMODULE_CHANGES" > $TMP_FILE && cp $TMP_FILE "$FILE"
+  ' "$OTHER" > $TMP_FILE && cp $TMP_FILE "$FILE"
 }
 
 strip_submodule_changes() {
@@ -151,8 +152,6 @@ case "$SOURCE" in
   *)
     # do nothing else if there are no submodule changes staged
     git diff-index --cached $OTHER | grep -q -e '^:160000' || exit 0
-
-    SUBMODULE_CHANGES=$(git submodule summary --cached $OTHER)
 
     strip_submodule_changes
     insert_submodule_changes
