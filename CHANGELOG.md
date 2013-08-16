@@ -1,3 +1,8 @@
+master
+
+* Fix "Too many open files" error for very large commits
+* Make `StagedFile` tempfile creation lazy - should speed up some checks
+
 0.2.2
 
 * Allow specifying multiple file types for checks and syntax check rake files

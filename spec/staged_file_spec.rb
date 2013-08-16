@@ -29,6 +29,11 @@ describe Overcommit::StagedFile do
       File.basename(described_class.new(staged_filename).path).
         should_not == staged_filename
     end
+
+    it 'should point to a file with the correct contents' do
+      File.read(described_class.new(staged_filename).path).
+        should == new_file
+    end
   end
 
   describe '#contents' do

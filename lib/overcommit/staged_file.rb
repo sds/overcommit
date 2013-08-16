@@ -9,9 +9,8 @@ module Overcommit
     attr_reader :contents
 
     def initialize(path)
-      @original_path  = path
-      @tempfile       = Tempfile.new([path.gsub('/', '_'), File.extname(path)])
-      self.contents   = `git show :#{@original_path}`
+      @original_path = path
+      @contents      = `git show :#{@original_path}`
     end
 
     # Given error output from a syntax checker, replace references to the
@@ -23,7 +22,7 @@ module Overcommit
     # The path of the temporary file on disk, suitable for feeding in to a
     # syntax checker.
     def path
-      @tempfile.path
+      tempfile.path
     end
 
     # Set or overwrite the temporary file's contents.
@@ -32,9 +31,7 @@ module Overcommit
     # the template before checking.
     def contents=(contents)
       @contents = contents
-      @tempfile.seek 0
-      @tempfile.write @contents
-      @tempfile.flush
+      write_tempfile
     end
 
     # Returns the set of line numbers corresponding to the lines that were
@@ -68,6 +65,22 @@ module Overcommit
       end
 
       lines
+    end
+
+    def tempfile
+      unless @tempfile
+        basename = [@original_path.gsub('/', '_'), File.extname(@original_path)]
+        @tempfile = Tempfile.new(basename)
+        write_tempfile
+      end
+      @tempfile
+    end
+
+    def write_tempfile
+      tempfile.open if tempfile.closed?
+      tempfile.truncate 0
+      tempfile.write @contents
+      tempfile.close
     end
   end
 end
