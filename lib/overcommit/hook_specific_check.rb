@@ -70,7 +70,14 @@ module Overcommit
       end
 
       def in_path?(cmd)
-        system("which #{cmd} &> /dev/null")
+        exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+          exts.each do |ext|
+            exe = File.join(path, "#{cmd}#{ext}")
+            return true if File.executable? exe
+          end
+        end
+        false
       end
 
       def commit_message_file
