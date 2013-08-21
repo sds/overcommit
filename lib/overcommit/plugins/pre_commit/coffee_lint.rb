@@ -8,7 +8,8 @@ module Overcommit::GitHook
         return :warn, 'Run `npm install -g coffeelint`'
       end
 
-      output = `coffeelint --quiet #{(staged.join(' '))}`.split("\n")
+      paths  = staged.collect(&:path).join(' ')
+      output = `coffeelint --quiet #{paths}`.split("\n")
       return ($?.success? ? :good : :bad), output
     end
   end
