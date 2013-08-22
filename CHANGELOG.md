@@ -1,7 +1,10 @@
-master
+0.2.3
 
 * Fix "Too many open files" error for very large commits
 * Make `StagedFile` tempfile creation lazy - should speed up some checks
+* Address rare cross-platform compatibility issue by replacing a `which`
+  call with a pure Ruby equivalent
+* Fix CoffeeScript linter path processing
 
 0.2.2
 
