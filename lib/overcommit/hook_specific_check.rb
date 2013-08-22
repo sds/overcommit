@@ -99,6 +99,12 @@ module Overcommit
           take_while { |line| !line.start_with?('diff --git') }
       end
 
+      def config_file
+        filename = self.class.name.split('::').last.downcase
+        dir = Dir.glob(".git/hooks/config/#{filename}*") #any extension
+        dir.last unless dir.empty?
+      end
+
       class << self
         def file_type(*types)
           self.filetypes = types

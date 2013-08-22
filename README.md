@@ -156,6 +156,17 @@ handy shell scripts:
 - `prepare-commit-msg` sets up your commit message to include additional author
   information and note submodule changes when updating.
 
+##Configuration
+
+Config files can be created in `.git/hooks/config/testname*`
+  
+Supported configs include:
+
+    >> tree .git/hooks/config
+    .git/hooks/config
+    └── coffeelint.json
+    
+    
 ## Uninstallation
 
 If you'd like to remove the hooks from a repository, just pass the `--uninstall`
