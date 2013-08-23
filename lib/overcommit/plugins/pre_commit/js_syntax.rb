@@ -6,7 +6,7 @@ module Overcommit::GitHook
     def run_check
       return :warn, 'Need either `jshint` or `rhino` in path' unless runner
 
-      paths = staged.map { |s| s.path }.join(' ')
+      paths = staged.collect(&:path).join(' ')
       output = runner.call(paths)
 
       return (output.empty? ? :good : :bad), output

@@ -3,7 +3,7 @@ module Overcommit::GitHook
     include HookRegistry
 
     def run_check
-      paths = staged.map { |s| s.path }.join(' ')
+      paths = staged.collect(&:path).join(' ')
 
       # Catches hard tabs
       output = `grep -Inl "\t" #{paths}`
