@@ -74,7 +74,6 @@ directory:
         ├── causes_email.rb
         ├── coffee_lint.rb
         ├── css_linter.rb
-        ├── erb_syntax.rb
         ├── haml_syntax.rb
         ├── js_console_log.rb
         ├── js_syntax.rb
