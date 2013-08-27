@@ -20,6 +20,9 @@ module Overcommit::GitHook
           file = match[1]
           line = match[2]
         end
+        unless paths_to_staged_files[file]
+          return :warn, "Unexpected output from rubocop:\n#{output}"
+        end
         paths_to_staged_files[file].modified_lines.include?(line.to_i)
       end
 
