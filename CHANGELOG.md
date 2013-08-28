@@ -1,4 +1,4 @@
-master
+0.2.4
 
 * Teach scss-lint check to downgrade lints on untouched lines as warnings
 
