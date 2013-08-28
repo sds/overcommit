@@ -1,3 +1,7 @@
+master
+
+* Teach scss-lint check to downgrade lints on untouched lines as warnings
+
 0.2.3
 
 * Fix "Too many open files" error for very large commits
