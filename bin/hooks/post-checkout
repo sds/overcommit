@@ -2,6 +2,7 @@
 
 # Executed every time HEAD changes. The current working directory will be set to
 # the top-level directory of the git repository for which this hook was fired.
+.git/hooks/scripts/check-gemfile $1 $2
 
 # Run in the background since even though it takes just over a second for a
 # large repo, it's a noticeable delay.
