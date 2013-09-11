@@ -1,4 +1,4 @@
-master
+0.2.5
 
 * Don't use `--silent` flag with `rubocop` for Ruby style check
   (allows upgrade to Rubocop 0.12.0)
