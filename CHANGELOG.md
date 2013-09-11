@@ -1,3 +1,8 @@
+master
+
+* Don't use `--silent` flag with `rubocop` for Ruby style check
+  (allows upgrade to Rubocop 0.12.0)
+
 0.2.4
 
 * Teach scss-lint check to downgrade lints on untouched lines as warnings

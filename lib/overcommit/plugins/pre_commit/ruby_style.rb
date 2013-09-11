@@ -11,7 +11,7 @@ module Overcommit::GitHook
       paths_to_staged_files = Hash[staged.map { |s| [s.path, s] }]
       staged_files = paths_to_staged_files.keys
 
-      output = `rubocop --format=emacs --silent #{staged_files.join(' ')} 2>&1`
+      output = `rubocop --format=emacs #{staged_files.join(' ')} 2>&1`
       return :good if $?.success?
 
       # Keep lines from the output for files that we actually modified
