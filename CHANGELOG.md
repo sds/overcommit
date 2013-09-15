@@ -1,4 +1,4 @@
-master (unreleased)
+0.2.6
 
 * Added check for linting HAML files with
   [haml-lint](https://github.com/causes/haml-lint)
