@@ -1,3 +1,8 @@
+master (unreleased)
+
+* Added check for linting HAML files with
+  [haml-lint](https://github.com/causes/haml-lint)
+
 0.2.5
 
 * Don't use `--silent` flag with `rubocop` for Ruby style check
