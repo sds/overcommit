@@ -52,7 +52,7 @@ module Overcommit
     def extract_modified_lines
       lines = Set.new
 
-      `git diff --cached -U0 -- #{@original_path}`.
+      `git diff --no-ext-diff --cached -U0 -- #{@original_path}`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
 
         lines_added = (lines_added || 1).to_i # When blank, one line was added
