@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    overcommit (0.2.6)
+    overcommit (0.3.0)
 
 GEM
   remote: http://rubygems.org/

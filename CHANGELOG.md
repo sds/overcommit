@@ -1,4 +1,4 @@
-master
+0.3.0
 
 * Added Gemfile.lock/bundler checking
 * Added `--no-ext-diff` option to git diff
