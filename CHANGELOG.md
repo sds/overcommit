@@ -1,5 +1,7 @@
 master
 
+* Added Gemfile.lock/bundler checking
+* Added `--no-ext-diff` option to git diff
 * Exposed StagedFile#original_path
 
 0.2.6
