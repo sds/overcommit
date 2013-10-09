@@ -22,6 +22,15 @@ describe Overcommit::StagedFile do
     end
   end
 
+  describe '#original_path' do
+    let(:new_file) { 'Some file contents' }
+
+    it 'points to the original file' do
+      File.basename(described_class.new(staged_filename).original_path).
+        should == staged_filename
+    end
+  end
+
   describe '#path' do
     let(:new_file) { 'Some file contents' }
 

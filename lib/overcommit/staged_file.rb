@@ -6,7 +6,7 @@ require 'tempfile'
 # to make working with staged files easier.
 module Overcommit
   class StagedFile
-    attr_reader :contents
+    attr_reader :contents, :original_path
 
     def initialize(path)
       @original_path = path

@@ -1,3 +1,7 @@
+master
+
+* Exposed StagedFile#original_path
+
 0.2.6
 
 * Added check for linting HAML files with
