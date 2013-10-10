@@ -3,4 +3,4 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
-script: bundle exec rspec
+script: GIT_AUTHOR_NAME="Travis CI" bundle exec rspec
