@@ -9,10 +9,9 @@ module Overcommit::GitHook
       end
 
       paths_to_staged_files = Hash[staged.map { |s| [s.path, s] }]
-      staged_files = paths_to_staged_files.keys
 
-      output = `rubocop --format=emacs #{staged_files.join(' ')} 2>&1`
-      return :good if $?.success?
+      success, output = run_rubocop
+      return :good if success
 
       # Keep lines from the output for files that we actually modified
       error_lines, warning_lines = output.lines.partition do |output_line|
@@ -29,6 +28,38 @@ module Overcommit::GitHook
       return :bad, error_lines.join unless error_lines.empty?
       return :warn, "Modified files have style lints (on lines you didn't modify)\n" <<
                     warning_lines.join
+    end
+
+  private
+
+    def run_rubocop
+      success, output = true, ''
+      rubocop_config_mapping.each do |config, files|
+        config = config ? "-c #{config}" : ''
+        output += `rubocop #{config} --format=emacs #{files.join(' ')} 2>&1`
+        success = success && $?.success?
+      end
+      [success, output]
+    end
+
+    def rubocop_config_mapping
+      staged.inject({}) do |mapping, file|
+        config = rubocop_yml_for(file)
+        mapping[config] ||= []
+        mapping[config] << file.path
+        mapping
+      end
+    end
+
+    def rubocop_yml_for(staged_file)
+      dir = staged_file.original_path.split('/')
+      file = ''
+      file = rubo_file(dir) while !File.exists?(file) && dir.pop
+      File.exists?(file) ? file : nil
+    end
+
+    def rubo_file(dir)
+      File.join(File.join(*dir), '.rubocop.yml')
     end
   end
 end
