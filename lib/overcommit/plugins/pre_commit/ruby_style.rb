@@ -10,8 +10,8 @@ module Overcommit::GitHook
 
       paths_to_staged_files = Hash[staged.map { |s| [s.path, s] }]
 
-      output = run_rubocop
-      return :good if $?.success?
+      success, output = run_rubocop
+      return :good if success
 
       # Keep lines from the output for files that we actually modified
       error_lines, warning_lines = output.lines.partition do |output_line|
@@ -33,14 +33,25 @@ module Overcommit::GitHook
     private
 
     def run_rubocop
-      staged.reduce('') do |output, staged_file|
-        config = detect_rubocop_yml_for(staged_file)
+      success, output = true, ''
+      rubocop_config_mapping.each do |config, files|
         config = config ? "-c #{config}" : ''
-        output + `rubocop #{config} --format=emacs #{staged_file.path} 2>&1`
+        output += `rubocop #{config} --format=emacs #{files.join(' ')} 2>&1`
+        success = success && $?.success?
+      end
+      [success, output]
+    end
+
+    def rubocop_config_mapping
+      staged.reduce(Hash.new) do |mapping, file|
+        config = rubocop_yml_for(file)
+        mapping[config] ||= Array.new
+        mapping[config] << file.path
+        mapping
       end
     end
 
-    def detect_rubocop_yml_for(staged_file)
+    def rubocop_yml_for(staged_file)
       dir = staged_file.original_path.split('/')
       file = ''
       file = rubo_file(dir) while !File.exists?(file) && dir.pop
@@ -48,7 +59,7 @@ module Overcommit::GitHook
     end
 
     def rubo_file(dir)
-      File.join(*dir, '.rubocop.yml')
+      File.join(File.join(*dir), '.rubocop.yml')
     end
 
   end
