@@ -55,7 +55,7 @@ module Overcommit::GitHook
       dir = staged_file.original_path.split('/')
       file = ''
       file = rubo_file(dir) while !File.exists?(file) && dir.pop
-      file
+      File.exists?(file) ? file : nil
     end
 
     def rubo_file(dir)
