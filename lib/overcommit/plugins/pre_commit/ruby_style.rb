@@ -1,3 +1,4 @@
+require 'enumerator'
 require 'pathname'
 
 module Overcommit::GitHook
@@ -54,15 +55,10 @@ module Overcommit::GitHook
     end
 
     def rubocop_yml_for(staged_file)
-      config_file = nil
-      Pathname.new(staged_file.original_path).ascend do |path|
-        rubo_file = path + '.rubocop.yml'
-        if rubo_file.file?
-          config_file = rubo_file
-          break
-        end
-      end
-      config_file
+      Pathname.new(staged_file.original_path).
+               enum_for(:ascend).
+               map { |path| path + '.rubocop.yml' }.
+               find { |path| path.file? }
     end
   end
 end
