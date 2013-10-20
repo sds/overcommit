@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
             Dir['bin/**/*'] +
             Dir['config/*.yml']
 
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec', '2.13.0'
 end
