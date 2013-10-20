@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Overcommit::GitHook
   class RubyStyle < HookSpecificCheck
     include HookRegistry
@@ -52,14 +54,15 @@ module Overcommit::GitHook
     end
 
     def rubocop_yml_for(staged_file)
-      dir = staged_file.original_path.split('/')
-      file = ''
-      file = rubo_file(dir) while !File.exists?(file) && dir.pop
-      File.exists?(file) ? file : nil
-    end
-
-    def rubo_file(dir)
-      File.join(File.join(*dir), '.rubocop.yml')
+      config_file = nil
+      Pathname.new(staged_file.original_path).ascend do |path|
+        rubo_file = path + '.rubocop.yml'
+        if rubo_file.file?
+          config_file = rubo_file
+          break
+        end
+      end
+      config_file
     end
   end
 end

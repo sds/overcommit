@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Use per-file `.rubocop.yml` configuration for staged files
+
 ## 0.3.0
 
 * Added Gemfile.lock/bundler checking
