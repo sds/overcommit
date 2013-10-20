@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.3.1
 
 * Use per-file `.rubocop.yml` configuration for staged files
 
