@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix bug where `.rubocop.yml` would not be found in present working directory
+
 ## 0.3.1
 
 * Use per-file `.rubocop.yml` configuration for staged files
