@@ -4,7 +4,7 @@ require 'image_optim'
 describe Overcommit::GitHook::ImageOptimization do
   describe '.filetypes' do
     it "includes only image filetypes" do
-      expect(described_class.filetypes).to eq([:gif, :jpg, :png])
+      expect(described_class.filetypes).to eq([:gif, :jpeg, :jpg, :png])
     end
   end
 

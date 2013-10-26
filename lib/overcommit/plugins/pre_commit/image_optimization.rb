@@ -1,7 +1,7 @@
 module Overcommit::GitHook
   class ImageOptimization < HookSpecificCheck
     include HookRegistry
-    file_types :gif, :jpg, :png
+    file_types :gif, :jpeg, :jpg, :png
 
     def run_check
       begin
