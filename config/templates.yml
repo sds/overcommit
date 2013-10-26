@@ -6,6 +6,7 @@ default:
       - release_note
     pre_commit:
       - causes_email
+      - image_optimization
       - restricted_paths
       - test_history
 all:
