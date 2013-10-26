@@ -18,11 +18,11 @@ describe Overcommit::GitHook::ImageOptimization::ImageSet do
     it "excludes already optimized images from the results" do
       ImageOptim.should_receive(:new).and_return(image_optim)
 
-      image_optim.should_receive(:optimize_images!)
-        .with([unoptimized_image, optimized_image])
-        .and_yield(unoptimized_image, true)
-        .and_yield(optimized_image, false)
-        .and_return([unoptimized_image])
+      image_optim.should_receive(:optimize_images!).
+        with([unoptimized_image, optimized_image]).
+        and_yield(unoptimized_image, true).
+        and_yield(optimized_image, false).
+        and_return([unoptimized_image])
 
       image_set = described_class.new([unoptimized_image, optimized_image])
       results = image_set.optimize!
