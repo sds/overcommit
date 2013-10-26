@@ -22,10 +22,10 @@ describe Overcommit::GitHook::ImageOptimization do
       let(:image_set) { stub(described_class::ImageSet) }
 
       before do
-        described_class::ImageSet
-          .should_receive(:new)
-          .with([staged_filename])
-          .and_return(image_set)
+        described_class::ImageSet.
+          should_receive(:new).
+          with([staged_filename]).
+          and_return(image_set)
 
         image_set.should_receive(:optimize!).and_raise(ImageOptim::BinNotFoundError)
       end
@@ -37,10 +37,10 @@ describe Overcommit::GitHook::ImageOptimization do
       let(:image_set) { stub(described_class::ImageSet) }
 
       before do
-        described_class::ImageSet
-          .should_receive(:new)
-          .with([staged_filename])
-          .and_return(image_set)
+        described_class::ImageSet.
+          should_receive(:new).
+          with([staged_filename]).
+          and_return(image_set)
 
         image_set.should_receive(:optimize!).and_return([staged_filename])
       end
@@ -52,10 +52,10 @@ describe Overcommit::GitHook::ImageOptimization do
       let(:image_set) { stub(described_class::ImageSet) }
 
       before do
-        described_class::ImageSet
-          .should_receive(:new)
-          .with([staged_filename])
-          .and_return(image_set)
+        described_class::ImageSet.
+          should_receive(:new).
+          with([staged_filename]).
+          and_return(image_set)
 
         image_set.should_receive(:optimize!).and_return([])
       end

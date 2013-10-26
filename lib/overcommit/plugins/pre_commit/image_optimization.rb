@@ -32,7 +32,7 @@ module Overcommit::GitHook
       end
 
       def image_optim
-        @image_optim ||= ImageOptim.new(pngout: false)
+        @image_optim ||= ImageOptim.new(:pngout => false)
       end
 
       def optimize!
