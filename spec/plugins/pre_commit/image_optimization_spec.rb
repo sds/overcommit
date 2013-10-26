@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'image_optim'
 
 describe Overcommit::GitHook::ImageOptimization do
   describe '.filetypes' do
@@ -8,6 +9,8 @@ describe Overcommit::GitHook::ImageOptimization do
   end
 
   describe "#run_check" do
+    let(:image_optim) { stub(ImageOptim) }
+    let(:image_set) { stub(described_class::ImageSet) }
     let(:staged_filename) { 'filename.jpg' }
 
     around do |example|
@@ -18,46 +21,43 @@ describe Overcommit::GitHook::ImageOptimization do
       end
     end
 
+    before do
+      ImageOptim.should_receive(:new).and_return(image_optim)
+
+      described_class::ImageSet.
+        should_receive(:new).
+        with([staged_filename]).
+        and_return(image_set)
+    end
+
     context "when a dependency of image_optim is not installed" do
-      let(:image_set) { stub(described_class::ImageSet) }
-
       before do
-        described_class::ImageSet.
-          should_receive(:new).
-          with([staged_filename]).
-          and_return(image_set)
-
-        image_set.should_receive(:optimize!).and_raise(ImageOptim::BinNotFoundError)
+        image_set.
+          should_receive(:optimize_with).
+          with(image_optim).
+          and_raise(ImageOptim::BinNotFoundError)
       end
 
       it { should stop }
     end
 
     context "when some staged files were optimized" do
-      let(:image_set) { stub(described_class::ImageSet) }
-
       before do
-        described_class::ImageSet.
-          should_receive(:new).
-          with([staged_filename]).
-          and_return(image_set)
-
-        image_set.should_receive(:optimize!).and_return([staged_filename])
+        image_set.
+          should_receive(:optimize_with).
+          with(image_optim).
+          and_return([staged_filename])
       end
 
       it { should fail_check }
     end
 
     context "when no staged files were optimized" do
-      let(:image_set) { stub(described_class::ImageSet) }
-
       before do
-        described_class::ImageSet.
-          should_receive(:new).
-          with([staged_filename]).
-          and_return(image_set)
-
-        image_set.should_receive(:optimize!).and_return([])
+        image_set.
+          should_receive(:optimize_with).
+          with(image_optim).
+          and_return([])
       end
 
       it { should pass }

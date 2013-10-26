@@ -1,14 +1,20 @@
-require 'image_optim'
-
 module Overcommit::GitHook
   class ImageOptimization < HookSpecificCheck
     include HookRegistry
     file_types :gif, :jpg, :png
 
     def run_check
+      begin
+        require 'image_optim'
+      rescue LoadError
+        return :warn, "'image_optim' gem not installed -- run `gem install image_optim`"
+      end
+
       optimized_images =
         begin
-          ImageSet.new(staged.map(&:original_path)).optimize!
+          ImageSet.new(staged.map(&:original_path)).
+            optimize_with(ImageOptim.new(:pngout => false))
+
         rescue ImageOptim::BinNotFoundError => e
           return :stop,
             "#{e.message}. The image_optim gem is dependendent on this binary. " <<
@@ -31,11 +37,7 @@ module Overcommit::GitHook
         @image_paths ||= image_paths
       end
 
-      def image_optim
-        @image_optim ||= ImageOptim.new(:pngout => false)
-      end
-
-      def optimize!
+      def optimize_with(image_optim)
         results =
           image_optim.optimize_images!(image_paths) do |path, was_optimized|
             path if was_optimized
