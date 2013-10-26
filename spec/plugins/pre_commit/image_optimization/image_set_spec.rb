@@ -10,14 +10,12 @@ describe Overcommit::GitHook::ImageOptimization::ImageSet do
     end
   end
 
-  describe "#optimize!" do
+  describe "#optimize_with(ImageOptim)" do
     let(:optimized_image) { '/tmp/optimized.jpg' }
     let(:unoptimized_image) { '/tmp/unoptimized.jpg' }
-    let(:image_optim) { stub(ImageOptim) }
+    let(:image_optim) { stub('ImageOptim') }
 
     it "excludes already optimized images from the results" do
-      ImageOptim.should_receive(:new).and_return(image_optim)
-
       image_optim.should_receive(:optimize_images!).
         with([unoptimized_image, optimized_image]).
         and_yield(unoptimized_image, true).
@@ -25,15 +23,8 @@ describe Overcommit::GitHook::ImageOptimization::ImageSet do
         and_return([unoptimized_image])
 
       image_set = described_class.new([unoptimized_image, optimized_image])
-      results = image_set.optimize!
+      results = image_set.optimize_with(image_optim)
       expect(results).to eq([unoptimized_image])
-    end
-  end
-
-  describe "image_optim" do
-    it "should be an ImageOptim" do
-      image_set = described_class.new([])
-      expect(image_set.image_optim).to be_a(ImageOptim)
     end
   end
 end
