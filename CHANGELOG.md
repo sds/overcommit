@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.3.2
 
 * Fix bug where `.rubocop.yml` would not be found in present working directory
 
