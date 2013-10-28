@@ -8,7 +8,7 @@ describe Overcommit::GitHook::ImageOptimization do
     end
   end
 
-  describe "#run_check" do
+  describe '#run_check' do
     let(:image_optim) { stub(ImageOptim) }
     let(:image_set) { stub(described_class::ImageSet) }
     let(:staged_filename) { 'filename.jpg' }
@@ -30,7 +30,7 @@ describe Overcommit::GitHook::ImageOptimization do
         and_return(image_set)
     end
 
-    context "when a dependency of image_optim is not installed" do
+    context 'when a dependency of image_optim is not installed' do
       before do
         image_set.
           should_receive(:optimize_with).
@@ -41,7 +41,7 @@ describe Overcommit::GitHook::ImageOptimization do
       it { should stop }
     end
 
-    context "when some staged files were optimized" do
+    context 'when some staged files were optimized' do
       before do
         image_set.
           should_receive(:optimize_with).
@@ -52,7 +52,7 @@ describe Overcommit::GitHook::ImageOptimization do
       it { should fail_check }
     end
 
-    context "when no staged files were optimized" do
+    context 'when no staged files were optimized' do
       before do
         image_set.
           should_receive(:optimize_with).

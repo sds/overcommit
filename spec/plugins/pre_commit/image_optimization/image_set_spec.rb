@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Overcommit::GitHook::ImageOptimization::ImageSet do
-  describe "#initialize(image_paths)" do
+  describe '#initialize(image_paths)' do
     let(:path) { '/tmp/filename.jpg20131024-7103-s1d6n9.jpg' }
 
     it "sets the image_paths of the image set" do
@@ -10,12 +10,12 @@ describe Overcommit::GitHook::ImageOptimization::ImageSet do
     end
   end
 
-  describe "#optimize_with(ImageOptim)" do
+  describe '#optimize_with(ImageOptim)' do
     let(:optimized_image) { '/tmp/optimized.jpg' }
     let(:unoptimized_image) { '/tmp/unoptimized.jpg' }
     let(:image_optim) { stub('ImageOptim') }
 
-    it "excludes already optimized images from the results" do
+    it 'excludes already optimized images from the results' do
       image_optim.should_receive(:optimize_images!).
         with([unoptimized_image, optimized_image]).
         and_yield(unoptimized_image, true).

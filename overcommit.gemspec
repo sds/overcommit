@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
             Dir['config/*.yml']
 
   s.add_development_dependency 'rspec', '2.13.0'
+  s.add_development_dependency 'image_optim', '0.9.1'
 end

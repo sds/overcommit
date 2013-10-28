@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Added pre-commit check that optimizes images with `image_optim`
+
 ## 0.3.2
 
 * Fix bug where `.rubocop.yml` would not be found in present working directory
