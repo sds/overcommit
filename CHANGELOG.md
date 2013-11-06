@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Added pre-commit check that optimizes images with `image_optim`
+* Don't include submodules in the list of modified files
 
 ## 0.3.2
 
