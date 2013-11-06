@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.4.0
 
 * Added pre-commit check that optimizes images with `image_optim`
 * Don't include submodules in the list of modified files
