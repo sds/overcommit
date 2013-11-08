@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.4.1
 
 * Remove `RestrictedPaths` pre-commit check
 
