@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Remove `RestrictedPaths` pre-commit check
+
 ## 0.4.0
 
 * Added pre-commit check that optimizes images with `image_optim`
