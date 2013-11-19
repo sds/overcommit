@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Use per-file `.scss-lint.yml` configuration for staged files
+
 ## 0.4.1
 
 * Remove `RestrictedPaths` pre-commit check
