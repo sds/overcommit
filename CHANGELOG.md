@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.5.0
 
 * Use per-file `.scss-lint.yml` configuration for staged files
 
