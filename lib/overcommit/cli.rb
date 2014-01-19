@@ -1,69 +1,33 @@
 require 'optparse'
 
 module Overcommit
+  # Responsible for parsing command-line options and executing appropriate
+  # application logic based on those options.
   class CLI
-    attr_reader :options
-
-    def initialize(arguments = [])
+    def initialize(arguments, logger)
       @arguments = arguments
+      @log       = logger
       @options   = {}
     end
 
     def parse_arguments
       @parser = OptionParser.new do |opts|
-        opts.banner = "Usage: #{opts.program_name} [options] target"
+        opts.banner = "Usage: #{opts.program_name} [options] [target-repo]"
 
         opts.on_tail('-h', '--help', 'Show this message') do
           print_help opts.help
         end
 
         opts.on_tail('-v', '--version', 'Show version') do
-          log.log VERSION
-          exit 0
+          print_version(opts.program_name)
         end
 
-        opts.on('-l', '--list-templates', 'List built-in templates') do
-          Overcommit.config.templates.each_pair do |name, configuration|
-            log.bold name
-            log.log YAML.dump(configuration), ''
-          end
-          exit 0
-        end
-
-        opts.on('-a', '--all', 'Include all git hooks') do
-          @options[:template] = 'all'
-        end
-
-        opts.on('-t', '--template template',
-                'Specify a template of hooks') do |template|
-          @options[:template] = template
-        end
-
-        opts.on('--uninstall', 'Remove overcommit from target') do
+        opts.on('--uninstall', 'Remove Overcommit hooks from a repository') do
           @options[:uninstall] = true
         end
 
-        opts.on('-e', '--exclude hook_name,...', Array,
-                'Exclude hooks from installation') do |excludes|
-          # Transform from:
-          #
-          #   pre_commit/test_history,commit_msg/change_id
-          #
-          # Into:
-          #
-          #   {
-          #     'commit_msg' => ['change_id'],
-          #     'pre_commit' => ['test_history']
-          #   }
-          @options[:excludes] = excludes.inject({}) do |memo, exclude|
-            parts = exclude.split(%r{[:/.]})
-            next memo unless parts.size == 2
-
-            memo[parts.first] ||= []
-            memo[parts.first] << parts.last
-
-            memo
-          end
+        opts.on('--install', 'Install Overcommit hooks in a repository') do
+          @options[:install] = true
         end
       end
 
@@ -78,37 +42,43 @@ module Overcommit
     end
 
     def run
-      if @options[:targets].nil? || @options[:targets].empty?
-        log.warning 'You must supply at least one directory'
-        log.log @parser.help
-        exit 2
+      if Array(@options[:targets]).empty?
+        @options[:targets] = [Overcommit::Utils.repo_root].compact
+        if @options[:targets].empty?
+          log.warning 'You are not in a git repository.'
+          log.log 'You must either specify the path to a repository or ' <<
+                  'change your current directory to a repository.'
+          halt 64 # EX_USAGE
+        end
       end
 
       @options[:targets].each do |target|
         begin
-          Installer.new(@options, target).run
-        rescue NotAGitRepoError => e
-          log.warning "Skipping #{target}: #{e}"
+          Installer.new(@options, target, log).run
+        rescue Overcommit::Exceptions::InvalidGitRepo => error
+          log.warning "Skipping #{target}: #{error}"
         end
       end
-
-      log.success "#{@options[:uninstall] ? 'Removal' : 'Installation'} complete"
-
-    rescue ArgumentError => ex
-      error "Installation failed: #{ex}"
-      exit 3
     end
 
   private
 
-    def log
-      Logger.instance
+    attr_reader :log
+
+    def print_help(message, error = nil)
+      log.error "#{error}\n" if error
+      log.log message
+      halt(error ? 64 : 0) # 64 = EX_USAGE
     end
 
-    def print_help(message, ex = nil)
-      log.error ex.to_s + "\n" if ex
-      log.log message
-      exit 0
+    def print_version(program_name)
+      log.log "#{program_name} #{Overcommit::VERSION}"
+      halt
+    end
+
+    # Used for ease of stubbing in tests
+    def halt(status = 0)
+      exit status
     end
   end
 end

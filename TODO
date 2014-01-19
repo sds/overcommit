@@ -1,0 +1,49 @@
+Handle case where hooks are installed but overcommit isn't
+Add user-friendly installation instructions (e.g. run `overcommit` in git
+repo and get asked to install if it is not installed)
+Symlink all scripts to single Overcommit file
+Ask to remove sample files
+Parallelize hook checks
+Stash non-indexed changes before running checks so real filename can be used
+(`git stash save --keep-index --include-untracked`)
+Allow hooks to depend on other hooks being run first? (`depends` option)
+Auto install hooks on updating overcommit during next hook run
+Auto update hook integration script when newer overcommit runs
+Allow GIT_TEMPLATE_DIR to be set with `export GIT_TEMPLATE_DIR=`overcommit --template-dir`
+Allow hooks to specify required executable (`executable` option, coupled with
+  install instructions of some sort)
+Allow hooks to specify whether they only apply to lines the user modified
+Split out Whitespace check into individual checks
+Allow SKIP arguments to be case insensitive
+
+
+Allow features of hooks to be customized (stealth, required, etc.)
+
+`overcommit pre-commit`
+`overcommit commit-msg <file-with-message>`
+`overcommit post-checkout <prev-HEAD> <new-HEAD> <file-checkout[0/1]>`
+
+Core philosophies:
+- Git Hooks are a first-class artifact that don't vary from system to system
+  (should be stored in source control)
+  - Copying hooks between multiple repositories is annoying
+  - Using `git config` as a method of storing hook configuration doesn't persist
+- Repository is the fundamental unit of configuration (no global configuration
+  for multiple repositories stored elsewhere)
+- Overcommit is the homebrew of git hooks
+
+
+
+WHAT's FIXED:
+- Renaming of core concepts
+- Control flow fixed to not `exit` in random places
+- No longer need temp files for staged files and the various hacks related to it
+  (e.g. rubocop/scss-lint config loading)
+- Easier for developers to test new hooks (just run `bundle exec git commit`,
+  etc.)
+- Removed the HookRegistry
+- Allow fine grained control over which checks apply to which files
+
+
+NICE TO HAVES:
+- report status sizes to width of terminal

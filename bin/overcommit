@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-$: << File.expand_path('../../lib', __FILE__)
-
 require 'overcommit'
 require 'overcommit/cli'
 
-Overcommit::CLI.new(ARGV).tap do |cli|
+logger = Overcommit::Logger.new(STDOUT)
+
+Overcommit::CLI.new(ARGV, logger).tap do |cli|
   cli.parse_arguments
   cli.run
 end

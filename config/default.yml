@@ -1,0 +1,94 @@
+# Default configuration that all Overcommit configurations inherit from.
+#
+# This is an opinionated list of which hooks are valuable to run and what their
+# out-of-the-box settings should be.
+
+# Where to store hook plugins specific to a repository. These are loaded in
+# addition to the default hooks Overcommit comes with. The location is relative
+# to the root of the repository.
+plugin_directory: '.githooks'
+
+# Hooks that are run after `git commit` is executed, before the commit message
+# editor is displayed. These hooks are ideal for syntax checkers, linters, and
+# other checks that you want to run before you allow a commit object to be
+# created.
+pre_commit:
+  ALL:
+    requires_files: true
+    required: false
+    quiet: false
+
+  AuthorName:
+    requires_files: false
+    required: true
+    silent: true
+
+  CoffeeLint:
+    description: 'Analyzing with coffeelint'
+    include: '**/*.coffee'
+
+  CssLint:
+    description: 'Analyzing with csslint'
+    include: '**/*.css'
+
+  HamlLint:
+    description: 'Analyzing with haml-lint'
+    include: '**/*.haml'
+
+  JsHint:
+    description: 'Analyzing with JSHint'
+    include: '**/*.js'
+
+  PythonFlake8:
+    description: 'Analyzing with flake8'
+    include: '**/*.py'
+
+  Rubocop:
+    description: 'Analyzing with Rubocop'
+    include:
+      - '**/*.gemspec'
+      - '**/*.rake'
+      - '**/*.rb'
+      - '**/Gemfile'
+      - '**/Rakefile'
+
+  ScssLint:
+    description: 'Analyzing with scss-lint'
+    include: '**/*.scss'
+
+  Whitespace:
+    description: 'Checking for invalid whitespace'
+
+  YamlSyntax:
+    description: 'Checking YAML syntax'
+    include: '**/*.yml'
+
+# Hooks that are run after all pre-commit hooks have run, before the user's
+# commit message editor is opened.
+# These hooks are used to edit the commit message based on the proprosed changes
+# (for example, if you want to include additional metadata with the commit
+# message).
+prepare_commit_msg:
+
+# Hooks that are run against every commit message after a user has written it.
+# These hooks are useful for enforcing policies on commit messages written for a
+# project.
+commit_msg:
+  ALL:
+    quiet: false
+
+  HardTabs:
+    description: 'Checking for hard tabs'
+
+  RussianNovel:
+    description: 'Checking length of commit message'
+    quiet: true
+
+  SingleLineSubject:
+    description: 'Checking subject line'
+
+  TextWidth:
+    description: 'Checking text width'
+
+  TrailingPeriod:
+    description: 'Checking for trailing periods in subject'

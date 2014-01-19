@@ -1,11 +1,12 @@
 require 'fileutils'
-require 'yaml'
 
 module Overcommit
+  # Manages the installation of Overcommit hooks in a git repository.
   class Installer
-    def initialize(options, target)
+    def initialize(options, target, log)
       @options = options
       @target  = target
+      @log     = log
     end
 
     def run
@@ -16,98 +17,83 @@ module Overcommit
     def install
       log.log "Installing hooks into #{@target}"
 
-      install_scripts
-      install_hooks
-      write_configuration
+      install_master_hook
+      install_hook_symlinks
+
+      log.success "Successfully installed hooks into #{@target}"
     end
 
     def uninstall
       log.log "Removing hooks from #{@target}"
 
-      uninstall_scripts
-      uninstall_hooks
-      rm_configuration
+      uninstall_master_hook
+      uninstall_hook_symlinks
+
+      log.success "Successfully removed hooks from #{@target}"
     end
 
   private
 
-    def log
-      Logger.instance
-    end
+    attr_reader :log
 
-    def hook_path
-      absolute_target = File.expand_path @target
+    def hooks_path
+      absolute_target = File.expand_path(@target)
       File.join(absolute_target, '.git/hooks')
     end
 
     def validate_target
-      absolute_target = File.expand_path @target
-      unless File.directory? absolute_target
-        raise NotAGitRepoError, 'is not a directory'
+      absolute_target = File.expand_path(@target)
+
+      unless File.directory?(absolute_target)
+        raise Overcommit::Exceptions::InvalidGitRepo, 'is not a directory'
       end
 
       unless File.directory?(File.join(absolute_target, '.git'))
-        raise NotAGitRepoError, 'does not appear to be a git repository'
+        raise Overcommit::Exceptions::InvalidGitRepo, 'does not appear to be a git repository'
       end
     end
 
-    # Make helper scripts available locally inside the repo
-    def install_scripts
-      FileUtils.cp_r Utils.absolute_path('bin/scripts'), hook_path
+    def install_master_hook
+      master_hook = File.join(OVERCOMMIT_HOME, 'libexec', 'overcommit-hook')
+      install_location = File.join(hooks_path, 'overcommit-hook')
+      FileUtils.mkdir_p(hooks_path)
+      FileUtils.cp(master_hook, install_location)
     end
 
-    # Install all available git hooks into the repo
-    def install_hooks
-      hooks.each do |hook|
-        FileUtils.cp hook, File.join(hook_path, File.basename(hook))
+    def uninstall_master_hook
+      install_location = File.join(hooks_path, 'overcommit-hook')
+      delete(install_location)
+    end
+
+    def install_hook_symlinks
+      # Link each hook type (pre-commit, commit-msg, etc.) to the master hook.
+      # We change directories so that the relative symlink paths work regardless
+      # of where the repository is located.
+      Dir.chdir(hooks_path) do
+        supported_hook_types.each do |hook_type|
+          FileUtils.ln_sf('overcommit-hook', hook_type)
+        end
       end
     end
 
-    def uninstall_hooks
-      hooks.each do |hook|
-        delete File.join(hook_path, File.basename(hook))
+    def uninstall_hook_symlinks
+      Dir.chdir(hooks_path) do
+        supported_hook_types.each do |hook_type|
+          if File.symlink?(hook_type) && File.readlink(hook_type) == 'overcommit-hook'
+            delete(hook_type)
+          end
+        end
       end
     end
 
-    def uninstall_scripts
-      scripts = File.join(hook_path, 'scripts')
-      FileUtils.rm_r scripts rescue false
-    end
-
-    def hooks
-      Dir[Utils.absolute_path('bin/hooks/*')]
-    end
-
-    # Dump a YAML document containing requested configuration
-    def write_configuration
-      template = @options.fetch(:template, 'default')
-      base_config = Overcommit.config.templates[template]
-      if base_config.nil?
-        raise ArgumentError, "No such template '#{template}'"
-      end
-
-      base_config = base_config.dup
-      (base_config['excludes'] ||= {}).
-        merge!(@options[:excludes] || {}) do |_, a, b|
-        # Concat the arrays together
-        a + b
-      end
-
-      File.open(configuration_location, 'w') do |config|
-        YAML.dump(base_config, config)
-      end
-    end
-
-    def rm_configuration
-      delete configuration_location
-    end
-
-    def configuration_location
-      File.join(hook_path, 'overcommit.yml')
+    def supported_hook_types
+      Dir[File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook_runner', '*')].
+        map { |file| File.basename(file, '.rb').gsub('_', '-') }.
+        reject { |file| file == 'base' }
     end
 
     def delete(file)
-      File.delete file rescue false
+      File.delete(file) rescue false
     end
   end
 end

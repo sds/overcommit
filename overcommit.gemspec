@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
             Dir['bin/**/*'] +
             Dir['config/*.yml']
 
+  s.add_dependency 'wopen3'
+
   s.add_development_dependency 'rspec', '2.14.1'
   s.add_development_dependency 'image_optim', '0.10.2'
 end

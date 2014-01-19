@@ -1,54 +1,108 @@
-require 'singleton'
-require 'yaml'
-
 module Overcommit
+  # Stores configuration for Overcommit and the hooks it runs.
   class Configuration
-    include Singleton
-
-    attr_reader :templates
-
-    def initialize
-      @templates = YAML.load_file(Utils.absolute_path('config/templates.yml'))
+    # Creates a configuration from the given hash.
+    def initialize(hash)
+      @hash = hash
+      validate
     end
 
-    # Read the repo-specific 'overcommit.yml' file to determine what behavior
-    # the user wants.
-    def repo_settings
-      config_file = Utils.repo_path('.git/hooks/overcommit.yml')
-
-      File.exist?(config_file) ? YAML.load_file(config_file) : {}
+    # Returns absolute path to the directory that external hook plugins should
+    # be loaded from.
+    def plugin_directory
+      File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'])
     end
 
-    # Given the current configuration, return a set of paths which should be
-    # loaded as plugins (`require`d)
-    def desired_plugins
-      excludes = repo_settings['excludes'] || {}
-
-      plugin_directories.map do |dir|
-        Dir[File.join(dir, Utils.hook_name, '*.rb')].map do |plugin|
-          basename = File.basename(plugin, '.rb')
-          if !(excludes[Utils.hook_name] || []).include?(basename)
-            plugin
-          end
-        end.compact
-      end.flatten
+    # Returns the hooks that have been enabled for a hook type.
+    def enabled_hooks(hook_type)
+      @hash[hook_type].keys.
+        select { |hook_name| hook_name != 'ALL' }.
+        select { |hook_name| @hash[hook_type][hook_name]['enabled'] != false }
     end
+
+    # Returns a non-modifiable configuration for a hook.
+    def hook_config(hook, hook_type = nil)
+      unless hook_type
+        components = hook.class.name.split('::')
+        hook = components.last
+        hook_type = Overcommit::Utils.underscorize(components[-2])
+      end
+
+      # Merge hook configuration with special 'ALL' config
+      smart_merge(@hash[hook_type]['ALL'], @hash[hook_type][hook] || {}).freeze
+    end
+
+    # Merges the given configuration with this one, returning a new
+    # {Configuration}. The provided configuration will either add to or replace
+    # any options defined in this configuration.
+    def merge(config)
+      self.class.new(smart_merge(@hash, config.hash))
+    end
+
+    # Applies additional configuration settings based on the provided
+    # environment variables.
+    def apply_environment!(hook_type, env)
+      hook_type = hook_type.gsub('-', '_')
+
+      skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']}".split(/[:, ]/)
+
+      if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
+        @hash[hook_type]['ALL']['enabled'] = false
+      else
+        skipped_hooks.each do |hook_name|
+          @hash[hook_type][hook_name] ||= {}
+          @hash[hook_type][hook_name]['enabled'] = false
+        end
+      end
+    end
+
+  protected
+
+    attr_reader :hash
 
   private
 
-    def plugin_directories
-      # Start with the base plugins provided by the gem
-      plugin_dirs   = [File.expand_path('../plugins', __FILE__)]
-      repo_specific = Utils.repo_path('.githooks')
-
-      # Add on any repo-specific checks
-      plugin_dirs << repo_specific if File.directory?(repo_specific)
-
-      plugin_dirs
+    # Validates the configuration for any invalid options, normalizing it where
+    # possible.
+    def validate
+      @hash = convert_nils_to_empty_hashes(@hash)
+      ensure_special_all_section_exists(@hash)
     end
-  end
 
-  def self.config
-    Configuration.instance
+    def smart_merge(parent, child)
+      parent.merge(child) do |key, old, new|
+        case old
+        when Array
+          old + new
+        when Hash
+          smart_merge(old, new)
+        else
+          new
+        end
+      end
+    end
+
+    def ensure_special_all_section_exists(hash)
+      hook_types = Dir[File.join(OVERCOMMIT_HOME, 'lib/overcommit/hook/*')].
+                     select { |path| File.directory?(path) }.
+                     map { |path| File.basename(path) }
+
+      hook_types.each do |hook_type|
+        hash[hook_type]['ALL'] ||= {}
+      end
+    end
+
+    def convert_nils_to_empty_hashes(hash)
+      hash.inject({}) do |h, (key, value)|
+        h[key] =
+          case value
+          when nil  then {}
+          when Hash then convert_nils_to_empty_hashes(value)
+          else
+            value
+          end
+        h
+      end
+    end
   end
 end

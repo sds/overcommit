@@ -1,18 +1,16 @@
-require 'singleton'
-
-# This class centralizes all communication to STDOUT
 module Overcommit
+  # Encapsulates all communication to an output source.
   class Logger
-    include Singleton
-
-    attr_accessor :output
+    def initialize(out)
+      @out = out
+    end
 
     def partial(*args)
-      out.print *args
+      @out.print(*args)
     end
 
     def log(*args)
-      out.puts *args
+      @out.puts(*args)
     end
 
     def bold(str)
@@ -35,14 +33,10 @@ module Overcommit
       color('1;33', str)
     end
 
-    def out
-      self.output ||= $stdout
-    end
-
   private
 
     def color(code, str)
-      log(out.isatty ? "\033[#{code}m#{str}\033[0m" : str)
+      log(@out.isatty ? "\033[#{code}m#{str}\033[0m" : str)
     end
   end
 end

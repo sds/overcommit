@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+
+# Entrypoint for Overcommit hook integration. Installing Overcommit will result
+# in all of your git hooks being symlinked to this file, allowing the framework
+# to manage your hooks for you.
+
+# Required for Ruby 1.8 compatibility (for older OSX versions)
+require 'rubygems'
+
+hook_type = File.basename($0)
+if hook_type == 'overcommit-hook'
+  puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " <<
+       "by each hook in a repository's .git/hooks directory."
+  exit 64 # EX_USAGE
+end
+
+begin
+  require 'overcommit'
+rescue LoadError
+  puts 'Overcommit is not installed. Install it to manage git hooks for ' <<
+       'this repository? (y/n)'
+
+  if (answer = gets) && answer.strip.downcase.start_with?('y')
+    if system('gem install overcommit')
+      require 'overcommit'
+    else
+      puts 'Unable to install Overcommit'
+      exit
+    end
+  else
+    puts 'You chose not to install Overcommit'
+    puts "No hooks were run for '#{hook_type}'"
+    exit
+  end
+end
+
+begin
+  config = Overcommit::ConfigurationLoader.load_repo_config
+  config.apply_environment!(hook_type, ENV)
+
+  log = Overcommit::Logger.new(STDOUT)
+
+  silence_log = Overcommit::Logger.new(File.open('/dev/null', 'w'))
+  # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
+  Overcommit::Installer.new({ install: true },
+                            Overcommit::Utils.repo_root,
+                            silence_log).run
+
+  runner = Overcommit::HookRunner.create(hook_type, config)
+
+  status = runner.run(ARGV, STDIN, log)
+
+  exit(status ? 0 : 65) # 65 = EX_DATAERR
+rescue Overcommit::Exceptions::ConfigurationError => error
+  puts error
+  exit 78 # EX_CONFIG
+rescue Overcommit::Exceptions::HookRunnerLoadError => error
+  puts error
+  puts 'Are you running an old version of Overcommit?'
+  exit 69 # EX_UNAVAILABLE
+rescue Overcommit::Exceptions::InvalidGitRepo => error
+  puts error
+  exit 64 # EX_USAGE
+rescue => error
+  puts error.message
+  puts error.backtrace
+  puts "Report this bug at #{Overcommit::BUG_REPORT_URL}"
+  exit 70 # EX_SOFTWARE
+end
