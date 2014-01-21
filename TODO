@@ -1,7 +1,7 @@
-Handle case where hooks are installed but overcommit isn't
+# Handle case where hooks are installed but overcommit isn't
 Add user-friendly installation instructions (e.g. run `overcommit` in git
 repo and get asked to install if it is not installed)
-Symlink all scripts to single Overcommit file
+#Symlink all scripts to single Overcommit file
 Ask to remove sample files
 Parallelize hook checks
 Stash non-indexed changes before running checks so real filename can be used
@@ -15,6 +15,9 @@ Allow hooks to specify required executable (`executable` option, coupled with
 Allow hooks to specify whether they only apply to lines the user modified
 Split out Whitespace check into individual checks
 Allow SKIP arguments to be case insensitive
+Move ReleaseNote check into Causes repo
+Enable hook by simply including it in repo-specific .overcommit.yml (no need
+to specify enabled: true)
 
 
 Allow features of hooks to be customized (stealth, required, etc.)

@@ -8,7 +8,7 @@ module Overcommit
       @config  = config
       @name    = hook_runner.underscored_hook_type.gsub('_', '-')
       @hooks   = hooks
-      @width   = 60 - (@hooks.map { |s| s.name.length }.max || 0)
+      @width   = [@hooks.map { |s| s.description.length }.max + 3, 60].max
       @results = []
     end
 
@@ -18,7 +18,7 @@ module Overcommit
 
     def with_status(hook, &block)
       title = "  #{hook.description}"
-      unless hook.silent?
+      unless hook.quiet?
         log.partial title
         print '.' * (@width - title.length)
       end
@@ -37,6 +37,8 @@ module Overcommit
       else
         log.error "✗ One or more #{@name} checks failed"
       end
+
+      log.log # Newline
     end
 
     def checks_passed?
@@ -46,7 +48,7 @@ module Overcommit
   private
 
     def print_hook_result(hook, title, status, output)
-      if hook.silent?
+      if hook.quiet?
         return if status == :good
         log.partial title
       end

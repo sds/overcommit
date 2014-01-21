@@ -7,12 +7,12 @@ module Overcommit::Hook::PreCommit
       # Catches hard tabs
       result = command("grep -Inl \"\\t\" #{paths}")
       unless result.stdout.empty?
-        return :stop, "Don't use hard tabs:\n#{result.stdout}"
+        return :bad, "Don't use hard tabs:\n#{result.stdout}"
       end
 
       # Catches trailing whitespace, conflict markers etc
       result = command('git diff --check --cached')
-      return :stop, result.stdout unless result.success?
+      return :bad, result.stdout unless result.success?
 
       :good
     end

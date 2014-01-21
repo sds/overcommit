@@ -47,11 +47,11 @@ module Overcommit
       skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']}".split(/[:, ]/)
 
       if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
-        @hash[hook_type]['ALL']['enabled'] = false
+        @hash[hook_type]['ALL']['skip'] = true
       else
         skipped_hooks.each do |hook_name|
           @hash[hook_type][hook_name] ||= {}
-          @hash[hook_type][hook_name]['enabled'] = false
+          @hash[hook_type][hook_name]['skip'] = true
         end
       end
     end

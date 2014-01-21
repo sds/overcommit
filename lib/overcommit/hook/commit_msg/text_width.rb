@@ -1,8 +1,8 @@
-module Overcommit::GitHook
-  class TextWidth < HookSpecificCheck
-    include HookRegistry
-
-    def run_check
+module Overcommit::Hook::CommitMsg
+  # Ensures the number of columns the subject and commit message lines occupy is
+  # under the preferred limits.
+  class TextWidth < Base
+    def run
       if commit_message.first.size > 60
         return :warn, 'Please keep the subject < ~60 characters'
       end

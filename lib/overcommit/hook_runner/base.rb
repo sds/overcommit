@@ -9,11 +9,15 @@ module Overcommit::HookRunner
 
     # Loads and runs the hooks registered for this {HookRunner}.
     def run(args, input, logger)
-      #stash_unstaged_files
+      @args = args
+      @input = input
+      @logger = logger
+
+      # stash_unstaged_files
       load_hooks
-      run_hooks(args, input, logger)
+      run_hooks
     ensure
-      #restore_unstaged_files
+      # restore_unstaged_files
     end
 
     # Returns the type of hook this runner deals with (e.g. "CommitMsg",
@@ -26,14 +30,23 @@ module Overcommit::HookRunner
       @underscored_hook_type ||= Overcommit::Utils.underscorize(hook_type)
     end
 
+    # Get a list of added, copied, or modified files that have been staged.
+    # Renames and deletions are ignored, since there should be nothing to check.
+    def staged_files
+      @staged_files ||=
+        `git diff --cached --name-only --diff-filter=ACM --ignore-submodules=all`.
+          split("\n").
+          map { |relative_file| File.expand_path(relative_file) }
+    end
+
   private
 
-    def run_hooks(args, input, log)
-      reporter = Overcommit::Reporter.new(self, @hooks, @config, log)
+    def run_hooks
+      reporter = Overcommit::Reporter.new(self, @hooks, @config, @logger)
 
       reporter.start_hook_run
 
-      @hooks.reject { |hook| hook.skip? }.
+      @hooks.select { |hook| hook.run? }.
              each do |hook|
         reporter.with_status(hook) do
           hook.run
@@ -72,8 +85,7 @@ module Overcommit::HookRunner
       Dir[File.join(directory, '*.rb')].sort do |plugin|
         require plugin
 
-        hook_name = Overcommit::HookRunner.hook_type_to_class_name(File.basename(plugin, '.rb'))
-
+        hook_name = self.class.hook_type_to_class_name(File.basename(plugin, '.rb'))
         @hooks << create_hook(hook_name)
       end
     end
@@ -82,7 +94,7 @@ module Overcommit::HookRunner
     # hook configuration.
     def create_hook(hook_name)
       Overcommit::Hook.const_get("#{hook_type}::#{hook_name}").
-                       new(@config)
+                       new(@config, self)
     rescue LoadError, NameError => error
       raise Overcommit::Exceptions::HookLoadError,
             "Unable to load hook '#{hook_name}': #{error}",

@@ -3,8 +3,9 @@ require 'wopen3'
 module Overcommit::Hook
   # Functionality common to all hooks.
   class Base
-    def initialize(config)
+    def initialize(config, hook_runner)
       @config = config.hook_config(self)
+      @hook_runner = hook_runner
     end
 
     # Runs the hook.
@@ -24,8 +25,8 @@ module Overcommit::Hook
       @config['required']
     end
 
-    def silent?
-      @config['silent']
+    def quiet?
+      @config['quiet']
     end
 
     def enabled?
@@ -37,8 +38,13 @@ module Overcommit::Hook
     end
 
     def skip?
-      !(enabled? || required?) ||
-        (requires_modified_files? && applicable_files.empty?)
+      @config['skip']
+    end
+
+    def run?
+      enabled? &&
+        (!skip? || required?) &&
+        !(requires_modified_files? && applicable_files.empty?)
     end
 
     # Gets a list of staged files that apply to this hook based on its
@@ -49,13 +55,8 @@ module Overcommit::Hook
 
   private
 
-    # Get a list of added, copied, or modified files that have been staged.
-    # Renames and deletions are ignored, since there should be nothing to check.
     def staged_files
-      @staged_files ||=
-        `git diff --cached --name-only --diff-filter=ACM --ignore-submodules=all`.
-          split("\n").
-          map { |relative_file| File.expand_path(relative_file) }
+      @hook_runner.staged_files
     end
 
     # Returns whether the specified file is applicable to this hook based on the

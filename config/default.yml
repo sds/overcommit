@@ -21,7 +21,7 @@ pre_commit:
   AuthorName:
     requires_files: false
     required: true
-    silent: true
+    quiet: true
 
   CoffeeLint:
     description: 'Analyzing with coffeelint'
@@ -75,7 +75,14 @@ prepare_commit_msg:
 # project.
 commit_msg:
   ALL:
+    requires_files: false
     quiet: false
+
+  GerritChangeId:
+    enabled: false
+    description: 'Ensuring Gerrit Change-Id is present'
+    required: true
+    quiet: true
 
   HardTabs:
     description: 'Checking for hard tabs'
