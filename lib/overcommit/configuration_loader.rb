@@ -16,6 +16,10 @@ module Overcommit
       end
     end
 
+    def self.default_configuration
+      @default_config ||= load_from_file(DEFAULT_CONFIG_PATH)
+    end
+
   private
 
     # Loads a configuration, ensuring it extends the default configuration.
@@ -38,10 +42,6 @@ module Overcommit
         end
 
       Overcommit::Configuration.new(hash)
-    end
-
-    def self.default_configuration
-      @default_config ||= load_from_file(DEFAULT_CONFIG_PATH)
     end
   end
 end

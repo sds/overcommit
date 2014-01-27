@@ -1,3 +1,5 @@
+require 'tmpdir'
+
 module GitSpecHelpers
   def repo(&block)
     Dir.mktmpdir.tap do |path|

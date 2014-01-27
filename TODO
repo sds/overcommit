@@ -18,6 +18,8 @@ Allow SKIP arguments to be case insensitive
 Move ReleaseNote check into Causes repo
 Enable hook by simply including it in repo-specific .overcommit.yml (no need
 to specify enabled: true)
+Display when a hook has been explicitly skipped when it would otherwise run
+Display when no applicable hooks ran (e.g. instead of "All pre-commit checks passed")
 
 
 Allow features of hooks to be customized (stealth, required, etc.)

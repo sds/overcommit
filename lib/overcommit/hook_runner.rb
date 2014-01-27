@@ -54,7 +54,7 @@ module Overcommit
     # Load hooks that ship with Overcommit, ignoring ones that are excluded from
     # the repository's configuration.
     def load_builtin_hooks
-      @config.enabled_hooks(underscored_hook_type).each do |hook_name|
+      @config.enabled_builtin_hooks(underscored_hook_type).each do |hook_name|
         underscored_hook_name = Overcommit::Utils.underscorize(hook_name)
         require "overcommit/hook/#{underscored_hook_type}/#{underscored_hook_name}"
         @hooks << create_hook(hook_name)

@@ -5,7 +5,7 @@ class CheckMatcher
   end
 
   def matches?(check)
-    actual_status, actual_message = [check.run_check].flatten
+    actual_status, actual_message = [check.run].flatten
     status_matches?(actual_status) && message_matches?(actual_message)
   end
 
@@ -34,8 +34,8 @@ class CheckMatcher
   end
 end
 
-# Can't call this `fail` since that is a reserved word in Ruby
-RSpec::Matchers.define :fail_check do |message|
+# Can't use 'fail' as it is a reserved word.
+RSpec::Matchers.define :fail_check  do |message|
   check_matcher = CheckMatcher.new(:status => :bad, :message => message)
 
   match do |check|
@@ -44,37 +44,16 @@ RSpec::Matchers.define :fail_check do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run_check,
-      'expected that the check would fail'
+      check.run,
+      'expected that the hook would fail'
     )
   end
 
   failure_message_for_should_not do
-    'expected that the check would not fail'
+    'expected that the hook would not fail'
   end
 
-  description { 'fail the check' }
-end
-
-RSpec::Matchers.define :stop do |message|
-  check_matcher = CheckMatcher.new(:status => :stop, :message => message)
-
-  match do |check|
-    check_matcher.matches?(actual)
-  end
-
-  failure_message_for_should do |check|
-    check_matcher.failure_message(
-      check.run_check,
-      'expected that the check would fail and halt further checking'
-    )
-  end
-
-  failure_message_for_should_not do
-    'expected that the check would not fail with a stopping error'
-  end
-
-  description { 'fail and halt further checking' }
+  description { 'fail' }
 end
 
 RSpec::Matchers.define :pass do |message|
@@ -86,7 +65,7 @@ RSpec::Matchers.define :pass do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run_check,
+      check.run,
       'expected that the check would pass'
     )
   end
@@ -107,7 +86,7 @@ RSpec::Matchers.define :warn do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run_check,
+      check.run,
       'expected that the check would report a warning'
     )
   end

@@ -13,8 +13,8 @@ module Overcommit
       File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'])
     end
 
-    # Returns the hooks that have been enabled for a hook type.
-    def enabled_hooks(hook_type)
+    # Returns the built-in hooks that have been enabled for a hook type.
+    def enabled_builtin_hooks(hook_type)
       @hash[hook_type].keys.
         select { |hook_name| hook_name != 'ALL' }.
         select { |hook_name| @hash[hook_type][hook_name]['enabled'] != false }

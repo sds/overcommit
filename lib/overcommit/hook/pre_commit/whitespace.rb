@@ -1,5 +1,5 @@
 module Overcommit::Hook::PreCommit
-  # Checks for invalid whitespace (hard tabs or trailig whitespace) in files.
+  # Checks for invalid whitespace (hard tabs or trailing whitespace) in files.
   class Whitespace < Base
     def run
       paths = applicable_files.join(' ')

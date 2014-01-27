@@ -7,8 +7,8 @@ module Overcommit::Hook::PreCommit
       end
 
       result = command("coffeelint --quiet #{applicable_files.join(' ')}")
-
-      return (result.success? ? :good : :bad), result.stdout
+      return :good if result.success?
+      return :bad, result.stdout
     end
   end
 end

@@ -5,7 +5,7 @@ module Overcommit::Hook::PostCheckout
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegator :@context,
-                  *%i[previous_head new_head branch_checkout? file_checkout?]
+    def_delegators :@context,
+                   :previous_head, :new_head, :branch_checkout?, :file_checkout?
   end
 end
