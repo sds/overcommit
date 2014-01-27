@@ -1,3 +1,5 @@
+require 'wopen3'
+
 module Overcommit
   # Utility functions for general use.
   module Utils
@@ -23,6 +25,44 @@ module Overcommit
             gsub(/([a-z\d])([A-Z])/, '\1_\2').
             tr('-', '_').
             downcase
+      end
+
+      # Returns whether a command can be found given the current environment path.
+      def in_path?(cmd)
+        exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+          exts.each do |ext|
+            exe = File.join(path, "#{cmd}#{ext}")
+            return true if File.executable?(exe)
+          end
+        end
+        false
+      end
+
+      # Wrap external subshell calls. This is necessary in order to allow
+      # Overcommit to call other Ruby executables without requiring that they be
+      # specified in Overcommit's Gemfile--a nasty consequence of using
+      # `bundle exec overcommit` while developing locally.
+      def command(command)
+        with_environment 'RUBYOPT' => nil do
+          Wopen3.system(command)
+        end
+      end
+
+    private
+
+      # Calls a block of code with a modified set of environment variables,
+      # restoring them once the code has executed.
+      def with_environment(env, &block)
+        old_env = {}
+        env.each do |var, value|
+          old_env[var] = ENV[var.to_s]
+          ENV[var.to_s] = value
+        end
+
+        yield
+      ensure
+        old_env.each { |var, value| ENV[var.to_s] = value }
       end
     end
   end

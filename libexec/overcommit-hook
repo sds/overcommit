@@ -16,7 +16,7 @@ end
 
 begin
   require 'overcommit'
-rescue LoadError
+rescue LoadError => ex
   puts 'Overcommit is not installed. Install it to manage git hooks for ' <<
        'this repository? (y/n)'
 
@@ -38,23 +38,22 @@ begin
   config = Overcommit::ConfigurationLoader.load_repo_config
   config.apply_environment!(hook_type, ENV)
 
-  log = Overcommit::Logger.new(STDOUT)
-
-  silence_log = Overcommit::Logger.new(File.open('/dev/null', 'w'))
   # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
-  Overcommit::Installer.new({ install: true },
-                            Overcommit::Utils.repo_root,
-                            silence_log).run
+  #Overcommit::Installer.new({ install: true },
+                            #Overcommit::Utils.repo_root,
+                            #Overcommit::Logger.silent).run
 
-  runner = Overcommit::HookRunner.create(hook_type, config)
+  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
+  logger = Overcommit::Logger.new(STDOUT)
+  runner = Overcommit::HookRunner.new(config)
 
-  status = runner.run(ARGV, STDIN, log)
+  status = runner.run(context, logger)
 
   exit(status ? 0 : 65) # 65 = EX_DATAERR
 rescue Overcommit::Exceptions::ConfigurationError => error
   puts error
   exit 78 # EX_CONFIG
-rescue Overcommit::Exceptions::HookRunnerLoadError => error
+rescue Overcommit::Exceptions::HookContextLoadError => error
   puts error
   puts 'Are you running an old version of Overcommit?'
   exit 69 # EX_UNAVAILABLE

@@ -6,7 +6,7 @@ module Overcommit::Exceptions
   class HookLoadError < StandardError; end
 
   # Raised when a {HookRunner} could not be loaded.
-  class HookRunnerLoadError < StandardError; end
+  class HookContextLoadError < StandardError; end
 
   # Raised when a installation target is not a valid git repository.
   class InvalidGitRepo < StandardError; end

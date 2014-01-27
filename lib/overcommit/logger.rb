@@ -1,6 +1,11 @@
 module Overcommit
   # Encapsulates all communication to an output source.
   class Logger
+    # Helper for creating a logger which outputs nothing.
+    def self.silent
+      new(File.open('/dev/null', 'w'))
+    end
+
     def initialize(out)
       @out = out
     end

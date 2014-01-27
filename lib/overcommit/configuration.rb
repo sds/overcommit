@@ -49,7 +49,8 @@ module Overcommit
       if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
         @hash[hook_type]['ALL']['skip'] = true
       else
-        skipped_hooks.each do |hook_name|
+        skipped_hooks.select { |hook_name| hook_exists?(hook_type, hook_name) }.
+                      each do |hook_name|
           @hash[hook_type][hook_name] ||= {}
           @hash[hook_type][hook_name]['skip'] = true
         end
@@ -61,6 +62,11 @@ module Overcommit
     attr_reader :hash
 
   private
+
+    def hook_exists?(hook_type, hook_name)
+      File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
+                            hook_type, "#{hook_name}.rb"))
+    end
 
     # Validates the configuration for any invalid options, normalizing it where
     # possible.
