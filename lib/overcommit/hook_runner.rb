@@ -20,16 +20,10 @@ module Overcommit
     end
 
     def underscored_hook_type
-      @underscored_hook_type ||= Overcommit::Utils.underscorize(hook_type)
+      @underscored_hook_type ||= Overcommit::Utils.underscorize(@context.hook_class_name)
     end
 
   private
-
-    # Returns the type of hook this runner deals with (e.g. "CommitMsg",
-    # "PreCommit", etc.)
-    def hook_type
-      @hook_type ||= @context.class.name.split('::').last
-    end
 
     def run_hooks
       reporter = Overcommit::Reporter.new(self, @hooks, @config, @logger)
@@ -75,6 +69,7 @@ module Overcommit
       Dir[File.join(directory, '*.rb')].sort do |plugin|
         require plugin
 
+        # TODO: FIX this!
         hook_name = self.class.hook_type_to_class_name(File.basename(plugin, '.rb'))
         @hooks << create_hook(hook_name)
       end
@@ -83,7 +78,7 @@ module Overcommit
     # Load and return a {Hook} from a CamelCase hook name and the given
     # hook configuration.
     def create_hook(hook_name)
-      Overcommit::Hook.const_get("#{hook_type}::#{hook_name}").
+      Overcommit::Hook.const_get("#{@context.hook_class_name}::#{hook_name}").
                        new(@config, @context)
     rescue LoadError, NameError => error
       raise Overcommit::Exceptions::HookLoadError,

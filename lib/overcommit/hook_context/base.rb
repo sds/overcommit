@@ -15,6 +15,10 @@ module Overcommit::HookContext
       @input = input
     end
 
+    def hook_class_name
+      @hook_class_name ||= self.class.name.split('::').last
+    end
+
     # Get a list of added, copied, or modified files that have been staged.
     # Renames and deletions are ignored, since there should be nothing to check.
     def staged_files
