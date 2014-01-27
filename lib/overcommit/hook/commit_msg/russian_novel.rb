@@ -4,7 +4,7 @@ module Overcommit::Hook::CommitMsg
     RUSSIAN_NOVEL_LENGTH = 30
 
     def run
-      if commit_message.length > RUSSIAN_NOVEL_LENGTH
+      if commit_message.length >= RUSSIAN_NOVEL_LENGTH
         return :warn, 'You seem to have authored a Russian novel; congratulations!'
       end
 

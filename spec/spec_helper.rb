@@ -1,4 +1,5 @@
 require 'overcommit'
+require 'tempfile'
 
 hook_types = Dir[File.join(Overcommit::OVERCOMMIT_HOME, 'lib/overcommit/hook/*')].
   select { |f| File.directory?(f) }.
