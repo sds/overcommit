@@ -6,13 +6,11 @@
 
 set -e
 
-ctags --version &> /dev/null || exit 0
-
 trap "rm -f .git/tags.$$" EXIT
 err_file=.git/ctags.err
 if ctags --tag-relative -Rf.git/tags.$$ --exclude=.git "$@" 2>${err_file}; then
   mv .git/tags.$$ .git/tags
-  [ -e ${err_file} ] && rm ${err_file}
+  [ -e ${err_file} ] && rm -f ${err_file}
 else
   # Ignore STDERR unless `ctags` returned a non-zero exit code
   cat ${err_file}

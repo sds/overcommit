@@ -20,6 +20,8 @@ post_checkout:
     include:
       - 'Gemfile'
       - 'Gemfile.lock'
+  IndexTags:
+    description: 'Indexing source code tags'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
