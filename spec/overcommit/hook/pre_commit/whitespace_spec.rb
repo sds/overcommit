@@ -20,16 +20,19 @@ describe Overcommit::Hook::PreCommit::Whitespace do
 
   context 'when file contains hard tabs' do
     let(:contents) { "Some\thard\ttabs" }
+
     it { should fail_check }
   end
 
   context 'when file contains trailing whitespace' do
     let(:contents) { 'Some trailing whitespace   ' }
+
     it { should fail_check }
   end
 
   context 'when file has no invalid whitespace' do
     let(:contents) { 'Just some text' }
+
     it { should pass }
   end
 end

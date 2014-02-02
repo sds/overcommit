@@ -44,7 +44,7 @@ RSpec::Matchers.define :fail_check  do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run,
+      actual,
       'expected that the hook would fail'
     )
   end
@@ -65,7 +65,7 @@ RSpec::Matchers.define :pass do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run,
+      actual,
       'expected that the check would pass'
     )
   end
@@ -86,7 +86,7 @@ RSpec::Matchers.define :warn do |message|
 
   failure_message_for_should do |check|
     check_matcher.failure_message(
-      check.run,
+      actual,
       'expected that the check would report a warning'
     )
   end

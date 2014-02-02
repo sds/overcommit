@@ -12,6 +12,14 @@ plugin_directory: '.githooks'
 # for updating source tags (e.g. via ctags) or warning about new migrations,
 # etc.
 post_checkout:
+  ALL:
+    required: false
+    quiet: true
+  BundleCheck:
+    description: 'Checking Gemfile dependencies'
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
