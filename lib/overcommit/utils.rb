@@ -30,8 +30,8 @@ module Overcommit
       # Returns a list of supported hook types (pre-commit, commit-msg, etc.)
       def supported_hook_types
         Dir[File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook', '*')].
-          map { |file| File.basename(file, '.rb').gsub('_', '-') }.
-          reject { |file| file == 'base' }
+          select { |file| File.directory?(file) }.
+          map { |file| File.basename(file, '.rb').gsub('_', '-') }
       end
 
       # Returns whether a command can be found given the current environment path.

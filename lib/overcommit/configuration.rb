@@ -21,7 +21,7 @@ module Overcommit
     end
 
     # Returns a non-modifiable configuration for a hook.
-    def hook_config(hook, hook_type = nil)
+    def for_hook(hook, hook_type = nil)
       unless hook_type
         components = hook.class.name.split('::')
         hook = components.last
@@ -72,7 +72,7 @@ module Overcommit
     # possible.
     def validate
       @hash = convert_nils_to_empty_hashes(@hash)
-      ensure_special_all_section_exists(@hash)
+      ensure_hook_type_sections_exist(@hash)
     end
 
     def smart_merge(parent, child)
@@ -88,10 +88,9 @@ module Overcommit
       end
     end
 
-    def ensure_special_all_section_exists(hash)
-      hook_types = Dir[File.join(OVERCOMMIT_HOME, 'lib/overcommit/hook/*')].
-                     select { |path| File.directory?(path) }.
-                     map { |path| File.basename(path) }
+    def ensure_hook_type_sections_exist(hash)
+      hook_types = Overcommit::Utils.supported_hook_types.
+                                     map { |type| type.gsub('-', '_') }
 
       hook_types.each do |hook_type|
         hash[hook_type] ||= {}

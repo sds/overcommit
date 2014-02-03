@@ -8,7 +8,7 @@ module Overcommit::Hook
     def_delegators :@context, :modified_files
 
     def initialize(config, context)
-      @config = config.hook_config(self)
+      @config = config.for_hook(self)
       @context = context
     end
 
