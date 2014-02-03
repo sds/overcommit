@@ -51,6 +51,7 @@ WHAT's FIXED:
   etc.)
 - Removed the HookRegistry
 - Allow fine grained control over which checks apply to which files
+- Separation of concerns for different hook types
 
 
 NICE TO HAVES:
