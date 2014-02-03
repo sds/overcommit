@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'overcommit/hook_context/commit_msg'
 
 describe Overcommit::HookContext::CommitMsg do
-  let(:config) { double('context') }
+  let(:config) { double('config') }
   let(:args) { [commit_message_file] }
   let(:input) { '' }
   let(:context) { described_class.new(config, args, input) }

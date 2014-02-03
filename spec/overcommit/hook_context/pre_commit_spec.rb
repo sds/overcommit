@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'overcommit/hook_context/pre_commit'
 
 describe Overcommit::HookContext::PreCommit do
-  let(:config) { double('context') }
+  let(:config) { double('config') }
   let(:args) { [] }
   let(:input) { '' }
   let(:context) { described_class.new(config, args, input) }

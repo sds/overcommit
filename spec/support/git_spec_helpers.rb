@@ -25,4 +25,8 @@ module GitSpecHelpers
 
     File.join(tmpdir, name)
   end
+
+  def random_hash
+    40.times.map { (65 + rand(26)).chr }.join
+  end
 end
