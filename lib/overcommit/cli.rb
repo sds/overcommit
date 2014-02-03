@@ -10,6 +10,33 @@ module Overcommit
       @options   = {}
     end
 
+    def run
+      parse_arguments
+
+      if Array(@options[:targets]).empty?
+        @options[:targets] = [Overcommit::Utils.repo_root].compact
+        if @options[:targets].empty?
+          log.warning 'You are not in a git repository.'
+          log.log 'You must either specify the path to a repository or ' <<
+                  'change your current directory to a repository.'
+          halt 64 # EX_USAGE
+        end
+      end
+
+      @options[:targets].each do |target|
+        begin
+          Installer.new(log).run(target, @options)
+        rescue Overcommit::Exceptions::InvalidGitRepo => error
+          log.warning "Invalid repo #{target}: #{error}"
+          halt 69 # EX_UNAVAILABLE
+        end
+      end
+    end
+
+  private
+
+    attr_reader :log
+
     def parse_arguments
       @parser = OptionParser.new do |opts|
         opts.banner = "Usage: #{opts.program_name} [options] [target-repo]"
@@ -22,11 +49,11 @@ module Overcommit
           print_version(opts.program_name)
         end
 
-        opts.on('--uninstall', 'Remove Overcommit hooks from a repository') do
+        opts.on('-u', '--uninstall', 'Remove Overcommit hooks from a repository') do
           @options[:uninstall] = true
         end
 
-        opts.on('--install', 'Install Overcommit hooks in a repository') do
+        opts.on('-i', '--install', 'Install Overcommit hooks in a repository') do
           @options[:install] = true
         end
       end
@@ -40,30 +67,6 @@ module Overcommit
         print_help @parser.help, ex
       end
     end
-
-    def run
-      if Array(@options[:targets]).empty?
-        @options[:targets] = [Overcommit::Utils.repo_root].compact
-        if @options[:targets].empty?
-          log.warning 'You are not in a git repository.'
-          log.log 'You must either specify the path to a repository or ' <<
-                  'change your current directory to a repository.'
-          halt 64 # EX_USAGE
-        end
-      end
-
-      @options[:targets].each do |target|
-        begin
-          Installer.new(@options, target, log).run
-        rescue Overcommit::Exceptions::InvalidGitRepo => error
-          log.warning "Skipping #{target}: #{error}"
-        end
-      end
-    end
-
-  private
-
-    attr_reader :log
 
     def print_help(message, error = nil)
       log.error "#{error}\n" if error

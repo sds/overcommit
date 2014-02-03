@@ -3,13 +3,13 @@ require 'fileutils'
 module Overcommit
   # Manages the installation of Overcommit hooks in a git repository.
   class Installer
-    def initialize(options, target, log)
-      @options = options
-      @target  = target
-      @log     = log
+    def initialize(logger)
+      @log = logger
     end
 
-    def run
+    def run(target, options)
+      @target = target
+      @options = options
       validate_target
       @options[:uninstall] ? uninstall : install
     end

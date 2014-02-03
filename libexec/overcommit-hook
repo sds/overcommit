@@ -39,9 +39,8 @@ begin
   config.apply_environment!(hook_type, ENV)
 
   # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
-  #Overcommit::Installer.new({ install: true },
-                            #Overcommit::Utils.repo_root,
-                            #Overcommit::Logger.silent).run
+  #Overcommit::Installer.new(Overcommit::Logger.silent).
+  #                      run(Overcommit::Utils.repo_root, install: true)
 
   context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
   logger = Overcommit::Logger.new(STDOUT)

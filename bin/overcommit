@@ -6,6 +6,5 @@ require 'overcommit/cli'
 logger = Overcommit::Logger.new(STDOUT)
 
 Overcommit::CLI.new(ARGV, logger).tap do |cli|
-  cli.parse_arguments
   cli.run
 end
