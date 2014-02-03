@@ -23,6 +23,8 @@ module Overcommit
         end
       end
 
+      @options[:action] ||= :install
+
       @options[:targets].each do |target|
         begin
           Installer.new(log).run(target, @options)
@@ -50,11 +52,11 @@ module Overcommit
         end
 
         opts.on('-u', '--uninstall', 'Remove Overcommit hooks from a repository') do
-          @options[:uninstall] = true
+          @options[:action] = :uninstall
         end
 
         opts.on('-i', '--install', 'Install Overcommit hooks in a repository') do
-          @options[:install] = true
+          @options[:action] = :install
         end
       end
 

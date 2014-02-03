@@ -40,7 +40,7 @@ begin
 
   # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
   #Overcommit::Installer.new(Overcommit::Logger.silent).
-  #                      run(Overcommit::Utils.repo_root, install: true)
+  #                      run(Overcommit::Utils.repo_root, :action => :install)
 
   context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
   logger = Overcommit::Logger.new(STDOUT)

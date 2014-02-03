@@ -11,8 +11,12 @@ module Overcommit
       @target = target
       @options = options
       validate_target
-      @options[:uninstall] ? uninstall : install
+      @options[:action] == :uninstall ? uninstall : install
     end
+
+  private
+
+    attr_reader :log
 
     def install
       log.log "Installing hooks into #{@target}"
@@ -32,13 +36,9 @@ module Overcommit
       log.success "Successfully removed hooks from #{@target}"
     end
 
-  private
-
-    attr_reader :log
-
     def hooks_path
       absolute_target = File.expand_path(@target)
-      File.join(absolute_target, '.git/hooks')
+      File.join(absolute_target, '.git', 'hooks')
     end
 
     def validate_target
@@ -62,7 +62,7 @@ module Overcommit
 
     def uninstall_master_hook
       install_location = File.join(hooks_path, 'overcommit-hook')
-      delete(install_location)
+      FileUtils.rm_rf(install_location)
     end
 
     def install_hook_symlinks
@@ -70,30 +70,32 @@ module Overcommit
       # We change directories so that the relative symlink paths work regardless
       # of where the repository is located.
       Dir.chdir(hooks_path) do
-        supported_hook_types.each do |hook_type|
+        Overcommit::Utils.supported_hook_types.each do |hook_type|
+          unless can_replace_file?(hook_type)
+            raise Overcommit::Exceptions::PreExistingHooks,
+                  "Hook '#{File.expand_path(hook_type)}' already exists and was not installed by Overcommit"
+          end
           FileUtils.ln_sf('overcommit-hook', hook_type)
         end
       end
     end
 
+    def can_replace_file?(file)
+      @options[:force] ||
+        !File.exists?(file) ||
+        overcommit_symlink?(file)
+    end
+
     def uninstall_hook_symlinks
       Dir.chdir(hooks_path) do
-        supported_hook_types.each do |hook_type|
-          if File.symlink?(hook_type) && File.readlink(hook_type) == 'overcommit-hook'
-            delete(hook_type)
-          end
+        Overcommit::Utils.supported_hook_types.each do |hook_type|
+          FileUtils.rm_rf(hook_type) if overcommit_symlink?(hook_type)
         end
       end
     end
 
-    def supported_hook_types
-      Dir[File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook_runner', '*')].
-        map { |file| File.basename(file, '.rb').gsub('_', '-') }.
-        reject { |file| file == 'base' }
-    end
-
-    def delete(file)
-      File.delete(file) rescue false
+    def overcommit_symlink?(file)
+      File.symlink?(file) && File.readlink(file) == 'overcommit-hook'
     end
   end
 end
