@@ -94,6 +94,7 @@ module Overcommit
                      map { |path| File.basename(path) }
 
       hook_types.each do |hook_type|
+        hash[hook_type] ||= {}
         hash[hook_type]['ALL'] ||= {}
       end
     end

@@ -3,8 +3,8 @@ module Overcommit::HookContext
   def self.create(hook_type, config, args, input)
     require "overcommit/hook_context/#{hook_type.gsub('-', '_')}"
 
-    Overcommit::HookContext.const_get(hook_type_to_class_name(hook_type))
-                           .new(config, args, input)
+    Overcommit::HookContext.const_get(hook_type_to_class_name(hook_type)).
+                            new(config, args, input)
   rescue LoadError, NameError => error
     # Could happen when a symlink was created for a hook type Overcommit does
     # not yet support.

@@ -25,7 +25,7 @@ describe Overcommit::Installer do
     end
 
     context 'when the target is a git repo' do
-      let(:target) { repo('some-repo') }
+      let(:target) { repo }
       let(:hooks_dir) { File.join(target, '.git', 'hooks') }
 
       context 'and an install is requested' do

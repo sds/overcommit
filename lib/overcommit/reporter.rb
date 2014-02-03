@@ -3,10 +3,10 @@ module Overcommit
   class Reporter
     attr_reader :log
 
-    def initialize(hook_runner, hooks, config, log)
+    def initialize(context, hooks, config, log)
       @log     = log
       @config  = config
-      @name    = hook_runner.underscored_hook_type.gsub('_', '-')
+      @name    = Overcommit::Utils.underscorize(context.hook_class_name).gsub('_', '-')
       @hooks   = hooks
       @width   = [@hooks.map { |s| s.description.length }.max + 3, 60].max
       @results = []

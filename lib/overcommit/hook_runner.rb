@@ -2,15 +2,15 @@ module Overcommit
   # Responsible for loading the hooks the repository has configured and running
   # them, collecting and displaying the results.
   class HookRunner
-    def initialize(config)
+    def initialize(config, logger)
       @config = config
+      @logger = logger
       @hooks = []
     end
 
     # Loads and runs the hooks registered for this {HookRunner}.
-    def run(context, logger)
+    def run(context)
       @context = context
-      @logger = logger
 
       # stash_unstaged_files
       load_hooks
@@ -19,14 +19,10 @@ module Overcommit
       # restore_unstaged_files
     end
 
-    def underscored_hook_type
-      @underscored_hook_type ||= Overcommit::Utils.underscorize(@context.hook_class_name)
-    end
-
   private
 
     def run_hooks
-      reporter = Overcommit::Reporter.new(self, @hooks, @config, @logger)
+      reporter = Overcommit::Reporter.new(@context, @hooks, @config, @logger)
 
       reporter.start_hook_run
 
@@ -84,6 +80,10 @@ module Overcommit
       raise Overcommit::Exceptions::HookLoadError,
             "Unable to load hook '#{hook_name}': #{error}",
             error.backtrace
+    end
+
+    def underscored_hook_type
+      @underscored_hook_type ||= Overcommit::Utils.underscorize(@context.hook_class_name)
     end
 
     # Stashes untracked files and unstaged changes so that those changes aren't
