@@ -3,7 +3,7 @@ module Overcommit::Hook::CommitMsg
   class HardTabs < Base
     def run
       # Catches hard tabs entered by the user (not auto-generated)
-      if commit_message.join.index(/\t/)
+      if commit_message.index(/\t/)
         return :warn, "Don't use hard tabs in commit messages"
       end
 

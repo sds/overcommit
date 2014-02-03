@@ -4,7 +4,7 @@ describe Overcommit::Hook::PreCommit::AuthorName do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   let(:subject) { described_class.new(config, context) }
-  let(:result)  { mock('result') }
+  let(:result)  { double('result') }
 
   before do
     result = mock('result)')

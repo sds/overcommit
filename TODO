@@ -23,6 +23,7 @@ Display when no applicable hooks ran (e.g. instead of "All pre-commit checks pas
 Add pre-commit check ensuring Gemfile.lock matches Gemfile (unless in .gitignore)
 Add check for https://github.com/mdevils/node-jscs
 Add post-checkout check for asking to update git submodules
+FIX let(:subject)
 
 
 Allow features of hooks to be customized (stealth, required, etc.)

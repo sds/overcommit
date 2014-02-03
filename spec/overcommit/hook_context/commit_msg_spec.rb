@@ -1,0 +1,43 @@
+require 'spec_helper'
+require 'overcommit/hook_context/commit_msg'
+
+describe Overcommit::HookContext::CommitMsg do
+  let(:config) { double('context') }
+  let(:args) { [commit_message_file] }
+  let(:input) { '' }
+  let(:context) { described_class.new(config, args, input) }
+  let(:commit_msg) do
+    [
+    '# Please enter the commit message for your changes.',
+    'Some commit message',
+    '# On branch master',
+    'diff --git a/file b/file',
+    'index 4ae1030..342a117 100644',
+    '--- a/file',
+    '+++ b/file',
+    ]
+  end
+
+  let(:commit_message_file) do
+    Tempfile.new('commit-message').tap do |file|
+      file.write(commit_msg.join("\n"))
+      file.fsync
+    end.path
+  end
+
+  describe '#commit_message' do
+    subject { context.commit_message }
+
+    it 'strips comments and trailing diff' do
+      subject.should == "Some commit message\n"
+    end
+  end
+
+  describe '#commit_message_lines' do
+    subject { context.commit_message_lines }
+
+    it 'strips comments and trailing diff' do
+      subject.should == ["Some commit message\n"]
+    end
+  end
+end

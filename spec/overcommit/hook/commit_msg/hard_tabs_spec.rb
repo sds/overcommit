@@ -10,13 +10,13 @@ describe Overcommit::Hook::CommitMsg::HardTabs do
   end
 
   context 'when message contains hard tabs' do
-    let(:commit_msg) { ["This is a hard-tab\tcommit message"] }
+    let(:commit_msg) { "This is a hard-tab\tcommit message" }
 
     it { should warn }
   end
 
   context 'when message does not contain hard tabs' do
-    let(:commit_msg) { ['No hard tabs to be found'] }
+    let(:commit_msg) { 'No hard tabs to be found' }
 
     it { should pass }
   end

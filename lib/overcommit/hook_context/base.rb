@@ -19,13 +19,20 @@ module Overcommit::HookContext
       @hook_class_name ||= self.class.name.split('::').last
     end
 
-    # Get a list of added, copied, or modified files that have been staged.
-    # Renames and deletions are ignored, since there should be nothing to check.
-    def staged_files
-      @staged_files ||=
-        `git diff --cached --name-only --diff-filter=ACM --ignore-submodules=all`.
-          split("\n").
-          map { |relative_file| File.expand_path(relative_file) }
+    # Returns a list of files that have been modified.
+    #
+    # By default, this returns an empty list. Subclasses should implement if
+    # there is a concept of files changing for the type of hook being run.
+    def modified_files
+      []
+    end
+
+    # Returns a set of lines that have been modified for a file.
+    #
+    # By default, this returns an empty set. Subclasses should implement if
+    # there is a concept of files changing for the type of hook being run.
+    def modified_lines(file)
+      Set.new
     end
   end
 end

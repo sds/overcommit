@@ -6,7 +6,7 @@ describe Overcommit::Hook::CommitMsg::SingleLineSubject do
   let(:subject) { described_class.new(config, context) }
 
   before do
-    subject.stub(:commit_message).and_return(commit_msg.split("\n"))
+    subject.stub(:commit_message_lines).and_return(commit_msg.split("\n"))
   end
 
   context 'when subject is separated from body by a blank line' do
