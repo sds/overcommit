@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::HamlLint do
 
   context 'when haml-lint exits successfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(true)
       subject.stub(:command).and_return(result)
     end
@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::HamlLint do
   end
 
   context 'when haml-lint exits unsucessfully' do
-    let(:result) { mock('result') }
+    let(:result) { double('result') }
 
     before do
       result.stub(:success?).and_return(false)

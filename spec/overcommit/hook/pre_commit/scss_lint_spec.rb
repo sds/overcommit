@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::ScssLint do
 
   context 'when scss-lint exits successfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(true)
       subject.stub(:command).and_return(result)
     end
@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::ScssLint do
   end
 
   context 'when scss-lint exits unsucessfully' do
-    let(:result) { mock('result') }
+    let(:result) { double('result') }
 
     before do
       result.stub(:success?).and_return(false)

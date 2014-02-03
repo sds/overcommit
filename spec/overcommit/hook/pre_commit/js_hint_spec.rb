@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::JsHint do
 
   context 'when jshint exits with no output' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:stdout).and_return('')
       subject.stub(:command).and_return(result)
     end
@@ -30,7 +30,7 @@ describe Overcommit::Hook::PreCommit::JsHint do
 
   context 'when jshint exits with output' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:stdout).and_return('Undefined variable')
       subject.stub(:command).and_return(result)
     end

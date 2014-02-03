@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
 
   context 'when flake8 exits successfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(true)
       result.stub(:stdout)
       subject.stub(:command).and_return(result)
@@ -31,7 +31,7 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
 
   context 'when scss-lint exits unsucessfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(false)
       result.stub(:stdout)
       subject.stub(:command).and_return(result)

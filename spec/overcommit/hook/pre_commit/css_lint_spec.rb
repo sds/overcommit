@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::CssLint do
 
   context 'when csslint exits with no output' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:stdout).and_return('')
       subject.stub(:command).and_return(result)
     end
@@ -30,7 +30,7 @@ describe Overcommit::Hook::PreCommit::CssLint do
 
   context 'when csslint exits with output' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:stdout).and_return('Error - @charset not allowed here')
       subject.stub(:command).and_return(result)
     end

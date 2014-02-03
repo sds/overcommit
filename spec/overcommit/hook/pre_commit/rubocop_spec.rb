@@ -19,7 +19,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
 
   context 'when rubocop exits successfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(true)
       subject.stub(:command).and_return(result)
     end
@@ -28,7 +28,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
   end
 
   context 'when rubocop exits unsucessfully' do
-    let(:result) { mock('result') }
+    let(:result) { double('result') }
 
     before do
       result.stub(:success?).and_return(false)

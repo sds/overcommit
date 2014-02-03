@@ -20,7 +20,7 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
 
   context 'when coffeelint exits successfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(true)
       subject.stub(:command).and_return(result)
     end
@@ -30,7 +30,7 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
 
   context 'when coffeelint exits unsucessfully' do
     before do
-      result = mock('result')
+      result = double('result')
       result.stub(:success?).and_return(false)
       result.stub(:stdout)
       subject.stub(:command).and_return(result)
