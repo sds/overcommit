@@ -95,4 +95,82 @@ describe Overcommit::Configuration do
       subject['required'].should be_false
     end
   end
+
+  describe '#merge' do
+    let(:parent_config) { described_class.new(parent) }
+    let(:child_config) { described_class.new(child) }
+    subject { parent_config.merge(child_config) }
+
+    context 'when parent and child are empty' do
+      let(:parent) { {} }
+      let(:child) { {} }
+
+      it 'returns a config equivalent to both' do
+        subject.should == parent_config
+        subject.should == child_config
+      end
+    end
+
+    context 'when parent and child are the same' do
+      let(:parent) { child }
+
+      let(:child) do
+        {
+          'plugin_directory' => 'some-directory',
+          'pre-commit' => {
+            'SomeHook' => {
+              'enabled' => false,
+            }
+          },
+        }
+      end
+
+      it 'returns a config equivalent to both' do
+        subject.should == parent_config
+        subject.should == child_config
+      end
+    end
+
+    context 'when parent item contains a hash' do
+      let(:parent) { { 'pre_commit' => { 'SomeHook' => { 'some-value' => 1 } } } }
+
+      context 'and child item contains a different hash under the same key' do
+        let(:child) { { 'pre_commit' => { 'SomeOtherHook' => { 'something' => 2 } } } }
+
+        it 'merges the hashes together' do
+          subject.for_hook('SomeHook', 'pre_commit').should == { 'some-value' => 1 }
+          subject.for_hook('SomeOtherHook', 'pre_commit').should == { 'something' => 2 }
+        end
+      end
+
+      context 'and child item contains a hash under a different key' do
+        let(:child) { { 'commit_msg' => { 'SomeHook' => { 'some-value' => 2 } } } }
+
+        it 'appends the item to the parent array' do
+          subject.for_hook('SomeHook', 'pre_commit').should == { 'some-value' => 1 }
+          subject.for_hook('SomeHook', 'commit_msg').should == { 'some-value' => 2 }
+        end
+      end
+    end
+
+    context 'when parent item contains an array' do
+      let(:parent) { { 'pre_commit' => { 'SomeHook' => { 'list' => [1, 2, 3] } } } }
+
+      context 'and child item contains an array' do
+        let(:child) { { 'pre_commit' => { 'SomeHook' => { 'list' => [4, 5] } } } }
+
+        it 'concatenates the arrays together' do
+          subject.for_hook('SomeHook', 'pre_commit')['list'] == [1, 2, 3, 4, 5]
+        end
+      end
+
+      context 'and child item contains a single item' do
+        let(:child) { { 'pre_commit' => { 'SomeHook' => { 'list' => 4 } } } }
+
+        it 'appends the item to the parent array' do
+          subject.for_hook('SomeHook', 'pre_commit')['list'] == [1, 2, 3, 4]
+        end
+      end
+    end
+  end
 end

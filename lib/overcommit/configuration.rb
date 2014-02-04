@@ -7,6 +7,11 @@ module Overcommit
       validate
     end
 
+    def ==(other)
+      super || @hash == other.hash
+    end
+    alias :eql? :==
+
     # Returns absolute path to the directory that external hook plugins should
     # be loaded from.
     def plugin_directory
@@ -79,7 +84,7 @@ module Overcommit
       parent.merge(child) do |key, old, new|
         case old
         when Array
-          old + new
+          old + Array(new)
         when Hash
           smart_merge(old, new)
         else
