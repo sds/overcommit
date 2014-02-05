@@ -3,14 +3,14 @@ require 'image_optim'
 
 describe Overcommit::GitHook::ImageOptimization do
   describe '.filetypes' do
-    it "includes only image filetypes" do
+    it 'includes only image filetypes' do
       expect(described_class.filetypes).to eq([:gif, :jpeg, :jpg, :png])
     end
   end
 
   describe '#run_check' do
-    let(:image_optim) { stub(ImageOptim) }
-    let(:image_set) { stub(described_class::ImageSet) }
+    let(:image_optim)     { double(ImageOptim) }
+    let(:image_set)       { double(described_class::ImageSet) }
     let(:staged_filename) { 'filename.jpg' }
 
     around do |example|
