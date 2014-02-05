@@ -1,0 +1,19 @@
+AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+CollectionMethods:
+  Enabled: false
+
+# Ruby 1.8.7 only supports trailing dots in method chains.
+DotPosition:
+  Style: trailing
+
+# Ruby 1.8.7 only supports hash rockets.
+HashSyntax:
+  EnforcedStyle: hash_rockets
+
+LineLength:
+  Max: 100
+
+MethodLength:
+  Max: 20
