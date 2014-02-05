@@ -27,6 +27,11 @@ module Overcommit
             downcase
       end
 
+      # Converts a string containing underscores/hyphens/spaces into CamelCase.
+      def camel_case(str)
+        str.split(/_|-| /).map { |part| part.sub(/^\w/) { |c| c.upcase } }.join
+      end
+
       # Returns a list of supported hook types (pre-commit, commit-msg, etc.)
       def supported_hook_types
         Dir[File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook', '*')].

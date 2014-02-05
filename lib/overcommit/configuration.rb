@@ -55,6 +55,7 @@ module Overcommit
         @hash[hook_type]['ALL']['skip'] = true
       else
         skipped_hooks.select { |hook_name| hook_exists?(hook_type, hook_name) }.
+                      map { |hook_name| Overcommit::Utils.camel_case(hook_name) }.
                       each do |hook_name|
           @hash[hook_type][hook_name] ||= {}
           @hash[hook_type][hook_name]['skip'] = true
@@ -69,6 +70,8 @@ module Overcommit
   private
 
     def hook_exists?(hook_type, hook_name)
+      hook_name = Overcommit::Utils.underscorize(hook_name)
+
       File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
                             hook_type, "#{hook_name}.rb"))
     end

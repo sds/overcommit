@@ -173,4 +173,71 @@ describe Overcommit::Configuration do
       end
     end
   end
+
+  describe '#apply_environment!' do
+    let(:hash) { {} }
+    let(:config) { described_class.new(hash) }
+    let!(:old_config) { described_class.new(hash.dup) }
+    subject { config }
+
+    before do
+      config.apply_environment!('pre-commit', env)
+    end
+
+    context 'when no hooks are requested to be skipped' do
+      let(:env) { {} }
+
+      it 'does nothing to the configuration' do
+        subject.should == old_config
+      end
+    end
+
+    context 'when a non-existent hook is requested to be skipped' do
+      let(:env) { { 'SKIP' => 'SomeMadeUpHook' } }
+
+      it 'does nothing to the configuration' do
+        subject.should == old_config
+      end
+    end
+
+    context 'when an existing hook is requested to be skipped' do
+      let(:env) { { 'SKIP' => 'AuthorName' } }
+
+      it 'sets the skip option of the hook to true' do
+        subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+      end
+
+      context 'and the hook is spelt with underscores' do
+        let(:env) { { 'SKIP' => 'author_name' } }
+
+        it 'sets the skip option of the hook to true' do
+          subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+        end
+      end
+
+      context 'and the hook is spelt with hyphens' do
+        let(:env) { { 'SKIP' => 'author-name' } }
+
+        it 'sets the skip option of the hook to true' do
+          subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+        end
+      end
+    end
+
+    context 'when the word "all" is included in the skip list' do
+      let(:env) { { 'SKIP' => 'all' } }
+
+      it 'sets the skip option of the ALL section to true' do
+        subject.for_hook('ALL', 'pre_commit')['skip'].should be_true
+      end
+
+      context 'and "all" is capitalized' do
+        let(:env) { { 'SKIP' => 'ALL' } }
+
+        it 'sets the skip option of the special ALL config to true' do
+          subject.for_hook('ALL', 'pre_commit')['skip'].should be_true
+        end
+      end
+    end
+  end
 end
