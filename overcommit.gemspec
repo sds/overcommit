@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
             Dir['bin/**/*'] +
             Dir['config/*.yml']
 
+  s.required_ruby_version = '>= 1.8.7'
+
   s.add_dependency 'wopen3'
 
   s.add_development_dependency 'rspec', '2.14.1'
