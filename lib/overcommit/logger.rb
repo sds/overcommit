@@ -41,7 +41,7 @@ module Overcommit
   private
 
     def color(code, str)
-      log(@out.isatty ? "\033[#{code}m#{str}\033[0m" : str)
+      log(@out.tty? ? "\033[#{code}m#{str}\033[0m" : str)
     end
   end
 end
