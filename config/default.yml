@@ -51,6 +51,14 @@ pre_commit:
     description: 'Analyzing with haml-lint'
     include: '**/*.haml'
 
+  ImageOptim:
+    description: 'Checking for optimizable images'
+    include:
+      - '**/*.gif'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.png'
+
   JsHint:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
