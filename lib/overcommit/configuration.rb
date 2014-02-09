@@ -15,14 +15,14 @@ module Overcommit
     # Returns absolute path to the directory that external hook plugins should
     # be loaded from.
     def plugin_directory
-      File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'])
+      File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.githooks')
     end
 
     # Returns the built-in hooks that have been enabled for a hook type.
     def enabled_builtin_hooks(hook_type)
       @hash[hook_type].keys.
         select { |hook_name| hook_name != 'ALL' }.
-        select { |hook_name| @hash[hook_type][hook_name]['enabled'] != false }
+        select { |hook_name| hook_enabled?(hook_type, hook_name) }
     end
 
     # Returns a non-modifiable configuration for a hook.
@@ -74,6 +74,16 @@ module Overcommit
 
       File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
                             hook_type, "#{hook_name}.rb"))
+    end
+
+    def hook_enabled?(hook_type, hook_name)
+      individual_enabled = @hash[hook_type][hook_name]['enabled']
+      return individual_enabled unless individual_enabled.nil?
+
+      all_enabled = @hash[hook_type]['ALL']['enabled']
+      return all_enabled unless all_enabled.nil?
+
+      true
     end
 
     # Validates the configuration for any invalid options, normalizing it where

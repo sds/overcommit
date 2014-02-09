@@ -8,7 +8,7 @@ module Overcommit
       @config  = config
       @name    = Overcommit::Utils.underscorize(context.hook_class_name).gsub('_', '-')
       @hooks   = hooks
-      @width   = [@hooks.map { |s| s.description.length }.max + 3, 60].max
+      @width   = [(@hooks.map { |s| s.description.length }.max || 57) + 3, 60].max
       @results = []
     end
 
@@ -20,7 +20,7 @@ module Overcommit
       title = "  #{hook.description}"
       unless hook.quiet?
         log.partial title
-        print '.' * (@width - title.length)
+        log.partial '.' * (@width - title.length)
       end
 
       status, output = yield
@@ -51,6 +51,7 @@ module Overcommit
       if hook.quiet?
         return if status == :good
         log.partial title
+        log.partial '.' * (@width - title.length)
       end
 
       case status

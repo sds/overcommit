@@ -6,8 +6,8 @@ module Overcommit::Hook::PreCommit
       name = result.stdout.chomp
 
       unless name.split(' ').count >= 2
-        return :bad, 'Author must have at least first and last name; ' <<
-                     "was: '#{name}'.\n Set your name with " <<
+        return :bad, 'Author must have at least first and last name, but ' <<
+                     "was: '#{name}'.\nSet your name with " <<
                      "`git config --global user.name 'Your Name'`"
       end
 
