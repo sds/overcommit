@@ -33,6 +33,13 @@ pre_commit:
     required: false
     quiet: false
 
+  AuthorEmail:
+    description: 'Checking author email'
+    requires_files: false
+    required: true
+    quiet: true
+    pattern: '^[^@]+@.*$'
+
   AuthorName:
     description: 'Checking for author name'
     requires_files: false

@@ -7,7 +7,6 @@ describe Overcommit::Hook::PreCommit::AuthorName do
   let(:result)  { double('result') }
 
   before do
-    result = double('result)')
     result.stub(:stdout).and_return(name)
     subject.stub(:command).and_return(result)
   end
