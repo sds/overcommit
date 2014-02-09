@@ -96,6 +96,13 @@ describe Overcommit::Logger do
     end
   end
 
+  describe '#bold_error' do
+    it_behaves_like 'colorized output' do
+      let(:method) { :bold_error }
+      let(:color_code) { '1;31' }
+    end
+  end
+
   describe '#success' do
     it_behaves_like 'colorized output' do
       let(:method) { :success }
@@ -110,9 +117,9 @@ describe Overcommit::Logger do
     end
   end
 
-  describe '#notice' do
+  describe '#bold_warning' do
     it_behaves_like 'colorized output' do
-      let(:method) { :notice }
+      let(:method) { :bold_warning }
       let(:color_code) { '1;33' }
     end
   end

@@ -59,10 +59,10 @@ module Overcommit
         log.success 'OK'
       when :bad
         log.error 'FAILED'
-        print_report output
+        print_report output, :bold_error
       when :warn
         log.warning 'WARNING'
-        print_report output
+        print_report output, :bold_warning
       else
         log.error '???'
         print_report "Check didn't return a status"
@@ -70,12 +70,12 @@ module Overcommit
     end
 
     OUTPUT_INDENT = ' ' * 4
-    def print_report(output)
+    def print_report(output, format = :log)
       unless output.empty?
         # Take each line of output and add indentation so it nests under check
         # name (except for the last newline if there is one)
         output = OUTPUT_INDENT + output.gsub(/\n(?!$)/, "\n#{OUTPUT_INDENT}")
-        log.log output
+        log.send(format, output)
       end
     end
   end

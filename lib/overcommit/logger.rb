@@ -26,6 +26,10 @@ module Overcommit
       color(31, str)
     end
 
+    def bold_error(str)
+      color('1;31', str)
+    end
+
     def success(str)
       color(32, str)
     end
@@ -34,7 +38,7 @@ module Overcommit
       color(33, str)
     end
 
-    def notice(str)
+    def bold_warning(str)
       color('1;33', str)
     end
 
