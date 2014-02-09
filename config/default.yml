@@ -94,13 +94,6 @@ pre_commit:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
 
-# Hooks that are run after all pre-commit hooks have run, before the user's
-# commit message editor is opened.
-# These hooks are used to edit the commit message based on the proprosed changes
-# (for example, if you want to include additional metadata with the commit
-# message).
-prepare_commit_msg:
-
 # Hooks that are run against every commit message after a user has written it.
 # These hooks are useful for enforcing policies on commit messages written for a
 # project.
