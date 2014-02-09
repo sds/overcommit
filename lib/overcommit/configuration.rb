@@ -10,7 +10,7 @@ module Overcommit
     def ==(other)
       super || @hash == other.hash
     end
-    alias :eql? :==
+    alias_method :eql?, :==
 
     # Returns absolute path to the directory that external hook plugins should
     # be loaded from.
