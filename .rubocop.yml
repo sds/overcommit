@@ -17,3 +17,9 @@ LineLength:
 
 MethodLength:
   Max: 20
+
+TrailingComma:
+  Enabled: false
+
+Void:
+  Enabled: false

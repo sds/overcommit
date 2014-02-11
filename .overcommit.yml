@@ -1,0 +1,3 @@
+commit_msg:
+  GerritChangeId:
+    enabled: true
