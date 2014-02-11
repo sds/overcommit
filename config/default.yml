@@ -106,7 +106,6 @@ commit_msg:
     enabled: false
     description: 'Ensuring Gerrit Change-Id is present'
     required: true
-    quiet: true
 
   HardTabs:
     description: 'Checking for hard tabs'
