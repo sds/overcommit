@@ -5,7 +5,9 @@
 # to manage your hooks for you.
 
 # Required for Ruby 1.8 compatibility (for older OSX versions)
-require 'rubygems'
+if RUBY_VERSION.split('.')[0..1] == ['1', '8']
+  require 'rubygems'
+end
 
 hook_type = File.basename($0)
 if hook_type == 'overcommit-hook'
