@@ -6,7 +6,7 @@ module Overcommit
     def initialize(context, hooks, config, log)
       @log     = log
       @config  = config
-      @name    = Overcommit::Utils.underscorize(context.hook_class_name).gsub('_', '-')
+      @name    = Overcommit::Utils.snake_case(context.hook_class_name).gsub('_', '-')
       @hooks   = hooks
       @width   = [(@hooks.map { |s| s.description.length }.max || 57) + 3, 60].max
       @results = []

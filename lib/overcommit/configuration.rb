@@ -68,8 +68,8 @@ module Overcommit
   private
 
     def hook_exists?(hook_type, hook_name)
-      hook_name = Overcommit::Utils.underscorize(hook_name)
-      underscored_hook_type = Overcommit::Utils.underscorize(hook_type)
+      hook_name = Overcommit::Utils.snake_case(hook_name)
+      underscored_hook_type = Overcommit::Utils.snake_case(hook_type)
 
       File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
                             underscored_hook_type, "#{hook_name}.rb"))

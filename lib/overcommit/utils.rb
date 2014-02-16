@@ -19,7 +19,7 @@ module Overcommit
 
       # Shamelessly stolen from:
       # stackoverflow.com/questions/1509915/converting-camel-case-to-underscore-case-in-ruby
-      def underscorize(str)
+      def snake_case(str)
         str.gsub(/::/, '/').
             gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
             gsub(/([a-z\d])([A-Z])/, '\1_\2').

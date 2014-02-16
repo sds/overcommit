@@ -51,7 +51,7 @@ module Overcommit
     # the repository's configuration.
     def load_builtin_hooks
       @config.enabled_builtin_hooks(@context.hook_class_name).each do |hook_name|
-        underscored_hook_name = Overcommit::Utils.underscorize(hook_name)
+        underscored_hook_name = Overcommit::Utils.snake_case(hook_name)
         require "overcommit/hook/#{underscored_hook_type}/#{underscored_hook_name}"
         @hooks << create_hook(hook_name)
       end
@@ -83,7 +83,7 @@ module Overcommit
     end
 
     def underscored_hook_type
-      @underscored_hook_type ||= Overcommit::Utils.underscorize(@context.hook_class_name)
+      @underscored_hook_type ||= Overcommit::Utils.snake_case(@context.hook_class_name)
     end
 
     # Stashes untracked files and unstaged changes so that those changes aren't

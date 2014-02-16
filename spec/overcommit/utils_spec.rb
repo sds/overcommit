@@ -28,17 +28,17 @@ describe Overcommit::Utils do
     end
   end
 
-  describe '.underscorize' do
+  describe '.snake_case' do
     it 'converts camel case to underscores' do
-      described_class.underscorize('HelloWorld').should == 'hello_world'
+      described_class.snake_case('HelloWorld').should == 'hello_world'
     end
 
     it 'leaves underscored strings as is' do
-      described_class.underscorize('hello_world').should == 'hello_world'
+      described_class.snake_case('hello_world').should == 'hello_world'
     end
 
     it 'converts namespaced class names to paths' do
-      described_class.underscorize('SomeModule::SomeOtherModule::SomeClass').
+      described_class.snake_case('SomeModule::SomeOtherModule::SomeClass').
         should == 'some_module/some_other_module/some_class'
     end
   end
