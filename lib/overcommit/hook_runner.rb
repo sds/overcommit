@@ -41,7 +41,7 @@ module Overcommit
     # This is done explicitly so that we only load hooks which will actually be
     # used.
     def load_hooks
-      require "overcommit/hook/#{underscored_hook_type}/base"
+      require "overcommit/hook/#{@context.hook_type_name}/base"
 
       load_builtin_hooks
       load_hook_plugins # Load after so they can subclass/modify existing hooks
@@ -52,7 +52,7 @@ module Overcommit
     def load_builtin_hooks
       @config.enabled_builtin_hooks(@context.hook_class_name).each do |hook_name|
         underscored_hook_name = Overcommit::Utils.snake_case(hook_name)
-        require "overcommit/hook/#{underscored_hook_type}/#{underscored_hook_name}"
+        require "overcommit/hook/#{@context.hook_type_name}/#{underscored_hook_name}"
         @hooks << create_hook(hook_name)
       end
     end
@@ -60,7 +60,7 @@ module Overcommit
     # Load hooks that are stored with the repository (i.e. are custom for the
     # repository).
     def load_hook_plugins
-      directory = File.join(@config.plugin_directory, underscored_hook_type)
+      directory = File.join(@config.plugin_directory, @context.hook_type_name)
 
       Dir[File.join(directory, '*.rb')].sort do |plugin|
         require plugin
@@ -80,10 +80,6 @@ module Overcommit
       raise Overcommit::Exceptions::HookLoadError,
             "Unable to load hook '#{hook_name}': #{error}",
             error.backtrace
-    end
-
-    def underscored_hook_type
-      @underscored_hook_type ||= Overcommit::Utils.snake_case(@context.hook_class_name)
     end
 
     # Stashes untracked files and unstaged changes so that those changes aren't
