@@ -6,7 +6,7 @@ describe Overcommit::Installer do
 
   describe '#run' do
     let(:options) { { :action => :install } }
-    let(:subject) { installer.run(target, options) }
+    subject { installer.run(target, options) }
 
     context 'when the target is not a directory' do
       let(:target) { Tempfile.new('some-file') }

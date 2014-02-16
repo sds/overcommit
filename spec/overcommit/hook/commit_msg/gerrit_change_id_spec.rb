@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Overcommit::Hook::CommitMsg::GerritChangeId do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
-  let(:subject) { described_class.new(config, context) }
+  subject { described_class.new(config, context) }
   let(:commit_msg_file) { Tempfile.new('commit-msg') }
 
   before do

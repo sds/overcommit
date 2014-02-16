@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Overcommit::Hook::PreCommit::CssLint do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
-  let(:subject) { described_class.new(config, context) }
+  subject { described_class.new(config, context) }
 
   before do
     subject.stub(:in_path?).and_return(true)
