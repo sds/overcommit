@@ -4,9 +4,11 @@ AccessModifierIndentation:
 CollectionMethods:
   Enabled: false
 
-# Ruby 1.8.7 only supports trailing dots in method chains.
+# Ruby 1.8.7 only supports trailing dots in method chains, but Rubocop still
+# reports it as an error for method calls chained onto do...end blocks. That's
+# too much noise, so remove it.
 DotPosition:
-  Style: trailing
+  Enabled: false
 
 # Ruby 1.8.7 only supports hash rockets.
 HashSyntax:
