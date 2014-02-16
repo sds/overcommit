@@ -37,7 +37,7 @@ describe Overcommit::Logger do
 
     it 'appends a newline' do
       subject
-      output[-1].should == "\n"
+      output[-1, 1].should == "\n"
     end
   end
 
@@ -51,7 +51,7 @@ describe Overcommit::Logger do
 
     it 'appends a newline' do
       subject
-      output[-1].should == "\n"
+      output[-1, 1].should == "\n"
     end
 
     context 'when the output stream is a TTY' do

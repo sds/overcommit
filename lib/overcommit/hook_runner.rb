@@ -74,7 +74,8 @@ module Overcommit
     # Load and return a {Hook} from a CamelCase hook name and the given
     # hook configuration.
     def create_hook(hook_name)
-      Overcommit::Hook.const_get("#{@context.hook_class_name}::#{hook_name}").
+      Overcommit::Hook.const_get(@context.hook_class_name).
+                       const_get(hook_name).
                        new(@config, @context)
     rescue LoadError, NameError => error
       raise Overcommit::Exceptions::HookLoadError,
