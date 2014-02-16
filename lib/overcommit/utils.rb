@@ -39,6 +39,13 @@ module Overcommit
           map { |file| File.basename(file, '.rb').gsub('_', '-') }
       end
 
+      # Returns a list of supported hook classes (PreCommit, CommitMsg, etc.)
+      def supported_hook_type_classes
+        supported_hook_types.map do |file|
+          file.split('-').map { |part| part.capitalize }.join
+        end
+      end
+
       # Returns whether a command can be found given the current environment path.
       def in_path?(cmd)
         exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']

@@ -16,7 +16,7 @@ end
 
 begin
   require 'overcommit'
-rescue LoadError => ex
+rescue LoadError
   puts 'Overcommit is not installed. Install it to manage git hooks for ' <<
        'this repository? (y/n)'
 
@@ -35,14 +35,16 @@ rescue LoadError => ex
 end
 
 begin
+  hook_type_class = Overcommit::Utils.camel_case(hook_type)
+
   config = Overcommit::ConfigurationLoader.load_repo_config
-  config.apply_environment!(hook_type, ENV)
+  config.apply_environment!(hook_type_class, ENV)
 
   # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
   #Overcommit::Installer.new(Overcommit::Logger.silent).
   #                      run(Overcommit::Utils.repo_root, :action => :install)
 
-  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
+  context = Overcommit::HookContext.create(hook_type_class, config, ARGV, STDIN)
   logger = Overcommit::Logger.new(STDOUT)
   runner = Overcommit::HookRunner.new(config, logger)
 

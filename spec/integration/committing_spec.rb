@@ -4,10 +4,10 @@ describe 'commiting' do
   subject { shell('git commit --allow-empty -m "Test"') }
 
   let(:config) { <<-YML }
-    commit_msg:
+    CommitMsg:
       ALL:
         enabled: false
-    pre_commit:
+    PreCommit:
       ALL:
         enabled: false
       AuthorName:

@@ -30,7 +30,7 @@ module Overcommit
       unless hook_type
         components = hook.class.name.split('::')
         hook = components.last
-        hook_type = Overcommit::Utils.underscorize(components[-2])
+        hook_type = components[-2]
       end
 
       # Merge hook configuration with special 'ALL' config
@@ -47,8 +47,6 @@ module Overcommit
     # Applies additional configuration settings based on the provided
     # environment variables.
     def apply_environment!(hook_type, env)
-      hook_type = hook_type.gsub('-', '_')
-
       skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']}".split(/[:, ]/)
 
       if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
@@ -71,9 +69,10 @@ module Overcommit
 
     def hook_exists?(hook_type, hook_name)
       hook_name = Overcommit::Utils.underscorize(hook_name)
+      underscored_hook_type = Overcommit::Utils.underscorize(hook_type)
 
       File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
-                            hook_type, "#{hook_name}.rb"))
+                            underscored_hook_type, "#{hook_name}.rb"))
     end
 
     def hook_enabled?(hook_type, hook_name)
@@ -107,10 +106,7 @@ module Overcommit
     end
 
     def ensure_hook_type_sections_exist(hash)
-      hook_types = Overcommit::Utils.supported_hook_types.
-                                     map { |type| type.gsub('-', '_') }
-
-      hook_types.each do |hook_type|
+      Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
         hash[hook_type] ||= {}
         hash[hook_type]['ALL'] ||= {}
       end

@@ -14,25 +14,25 @@ describe Overcommit::Configuration do
 
     context 'when no configuration exists for a hook type' do
       it 'creates sections for those hook types' do
-        internal_hash.should have_key 'pre_commit'
+        internal_hash.should have_key 'PreCommit'
       end
 
       it 'creates the special ALL section for the hook type' do
-        internal_hash['pre_commit'].should have_key 'ALL'
+        internal_hash['PreCommit'].should have_key 'ALL'
       end
     end
 
     context 'when keys with empty values exist' do
       let(:hash) do
         {
-          'pre_commit' => {
+          'PreCommit' => {
             'SomeHook' => nil
           },
         }
       end
 
       it 'converts the values to empty hashes' do
-        internal_hash['pre_commit']['SomeHook'].should == {}
+        internal_hash['PreCommit']['SomeHook'].should == {}
       end
     end
   end
@@ -53,7 +53,7 @@ describe Overcommit::Configuration do
   describe '#enabled_builtin_hooks' do
     let(:hash) do
       {
-        'pre_commit' => {
+        'PreCommit' => {
           'SomeHook' => nil,
           'SomeOtherHook' => {
             'enabled' => false
@@ -62,7 +62,7 @@ describe Overcommit::Configuration do
       }
     end
 
-    subject { config.enabled_builtin_hooks('pre_commit') }
+    subject { config.enabled_builtin_hooks('PreCommit') }
 
     it 'includes hooks that are not disabled' do
       subject.should == ['SomeHook']
@@ -72,7 +72,7 @@ describe Overcommit::Configuration do
   describe '#for_hook' do
     let(:hash) do
       {
-        'pre_commit' => {
+        'PreCommit' => {
           'ALL' => {
             'required' => false,
           },
@@ -84,7 +84,7 @@ describe Overcommit::Configuration do
       }
     end
 
-    subject { config.for_hook('SomeHook', 'pre_commit') }
+    subject { config.for_hook('SomeHook', 'PreCommit') }
 
     it 'returns the subset of the config for the specified hook' do
       subject['enabled'].should be_true
@@ -132,43 +132,43 @@ describe Overcommit::Configuration do
     end
 
     context 'when parent item contains a hash' do
-      let(:parent) { { 'pre_commit' => { 'SomeHook' => { 'some-value' => 1 } } } }
+      let(:parent) { { 'PreCommit' => { 'SomeHook' => { 'some-value' => 1 } } } }
 
       context 'and child item contains a different hash under the same key' do
-        let(:child) { { 'pre_commit' => { 'SomeOtherHook' => { 'something' => 2 } } } }
+        let(:child) { { 'PreCommit' => { 'SomeOtherHook' => { 'something' => 2 } } } }
 
         it 'merges the hashes together' do
-          subject.for_hook('SomeHook', 'pre_commit').should == { 'some-value' => 1 }
-          subject.for_hook('SomeOtherHook', 'pre_commit').should == { 'something' => 2 }
+          subject.for_hook('SomeHook', 'PreCommit').should == { 'some-value' => 1 }
+          subject.for_hook('SomeOtherHook', 'PreCommit').should == { 'something' => 2 }
         end
       end
 
       context 'and child item contains a hash under a different key' do
-        let(:child) { { 'commit_msg' => { 'SomeHook' => { 'some-value' => 2 } } } }
+        let(:child) { { 'CommitMsg' => { 'SomeHook' => { 'some-value' => 2 } } } }
 
         it 'appends the item to the parent array' do
-          subject.for_hook('SomeHook', 'pre_commit').should == { 'some-value' => 1 }
-          subject.for_hook('SomeHook', 'commit_msg').should == { 'some-value' => 2 }
+          subject.for_hook('SomeHook', 'PreCommit').should == { 'some-value' => 1 }
+          subject.for_hook('SomeHook', 'CommitMsg').should == { 'some-value' => 2 }
         end
       end
     end
 
     context 'when parent item contains an array' do
-      let(:parent) { { 'pre_commit' => { 'SomeHook' => { 'list' => [1, 2, 3] } } } }
+      let(:parent) { { 'PreCommit' => { 'SomeHook' => { 'list' => [1, 2, 3] } } } }
 
       context 'and child item contains an array' do
-        let(:child) { { 'pre_commit' => { 'SomeHook' => { 'list' => [4, 5] } } } }
+        let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => [4, 5] } } } }
 
         it 'concatenates the arrays together' do
-          subject.for_hook('SomeHook', 'pre_commit')['list'] == [1, 2, 3, 4, 5]
+          subject.for_hook('SomeHook', 'PreCommit')['list'] == [1, 2, 3, 4, 5]
         end
       end
 
       context 'and child item contains a single item' do
-        let(:child) { { 'pre_commit' => { 'SomeHook' => { 'list' => 4 } } } }
+        let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => 4 } } } }
 
         it 'appends the item to the parent array' do
-          subject.for_hook('SomeHook', 'pre_commit')['list'] == [1, 2, 3, 4]
+          subject.for_hook('SomeHook', 'PreCommit')['list'] == [1, 2, 3, 4]
         end
       end
     end
@@ -181,7 +181,7 @@ describe Overcommit::Configuration do
     subject { config }
 
     before do
-      config.apply_environment!('pre-commit', env)
+      config.apply_environment!('PreCommit', env)
     end
 
     context 'when no hooks are requested to be skipped' do
@@ -204,14 +204,14 @@ describe Overcommit::Configuration do
       let(:env) { { 'SKIP' => 'AuthorName' } }
 
       it 'sets the skip option of the hook to true' do
-        subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+        subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
       end
 
       context 'and the hook is spelt with underscores' do
         let(:env) { { 'SKIP' => 'author_name' } }
 
         it 'sets the skip option of the hook to true' do
-          subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+          subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
         end
       end
 
@@ -219,7 +219,7 @@ describe Overcommit::Configuration do
         let(:env) { { 'SKIP' => 'author-name' } }
 
         it 'sets the skip option of the hook to true' do
-          subject.for_hook('AuthorName', 'pre_commit')['skip'].should be_true
+          subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
         end
       end
     end
@@ -228,14 +228,14 @@ describe Overcommit::Configuration do
       let(:env) { { 'SKIP' => 'all' } }
 
       it 'sets the skip option of the ALL section to true' do
-        subject.for_hook('ALL', 'pre_commit')['skip'].should be_true
+        subject.for_hook('ALL', 'PreCommit')['skip'].should be_true
       end
 
       context 'and "all" is capitalized' do
         let(:env) { { 'SKIP' => 'ALL' } }
 
         it 'sets the skip option of the special ALL config to true' do
-          subject.for_hook('ALL', 'pre_commit')['skip'].should be_true
+          subject.for_hook('ALL', 'PreCommit')['skip'].should be_true
         end
       end
     end

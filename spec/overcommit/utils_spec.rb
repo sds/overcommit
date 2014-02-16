@@ -62,4 +62,10 @@ describe Overcommit::Utils do
 
     it { should =~ %w[commit-msg pre-commit post-checkout] }
   end
+
+  describe '.supported_hook_type_classes' do
+    subject { described_class.supported_hook_type_classes }
+
+    it { should =~ %w[CommitMsg PreCommit PostCheckout] }
+  end
 end
