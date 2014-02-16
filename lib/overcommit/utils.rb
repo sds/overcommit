@@ -5,7 +5,7 @@ module Overcommit
   module Utils
     class << self
       def script_path(script)
-        File.join(OVERCOMMIT_HOME, 'libexec', 'scripts', script)
+        File.join(OVERCOMMIT_HOME, 'libexec', script)
       end
 
       # Returns an absolute path to the root of the repository.

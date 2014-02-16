@@ -5,7 +5,7 @@ describe Overcommit::Utils do
     subject { described_class.script_path('some-script') }
 
     it 'points to the libexec scripts directory' do
-      subject.should end_with File.join('libexec', 'scripts', 'some-script')
+      subject.should end_with File.join('libexec', 'some-script')
     end
   end
 

@@ -54,7 +54,7 @@ module Overcommit
     end
 
     def install_master_hook
-      master_hook = File.join(OVERCOMMIT_HOME, 'libexec', 'overcommit-hook')
+      master_hook = File.join(OVERCOMMIT_HOME, 'template-dir', 'overcommit-hook')
       install_location = File.join(hooks_path, 'overcommit-hook')
       FileUtils.mkdir_p(hooks_path)
       FileUtils.cp(master_hook, install_location)
