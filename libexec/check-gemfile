@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ -e Gemfile.lock ] && which bundle &> /dev/null; then
-  if ! git diff --exit-code $1 $2 -- Gemfile.lock &> /dev/null; then
-    if ! bundle check &> /dev/null; then
-      echo 'NOTE: Gemfile dependencies unsatisfied. You might want to `bundle install`.'
-    fi
-  fi
-fi
