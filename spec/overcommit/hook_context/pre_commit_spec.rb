@@ -7,6 +7,133 @@ describe Overcommit::HookContext::PreCommit do
   let(:input) { '' }
   let(:context) { described_class.new(config, args, input) }
 
+  describe '#setup_environment' do
+    subject { context.setup_environment }
+
+    context 'when there are no staged changes' do
+      around do |example|
+        repo do
+          `echo "Hello World" > tracked-file`
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          `echo "Hello Again" > untracked-file`
+          example.run
+        end
+      end
+
+      it 'keeps already-committed files' do
+        subject
+        File.open('tracked-file', 'r').read == 'Hello World'
+      end
+
+      it 'keeps untracked files' do
+        subject
+        File.open('untracked-file', 'r').read == 'Hello Again'
+      end
+
+      it 'keeps modification times the same' do
+        expect { subject }.
+          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+      end
+    end
+
+    context 'when there are staged changes' do
+      around do |example|
+        repo do
+          `echo "Hello World" > tracked-file`
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          `echo "Hello Again" > untracked-file`
+          `echo "Some more text" >> tracked-file`
+          `git add tracked-file`
+          `echo "Yet some more text" >> tracked-file`
+          example.run
+        end
+      end
+
+      it 'keeps staged changes' do
+        subject
+        File.open('tracked-file', 'r').read == 'Hello WorldSome more text'
+      end
+
+      it 'keeps untracked files' do
+        subject
+        File.open('untracked-file', 'r').read == 'Hello Again'
+      end
+
+      it 'keeps modification times the same' do
+        expect { subject }.
+          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+      end
+    end
+  end
+
+  describe '#cleanup_environment' do
+    subject { context.cleanup_environment }
+
+    before do
+      context.setup_environment
+    end
+
+    context 'when there were no staged changes' do
+      around do |example|
+        repo do
+          `echo "Hello World" > tracked-file`
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          `echo "Hello Again" > untracked-file`
+          example.run
+        end
+      end
+
+      it 'keeps already-committed files' do
+        subject
+        File.open('tracked-file', 'r').read.should == "Hello World\n"
+      end
+
+      it 'keeps untracked files' do
+        subject
+        File.open('untracked-file', 'r').read.should == "Hello Again\n"
+      end
+
+      it 'keeps modification times the same' do
+        expect { subject }.
+          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+      end
+    end
+
+    context 'when there were staged changes' do
+      around do |example|
+        repo do
+          `echo "Hello World" > tracked-file`
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          `echo "Hello Again" > untracked-file`
+          `echo "Some more text" >> tracked-file`
+          `git add tracked-file`
+          `echo "Yet some more text" >> tracked-file`
+          example.run
+        end
+      end
+
+      it 'restores the unstaged changes' do
+        subject
+        File.open('tracked-file', 'r').read.
+          should == "Hello World\nSome more text\nYet some more text\n"
+      end
+
+      it 'keeps untracked files' do
+        subject
+        File.open('untracked-file', 'r').read.should == "Hello Again\n"
+      end
+
+      it 'keeps modification times the same' do
+        expect { subject }.
+          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+      end
+    end
+  end
+
   describe '#modified_files' do
     subject { context.modified_files }
 

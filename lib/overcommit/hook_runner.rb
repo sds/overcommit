@@ -2,21 +2,20 @@ module Overcommit
   # Responsible for loading the hooks the repository has configured and running
   # them, collecting and displaying the results.
   class HookRunner
-    def initialize(config, logger)
+    def initialize(config, logger, context)
       @config = config
       @logger = logger
+      @context = context
       @hooks = []
     end
 
     # Loads and runs the hooks registered for this {HookRunner}.
-    def run(context)
-      @context = context
-
-      # stash_unstaged_files
+    def run
       load_hooks
+      @context.setup_environment
       run_hooks
     ensure
-      # restore_unstaged_files
+      @context.cleanup_environment
     end
 
   private
@@ -81,25 +80,6 @@ module Overcommit
       raise Overcommit::Exceptions::HookLoadError,
             "Unable to load hook '#{hook_name}': #{error}",
             error.backtrace
-    end
-
-    # Stashes untracked files and unstaged changes so that those changes aren't
-    # read by the hooks.
-    def stash_unstaged_files
-      # TODO: store mtime of all stashed files with File.new('blah').mtime
-      `git stash save --keep-index --include-untracked --quiet #{<<-MSG}`
-        "Stash of repo state before hook run - #{Time.now}"
-      MSG
-    end
-
-    # Restores the stashed files after hook has run.
-    #
-    # Assumes that any hooks that might have manipulated the stash have properly
-    # left the stash in its original state.
-    def restore_unstaged_files
-      # TODO: Restore mtime of all stashed files with
-      # FileUtils.touch('blah'), :mtime => time
-      `git stash pop --quiet`
     end
   end
 end

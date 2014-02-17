@@ -25,6 +25,23 @@ module Overcommit::HookContext
       Overcommit::Utils.snake_case(hook_class_name)
     end
 
+    # Initializes anything related to the environment.
+    #
+    # This is called before the hooks are run by the [HookRunner]. Different
+    # hook types can perform different setup.
+    def setup_environment
+      # Implemented by subclass
+    end
+
+    # Resets the environment to an appropriate state.
+    #
+    # This is called after the hooks have been run by the [HookRunner].
+    # Different hook types can perform different cleanup operations, which are
+    # intended to "undo" the results of the call to {#setup_environment}.
+    def cleanup_environment
+      # Implemented by subclass
+    end
+
     # Returns a list of files that have been modified.
     #
     # By default, this returns an empty list. Subclasses should implement if

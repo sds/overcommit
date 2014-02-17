@@ -48,9 +48,9 @@ begin
 
   context = Overcommit::HookContext.create(hook_type_class, config, ARGV, STDIN)
   logger = Overcommit::Logger.new(STDOUT)
-  runner = Overcommit::HookRunner.new(config, logger)
+  runner = Overcommit::HookRunner.new(config, logger, context)
 
-  status = runner.run(context)
+  status = runner.run
 
   exit(status ? 0 : 65) # 65 = EX_DATAERR
 rescue Overcommit::Exceptions::ConfigurationError => error

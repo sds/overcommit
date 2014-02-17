@@ -4,6 +4,30 @@ module Overcommit::HookContext
   # This includes staged files, which lines of those files have been modified,
   # etc.
   class PreCommit < Base
+    # Stash unstaged contents of files so hooks don't see changes that aren't
+    # about to be committed.
+    def setup_environment
+      store_modified_times
+
+      if modified_files.any?
+        `git stash save --keep-index --quiet #{<<-MSG}`
+          "Overcommit: Stash of repo state before hook run at #{Time.now}"
+        MSG
+      end
+
+      # While running the hooks make it appear as if nothing changed
+      restore_modified_times
+    end
+
+    # Restore unstaged changes and reset file modification times so it appears
+    # as if nothing ever changed.
+    def cleanup_environment
+      `git reset --hard`
+      `git stash pop --index --quiet` if modified_files.any?
+
+      restore_modified_times
+    end
+
     # Get a list of added, copied, or modified files that have been staged.
     # Renames and deletions are ignored, since there should be nothing to check.
     def modified_files
@@ -45,6 +69,26 @@ module Overcommit::HookContext
       end
 
       lines
+    end
+
+    def store_modified_times
+      @modified_times = {}
+
+      modified_files.each do |file|
+        @modified_times[file] = File.mtime(file)
+      end
+    end
+
+    # Stores the modification times for all modified files to make it appear like
+    # they never changed.
+    #
+    # This prevents editors from complaining about files changing when we stash
+    # changes before running the hooks.
+    def restore_modified_times
+      modified_files.each do |file|
+        time = @modified_times[file]
+        File.utime(time, time, file)
+      end
     end
   end
 end
