@@ -13,25 +13,11 @@ module Overcommit
     def run
       parse_arguments
 
-      if Array(@options[:targets]).empty?
-        @options[:targets] = [Overcommit::Utils.repo_root].compact
-        if @options[:targets].empty?
-          log.warning 'You are not in a git repository.'
-          log.log 'You must either specify the path to a repository or ' <<
-                  'change your current directory to a repository.'
-          halt 64 # EX_USAGE
-        end
-      end
-
-      @options[:action] ||= :install
-
-      @options[:targets].each do |target|
-        begin
-          Installer.new(log).run(target, @options)
-        rescue Overcommit::Exceptions::InvalidGitRepo => error
-          log.warning "Invalid repo #{target}: #{error}"
-          halt 69 # EX_UNAVAILABLE
-        end
+      case @options[:action]
+      when :install, :uninstall
+        install_or_uninstall
+      when :template_dir
+        print_template_directory_path
       end
     end
 
@@ -58,16 +44,50 @@ module Overcommit
         opts.on('-i', '--install', 'Install Overcommit hooks in a repository') do
           @options[:action] = :install
         end
+
+        opts.on('-t', '--template-dir', 'Print location of template directory') do
+          @options[:action] = :template_dir
+        end
       end
 
       begin
         @parser.parse!(@arguments)
+
+        # Default action is to install
+        @options[:action] ||= :install
 
         # Unconsumed arguments are our targets
         @options[:targets] = @arguments
       rescue OptionParser::InvalidOption => ex
         print_help @parser.help, ex
       end
+    end
+
+    def install_or_uninstall
+      if Array(@options[:targets]).empty?
+        @options[:targets] = [Overcommit::Utils.repo_root].compact
+      end
+
+      if @options[:targets].empty?
+        log.warning 'You are not in a git repository.'
+        log.log 'You must either specify the path to a repository or ' <<
+                'change your current directory to a repository.'
+        halt 64 # EX_USAGE
+      end
+
+      @options[:targets].each do |target|
+        begin
+          Installer.new(log).run(target, @options)
+        rescue Overcommit::Exceptions::InvalidGitRepo => error
+          log.warning "Invalid repo #{target}: #{error}"
+          halt 69 # EX_UNAVAILABLE
+        end
+      end
+    end
+
+    def print_template_directory_path
+      puts File.join(OVERCOMMIT_HOME, 'template-dir')
+      halt
     end
 
     def print_help(message, error = nil)

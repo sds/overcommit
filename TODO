@@ -9,7 +9,7 @@ Stash non-indexed changes before running checks so real filename can be used
 Allow hooks to depend on other hooks being run first? (`depends` option)
 Auto install hooks on updating overcommit during next hook run
 Auto update hook integration script when newer overcommit runs
-Allow GIT_TEMPLATE_DIR to be set with `export GIT_TEMPLATE_DIR=`overcommit --template-dir`
+#Allow GIT_TEMPLATE_DIR to be set with `export GIT_TEMPLATE_DIR=`overcommit --template-dir`
 Allow hooks to specify required executable (`executable` option, coupled with
   install instructions of some sort)
 Allow hooks to specify whether they only apply to lines the user modified

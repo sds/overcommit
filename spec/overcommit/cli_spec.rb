@@ -4,7 +4,8 @@ require 'overcommit/cli'
 describe Overcommit::CLI do
   describe '#run' do
     let(:logger) { Overcommit::Logger.silent }
-    subject { described_class.new(arguments, logger).run }
+    let(:cli) { described_class.new(arguments, logger) }
+    subject { cli.run }
 
     before do
       Overcommit::Utils.stub(:repo_root).and_return('current-dir')
@@ -67,6 +68,18 @@ describe Overcommit::CLI do
                                      hash_including(:action => :install))
           subject
         end
+      end
+    end
+
+    context 'with the template directory switch specified' do
+      let(:arguments) { ['--template-dir'] }
+
+      before do
+        cli.stub(:halt)
+      end
+
+      it 'prints the location of the template directory' do
+        capture_stdout { subject }.chomp.should end_with 'template-dir'
       end
     end
   end
