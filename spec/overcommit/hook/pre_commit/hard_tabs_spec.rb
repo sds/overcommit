@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::Whitespace do
+describe Overcommit::Hook::PreCommit::HardTabs do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -24,13 +24,7 @@ describe Overcommit::Hook::PreCommit::Whitespace do
     it { should fail_check }
   end
 
-  context 'when file contains trailing whitespace' do
-    let(:contents) { 'Some trailing whitespace   ' }
-
-    it { should fail_check }
-  end
-
-  context 'when file has no invalid whitespace' do
+  context 'when file has no hard tabs' do
     let(:contents) { 'Just some text' }
 
     it { should pass }

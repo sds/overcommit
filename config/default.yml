@@ -58,6 +58,9 @@ PreCommit:
     description: 'Analyzing with haml-lint'
     include: '**/*.haml'
 
+  HardTabs:
+    description: 'Checking for hard tabs'
+
   ImageOptim:
     description: 'Checking for optimizable images'
     include:
@@ -87,8 +90,8 @@ PreCommit:
     description: 'Analyzing with scss-lint'
     include: '**/*.scss'
 
-  Whitespace:
-    description: 'Checking for invalid whitespace'
+  TrailingWhitespace:
+    description: 'Checking for trailing whitespace'
 
   YamlSyntax:
     description: 'Checking YAML syntax'
