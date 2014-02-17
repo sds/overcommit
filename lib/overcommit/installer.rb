@@ -21,6 +21,7 @@ module Overcommit
     def install
       log.log "Installing hooks into #{@target}"
 
+      ensure_hooks_directory
       install_master_hook
       install_hook_symlinks
 
@@ -39,6 +40,10 @@ module Overcommit
     def hooks_path
       absolute_target = File.expand_path(@target)
       File.join(absolute_target, '.git', 'hooks')
+    end
+
+    def ensure_hooks_directory
+      FileUtils.mkdir_p(hooks_path)
     end
 
     def validate_target

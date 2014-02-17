@@ -6,7 +6,8 @@ module GitSpecHelpers
 
   def repo(name = 'some-repo', &block)
     directory(name) do
-      `git init`
+      `git init --template=""` # Ensure no template directory is applied
+      `mkdir -p .git/hooks` # Since we don't specify template, need to create ourselves
       block.call if block_given?
     end
   end
