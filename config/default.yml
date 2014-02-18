@@ -6,7 +6,7 @@
 # Where to store hook plugins specific to a repository. These are loaded in
 # addition to the default hooks Overcommit comes with. The location is relative
 # to the root of the repository.
-plugin_directory: '.githooks'
+plugin_directory: '.git-hooks'
 
 # Hooks that run after HEAD changes or a file is explicitly checked out. Useful
 # for updating source tags (e.g. via ctags) or warning about new migrations,

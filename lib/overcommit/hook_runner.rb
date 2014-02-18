@@ -121,16 +121,14 @@ module Overcommit
       end
     end
 
-    # Load hooks that are stored with the repository (i.e. are custom for the
-    # repository).
+    # Load hooks that are stored in the repository's plugin directory.
     def load_hook_plugins
       directory = File.join(@config.plugin_directory, @context.hook_type_name)
 
-      Dir[File.join(directory, '*.rb')].sort do |plugin|
+      Dir[File.join(directory, '*.rb')].sort.each do |plugin|
         require plugin
 
-        # TODO: FIX this!
-        hook_name = self.class.hook_type_to_class_name(File.basename(plugin, '.rb'))
+        hook_name = Overcommit::Utils.camel_case(File.basename(plugin, '.rb'))
         @hooks << create_hook(hook_name)
       end
     end
