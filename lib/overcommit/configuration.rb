@@ -47,7 +47,7 @@ module Overcommit
     # Applies additional configuration settings based on the provided
     # environment variables.
     def apply_environment!(hook_type, env)
-      skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']}".split(/[:, ]/)
+      skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(/[:, ]/)
 
       if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
         @hash[hook_type]['ALL']['skip'] = true
