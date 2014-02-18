@@ -5,7 +5,7 @@ module Overcommit::Hook::CommitMsg
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegators :@context, :commit_message, :commit_message_lines,
-                   :commit_message_file
+    def_delegators :@context, :commit_message, :update_commit_message,
+                   :commit_message_lines, :commit_message_file
   end
 end

@@ -6,6 +6,13 @@ module Overcommit::HookContext
       commit_message_lines.join
     end
 
+    # Updates the commit message to the specified text.
+    def update_commit_message(message)
+      ::File.open(commit_message_file, 'w') do |file|
+        file.write(message)
+      end
+    end
+
     def commit_message_lines
       raw_commit_message_lines.
         reject     { |line| line =~ /^#/ }.
