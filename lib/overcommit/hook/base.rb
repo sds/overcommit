@@ -37,10 +37,6 @@ module Overcommit::Hook
       @config['enabled'] != false
     end
 
-    def requires_modified_files?
-      @config['requires_files']
-    end
-
     def skip?
       @config['skip']
     end
@@ -66,6 +62,10 @@ module Overcommit::Hook
     end
 
   private
+
+    def requires_modified_files?
+      @config['requires_files']
+    end
 
     def applicable_file?(file)
       includes = Array(@config['include']).map { |glob| convert_glob_to_absolute(glob) }

@@ -17,12 +17,17 @@ module Overcommit::HookContext
 
     # Returns the camel-cased type of this hook (e.g. PreCommit)
     def hook_class_name
-      @hook_class_name ||= self.class.name.split('::').last
+      self.class.name.split('::').last
     end
 
-    # Returns the snake-cased type of this hook (e.g. pre-commit)
+    # Returns the snake-cased type of this hook (e.g. pre_commit)
     def hook_type_name
       Overcommit::Utils.snake_case(hook_class_name)
+    end
+
+    # Returns the actual name of the hook script being run (e.g. pre-commit).
+    def hook_script_name
+      hook_type_name.gsub('_', '-')
     end
 
     # Initializes anything related to the environment.

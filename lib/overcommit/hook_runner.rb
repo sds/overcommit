@@ -4,7 +4,7 @@ module Overcommit
   class HookRunner
     def initialize(config, logger, context)
       @config = config
-      @logger = logger
+      @log = logger
       @context = context
       @hooks = []
     end
@@ -20,20 +20,85 @@ module Overcommit
 
   private
 
+    attr_reader :log
+
     def run_hooks
-      reporter = Overcommit::Reporter.new(@context, @hooks, @config, @logger)
+      if @hooks.any? { |hook| hook.run? || hook.skip? }
+        log.bold "Running #{@context.hook_script_name} hooks"
 
-      reporter.start_hook_run
+        statuses = @hooks.map { |hook| run_hook(hook) }.compact
 
-      @hooks.select { |hook| hook.run? }.
-             each do |hook|
-        reporter.with_status(hook) do
-          hook.run
+        log.log # Newline
+
+        run_failed = statuses.include?(:bad)
+
+        if run_failed
+          log.error "✗ One or more #{@context.hook_script_name} hooks failed"
+        else
+          log.success "✓ All #{@context.hook_script_name} hooks passed"
+        end
+
+        log.log # Newline
+
+        !run_failed
+      else
+        log.success "✓ No applicable #{@context.hook_script_name} hooks to run"
+        true # Run was successful
+      end
+    end
+
+    def run_hook(hook)
+      return unless hook.enabled?
+
+      if hook.skip?
+        if hook.required?
+          log.warning "Cannot skip #{hook.name} since it is required"
+        else
+          log.warning "Skipping #{hook.name}"
+          return
         end
       end
 
-      reporter.finish_hook_run
-      reporter.checks_passed?
+      return unless hook.run?
+
+      unless hook.quiet?
+        print_header(hook)
+      end
+
+      begin
+        status, output = hook.run
+      rescue => ex
+        status = :bad
+        output = "Hook raised unexpected error\n#{ex.message}"
+      end
+
+      # Want to print the header in the event the result wasn't good so that the
+      # user knows what failed
+      if hook.quiet? && status != :good
+        print_header(hook)
+      end
+
+      case status
+      when :good
+        log.success 'OK' unless hook.quiet?
+      when :warn
+        log.warning 'WARNING'
+        print_report(output, :bold_warning)
+      when :bad
+        log.error 'FAILED'
+        print_report(output, :bold_error)
+      end
+
+      status
+    end
+
+    def print_header(hook)
+      log.partial hook.description
+      log.partial '.' * (70 - hook.description.length)
+    end
+
+    def print_report(output, format = :log)
+      log.send(format, output) unless output.empty?
     end
 
     # Loads hooks that will be run.
