@@ -77,6 +77,10 @@ PreCommit:
       - '**/*.jpeg'
       - '**/*.png'
 
+  Jscs:
+    description: 'Analyzing with JSCS'
+    include: '**/*.js'
+
   JsHint:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
