@@ -20,6 +20,7 @@ PostCheckout:
     include:
       - 'Gemfile'
       - 'Gemfile.lock'
+      - '*.gemspec'
   IndexTags:
     description: 'Indexing source code tags'
 
@@ -45,6 +46,13 @@ PreCommit:
     requires_files: false
     required: true
     quiet: true
+
+  BundleCheck:
+    description: 'Checking Gemfile dependencies'
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '*.gemspec'
 
   CoffeeLint:
     description: 'Analyzing with coffeelint'
