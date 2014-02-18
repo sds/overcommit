@@ -14,6 +14,9 @@ DotPosition:
 HashSyntax:
   EnforcedStyle: hash_rockets
 
+IfUnlessModifier:
+  Enabled: false
+
 LineLength:
   Max: 100
 
