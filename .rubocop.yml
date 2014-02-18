@@ -1,6 +1,9 @@
 AccessModifierIndentation:
   EnforcedStyle: outdent
 
+AssignmentInCondition:
+  Enabled: false
+
 CollectionMethods:
   Enabled: false
 
