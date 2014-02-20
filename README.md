@@ -5,171 +5,208 @@
 
 # Overcommit
 
-A gem to install and manage a configurable (but opinionated) set of Git hooks.
-Originally written for use at [Causes](https://github.com/causes).
+`overcommit` is a tool to manage and configure
+[Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
-In addition to supporting global hooks, it also allows teams to define plugins
-specific to a repository (installed in the `.githooks` directory).
+In addition to supporting a wide variety of hooks that can be used across
+multiple repositories, you can also define hooks specific to a
+repository (but unlike regular Git hooks, are stored with that repository).
 
 [Read more](http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/)
-about overcommit on our [engineering blog](http://causes.github.io).
+about Overcommit on our [engineering blog](http://causes.github.io).
+
+* [Requirements](#requirements)
+  * [Dependencies](#dependencies)
+* [Installation](#installation)
+  * [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Built-In Hooks](#built-in-hooks)
+* [Repo-Specific Hooks](#repo-specific-hooks)
+* [Contributing](#contributing)
+* [Changelog](#changelog)
+* [License](#license)
+
+## Requirements
+
+* Ruby 1.8.7+ is supported
+
+### Dependencies
+
+Some of the hooks have third-party dependencies. For example, to lint your
+[SCSS](http://sass-lang.com/) files, you're going to need our
+[scss-lint gem](https://github.com/causes/scss-lint):
+
+Depending on the hooks you enable/disable for your repository, you'll need to
+ensure your development environment already has those dependencies installed.
+Most hooks will display a warning if a required executable isn't available.
 
 ## Installation
 
-The `overcommit` is installed as a binary via rubygems:
+`overcommit` is installed as a binary via [RubyGems](https://rubygems.org/):
 
-    gem install overcommit
+```bash
+gem install overcommit
+```
 
 You can then run the `overcommit` command to install hooks into repositories:
 
-    mkdir important-project
-    cd important-project
-    git init
-    overcommit .
+```bash
+mkdir important-project
+cd important-project
+git init
+overcommit --install
+```
 
-`overcommit` also accepts a handful of arguments, which can be enumerated by
-running `overcommit --help`.
+### Automatically Install Overcommit Hooks
 
-At [Causes](https://github.com/causes), we install all of the hooks via the
-`--all` flag. In absence of this flag, you will be given the `default` template.
-For more information, try `overcommit --list-templates`.
+If you want to use `overcommit` for all repositories you create/clone going
+forward, add the following to automatically run in your shell environment:
 
-## Dependencies
+```bash
+export GIT_TEMPLATE_DIR=`overcommit --template-dir`
+```
 
-Some of the lints have third-party dependencies. For example, to lint your
-[SCSS](http://sass-lang.com/) files, you're going to need our [scss-lint
-gem](https://github.com/causes/scss-lint):
+The `GIT_TEMPLATE_DIR` provides a directory for Git to use as a template
+for automatically populating the `.git` directory. If you have your own
+template directory, you might just want to copy the contents of
+`overcommit --template-dir` to that directory.
 
-    gem install scss-lint
+## Usage
 
-Other useful utilities include `jshint`, which can be installed via `npm`:
+Once you've installed the hooks via `overcommit --install`, they will
+automatically run when the appropriate hook is triggered.
 
-    npm install -g jshint
+The `overcommit` executable supports the following command-line flags:
 
-## Built-in hooks
+Command Line Flag         | Description
+--------------------------|----------------------------------------------------
+`-i`/`--install`          | Install Overcommit hooks in a repository
+`-u`/`--uninstall`        | Remove Overcommit hooks from a repository
+`-t`/`--template-dir`     | Print location of template directory
+`-h`/`--help`             | Show command-line flag documentation
+`-v`/`--version`          | Show version
 
-There are two types of hooks installed by this utility. `post-checkout`,
-`post-merge`, and `prepare-commit-msg` are all simple shell scripts rolled by
-hand for use at Causes. We think other people may find them useful.
+### Skipping Hooks
 
-The second, more interesting type is the Ruby-based, extensible checks. These
-are currently `pre-commit` and `commit-msg`. These are used for checking the
-validity of the code to be committed and checking the content of the commit
-message, respectively.
+Sometimes a hook will report an error that for one reason or another you'll want
+to ignore. To prevent these errors from blocking your commit, you can include
+the name of the relevant hook in the `SKIP` environment variable, e.g.
 
-You can see the various sub-hooks available in the `lib/overcommit/plugins`
-directory:
+```bash
+SKIP=rubocop git commit
+```
 
-    >> tree lib/overcommit/plugins
-    lib/overcommit/plugins
-    ├── commit_msg
-    │   ├── change_id.rb
-    │   ├── hard_tabs.rb
-    │   ├── release_note.rb
-    │   ├── russian_novel.rb
-    │   ├── single_line_subject.rb
-    │   ├── text_width.rb
-    │   └── trailing_period.rb
-    └── pre_commit
-        ├── author_name.rb
-        ├── causes_email.rb
-        ├── coffee_lint.rb
-        ├── css_linter.rb
-        ├── haml_style.rb
-        ├── haml_syntax.rb
-        ├── js_console_log.rb
-        ├── js_syntax.rb
-        ├── python_flake8.rb
-        ├── restricted_paths.rb
-        ├── ruby_style.rb
-        ├── ruby_syntax.rb
-        ├── scss_lint.rb
-        ├── test_history.rb
-        ├── whitespace.rb
-        └── yaml_syntax.rb
+Use this feature sparingly, as there is no point to having the hook in the first
+place if you're just going to ignore it. If you want to ensure a hook is never
+skipped, set the `required` option to `true` in its configuration.
 
-Most of them are straightforward lints, with an easter egg or two thrown in for
-good measure. Because some of these are Causes-specific (for instance, we
-insert a 'Change-Id' at the end of each commit message for Gerrit code review),
-the default installation will skip loading some of these checks.
+## Configuration
 
-## Repo-specific hooks
+Overcommit provides a flexible configuration system that allows you to tailor
+the built-in hooks to suit your workflow. All configuration specific to a
+repository is stored in `.overcommit.yml` in the top-level directory of the
+repository.
+
+When writing your own configuration, it will automatically extend the
+[default configuration](config/default.yml), so you only need to specify
+your configuration with respect to the default.
+
+Within a configuration file, the following high-level concepts exist:
+
+* **Plugin Directory`**: allows you to specify the directory where your own
+  Git hook plugins are stored (if you have project-specific hooks)
+
+* **Hook type configuration (`PreCommit`, `CommitMsg`, etc.)**: these
+  categories each contain a list of hooks that are available for the respective
+  hook type. One special hook is the `ALL` hook, which allows you to define
+  configuration that applies to all hooks of the given type.
+
+* **Hook configuration**: Within each hook category, an individual hook can
+  be configured with the following properties:
+
+  * `required`: if true, this hook cannot be skipped
+  * `quiet`: if true, this hook does not display anything unless it fails
+  * `description`: text displayed when the hook is running
+  * `requires_files`: whether this hook should run only if files have been
+    modified
+  * `include`: Glob patterns of files that apply to this hook (it will run
+    only if a file matching the pattern has been modified--note that the
+    concept of "modified" varies for different types of hooks)
+  * `exclude`: Glob patterns of files that are ignored by this hook
+
+  On top of the above built-in configuration options, each hook can support
+  individual configuration. As an example, the `AuthorEmail` hook allows you
+  to customize the regex used to check emails via the `pattern` option, which
+  is useful if you want to enforce developers to use a company email address
+  for their commits.
+
+## Built-In Hooks
+
+Currently, Overcommit supports `commit-msg`, `pre-commit`, and `post-checkout`
+hooks, but it can easily be expanded to support others.
+
+You can see the full list of hooks by checking out the
+[hooks directory](https://github.com/causes/overcommit/blob/master/lib/overcommit/hook),
+and view their [default configuration](config/default.yml).
+
+## Repo-Specific hooks
 
 Out of the box, `overcommit` comes with a set of hooks that enforce a variety of
 styles and lints. However, some hooks only make sense in the context of a given
 repository.
 
-At Causes, for example, we have a repository for managing our
-[Chef](http://www.opscode.com/chef/) cookbooks. Inside this repository, we have
-a few additional lints we run before commits are pushed:
+At Causes, for example, we have a number of ad hoc Ruby checks that we run
+against our code to catch common errors. For example, since we use
+[RSpec](http://rspec.info/), we want to make sure all spec files contain the
+line `require 'spec_helper'`.
 
-    >> tree .githooks
-    .githooks
-    └── pre_commit
-        ├── berksfile_source.rb
-        ├── cookbook_version.rb
-        └── food_critic.rb
-
-`food_critic.rb` contains a subclass of `HookSpecificCheck` that runs
-[Foodcritic](http://acrmp.github.io/foodcritic/) against the cookbooks about to
-be committed (if any).
-
-The meat of it looks like this:
+Inside our repository, we can add the following file to `.git-hooks/pre_commit`
+in order to automatically check our spec files:
 
 ```ruby
-module Overcommit::GitHook
-  class FoodCritic < HookSpecificCheck
-    include HookRegistry
-    COOKBOOKS = 'cookbooks'
-    @@options = { :tags => %w[~readme ~fc001] }
+module Overcommit::Hook::PreCommit
+  class EnsureSpecHelper < Base
+    errors = []
 
-    def run_check
-      begin
-        require 'foodcritic'
-      rescue LoadError
-        return :stop, 'run `bundle install` to install the foodcritic gem'
+    applicable_files.each do |file|
+      if File.open(file, 'r').read !~ /^require 'spec_helper'/
+        errors << "#{file}: missing `require 'spec_helper'`"
       end
-
-      changed_cookbooks = modified_files.map do |file|
-        file.split('/')[0..1].join('/') if file.start_with? COOKBOOKS
-      end.compact.uniq
-
-      linter = ::FoodCritic::Linter.new
-      review = linter.check(changed_cookbooks, @@options)
-      return (review.warnings.any? ? :bad : :good), review
     end
+
+    return :bad, errors.join("\n") if errors.any?
+
+    :good
   end
 end
 ```
 
-## Other functionality
+The corresponding configuration for this hook would look like:
 
-In addition to the Ruby-based plugin system, `overcommit` also ships with a few
-handy shell scripts:
-
-- `post-checkout` runs `ctags` after checkouts to aid in tag-based navigation.
-  We use this in combination with Vim by adding `.git/tags` to the `tags`
-  configuration:
-
-        set tags=.git/tags,.tags
-
-- `post-merge` checks for updated submodules and prompts you to update them.
-
-- `prepare-commit-msg` sets up your commit message to include additional author
-  information and note submodule changes when updating.
-
-## Uninstallation
-
-If you'd like to remove the hooks from a repository, just pass the `--uninstall`
-flag:
-
-    overcommit --uninstall important-project
+```yaml
+PreCommit:
+  EnsureSpecHelper:
+    description: 'Checking for missing inclusion of spec_helper'
+    include: '**/*_spec.rb'
+```
 
 ## Contributing
 
-Pull requests and issues are welcome. New features should ship with tests so
-that we can avoid breaking them in the future.
+We love getting feedback with or without pull requests. If you do add a new
+feature, please add tests so that we can avoid breaking it in the future.
+
+Speaking of tests, we use `rspec`, which can be run like so:
+
+```bash
+bundle exec rspec
+```
+
+## Changelog
+
+If you're interested in seeing the changes and bug fixes between each version
+of `overcommit`, read the [Overcommit Changelog](CHANGELOG.md).
 
 ## License
 
-Released under the MIT License.
+This project is released under the [MIT license](MIT-LICENSE).
