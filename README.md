@@ -34,7 +34,7 @@ about Overcommit on our [engineering blog](http://causes.github.io).
 
 Some of the hooks have third-party dependencies. For example, to lint your
 [SCSS](http://sass-lang.com/) files, you're going to need our
-[scss-lint gem](https://github.com/causes/scss-lint):
+[scss-lint gem](https://github.com/causes/scss-lint).
 
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
@@ -113,7 +113,7 @@ your configuration with respect to the default.
 
 Within a configuration file, the following high-level concepts exist:
 
-* **Plugin Directory`**: allows you to specify the directory where your own
+* **Plugin Directory**: allows you to specify the directory where your own
   Git hook plugins are stored (if you have project-specific hooks)
 
 * **Hook type configuration (`PreCommit`, `CommitMsg`, etc.)**: these
