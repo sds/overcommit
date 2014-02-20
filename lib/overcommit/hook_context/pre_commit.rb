@@ -1,3 +1,5 @@
+require 'set'
+
 module Overcommit::HookContext
   # Contains helpers related to contextual information used by pre-commit hooks.
   #
