@@ -20,7 +20,9 @@ Gem::Specification.new do |s|
 
   s.files                 = Dir['bin/**/*'] +
                             Dir['config/*.yml'] +
-                            Dir['lib/**/*.rb']
+                            Dir['lib/**/*.rb'] +
+                            Dir['libexec/**/*'] +
+                            Dir['template-dir/**/*']
 
   s.required_ruby_version = '>= 1.8.7'
 
