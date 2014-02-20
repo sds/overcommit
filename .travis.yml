@@ -5,5 +5,4 @@ rvm:
   - 2.0.0
 script: bundle exec rspec
 env:
-  - GIT_AUTHOR_NAME="Travis CI"
-  - GIT_AUTHOR_EMAIL="travis@ci.com"
+  - GIT_AUTHOR_NAME="Travis CI" GIT_AUTHOR_EMAIL="travis@ci.com"
