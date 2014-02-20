@@ -30,8 +30,8 @@ rescue LoadError
       Gem.clear_paths # Reset load paths so newly installed gem is found
       require 'overcommit'
     else
-      puts 'Unable to install Overcommit'
-      exit
+      puts 'Unable to install Overcommit -- try running `gem install overcommit`'
+      exit 69 # EX_UNAVAILABLE
     end
   else
     puts 'You chose not to install Overcommit'
