@@ -14,7 +14,7 @@ plugin_directory: '.git-hooks'
 PostCheckout:
   ALL:
     required: false
-    quiet: true
+    quiet: false
   BundleCheck:
     description: 'Checking Gemfile dependencies'
     include:
