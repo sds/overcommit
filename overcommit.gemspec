@@ -1,4 +1,5 @@
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
+require 'overcommit/constants'
 require 'overcommit/version'
 
 Gem::Specification.new do |s|
@@ -9,7 +10,7 @@ Gem::Specification.new do |s|
   s.description           = 'Utility to install, configure, and extend Git hooks'
   s.authors               = ['Causes Engineering', 'Shane da Silva']
   s.email                 = ['eng@causes.com', 'shane@causes.com']
-  s.homepage              = 'http://github.com/causes/overcommit'
+  s.homepage              = Overcommit::REPO_URL
   s.post_install_message  =
     'Install hooks by running `overcommit --install` in your Git repository'
 
