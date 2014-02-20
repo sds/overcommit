@@ -40,6 +40,14 @@ rescue LoadError
   end
 end
 
+if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
+  puts "Installed version of Overcommit (#{Overcommit::VERSION}) is " <<
+       "incompatible with the installed hooks.\n" <<
+       'Run `gem install overcommit && overcommit --install` to ensure ' <<
+       "you're up-to-date."
+  exit 64 # EX_USAGE
+end
+
 begin
   hook_type_class = Overcommit::Utils.camel_case(hook_type)
 
