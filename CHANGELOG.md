@@ -1,5 +1,25 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Breaking changes: plugin framework has been overhauled.
+  You must now subclass `Overcommit::Hook::<Type>` and implement
+  the method `run` instead of `run_check`. Also, the old hook runner
+  no longer works, so you'll need to remove the hooks installed in
+  `.git/hooks` and install new ones with `overcommit --install`
+* Configuration for repository can be specified via `.overcommit.yml` file
+* Can now skip hooks using just `SKIP` instead of `SKIP_CHECKS` environment
+  variable
+* Add `--template-dir` flag which provides a convenient way to auto-install
+  overcommit via Git template directories
+* Converted all script-based hook scripts to Ruby-based ones
+* `AuthorEmail` check can be customized so emails match a regex
+* `Whitespace` check was split into `HardTabs` and `TrailingWhitespace`
+* Add pre-commit JavaScript style checking with
+  [JSCS](https://github.com/mdevils/node-jscs)
+* Add `BundleCheck` pre-commit hook which checks if `Gemfile.lock` matches
+  `Gemfile`
+
 ## 0.5.0
 
 * Use per-file `.scss-lint.yml` configuration for staged files
