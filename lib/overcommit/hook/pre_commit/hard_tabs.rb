@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       paths = applicable_files.join(' ')
 
       # Catches hard tabs
-      result = command("grep -IHn \"\\t\" #{paths}")
+      result = command("grep -IHn \"\t\" #{paths}")
       unless result.stdout.empty?
         return :bad, "Hard tabs detected:\n#{result.stdout}"
       end
