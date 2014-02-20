@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.6.0
 
 * Breaking changes: plugin framework has been overhauled.
   You must now subclass `Overcommit::Hook::<Type>` and implement
