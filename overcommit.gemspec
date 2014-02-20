@@ -10,6 +10,8 @@ Gem::Specification.new do |s|
   s.authors               = ['Causes Engineering']
   s.email                 = 'eng@causes.com'
   s.homepage              = 'http://github.com/causes/overcommit'
+  s.post_install_message  =
+    'Install hooks by running `overcommit --install` in your Git repository'
 
   s.require_paths         = %w[lib]
 
