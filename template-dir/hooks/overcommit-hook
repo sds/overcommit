@@ -27,6 +27,7 @@ rescue LoadError
 
   if (answer = gets) && answer.strip.downcase.start_with?('y')
     if system('gem install overcommit')
+      Gem.clear_paths # Reset load paths so newly installed gem is found
       require 'overcommit'
     else
       puts 'Unable to install Overcommit'
