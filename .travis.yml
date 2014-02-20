@@ -3,4 +3,7 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
-script: GIT_AUTHOR_NAME="Travis CI" GIT_AUTHOR_EMAIL="travis@ci.com" bundle exec rspec
+before_script:
+  - git config --global user.email "travis@ci.com"
+  - git config --global user.name "Travis CI"
+script: bundle exec rspec
