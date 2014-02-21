@@ -49,16 +49,15 @@ if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
 end
 
 begin
-  hook_type_class = Overcommit::Utils.camel_case(hook_type)
-
-  config = Overcommit::ConfigurationLoader.load_repo_config
-  config.apply_environment!(hook_type_class, ENV)
-
   # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
   Overcommit::Installer.new(Overcommit::Logger.silent).
                         run(Overcommit::Utils.repo_root, :action => :install)
 
-  context = Overcommit::HookContext.create(hook_type_class, config, ARGV, STDIN)
+  config = Overcommit::ConfigurationLoader.load_repo_config
+
+  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
+  config.apply_environment!(context, ENV)
+
   logger = Overcommit::Logger.new(STDOUT)
   runner = Overcommit::HookRunner.new(config, logger, context)
 

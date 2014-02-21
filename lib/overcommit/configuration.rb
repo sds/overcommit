@@ -19,10 +19,11 @@ module Overcommit
     end
 
     # Returns the built-in hooks that have been enabled for a hook type.
-    def enabled_builtin_hooks(hook_type)
-      @hash[hook_type].keys.
+    def enabled_builtin_hooks(hook_context)
+      @hash[hook_context.hook_class_name].keys.
         select { |hook_name| hook_name != 'ALL' }.
-        select { |hook_name| hook_enabled?(hook_type, hook_name) }
+        select { |hook_name| built_in_hook?(hook_context, hook_name) }.
+        select { |hook_name| hook_enabled?(hook_context, hook_name) }
     end
 
     # Returns a non-modifiable configuration for a hook.
@@ -46,13 +47,14 @@ module Overcommit
 
     # Applies additional configuration settings based on the provided
     # environment variables.
-    def apply_environment!(hook_type, env)
+    def apply_environment!(hook_context, env)
       skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(/[:, ]/)
+      hook_type = hook_context.hook_class_name
 
       if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
         @hash[hook_type]['ALL']['skip'] = true
       else
-        skipped_hooks.select { |hook_name| hook_exists?(hook_type, hook_name) }.
+        skipped_hooks.select { |hook_name| hook_exists?(hook_context, hook_name) }.
                       map { |hook_name| Overcommit::Utils.camel_case(hook_name) }.
                       each do |hook_name|
           @hash[hook_type][hook_name] ||= {}
@@ -67,15 +69,28 @@ module Overcommit
 
   private
 
-    def hook_exists?(hook_type, hook_name)
+    def built_in_hook?(hook_context, hook_name)
       hook_name = Overcommit::Utils.snake_case(hook_name)
-      underscored_hook_type = Overcommit::Utils.snake_case(hook_type)
 
       File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
-                            underscored_hook_type, "#{hook_name}.rb"))
+                            hook_context.hook_type_name, "#{hook_name}.rb"))
     end
 
-    def hook_enabled?(hook_type, hook_name)
+    def plugin_hook?(hook_context, hook_name)
+      hook_name = Overcommit::Utils.snake_case(hook_name)
+
+      File.exist?(File.join(plugin_directory,
+                            hook_context.hook_type_name,
+                            "#{hook_name}.rb"))
+    end
+
+    def hook_exists?(hook_context, hook_name)
+      built_in_hook?(hook_context, hook_name) ||
+        plugin_hook?(hook_context, hook_name)
+    end
+
+    def hook_enabled?(hook_context, hook_name)
+      hook_type = hook_context.hook_class_name
       individual_enabled = @hash[hook_type][hook_name]['enabled']
       return individual_enabled unless individual_enabled.nil?
 

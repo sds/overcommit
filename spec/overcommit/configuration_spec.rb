@@ -54,18 +54,24 @@ describe Overcommit::Configuration do
     let(:hash) do
       {
         'PreCommit' => {
-          'SomeHook' => nil,
-          'SomeOtherHook' => {
+          'AuthorName' => nil,
+          'AuthorEmail' => {
             'enabled' => false
           },
         }
       }
     end
 
-    subject { config.enabled_builtin_hooks('PreCommit') }
+    let(:context) { double('context') }
+    subject { config.enabled_builtin_hooks(context) }
+
+    before do
+      context.stub(:hook_class_name => 'PreCommit',
+                   :hook_type_name => 'pre_commit')
+    end
 
     it 'includes hooks that are not disabled' do
-      subject.should == ['SomeHook']
+      subject.should == ['AuthorName']
     end
   end
 
@@ -178,10 +184,13 @@ describe Overcommit::Configuration do
     let(:hash) { {} }
     let(:config) { described_class.new(hash) }
     let!(:old_config) { described_class.new(hash.dup) }
+    let(:context) { double('context') }
     subject { config }
 
     before do
-      config.apply_environment!('PreCommit', env)
+      context.stub(:hook_type_name).and_return('pre_commit')
+      context.stub(:hook_class_name).and_return('PreCommit')
+      config.apply_environment!(context, env)
     end
 
     context 'when no hooks are requested to be skipped' do
