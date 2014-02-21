@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.6.2
 
 * Fix bug where hook run would crash if hook was unsuccessful but returned no
   output
