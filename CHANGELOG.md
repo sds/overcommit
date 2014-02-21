@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix bug where hook run would crash if hook was unsuccessful but returned no
+  output
+
 ## 0.6.1
 
 * Fix bug where a plugin would fail to load if it had a custom configuration

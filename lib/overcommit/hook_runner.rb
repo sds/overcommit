@@ -100,7 +100,7 @@ module Overcommit
     end
 
     def print_report(output, format = :log)
-      log.send(format, output) unless output.empty?
+      log.send(format, output) unless output.nil? || output.empty?
     end
 
     # Loads hooks that will be run.
