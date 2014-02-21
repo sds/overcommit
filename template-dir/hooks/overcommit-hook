@@ -49,10 +49,6 @@ if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
 end
 
 begin
-  # Ensure this script and all symlinks are always up-to-date (it's cheap to do)
-  Overcommit::Installer.new(Overcommit::Logger.silent).
-                        run(Overcommit::Utils.repo_root, :action => :install)
-
   config = Overcommit::ConfigurationLoader.load_repo_config
 
   context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
