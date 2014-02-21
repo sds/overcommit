@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.6.1
 
 * Fix bug where a plugin would fail to load if it had a custom configuration
   defined
