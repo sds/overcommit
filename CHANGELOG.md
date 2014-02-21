@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix bug where a plugin would fail to load if it had a custom configuration
+  defined
+
 ## 0.6.0
 
 * Breaking changes: plugin framework has been overhauled.
