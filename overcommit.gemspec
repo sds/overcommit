@@ -29,5 +29,5 @@ Gem::Specification.new do |s|
   s.add_dependency             'wopen3'
 
   s.add_development_dependency 'rspec', '2.14.1'
-  s.add_development_dependency 'image_optim', '0.10.2'
+  s.add_development_dependency 'image_optim', '0.11.1'
 end
