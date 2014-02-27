@@ -133,7 +133,6 @@ Within a configuration file, the following high-level concepts exist:
   be configured with the following properties:
 
   * `enabled`: if false, this hook will not be enabled
-  * `skip`: if true, this hook will be skipped
   * `required`: if true, this hook cannot be skipped
   * `quiet`: if true, this hook does not display anything unless it fails
   * `description`: text displayed when the hook is running
