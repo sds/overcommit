@@ -109,7 +109,15 @@ repository.
 
 When writing your own configuration, it will automatically extend the
 [default configuration](config/default.yml), so you only need to specify
-your configuration with respect to the default.
+your configuration with respect to the default. In order to
+enable/disable the default hooks, you can add the following to your repo-specific
+configuration file:
+
+```yaml
+PreCommit:
+  Rubocop:
+    enabled: false
+```
 
 Within a configuration file, the following high-level concepts exist:
 
@@ -124,7 +132,9 @@ Within a configuration file, the following high-level concepts exist:
 * **Hook configuration**: Within each hook category, an individual hook can
   be configured with the following properties:
 
-  * `required`: if true, this hook cannot be skipped
+  * `enabled`: if false, this hook will not be enabled
+  * `required`: if true, this hook cannot be skipped via the `SKIP` environment
+    variable
   * `quiet`: if true, this hook does not display anything unless it fails
   * `description`: text displayed when the hook is running
   * `requires_files`: whether this hook should run only if files have been
