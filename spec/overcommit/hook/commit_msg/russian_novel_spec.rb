@@ -20,4 +20,28 @@ describe Overcommit::Hook::CommitMsg::RussianNovel do
 
     it { should warn }
   end
+
+  context 'when a custom maximum length is specified' do
+    let(:config) do
+      super().merge(Overcommit::Configuration.new(
+        'CommitMsg' => {
+          'RussianNovel' => {
+            'max_length' => 75
+          }
+        }
+      ))
+    end
+
+    context 'when message contains fewer than 75 lines' do
+      let(:commit_msg) { ['A single line'] * 10 }
+
+      it { should pass }
+    end
+
+    context 'when message contains at least 75 lines' do
+      let(:commit_msg) { ['A single line'] * 75 }
+
+      it { should warn }
+    end
+  end
 end
