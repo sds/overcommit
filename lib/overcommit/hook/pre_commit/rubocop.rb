@@ -2,11 +2,13 @@ module Overcommit::Hook::PreCommit
   # Runs `rubocop` against any modified Ruby files.
   class Rubocop < Base
     def run
+      puts "IN_PATH? #{in_path?('rubocop')}"
       unless in_path?('rubocop')
         return :warn, 'Rubocop not installed -- run `gem install rubocop`'
       end
 
       result = command("rubocop --format=emacs #{applicable_files.join(' ')} 2>&1")
+      puts "RESULT: #{result.success?}"
       return :good if result.success?
 
       # Keep lines from the output for files that we actually modified
@@ -17,6 +19,8 @@ module Overcommit::Hook::PreCommit
         end
         modified_lines(file).include?(line.to_i)
       end
+
+      puts "ERRORS: #{error_lines.join("\n")}"
 
       return :bad, error_lines.join("\n") unless error_lines.empty?
       return :warn, "Modified files have lints (on lines you didn't modify)\n" <<
