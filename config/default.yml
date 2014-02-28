@@ -134,9 +134,8 @@ CommitMsg:
 
   TextWidth:
     description: 'Checking text width'
-    subject_length: 50
-    commit_message_length: 72
-
+    max_subject_width: 60
+    max_body_width: 72
 
   TrailingPeriod:
     description: 'Checking for trailing periods in subject'

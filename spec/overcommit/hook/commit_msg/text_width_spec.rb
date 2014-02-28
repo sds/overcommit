@@ -9,14 +9,14 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     subject.stub(:commit_message_lines).and_return(commit_msg.split("\n"))
   end
 
-  context 'when subject is longer than 50 characters' do
-    let(:commit_msg) { 'A' * 51 }
+  context 'when subject is longer than 60 characters' do
+    let(:commit_msg) { 'A' * 61 }
 
     it { should warn /subject/ }
   end
 
-  context 'when subject is 50 characters or fewer' do
-    let(:commit_msg) { 'A' * 50 }
+  context 'when subject is 60 characters or fewer' do
+    let(:commit_msg) { 'A' * 60 }
 
     it { should pass }
   end
@@ -48,21 +48,21 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       super().merge(Overcommit::Configuration.new(
         'CommitMsg' => {
           'TextWidth' => {
-            'subject_length' => 60,
-            'commit_message_length' => 80
+            'max_subject_width' => 70,
+            'max_body_width' => 80
           }
         }
       ))
     end
 
-    context 'when subject is longer than 60 characters' do
-      let(:commit_msg) { 'A' * 61 }
+    context 'when subject is longer than 70 characters' do
+      let(:commit_msg) { 'A' * 71 }
 
       it { should warn /subject/ }
     end
 
-    context 'when subject is 60 characters or fewer' do
-      let(:commit_msg) { 'A' * 60 }
+    context 'when subject is 70 characters or fewer' do
+      let(:commit_msg) { 'A' * 70 }
 
       it { should pass }
     end

@@ -3,18 +3,19 @@ module Overcommit::Hook::CommitMsg
   # under the preferred limits.
   class TextWidth < Base
     def run
-      subject_length = @config['subject_length']
-      commit_message_length = @config['commit_message_length']
+      max_subject_width = @config['max_subject_width']
+      max_body_width = @config['max_body_width']
 
-      if commit_message_lines.first.size > subject_length
-        return :warn, "Please keep the subject < ~#{subject_length} characters"
+      if commit_message_lines.first.size > max_subject_width
+        return :warn, "Please keep the subject <= #{max_subject_width} characters"
       end
 
-      commit_message_lines.each do |line|
+      commit_message_lines.each_with_index do |line, index|
         chomped = line.chomp
-        if chomped.size > commit_message_length
-          return :warn, "> #{commit_message_length} characters, " <<
-                        "please hard wrap: '#{chomped}'"
+        if chomped.size > max_body_width
+          return :warn, "Line #{index + 1} of commit message has > " <<
+                        "#{max_body_width} characters, please hard wrap: " <<
+                        "'#{chomped}'"
         end
       end
 
