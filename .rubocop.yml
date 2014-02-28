@@ -1,3 +1,6 @@
+AmbiguousRegexpLiteral:
+  Enabled: false
+
 AccessModifierIndentation:
   EnforcedStyle: outdent
 
