@@ -28,7 +28,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       This line is longer than 72 characters which is clearly be seen by count.
     MSG
 
-    it { should warn /72 char/ }
+    it { should warn('Line 3 of commit message has > 72 characters') }
   end
 
   context 'when all lines in the message are fewer than 72 characters' do
@@ -41,6 +41,21 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     MSG
 
     it { should pass }
+  end
+
+  context 'when subject and a line in the message is longer than the limits' do
+    let(:commit_msg) { <<-MSG }
+      A subject line that is way too long. A subject line that is way too long.
+
+      A message line that is way too long. A message line that is way too long.
+    MSG
+
+    it do
+      should warn(
+        "Please keep the subject <= 60 characters\n" <<
+        "Line 3 of commit message has > 72 characters"
+      )
+    end
   end
 
   context 'when custom lengths are specified' do
@@ -74,7 +89,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
         This line is longer than 80 characters which can clearly be seen by counting the number of characters.
       MSG
 
-      it { should warn /80 char/ }
+      it { should warn('Line 3 of commit message has > 80 characters') }
     end
 
     context 'when all lines in the message are fewer than 80 characters' do
@@ -87,6 +102,21 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       MSG
 
       it { should pass }
+    end
+
+    context 'when subject and a line in the message is longer than the limits' do
+      let(:commit_msg) { <<-MSG }
+        A subject line that is way too long. A subject line that is way too long.
+
+        A message line that is way too long. A message line that is way too long. A message line that is way too long.
+      MSG
+
+      it do
+        should warn(
+          "Please keep the subject <= 70 characters\n" <<
+          "Line 3 of commit message has > 80 characters"
+        )
+      end
     end
   end
 end

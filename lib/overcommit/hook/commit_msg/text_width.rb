@@ -3,21 +3,27 @@ module Overcommit::Hook::CommitMsg
   # under the preferred limits.
   class TextWidth < Base
     def run
+      errors = []
+
       max_subject_width = @config['max_subject_width']
       max_body_width = @config['max_body_width']
 
       if commit_message_lines.first.size > max_subject_width
-        return :warn, "Please keep the subject <= #{max_subject_width} characters"
+        errors << "Please keep the subject <= #{max_subject_width} characters"
       end
 
-      commit_message_lines.each_with_index do |line, index|
-        chomped = line.chomp
-        if chomped.size > max_body_width
-          return :warn, "Line #{index + 1} of commit message has > " <<
-                        "#{max_body_width} characters, please hard wrap: " <<
-                        "'#{chomped}'"
+      if commit_message_lines.size > 2
+        commit_message_lines[2..-1].each_with_index do |line, index|
+          chomped = line.chomp
+          if chomped.size > max_body_width
+            error = "Line #{index + 3} of commit message has > " <<
+                    "#{max_body_width} characters"
+            errors << error
+          end
         end
       end
+
+      return :warn, errors.join("\n") if errors.any?
 
       :good
     end
