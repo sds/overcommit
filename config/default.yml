@@ -63,6 +63,7 @@ PreCommit:
     include: '**/*.css'
 
   HamlLint:
+    enabled: false
     description: 'Analyzing with haml-lint'
     include: '**/*.haml'
 
