@@ -6,12 +6,15 @@ module Overcommit::Hook::PreCommit
         return :warn, 'haml-lint not installed -- run `gem install haml-lint`'
       end
 
-      result = command("haml-lint #{applicable_files.join(' ')}")
+      command_string =
+        "haml-lint --exclude-lint RubyScript #{applicable_files.join(' ')}"
+      result = command(command_string)
       return :good if result.success?
 
       # Keep lines from the output for files that we actually modified
       error_lines, warning_lines = result.stdout.split("\n").partition do |output_line|
-        if match = output_line.match(/^([^:]+):(\d+)/)
+        match = output_line.match(/^([^:]+):(\d+)/)
+        if match
           file = match[1]
           line = match[2]
         end

@@ -63,6 +63,7 @@ PreCommit:
     include: '**/*.css'
 
   HamlLint:
+    enabled: false
     description: 'Analyzing with haml-lint'
     include: '**/*.haml'
 
@@ -108,6 +109,17 @@ PreCommit:
   YamlSyntax:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
+
+  LineLength:
+    description: 'Checking for long lines'
+    quiet: false
+    max: 89
+    exclude:
+      - '**/*.rb'
+      - '**/*.gif'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.png'
 
 # Hooks that are run against every commit message after a user has written it.
 # These hooks are useful for enforcing policies on commit messages written for a
