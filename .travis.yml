@@ -3,6 +3,7 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
+  - 2.1.0
 before_script:
   - git config --global user.email "travis@ci.com"
   - git config --global user.name "Travis CI"
