@@ -11,7 +11,8 @@ module Overcommit::HookContext
     def setup_environment
       store_modified_times
 
-      if modified_files.any?
+      if any_changes?
+        @changes_stashed = true
         `git stash save --keep-index --quiet #{<<-MSG}`
           "Overcommit: Stash of repo state before hook run at #{Time.now}"
         MSG
@@ -24,8 +25,11 @@ module Overcommit::HookContext
     # Restore unstaged changes and reset file modification times so it appears
     # as if nothing ever changed.
     def cleanup_environment
-      `git reset --hard`
-      `git stash pop --index --quiet` if modified_files.any?
+      `git reset --hard` # Ensure working tree is clean before popping stash
+
+      if @changes_stashed
+        `git stash pop --index --quiet`
+      end
 
       restore_modified_times
     end
@@ -47,6 +51,12 @@ module Overcommit::HookContext
     end
 
   private
+
+    # Returns whether there are any changes between the working tree or index
+    # and HEAD.
+    def any_changes?
+      !`git diff --name-only --ignore-submodules=all HEAD`.strip.empty?
+    end
 
     DIFF_HUNK_REGEX = /
       ^@@\s

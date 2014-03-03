@@ -4,6 +4,8 @@
 
 * `TextWidth` pre-commit hook now supports customized maximum subject line
   and commit message body widths
+* Fix bug where committing a change with only file deletions would result
+  in those changes not being committed
 
 ## 0.6.2
 

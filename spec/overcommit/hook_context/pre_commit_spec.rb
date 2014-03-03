@@ -132,6 +132,23 @@ describe Overcommit::HookContext::PreCommit do
           to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
       end
     end
+
+    context 'when there were deleted files' do
+      around do |example|
+        repo do
+          `echo "Hello World" > tracked-file`
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          `git rm tracked-file`
+          example.run
+        end
+      end
+
+      it 'deletes the file' do
+        subject
+        File.exist?('tracked-file').should be_false
+      end
+    end
   end
 
   describe '#modified_files' do
