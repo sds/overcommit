@@ -7,7 +7,7 @@ module Overcommit::Hook::PostCheckout
         return :warn, 'bundler not installed -- run `gem install bundler`'
       end
 
-      return :bad if dependencies_changed? && !dependencies_satisfied?
+      return :warn if dependencies_changed? && !dependencies_satisfied?
 
       :good
     end
