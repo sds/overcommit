@@ -43,7 +43,7 @@ describe Overcommit::Hook::PostCheckout::BundleCheck do
     context 'and the dependencies are not satisfied' do
       let(:satisfied) { false }
 
-      it { should fail_check }
+      it { should warn }
     end
   end
 end

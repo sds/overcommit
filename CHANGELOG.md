@@ -6,6 +6,8 @@
   and commit message body widths
 * Fix bug where committing a change with only file deletions would result
   in those changes not being committed
+* Warn instead of failing when gem dependencies are out of date in
+  `BundleCheck` post-checkout hook
 
 ## 0.6.2
 
