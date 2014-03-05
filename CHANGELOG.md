@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.6.3
 
 * `TextWidth` pre-commit hook now supports customized maximum subject line
   and commit message body widths
