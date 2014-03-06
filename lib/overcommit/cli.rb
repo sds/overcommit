@@ -81,6 +81,9 @@ module Overcommit
         rescue Overcommit::Exceptions::InvalidGitRepo => error
           log.warning "Invalid repo #{target}: #{error}"
           halt 69 # EX_UNAVAILABLE
+        rescue Overcommit::Exceptions::PreExistingHooks => error
+          log.warning "Unable to install into #{target}: #{error}"
+          halt 73 # EX_CANTCREAT
         end
       end
     end

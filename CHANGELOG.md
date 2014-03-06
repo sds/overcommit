@@ -6,6 +6,8 @@
   instead of a shell string
 * Rename `command` hook helper to `execute`
 * Add support for JRuby 1.7.9 in Ruby 1.9 mode
+* Display more helpful error message when installing Overcommit into a repo
+  that already has non-Overcommit hooks
 
 ## 0.6.3
 
