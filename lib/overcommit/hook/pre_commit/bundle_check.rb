@@ -8,14 +8,14 @@ module Overcommit::Hook::PreCommit
       end
 
       # Ignore if Gemfile.lock is not tracked by git
-      return :good if command(%w[git check-ignore] + [LOCK_FILE]).success?
+      return :good if execute(%w[git check-ignore] + [LOCK_FILE]).success?
 
-      result = command(%w[bundle check])
+      result = execute(%w[bundle check])
       unless result.success?
         return :bad, result.stdout
       end
 
-      result = command(%w[git diff --quiet --] + [LOCK_FILE])
+      result = execute(%w[git diff --quiet --] + [LOCK_FILE])
       unless result.success?
         return :bad, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
       end

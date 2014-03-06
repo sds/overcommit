@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'jscs not installed -- run `npm install -g jscs`'
       end
 
-      result = command(%w[jscs --reporter=inline] + applicable_files)
+      result = execute(%w[jscs --reporter=inline] + applicable_files)
       return :good if result.success?
 
       if /Config.*not found/i =~ result.stderr

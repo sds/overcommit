@@ -15,7 +15,7 @@ module Overcommit::Hook::PostCheckout
   private
 
     def dependencies_changed?
-      result = command(%w[git diff --exit-code --name-only] + [new_head, previous_head])
+      result = execute(%w[git diff --exit-code --name-only] + [new_head, previous_head])
 
       result.stdout.split("\n").any? do |file|
         Array(@config['include']).any? { |glob| File.fnmatch(glob, file) }
@@ -23,7 +23,7 @@ module Overcommit::Hook::PostCheckout
     end
 
     def dependencies_satisfied?
-      command(%w[bundle check]).success?
+      execute(%w[bundle check]).success?
     end
   end
 end

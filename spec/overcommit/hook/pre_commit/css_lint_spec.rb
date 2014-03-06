@@ -22,7 +22,7 @@ describe Overcommit::Hook::PreCommit::CssLint do
     before do
       result = double('result')
       result.stub(:stdout).and_return('')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
@@ -32,7 +32,7 @@ describe Overcommit::Hook::PreCommit::CssLint do
     before do
       result = double('result')
       result.stub(:stdout).and_return('Error - @charset not allowed here')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should fail_check }

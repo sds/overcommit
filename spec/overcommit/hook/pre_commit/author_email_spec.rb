@@ -8,7 +8,7 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
 
   before do
     result.stub(:stdout).and_return(email)
-    subject.stub(:command).and_return(result)
+    subject.stub(:execute).and_return(result)
   end
 
   context 'when user has no email' do

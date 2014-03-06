@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'csslint not installed -- run `npm install -g csslint`'
       end
 
-      result = command(%w[csslint --quiet --format=compact] + applicable_files)
+      result = execute(%w[csslint --quiet --format=compact] + applicable_files)
       output = result.stdout
       return (output !~ /Error - (?!Unknown @ rule)/ ? :good : :bad), output
     end

@@ -23,7 +23,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
       result = double('result')
       result.stub(:success? => false,
                   :stderr => 'Configuration file some-path/.jscs.json was not found.')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should warn }
@@ -34,7 +34,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
 
     before do
       result.stub(:success? => false, :stderr => '')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     context 'and it reports lines that were not modified by the commit' do

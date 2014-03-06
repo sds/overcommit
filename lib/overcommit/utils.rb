@@ -62,7 +62,7 @@ module Overcommit
       # Overcommit to call other Ruby executables without requiring that they be
       # specified in Overcommit's Gemfile--a nasty consequence of using
       # `bundle exec overcommit` while developing locally.
-      def command(args)
+      def execute(args)
         with_environment 'RUBYOPT' => nil do
           Subprocess.spawn(args)
         end

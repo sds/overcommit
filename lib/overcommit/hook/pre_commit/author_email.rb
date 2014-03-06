@@ -2,7 +2,7 @@ module Overcommit::Hook::PreCommit
   # Checks the format of an author's email address.
   class AuthorEmail < Base
     def run
-      result = command(%w[git config --get user.email])
+      result = execute(%w[git config --get user.email])
       email = result.stdout.chomp
 
       unless email =~ /#{@config['pattern']}/

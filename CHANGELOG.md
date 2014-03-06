@@ -4,6 +4,7 @@
 
 * Change `command` hook helper signature to accept an array of arguments
   instead of a shell string
+* Rename `command` hook helper to `execute`
 * Add support for JRuby 1.7.9 in Ruby 1.9 mode
 
 ## 0.6.3

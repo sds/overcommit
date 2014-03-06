@@ -22,7 +22,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
     before do
       result = double('result')
       result.stub(:success?).and_return(true)
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
@@ -33,7 +33,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
 
     before do
       result.stub(:success?).and_return(false)
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     context 'and it reports lines that were not modified by the commit' do

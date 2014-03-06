@@ -51,8 +51,8 @@ module Overcommit::Hook
       Overcommit::Utils.in_path?(cmd)
     end
 
-    def command(cmd)
-      Overcommit::Utils.command(cmd)
+    def execute(cmd)
+      Overcommit::Utils.execute(cmd)
     end
 
     # Gets a list of staged files that apply to this hook based on its

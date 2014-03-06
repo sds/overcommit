@@ -7,7 +7,7 @@ module Overcommit::Hook::CommitMsg
   # edit the message after a prepare-commit-msg hook was run.
   class GerritChangeId < Base
     def run
-      result = command([SCRIPT_LOCATION, commit_message_file])
+      result = execute([SCRIPT_LOCATION, commit_message_file])
       return (result.success? ? :good : :bad), result.stdout
     end
 

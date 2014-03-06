@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'scss-lint not installed -- run `gem install scss-lint`'
       end
 
-      result = command(%w[scss-lint] + applicable_files)
+      result = execute(%w[scss-lint] + applicable_files)
       return :good if result.success?
 
       # Keep lines from the output for files that we actually modified

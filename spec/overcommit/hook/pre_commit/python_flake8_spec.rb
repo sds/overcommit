@@ -23,7 +23,7 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
       result = double('result')
       result.stub(:success?).and_return(true)
       result.stub(:stdout)
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
@@ -34,7 +34,7 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
       result = double('result')
       result.stub(:success?).and_return(false)
       result.stub(:stdout)
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should fail_check }

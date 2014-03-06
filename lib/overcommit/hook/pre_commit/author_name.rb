@@ -2,7 +2,7 @@ module Overcommit::Hook::PreCommit
   # Ensures that a commit author has a name with at least first and last names.
   class AuthorName < Base
     def run
-      result = command(%w[git config --get user.name])
+      result = execute(%w[git config --get user.name])
       name = result.stdout.chomp
 
       unless name.split(' ').count >= 2

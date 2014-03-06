@@ -37,8 +37,8 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
 
     before do
       result.stub(:success? => success, :stdout => 'Bundler error message')
-      subject.stub(:command).and_call_original
-      subject.stub(:command).with(%w[bundle check]).and_return(result)
+      subject.stub(:execute).and_call_original
+      subject.stub(:execute).with(%w[bundle check]).and_return(result)
     end
 
     context 'and bundle check exits unsuccessfully' do

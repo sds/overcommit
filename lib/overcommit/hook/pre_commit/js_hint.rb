@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'jshint not installed -- run `npm install -g jshint`'
       end
 
-      result = command(%w[jshint] + applicable_files)
+      result = execute(%w[jshint] + applicable_files)
       output = result.stdout
 
       return (output.empty? ? :good : :bad), output

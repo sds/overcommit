@@ -8,7 +8,7 @@ describe Overcommit::Hook::PreCommit::AuthorName do
 
   before do
     result.stub(:stdout).and_return(name)
-    subject.stub(:command).and_return(result)
+    subject.stub(:execute).and_return(result)
   end
 
   context 'when user has no name' do

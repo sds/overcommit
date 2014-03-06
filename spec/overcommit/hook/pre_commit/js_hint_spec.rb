@@ -22,7 +22,7 @@ describe Overcommit::Hook::PreCommit::JsHint do
     before do
       result = double('result')
       result.stub(:stdout).and_return('')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
@@ -32,7 +32,7 @@ describe Overcommit::Hook::PreCommit::JsHint do
     before do
       result = double('result')
       result.stub(:stdout).and_return('Undefined variable')
-      subject.stub(:command).and_return(result)
+      subject.stub(:execute).and_return(result)
     end
 
     it { should fail_check }
