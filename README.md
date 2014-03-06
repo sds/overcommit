@@ -36,6 +36,7 @@ The following Ruby versions are supported:
 * 1.9.3
 * 2.0.0
 * 2.1.0
+* JRuby 1.7.9 in Ruby 1.9 mode
 
 ### Dependencies
 
