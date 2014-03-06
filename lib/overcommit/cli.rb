@@ -45,6 +45,10 @@ module Overcommit
           @options[:action] = :install
         end
 
+        opts.on('-f', '--force', 'Overwrite any previously installed hooks') do
+          @options[:force] = true
+        end
+
         opts.on('-t', '--template-dir', 'Print location of template directory') do
           @options[:action] = :template_dir
         end

@@ -8,6 +8,8 @@
 * Add support for JRuby 1.7.9 in Ruby 1.9 mode
 * Display more helpful error message when installing Overcommit into a repo
   that already has non-Overcommit hooks
+* Add `--force` flag allowing Overcommit to be installed in repositories that
+  already contain non-Overcommit hooks (overwriting them in the process)
 
 ## 0.6.3
 

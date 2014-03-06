@@ -81,6 +81,13 @@ describe Overcommit::Installer do
             it 'does not raise an error' do
               expect { subject }.to_not raise_error
             end
+
+            it 'symlinks all supported hooks to the master hook' do
+              subject
+              Overcommit::Utils.supported_hook_types.all? do |hook_type|
+                File.readlink(File.join(hooks_dir, hook_type)) == 'overcommit-hook'
+              end
+            end
           end
         end
       end

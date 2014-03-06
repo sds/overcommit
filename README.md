@@ -90,6 +90,7 @@ Command Line Flag         | Description
 --------------------------|----------------------------------------------------
 `-i`/`--install`          | Install Overcommit hooks in a repository
 `-u`/`--uninstall`        | Remove Overcommit hooks from a repository
+`-f`/`--force`            | Don't bail on install if other hooks already exist--overwrite them
 `-t`/`--template-dir`     | Print location of template directory
 `-h`/`--help`             | Show command-line flag documentation
 `-v`/`--version`          | Show version
