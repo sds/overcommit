@@ -32,6 +32,9 @@ MethodLength:
 SignalException:
   Enabled: false
 
+SpecialGlobalVars:
+  Enabled: false
+
 TrailingComma:
   Enabled: false
 
