@@ -1,8 +1,8 @@
-require 'wopen3'
+require 'overcommit/subprocess'
 
 # Helpers for executing shell commands in tests.
 module ShellHelpers
   def shell(command)
-    Wopen3.system(command)
+    Overcommit::Subprocess.spawn(command)
   end
 end

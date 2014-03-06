@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'flake8 not installed -- run `pip install flake8`'
       end
 
-      result = command("flake8 #{applicable_files.join(' ')}")
+      result = command(%w[flake8] + applicable_files)
 
       return (result.success? ? :good : :bad), result.stdout
     end

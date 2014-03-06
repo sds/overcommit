@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'commiting' do
-  subject { shell('git commit --allow-empty -m "Test"') }
+  subject { shell(%w[git commit --allow-empty -m Test]) }
 
   let(:config) { <<-YML }
     CommitMsg:

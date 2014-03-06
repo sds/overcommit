@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'haml-lint not installed -- run `gem install haml-lint`'
       end
 
-      result = command("haml-lint #{applicable_files.join(' ')}")
+      result = command(%w[haml-lint] + applicable_files)
       return :good if result.success?
 
       # Keep lines from the output for files that we actually modified

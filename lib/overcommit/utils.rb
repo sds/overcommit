@@ -1,4 +1,4 @@
-require 'wopen3'
+require 'overcommit/subprocess'
 
 module Overcommit
   # Utility functions for general use.
@@ -62,9 +62,9 @@ module Overcommit
       # Overcommit to call other Ruby executables without requiring that they be
       # specified in Overcommit's Gemfile--a nasty consequence of using
       # `bundle exec overcommit` while developing locally.
-      def command(command)
+      def command(args)
         with_environment 'RUBYOPT' => nil do
-          Wopen3.system(command)
+          Subprocess.spawn(args)
         end
       end
 

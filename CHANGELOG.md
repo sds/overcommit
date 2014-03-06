@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Change `command` hook helper signature to accept an array of arguments
+  instead of a shell string
+
 ## 0.6.3
 
 * `TextWidth` pre-commit hook now supports customized maximum subject line

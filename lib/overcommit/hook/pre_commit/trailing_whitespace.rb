@@ -2,9 +2,7 @@ module Overcommit::Hook::PreCommit
   # Checks for trailing whitespace in files.
   class TrailingWhitespace < Base
     def run
-      paths = applicable_files.join(' ')
-
-      result = command("grep -IHn \"\\s$\" #{paths}")
+      result = command(%w[grep -IHn \s$] + applicable_files)
       unless result.stdout.empty?
         return :bad, "Trailing whitespace detected:\n#{result.stdout}"
       end

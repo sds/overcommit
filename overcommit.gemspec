@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.8.7'
 
-  s.add_dependency             'wopen3'
+  s.add_dependency             'childprocess', '>= 0.5.1'
 
   s.add_development_dependency 'rspec', '2.14.1'
   s.add_development_dependency 'image_optim', '0.11.1'

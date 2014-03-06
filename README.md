@@ -29,7 +29,13 @@ about Overcommit on our [engineering blog](http://causes.github.io).
 
 ## Requirements
 
-* Ruby 1.8.7+ is supported
+The following Ruby versions are supported:
+
+* 1.8.7
+* 1.9.2
+* 1.9.3
+* 2.0.0
+* 2.1.0
 
 ### Dependencies
 

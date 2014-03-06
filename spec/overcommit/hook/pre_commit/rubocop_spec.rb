@@ -41,6 +41,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
         result.stub(:stdout).and_return([
           'file1.rb:1:1: C: Missing top-level class documentation',
         ].join("\n"))
+        result.stub(:stderr).and_return('')
 
         subject.stub(:modified_lines).and_return([2, 3])
       end
@@ -53,6 +54,7 @@ describe Overcommit::Hook::PreCommit::Rubocop do
         result.stub(:stdout).and_return([
           'file1.rb:1:1: C: Missing top-level class documentation',
         ].join("\n"))
+        result.stub(:stderr).and_return('')
 
         subject.stub(:modified_lines).and_return([1, 2])
       end

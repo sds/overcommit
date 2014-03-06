@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'Run `npm install -g coffeelint`'
       end
 
-      result = command("coffeelint --quiet #{applicable_files.join(' ')}")
+      result = command(%w[coffeelint --quiet] + applicable_files)
       return :good if result.success?
       return :bad, result.stdout
     end
