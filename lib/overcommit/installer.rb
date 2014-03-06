@@ -101,6 +101,10 @@ module Overcommit
 
     def overcommit_symlink?(file)
       File.symlink?(file) && File.readlink(file) == 'overcommit-hook'
+    rescue Errno::ENOENT
+      # Some Ruby implementations (e.g. JRuby) raise an error when the file
+      # doesn't exist. Standardize the behavior to return false.
+      false
     end
   end
 end
