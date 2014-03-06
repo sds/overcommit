@@ -29,6 +29,9 @@ LineLength:
 MethodLength:
   Max: 20
 
+SignalException:
+  Enabled: false
+
 TrailingComma:
   Enabled: false
 
