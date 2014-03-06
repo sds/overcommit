@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.7.0
 
 * Change `command` hook helper signature to accept an array of arguments
   instead of a shell string
