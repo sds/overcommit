@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add pre-commit `TravisLint` hook which uses the
+  [travis-lint](https://github.com/travis-ci/travis-lint) gem
+
 ## 0.7.0
 
 * Change `command` hook helper signature to accept an array of arguments

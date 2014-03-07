@@ -105,6 +105,10 @@ PreCommit:
   TrailingWhitespace:
     description: 'Checking for trailing whitespace'
 
+  TravisLint:
+    description: 'Checking Travis CI configuration'
+    include: '.travis.yml'
+
   YamlSyntax:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
