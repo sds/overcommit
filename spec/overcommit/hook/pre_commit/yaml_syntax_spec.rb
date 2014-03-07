@@ -23,6 +23,6 @@ describe Overcommit::Hook::PreCommit::YamlSyntax do
       YAML.stub(:load_file).with(staged_file).and_raise(ArgumentError)
     end
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 end

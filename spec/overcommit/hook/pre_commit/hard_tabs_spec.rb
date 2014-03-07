@@ -21,7 +21,7 @@ describe Overcommit::Hook::PreCommit::HardTabs do
   context 'when file contains hard tabs' do
     let(:contents) { "Some\thard\ttabs" }
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when file has no hard tabs' do

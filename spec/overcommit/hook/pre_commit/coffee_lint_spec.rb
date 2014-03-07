@@ -36,6 +36,6 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 end

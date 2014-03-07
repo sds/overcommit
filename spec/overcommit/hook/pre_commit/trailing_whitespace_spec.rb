@@ -21,13 +21,13 @@ describe Overcommit::Hook::PreCommit::TrailingWhitespace do
   context 'when file contains trailing whitespace' do
     let(:contents) { 'Some trailing whitespace   ' }
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when file contains trailing tabs' do
     let(:contents) { "Some trailing tabs\t\t" }
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when file has no invalid whitespace' do

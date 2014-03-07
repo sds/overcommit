@@ -36,6 +36,6 @@ describe Overcommit::Hook::PreCommit::TravisLint do
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_check 'Some error message' }
+    it { should fail_hook 'Some error message' }
   end
 end

@@ -15,7 +15,7 @@ describe Overcommit::Hook::PreCommit::ImageOptim do
       subject.stub(:optimize_images).and_raise(::ImageOptim::BinNotFoundError)
     end
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when an image was optimized' do
@@ -23,7 +23,7 @@ describe Overcommit::Hook::PreCommit::ImageOptim do
       subject.stub(:optimize_images).and_return(['file1.jpg'])
     end
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when no images were optimized' do

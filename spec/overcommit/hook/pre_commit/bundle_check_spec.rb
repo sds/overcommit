@@ -44,7 +44,7 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
     context 'and bundle check exits unsuccessfully' do
       let(:success) { false }
 
-      it { should fail_check }
+      it { should fail_hook }
     end
 
     context 'and bundle check exist successfully' do

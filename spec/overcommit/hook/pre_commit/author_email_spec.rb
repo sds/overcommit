@@ -14,13 +14,13 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
   context 'when user has no email' do
     let(:email) { '' }
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when user has an invalid email' do
     let(:email) { 'Invalid Email' }
 
-    it { should fail_check }
+    it { should fail_hook }
   end
 
   context 'when user has a valid email' do
@@ -43,7 +43,7 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
     context 'and the email does not match the pattern' do
       let(:email) { 'email@example.com' }
 
-      it { should fail_check }
+      it { should fail_hook }
     end
 
     context 'and the email matches the pattern' do

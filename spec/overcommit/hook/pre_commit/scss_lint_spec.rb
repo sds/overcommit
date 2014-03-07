@@ -57,7 +57,7 @@ describe Overcommit::Hook::PreCommit::ScssLint do
         subject.stub(:modified_lines).and_return([1, 2])
       end
 
-      it { should fail_check }
+      it { should fail_hook }
     end
   end
 end

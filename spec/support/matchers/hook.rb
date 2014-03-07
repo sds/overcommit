@@ -1,4 +1,5 @@
-class CheckMatcher
+# General spec matcher logic for checking hook status and output.
+class HookMatcher
   def initialize(options)
     @expected_status = options[:status]
     @expected_message = options[:message]
@@ -16,9 +17,11 @@ class CheckMatcher
   def message_matches?(actual_message)
     return true if @expected_message.nil?
 
-    @expected_message.is_a?(Regexp) ?
-      actual_message =~ @expected_message :
+    if @expected_message.is_a?(Regexp)
+      actual_message =~ @expected_message
+    else
       actual_message == @expected_message
+    end
   end
 
   def failure_message(actual, error_message)
@@ -35,8 +38,8 @@ class CheckMatcher
 end
 
 # Can't use 'fail' as it is a reserved word.
-RSpec::Matchers.define :fail_check  do |message|
-  check_matcher = CheckMatcher.new(:status => :bad, :message => message)
+RSpec::Matchers.define :fail_hook  do |message|
+  check_matcher = HookMatcher.new(:status => :bad, :message => message)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -57,7 +60,7 @@ RSpec::Matchers.define :fail_check  do |message|
 end
 
 RSpec::Matchers.define :pass do |message|
-  check_matcher = CheckMatcher.new(:status => :good, :message => message)
+  check_matcher = HookMatcher.new(:status => :good, :message => message)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -78,7 +81,7 @@ RSpec::Matchers.define :pass do |message|
 end
 
 RSpec::Matchers.define :warn do |message|
-  check_matcher = CheckMatcher.new(:status => :warn, :message => message)
+  check_matcher = HookMatcher.new(:status => :warn, :message => message)
 
   match do |check|
     check_matcher.matches?(check)
