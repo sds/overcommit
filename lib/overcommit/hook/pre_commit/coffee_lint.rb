@@ -8,7 +8,8 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[coffeelint --quiet] + applicable_files)
       return :good if result.success?
-      return :bad, result.stdout
+
+      [:bad, result.stdout]
     end
   end
 end

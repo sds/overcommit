@@ -1,4 +1,6 @@
 module Overcommit::HookContext
+  # Contains helpers related to contextual information used by post-checkout
+  # hooks.
   class PostCheckout < Base
     # Returns the ref of the HEAD that we transitioned from.
     def previous_head

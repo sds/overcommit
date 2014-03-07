@@ -78,7 +78,8 @@ module Overcommit
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           unless can_replace_file?(hook_type)
             raise Overcommit::Exceptions::PreExistingHooks,
-                  "Hook '#{File.expand_path(hook_type)}' already exists and was not installed by Overcommit"
+                  "Hook '#{File.expand_path(hook_type)}' already exists and " <<
+                  'was not installed by Overcommit'
           end
           FileUtils.ln_sf('overcommit-hook', hook_type)
         end

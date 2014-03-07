@@ -81,7 +81,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       let(:commit_msg) { <<-MSG }
         Some summary
 
-        This line is longer than 80 characters which can clearly be seen by counting the number of characters.
+        This line is longer than #{'A' * 80} characters.
       MSG
 
       it { should warn 'Line 3 of commit message has > 80 characters' }
@@ -103,7 +103,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       let(:commit_msg) { <<-MSG }
         A subject line that is way too long. A subject line that is way too long.
 
-        A message line that is way too long. A message line that is way too long. A message line that is way too long.
+        This line is longer than #{'A' * 80} characters.
       MSG
 
       it { should warn /keep.*subject <= 70.*\n.*line 3.*> 80.*/im }

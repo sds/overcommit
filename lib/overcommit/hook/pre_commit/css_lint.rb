@@ -7,8 +7,9 @@ module Overcommit::Hook::PreCommit
       end
 
       result = execute(%w[csslint --quiet --format=compact] + applicable_files)
-      output = result.stdout
-      return (output !~ /Error - (?!Unknown @ rule)/ ? :good : :bad), output
+      return :good if result.stdout !~ /Error - (?!Unknown @ rule)/
+
+      [:bad, result.stdout]
     end
   end
 end

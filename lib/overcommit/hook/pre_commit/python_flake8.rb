@@ -7,8 +7,9 @@ module Overcommit::Hook::PreCommit
       end
 
       result = execute(%w[flake8] + applicable_files)
+      return :good if result.success?
 
-      return (result.success? ? :good : :bad), result.stdout
+      [:bad, result.stdout]
     end
   end
 end

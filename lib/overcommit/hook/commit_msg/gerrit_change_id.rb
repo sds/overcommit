@@ -8,7 +8,9 @@ module Overcommit::Hook::CommitMsg
   class GerritChangeId < Base
     def run
       result = execute([SCRIPT_LOCATION, commit_message_file])
-      return (result.success? ? :good : :bad), result.stdout
+      return :good if result.success?
+
+      [:bad, result.stdout]
     end
 
   private

@@ -8,7 +8,8 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[travis-lint] + applicable_files)
       return :good if result.success?
-      return :bad, result.stdout.strip
+
+      [:bad, result.stdout.strip]
     end
   end
 end
