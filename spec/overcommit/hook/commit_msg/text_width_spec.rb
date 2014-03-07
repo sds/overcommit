@@ -84,7 +84,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
         This line is longer than 80 characters which can clearly be seen by counting the number of characters.
       MSG
 
-      it { should warn('Line 3 of commit message has > 80 characters') }
+      it { should warn 'Line 3 of commit message has > 80 characters' }
     end
 
     context 'when all lines in the message are fewer than 80 characters' do

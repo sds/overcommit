@@ -1,7 +1,8 @@
 # General spec matcher logic for checking hook status and output.
 class HookMatcher
-  def initialize(options)
-    @expected_status = options[:status]
+  def initialize(status, args)
+    options = args.empty? ? {} : { :message => args.first }
+    @expected_status = status
     @expected_message = options[:message]
   end
 
@@ -38,8 +39,8 @@ class HookMatcher
 end
 
 # Can't use 'fail' as it is a reserved word.
-RSpec::Matchers.define :fail_hook  do |message|
-  check_matcher = HookMatcher.new(:status => :bad, :message => message)
+RSpec::Matchers.define :fail_hook  do |*args|
+  check_matcher = HookMatcher.new(:bad, args)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -59,8 +60,8 @@ RSpec::Matchers.define :fail_hook  do |message|
   description { 'fail' }
 end
 
-RSpec::Matchers.define :pass do |message|
-  check_matcher = HookMatcher.new(:status => :good, :message => message)
+RSpec::Matchers.define :pass do |*args|
+  check_matcher = HookMatcher.new(:good, args)
 
   match do |check|
     check_matcher.matches?(actual)
@@ -80,8 +81,8 @@ RSpec::Matchers.define :pass do |message|
   description { 'pass the check' }
 end
 
-RSpec::Matchers.define :warn do |message|
-  check_matcher = HookMatcher.new(:status => :warn, :message => message)
+RSpec::Matchers.define :warn do |*args|
+  check_matcher = HookMatcher.new(:warn, args)
 
   match do |check|
     check_matcher.matches?(check)
