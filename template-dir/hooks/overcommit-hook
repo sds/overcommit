@@ -26,6 +26,7 @@ rescue LoadError
   STDIN.reopen('/dev/tty') if STDIN.eof?
 
   if (answer = gets) && answer.strip.downcase.start_with?('y')
+    puts 'Installing...'
     if system('gem install overcommit')
       Gem.clear_paths # Reset load paths so newly installed gem is found
       require 'overcommit'
