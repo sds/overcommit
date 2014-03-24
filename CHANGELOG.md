@@ -4,6 +4,8 @@
 
 * Add pre-commit `TravisLint` hook which uses the
   [travis-lint](https://github.com/travis-ci/travis-lint) gem
+* Display actual warning message when dependencies aren't satisifed in
+  post-checkout `BundleCheck` hook
 
 ## 0.7.0
 

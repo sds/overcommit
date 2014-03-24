@@ -7,12 +7,16 @@ module Overcommit::Hook::PostCheckout
         return :warn, 'bundler not installed -- run `gem install bundler`'
       end
 
-      return :warn if dependencies_changed? && !dependencies_satisfied?
+      if dependencies_changed? && !dependencies_satisfied?
+        return :warn, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
+      end
 
       :good
     end
 
   private
+
+    LOCK_FILE = 'Gemfile.lock'
 
     def dependencies_changed?
       result = execute(%w[git diff --exit-code --name-only] + [new_head, previous_head])
