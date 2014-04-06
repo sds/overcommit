@@ -98,6 +98,12 @@ PreCommit:
   MergeConflicts:
     description: 'Checking for merge conflicts'
 
+  PryBinding:
+    description: 'Checking for instances of binding.pry'
+    include:
+      - '**/*.rb'
+      - '**/*.rake'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'
