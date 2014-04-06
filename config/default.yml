@@ -53,6 +53,11 @@ PreCommit:
     required: true
     quiet: true
 
+  Brakeman:
+    description: 'Checking for security vulnerabilities'
+    include:
+      - '**/*.rb'
+
   BundleCheck:
     description: 'Checking Gemfile dependencies'
     include:
