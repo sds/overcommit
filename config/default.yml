@@ -91,6 +91,10 @@ PreCommit:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
 
+  JsonSyntax:
+    description: 'Validating JSON syntax'
+    include: '**/*.json'
+
   JsxHint:
     description: 'Analyzing with JSXHint'
     include: '**/*.jsx'

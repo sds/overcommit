@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.8.7'
 
   s.add_dependency             'childprocess', '>= 0.5.1'
+  s.add_dependency             'json', '>= 1.8' # For 1.8.7. support only
 
   s.add_development_dependency 'rspec', '2.14.1'
   s.add_development_dependency 'image_optim', '~> 0.13.0'
