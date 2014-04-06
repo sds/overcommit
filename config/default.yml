@@ -66,6 +66,11 @@ PreCommit:
       - 'Gemfile.lock'
       - '*.gemspec'
 
+  ChamberSecurity:
+    enabled: false
+    description: 'Checking that settings have been secured with Chamber'
+    include: 'config/settings.yml'
+
   CoffeeLint:
     description: 'Analyzing with coffeelint'
     include: '**/*.coffee'
