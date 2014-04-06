@@ -102,6 +102,13 @@ PreCommit:
     description: 'Analyzing with flake8'
     include: '**/*.py'
 
+  RailsSchemaUpToDate:
+    description: 'Checking if database schema is up to date'
+    include:
+      - 'db/migrate/*.rb'
+      - 'db/schema.rb'
+      - 'db/structure.sql'
+
   Rubocop:
     description: 'Analyzing with Rubocop'
     include:
