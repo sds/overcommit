@@ -95,6 +95,10 @@ PreCommit:
     description: 'Analyzing with JSXHint'
     include: '**/*.jsx'
 
+  LocalPathsInGemfile:
+    description: 'Checking for references to local paths in your Gemfile'
+    include: '**/Gemfile'
+
   MergeConflicts:
     description: 'Checking for merge conflicts'
 
