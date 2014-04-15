@@ -18,6 +18,10 @@ module Overcommit
       File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.githooks')
     end
 
+    def verify_plugin_signatures?
+      @hash['verify_plugin_signatures'] != false
+    end
+
     # Returns the built-in hooks that have been enabled for a hook type.
     def enabled_builtin_hooks(hook_context)
       @hash[hook_context.hook_class_name].keys.

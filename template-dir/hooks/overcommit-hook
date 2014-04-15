@@ -68,6 +68,9 @@ rescue Overcommit::Exceptions::HookContextLoadError => error
   puts error
   puts 'Are you running an old version of Overcommit?'
   exit 69 # EX_UNAVAILABLE
+rescue Overcommit::Exceptions::HookCancelled
+  puts 'You cancelled the hook run'
+  exit 1
 rescue Overcommit::Exceptions::InvalidGitRepo => error
   puts error
   exit 64 # EX_USAGE

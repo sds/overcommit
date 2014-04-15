@@ -3,9 +3,11 @@ module Overcommit::HookLoader
   class Base
     # @param config [Overcommit::Configuration]
     # @param context [Overcommit::HookContext]
-    def initialize(config, context)
+    # @param logger [Overcommit::Logger]
+    def initialize(config, context, logger)
       @config = config
       @context = context
+      @log = logger
     end
 
     # When implemented in subclasses, loads the hooks for which that subclass is
@@ -17,6 +19,8 @@ module Overcommit::HookLoader
     end
 
   private
+
+    attr_reader :log
 
     # Load and return a {Hook} from a CamelCase hook name.
     def create_hook(hook_name)

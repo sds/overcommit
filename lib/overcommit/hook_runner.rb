@@ -13,8 +13,8 @@ module Overcommit
 
     # Loads and runs the hooks registered for this {HookRunner}.
     def run
-      load_hooks
       @context.setup_environment
+      load_hooks
       run_hooks
     ensure
       @context.cleanup_environment
@@ -114,10 +114,10 @@ module Overcommit
     def load_hooks
       require "overcommit/hook/#{@context.hook_type_name}/base"
 
-      @hooks += HookLoader::BuiltInHookLoader.new(@config, @context).load_hooks
+      @hooks += HookLoader::BuiltInHookLoader.new(@config, @context, @log).load_hooks
 
       # Load plugin hooks after so they can subclass existing hooks
-      @hooks += HookLoader::PluginHookLoader.new(@config, @context).load_hooks
+      @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log).load_hooks
     end
 
     def hook_script_name

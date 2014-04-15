@@ -23,6 +23,7 @@ about Overcommit on our [engineering blog](http://causes.github.io).
 * [Configuration](#configuration)
 * [Built-In Hooks](#built-in-hooks)
 * [Repo-Specific Hooks](#repo-specific-hooks)
+* [Security](#security)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -208,6 +209,40 @@ PreCommit:
     description: 'Checking for missing inclusion of spec_helper'
     include: '**/*_spec.rb'
 ```
+
+## Security
+
+While Overcommit can make managing Git hooks easier and more convenient,
+this convenience can come at a cost of being less secure.
+
+Since installing Overcommit hooks will allow arbitrary plugin code in your
+repository to be executed, you expose yourself to an attack where checking
+out code from a third party can result in malicious code being executed
+on your system.
+
+As an example, consider the situation where you have an open source project.
+An attacker could submit a pull request which adds a `post-checkout` hook
+that executes some malicious code. When you fetch and checkout this pull
+request, the `post-checkout` hook will be run on your machine, along with
+the malicious code that you just checked out.
+
+Overcommit attempts to address this problem by storing a signature of all
+hook plugins since the last time it ran the plugin. When the signature
+changes, a warning is displayed alerting you to which plugins have changed.
+It is then up to you to manually verify that the changes are not malicious,
+and then continue running the hooks.
+
+The signature is derived from the contents of the plugin's source code itself
+and any configuration for the plugin. Thus a change to the plugin's source
+code or your local repo's `.overcommit.yml` file could result in a signature
+change.
+
+### Disabling Signature Checking
+
+Users who work within proprietary repositories where all developers who can
+push changes to the repository are already given a minimum security clearance
+may wish to disable this check. While not recommended, you can disable
+signature verification by setting `verify_plugin_signatures` to `false`.
 
 ## Contributing
 

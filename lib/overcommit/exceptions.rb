@@ -2,6 +2,12 @@ module Overcommit::Exceptions
   # Raised when a {Configuration} could not be loaded from a file.
   class ConfigurationError < StandardError; end
 
+  # Raised when trying to read/write to/from the local repo git config fails.
+  class GitConfigError < StandardError; end
+
+  # Raised when a hook run was cancelled by the user.
+  class HookCancelled < StandardError; end
+
   # Raised when a hook could not be loaded by a {HookRunner}.
   class HookLoadError < StandardError; end
 
