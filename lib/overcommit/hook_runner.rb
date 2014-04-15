@@ -26,7 +26,7 @@ module Overcommit
 
     def run_hooks
       if @hooks.any? { |hook| hook.run? || hook.skip? }
-        log.bold "Running #{@context.hook_script_name} hooks"
+        log.bold "Running #{hook_script_name} hooks"
 
         statuses = @hooks.map { |hook| run_hook(hook) }.compact
 
@@ -35,16 +35,16 @@ module Overcommit
         run_failed = statuses.include?(:bad)
 
         if run_failed
-          log.error "✗ One or more #{@context.hook_script_name} hooks failed"
+          log.error "✗ One or more #{hook_script_name} hooks failed"
         else
-          log.success "✓ All #{@context.hook_script_name} hooks passed"
+          log.success "✓ All #{hook_script_name} hooks passed"
         end
 
         log.log # Newline
 
         !run_failed
       else
-        log.success "✓ No applicable #{@context.hook_script_name} hooks to run"
+        log.success "✓ No applicable #{hook_script_name} hooks to run"
         true # Run was successful
       end
     end
@@ -107,7 +107,7 @@ module Overcommit
     # This is done explicitly so that we only load hooks which will actually be
     # used.
     def load_hooks
-      require "overcommit/hook/#{@context.hook_type_name}/base"
+      require "overcommit/hook/#{hook_type_name}/base"
 
       load_builtin_hooks
       load_hook_plugins # Load after so they can subclass/modify existing hooks
@@ -118,14 +118,14 @@ module Overcommit
     def load_builtin_hooks
       @config.enabled_builtin_hooks(@context).each do |hook_name|
         underscored_hook_name = Overcommit::Utils.snake_case(hook_name)
-        require "overcommit/hook/#{@context.hook_type_name}/#{underscored_hook_name}"
+        require "overcommit/hook/#{hook_type_name}/#{underscored_hook_name}"
         @hooks << create_hook(hook_name)
       end
     end
 
     # Load hooks that are stored in the repository's plugin directory.
     def load_hook_plugins
-      directory = File.join(@config.plugin_directory, @context.hook_type_name)
+      directory = File.join(@config.plugin_directory, hook_type_name)
 
       Dir[File.join(directory, '*.rb')].sort.each do |plugin|
         require plugin
@@ -145,6 +145,14 @@ module Overcommit
       raise Overcommit::Exceptions::HookLoadError,
             "Unable to load hook '#{hook_name}': #{error}",
             error.backtrace
+    end
+
+    def hook_type_name
+      @context.hook_type_name
+    end
+
+    def hook_script_name
+      @context.hook_script_name
     end
   end
 end
