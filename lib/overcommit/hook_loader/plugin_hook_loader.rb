@@ -1,7 +1,7 @@
-module Overcommit
-  # Responsible for loading hooks that are specific the repository Overcommit is
-  # running in.
-  class PluginHookLoader < HookLoader
+module Overcommit::HookLoader
+  # Responsible for loading hooks that are specific to the repository Overcommit
+  # is running in.
+  class PluginHookLoader < Base
     def load_hooks
       directory = File.join(@config.plugin_directory, @context.hook_type_name)
 

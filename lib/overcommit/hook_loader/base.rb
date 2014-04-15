@@ -1,6 +1,6 @@
-module Overcommit
+module Overcommit::HookLoader
   # Responsible for loading hooks from a file.
-  class HookLoader
+  class Base
     # @param config [Overcommit::Configuration]
     # @param context [Overcommit::HookContext]
     def initialize(config, context)

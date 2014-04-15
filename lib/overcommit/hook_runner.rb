@@ -114,10 +114,10 @@ module Overcommit
     def load_hooks
       require "overcommit/hook/#{@context.hook_type_name}/base"
 
-      @hooks += BuiltInHookLoader.new(@config, @context).load_hooks
+      @hooks += HookLoader::BuiltInHookLoader.new(@config, @context).load_hooks
 
       # Load plugin hooks after so they can subclass existing hooks
-      @hooks += PluginHookLoader.new(@config, @context).load_hooks
+      @hooks += HookLoader::PluginHookLoader.new(@config, @context).load_hooks
     end
 
     def hook_script_name

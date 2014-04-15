@@ -1,6 +1,6 @@
-module Overcommit
+module Overcommit::HookLoader
   # Responsible for loading hooks that ship with Overcommit.
-  class BuiltInHookLoader < HookLoader
+  class BuiltInHookLoader < Base
     def load_hooks
       @config.enabled_builtin_hooks(@context).map do |hook_name|
         underscored_hook_name = Overcommit::Utils.snake_case(hook_name)
