@@ -50,18 +50,7 @@ module Overcommit
     end
 
     def run_hook(hook)
-      return unless hook.enabled?
-
-      if hook.skip?
-        if hook.required?
-          log.warning "Cannot skip #{hook.name} since it is required"
-        else
-          log.warning "Skipping #{hook.name}"
-          return
-        end
-      end
-
-      return unless hook.run?
+      return if should_skip?(hook)
 
       unless hook.quiet?
         print_header(hook)
@@ -80,6 +69,32 @@ module Overcommit
         print_header(hook)
       end
 
+      print_result(hook, status, output)
+
+      status
+    end
+
+    def print_header(hook)
+      log.partial hook.description
+      log.partial '.' * (70 - hook.description.length)
+    end
+
+    def should_skip?(hook)
+      return true unless hook.enabled?
+
+      if hook.skip?
+        if hook.required?
+          log.warning "Cannot skip #{hook.name} since it is required"
+        else
+          log.warning "Skipping #{hook.name}"
+          return true
+        end
+      end
+
+      !hook.run?
+    end
+
+    def print_result(hook, status, output)
       case status
       when :good
         log.success 'OK' unless hook.quiet?
@@ -90,13 +105,6 @@ module Overcommit
         log.error 'FAILED'
         print_report(output, :bold_error)
       end
-
-      status
-    end
-
-    def print_header(hook)
-      log.partial hook.description
-      log.partial '.' * (70 - hook.description.length)
     end
 
     def print_report(output, format = :log)
