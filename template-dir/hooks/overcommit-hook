@@ -56,7 +56,9 @@ begin
   config.apply_environment!(context, ENV)
 
   logger = Overcommit::Logger.new(STDOUT)
-  runner = Overcommit::HookRunner.new(config, logger, context)
+  input = Overcommit::UserInput.new(STDIN)
+
+  runner = Overcommit::HookRunner.new(config, logger, context, input)
 
   status = runner.run
 

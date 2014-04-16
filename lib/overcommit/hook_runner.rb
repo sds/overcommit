@@ -4,10 +4,15 @@ module Overcommit
   # Responsible for loading the hooks the repository has configured and running
   # them, collecting and displaying the results.
   class HookRunner
-    def initialize(config, logger, context)
+    # @param config [Overcommit::Configuration]
+    # @param logger [Overcommit::Logger]
+    # @param context [Overcommit::HookContext]
+    # @param input [Overcommit::UserInput]
+    def initialize(config, logger, context, input)
       @config = config
       @log = logger
       @context = context
+      @input = input
       @hooks = []
     end
 
@@ -114,10 +119,10 @@ module Overcommit
     def load_hooks
       require "overcommit/hook/#{@context.hook_type_name}/base"
 
-      @hooks += HookLoader::BuiltInHookLoader.new(@config, @context, @log).load_hooks
+      @hooks += HookLoader::BuiltInHookLoader.new(@config, @context, @log, @input).load_hooks
 
       # Load plugin hooks after so they can subclass existing hooks
-      @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log).load_hooks
+      @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log, @input).load_hooks
     end
 
     def hook_script_name

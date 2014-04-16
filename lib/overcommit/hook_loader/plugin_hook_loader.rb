@@ -40,10 +40,7 @@ module Overcommit::HookLoader
       log.log
       log.partial 'Continue? (y/n) '
 
-      # If the hook isn't interactive, we need to map STDIN to keyboard manually
-      STDIN.reopen('/dev/tty') if STDIN.eof?
-
-      unless (answer = gets) && answer.strip.downcase.start_with?('y')
+      unless (answer = @input.get) && answer.strip.downcase.start_with?('y')
         raise Overcommit::Exceptions::HookCancelled
       end
 
