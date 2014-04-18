@@ -18,7 +18,9 @@ module Overcommit
     # Git hooks are not interactive and will close STDIN by default.
     def reopen_tty
       # If the hook isn't interactive, we need to map STDIN to keyboard manually
-      STDIN.reopen('/dev/tty') if STDIN.tty? && STDIN.eof?
+      STDIN.reopen('/dev/tty') if STDIN.eof?
+    rescue
+      # Happens in tests run with no console available
     end
   end
 end
