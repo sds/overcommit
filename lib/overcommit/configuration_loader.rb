@@ -9,7 +9,7 @@ module Overcommit
     def self.load_repo_config
       overcommit_yml = File.join(Overcommit::Utils.repo_root, FILE_NAME)
 
-      if File.exists?(overcommit_yml)
+      if File.exist?(overcommit_yml)
         load_file(overcommit_yml)
       else
         default_configuration

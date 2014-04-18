@@ -102,14 +102,14 @@ describe Overcommit::Installer do
 
           it 'removes the master hook from the hooks directory' do
             expect { subject }.to change {
-              File.exists?(File.join(hooks_dir, 'overcommit-hook'))
+              File.exist?(File.join(hooks_dir, 'overcommit-hook'))
             }.from(true).to(false)
           end
 
           it 'removes all symlinks from the hooks directory' do
             expect { subject }.to change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                File.exists?(File.join(hooks_dir, hook_type))
+                File.exist?(File.join(hooks_dir, hook_type))
               end
             }.from(true).to(false)
           end
@@ -132,7 +132,7 @@ describe Overcommit::Installer do
           it 'does not remove the previously existing hooks' do
             expect { subject }.to_not change {
               %w[commit-msg pre-commit].all? do |hook_type|
-                File.exists?(File.join(hooks_dir, hook_type))
+                File.exist?(File.join(hooks_dir, hook_type))
               end
             }
           end
