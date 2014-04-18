@@ -11,7 +11,7 @@ end
 
 hook_type = File.basename($0)
 if hook_type == 'overcommit-hook'
-  puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " <<
+  puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " \
        "by each hook in a repository's .git/hooks directory."
   exit 64 # EX_USAGE
 end
@@ -19,7 +19,7 @@ end
 begin
   require 'overcommit'
 rescue LoadError
-  puts 'Overcommit is not installed. Install it to manage git hooks for ' <<
+  puts 'Overcommit is not installed. Install it to manage git hooks for ' \
        'this repository? (y/n)'
 
   # If the hook isn't interactive, we need to map STDIN to keyboard manually
@@ -42,9 +42,9 @@ rescue LoadError
 end
 
 if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
-  puts "Installed version of Overcommit (#{Overcommit::VERSION}) is " <<
-       "incompatible with the installed hooks.\n" <<
-       'Run `gem install overcommit && overcommit --install` to ensure ' <<
+  puts "Installed version of Overcommit (#{Overcommit::VERSION}) is " \
+       "incompatible with the installed hooks.\n" \
+       'Run `gem install overcommit && overcommit --install` to ensure ' \
        "you're up-to-date."
   exit 64 # EX_USAGE
 end
