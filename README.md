@@ -239,10 +239,13 @@ change.
 
 ### Disabling Signature Checking
 
-Users who work within proprietary repositories where all developers who can
-push changes to the repository are already given a minimum security clearance
-may wish to disable this check. While not recommended, you can disable
-signature verification by setting `verify_plugin_signatures` to `false`.
+In typical usage, your plugins usually don't change too often, so this warning
+shouldn't become a nuisance. However, users who work within proprietary
+repositories where all developers who can push changes to the repository
+already have a minimum security clearance may wish to disable this check.
+
+While not recommended, you can disable signature verification by setting
+`verify_plugin_signatures` to `false` in your `.overcommit.yml` file.
 
 ## Contributing
 
