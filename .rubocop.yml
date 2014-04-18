@@ -24,6 +24,13 @@ Documentation:
 DotPosition:
   Enabled: false
 
+FileName:
+  Exclude:
+    - 'template-dir/hooks/*'
+    - 'Gemfile'
+    - 'Rakefile'
+    - '*.gemspec'
+
 FormatString:
   Enabled: false
 
