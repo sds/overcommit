@@ -6,15 +6,13 @@ module Overcommit::Hook::CommitMsg
   # you need to do it in a commit-msg hook. This is because the user could still
   # edit the message after a prepare-commit-msg hook was run.
   class GerritChangeId < Base
+    SCRIPT_LOCATION = Overcommit::Utils.script_path('gerrit-change-id')
+
     def run
       result = execute([SCRIPT_LOCATION, commit_message_file])
       return :good if result.success?
 
       [:bad, result.stdout]
     end
-
-  private
-
-    SCRIPT_LOCATION = Overcommit::Utils.script_path('gerrit-change-id')
   end
 end

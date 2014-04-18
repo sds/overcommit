@@ -2,6 +2,8 @@ module Overcommit::Hook::PreCommit
   # Check if local Gemfile.lock matches Gemfile when either changes, unless
   # Gemfile.lock is ignored by git.
   class BundleCheck < Base
+    LOCK_FILE = 'Gemfile.lock'
+
     def run
       unless in_path?('bundle')
         return :warn, 'bundler not installed -- run `gem install bundler`'
@@ -22,9 +24,5 @@ module Overcommit::Hook::PreCommit
 
       :good
     end
-
-  private
-
-    LOCK_FILE = 'Gemfile.lock'
   end
 end
