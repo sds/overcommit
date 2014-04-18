@@ -3,6 +3,9 @@ require 'fileutils'
 module Overcommit
   # Manages the installation of Overcommit hooks in a git repository.
   class Installer
+    MASTER_HOOK =
+      File.join(OVERCOMMIT_HOME, 'template-dir', 'hooks', 'overcommit-hook')
+
     def initialize(logger)
       @log = logger
     end
@@ -11,7 +14,13 @@ module Overcommit
       @target = target
       @options = options
       validate_target
-      @options[:action] == :uninstall ? uninstall : install
+
+      case @options[:action]
+      when :uninstall then uninstall
+      when :update then update
+      else
+        install
+      end
     end
 
   private
@@ -37,9 +46,22 @@ module Overcommit
       log.success "Successfully removed hooks from #{@target}"
     end
 
+    # @return [true,false] whether the hooks were updated
+    def update
+      unless FileUtils.compare_file(MASTER_HOOK, master_hook_install_path)
+        install_master_hook
+        install_hook_symlinks
+        true
+      end
+    end
+
     def hooks_path
       absolute_target = File.expand_path(@target)
       File.join(absolute_target, '.git', 'hooks')
+    end
+
+    def master_hook_install_path
+      File.join(hooks_path, 'overcommit-hook')
     end
 
     def ensure_hooks_directory
@@ -59,15 +81,12 @@ module Overcommit
     end
 
     def install_master_hook
-      master_hook = File.join(OVERCOMMIT_HOME, 'template-dir', 'hooks', 'overcommit-hook')
-      install_location = File.join(hooks_path, 'overcommit-hook')
       FileUtils.mkdir_p(hooks_path)
-      FileUtils.cp(master_hook, install_location)
+      FileUtils.cp(MASTER_HOOK, master_hook_install_path)
     end
 
     def uninstall_master_hook
-      install_location = File.join(hooks_path, 'overcommit-hook')
-      FileUtils.rm_rf(install_location)
+      FileUtils.rm_rf(master_hook_install_path)
     end
 
     def install_hook_symlinks
@@ -78,7 +97,7 @@ module Overcommit
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           unless can_replace_file?(hook_type)
             raise Overcommit::Exceptions::PreExistingHooks,
-                  "Hook '#{File.expand_path(hook_type)}' already exists and " <<
+                  "Hook '#{File.expand_path(hook_type)}' already exists and " \
                   'was not installed by Overcommit'
           end
           FileUtils.ln_sf('overcommit-hook', hook_type)
@@ -88,7 +107,7 @@ module Overcommit
 
     def can_replace_file?(file)
       @options[:force] ||
-        !File.exists?(file) ||
+        !File.exist?(file) ||
         overcommit_symlink?(file)
     end
 

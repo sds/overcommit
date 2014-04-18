@@ -50,12 +50,19 @@ if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
 end
 
 begin
+  logger = Overcommit::Logger.new(STDOUT)
+
+  # Ensure master hook is up-to-date
+  installer = Overcommit::Installer.new(logger)
+  if installer.run(Overcommit::Utils.repo_root, :action => :update)
+    exec $0 # Execute the updated hook
+  end
+
   config = Overcommit::ConfigurationLoader.load_repo_config
 
   context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
   config.apply_environment!(context, ENV)
 
-  logger = Overcommit::Logger.new(STDOUT)
   input = Overcommit::UserInput.new(STDIN)
 
   runner = Overcommit::HookRunner.new(config, logger, context, input)
