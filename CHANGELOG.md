@@ -4,8 +4,15 @@
 
 * Add pre-commit `TravisLint` hook which uses the
   [travis-lint](https://github.com/travis-ci/travis-lint) gem
-* Display actual warning message when dependencies aren't satisifed in
+* Display actual warning message when dependencies aren't satisfied in
   post-checkout `BundleCheck` hook
+* Add support for hook plugin signature verification so that you don't
+  automatically execute repo-specific hooks that changed since you last
+  ran them. See [Security](https://github.com/causes/overcommit#security)
+  for more information
+* Automatically update `overcommit-hook` master hook and any other symlinks
+  before hook run. Run `overcommit --install` if you're upgrading to save
+  you from having to run `overcommit --install` in the future
 
 ## 0.7.0
 
