@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.8.0
 
 * Add pre-commit `TravisLint` hook which uses the
   [travis-lint](https://github.com/travis-ci/travis-lint) gem
