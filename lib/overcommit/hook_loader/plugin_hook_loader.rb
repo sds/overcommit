@@ -6,32 +6,33 @@ module Overcommit::HookLoader
   class PluginHookLoader < Base
     def load_hooks
       directory = File.join(@config.plugin_directory, @context.hook_type_name)
-
       plugin_paths = Dir[File.join(directory, '*.rb')].sort
 
       check_for_modified_plugins(plugin_paths) if @config.verify_plugin_signatures?
 
       plugin_paths.map do |plugin_path|
         require plugin_path
-        create_hook(hook_name(plugin_path))
+
+        hook_name = Overcommit::Utils.camel_case(File.basename(plugin_path, '.rb'))
+        create_hook(hook_name)
       end
     end
 
   private
 
     def check_for_modified_plugins(plugin_paths)
-      modified_plugins = plugin_paths.select do |plugin_path|
-        signature_changed?(plugin_path)
-      end
+      modified_plugins = plugin_paths.
+        map { |path| Overcommit::HookSigner.new(path, @config, @context) }.
+        select { |signer| signer.signature_changed? }
 
       return if modified_plugins.empty?
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
-                       "have been added or changed:"
+                       "have been added, changed, or had their configuration modified:"
       log.log
 
-      modified_plugins.each do |plugin_path|
-        log.warning " * #{hook_name(plugin_path)} in #{plugin_path}"
+      modified_plugins.each do |signer|
+        log.warning " * #{signer.hook_name} in #{signer.hook_path}"
       end
 
       log.log
@@ -44,57 +45,7 @@ module Overcommit::HookLoader
         raise Overcommit::Exceptions::HookCancelled
       end
 
-      modified_plugins.each { |plugin_path| update_signature(plugin_path) }
-    end
-
-    def hook_name(plugin_path)
-      Overcommit::Utils.camel_case(File.basename(plugin_path, '.rb'))
-    end
-
-    def signature_changed?(plugin_path)
-      calculate_signature(plugin_path) != stored_signature(plugin_path)
-    end
-
-    # Calculates a hash of a plugin using a combination of its configuration and
-    # file contents.
-    #
-    # This way, if either the plugin code changes or its configuration changes,
-    # the hash will change and we can alert the user to this change.
-    def calculate_signature(plugin_path)
-      hook_config = @config.for_hook(hook_name(plugin_path), @context.hook_class_name)
-
-      Digest::SHA256.hexdigest(File.open(plugin_path, 'r').read + hook_config.to_s)
-    end
-
-    def stored_signature(plugin_path)
-      result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key(plugin_path)]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return ''
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
-      end
-
-      result.stdout.chomp
-    end
-
-    def update_signature(plugin_path)
-      result = Overcommit::Utils.execute(
-        %w[git config --local] +
-        [signature_config_key(plugin_path), calculate_signature(plugin_path)]
-      )
-
-      unless result.success?
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to write to local repo git config: #{result.stderr}"
-      end
-    end
-
-    def signature_config_key(plugin_path)
-      "overcommit.#{@context.hook_class_name}.#{hook_name(plugin_path)}.signature"
+      modified_plugins.each { |signer| signer.update_signature! }
     end
   end
 end
