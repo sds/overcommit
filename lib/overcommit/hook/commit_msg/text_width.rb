@@ -16,7 +16,7 @@ module Overcommit::Hook::CommitMsg
         commit_message_lines[2..-1].each_with_index do |line, index|
           chomped = line.chomp
           if chomped.size > max_body_width
-            error = "Line #{index + 3} of commit message has > " <<
+            error = "Line #{index + 3} of commit message has > " \
                     "#{max_body_width} characters"
             errors << error
           end

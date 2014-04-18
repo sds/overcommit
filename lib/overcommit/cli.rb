@@ -74,7 +74,7 @@ module Overcommit
 
       if @options[:targets].empty?
         log.warning 'You are not in a git repository.'
-        log.log 'You must either specify the path to a repository or ' <<
+        log.log 'You must either specify the path to a repository or ' \
                 'change your current directory to a repository.'
         halt 64 # EX_USAGE
       end
