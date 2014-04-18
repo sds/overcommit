@@ -8,13 +8,13 @@ describe Overcommit::HookContext::CommitMsg do
   let(:context) { described_class.new(config, args, input) }
   let(:commit_msg) do
     [
-    '# Please enter the commit message for your changes.',
-    'Some commit message',
-    '# On branch master',
-    'diff --git a/file b/file',
-    'index 4ae1030..342a117 100644',
-    '--- a/file',
-    '+++ b/file',
+      '# Please enter the commit message for your changes.',
+      'Some commit message',
+      '# On branch master',
+      'diff --git a/file b/file',
+      'index 4ae1030..342a117 100644',
+      '--- a/file',
+      '+++ b/file',
     ]
   end
 
