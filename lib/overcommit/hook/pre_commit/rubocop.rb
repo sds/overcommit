@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'Rubocop not installed -- run `gem install rubocop`'
       end
 
-      result = execute(%w[rubocop --format=emacs] + applicable_files)
+      result = execute(%w[rubocop --format=emacs --force-exclusion] + applicable_files)
       return :good if result.success?
 
       output = result.stdout + result.stderr

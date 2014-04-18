@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Include `--force-exclusion` flag in Rubocop hook so files excluded via
+  `.rubocop.yml` are actually excluded
+
 ## 0.8.0
 
 * Add pre-commit `TravisLint` hook which uses the
