@@ -91,6 +91,10 @@ PreCommit:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
 
+  JsxHint:
+    description: 'Analyzing with JSXHint'
+    include: '**/*.jsx'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'

@@ -4,6 +4,8 @@
 
 * Include `--force-exclusion` flag in Rubocop hook so files excluded via
   `.rubocop.yml` are actually excluded
+* Add pre-commit `JsxHint` hook which uses the
+  [JSXHint](https://github.com/STRML/JSXHint) project
 
 ## 0.8.0
 
