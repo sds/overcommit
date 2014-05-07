@@ -6,6 +6,8 @@
   `.rubocop.yml` are actually excluded
 * Add pre-commit `JsxHint` hook which uses the
   [JSXHint](https://github.com/STRML/JSXHint) project
+* Add pre-commit `BerksfileCheck` hook which warns you when your
+  `Berksfile.lock` is out of sync with your `Berksfile`
 
 ## 0.8.0
 
