@@ -6,14 +6,14 @@ module Overcommit::Hook::PreCommit
       result = execute(%w{
                          grep
                          -nIHE
-                         '^\s*((f?specify)|(f?example)|(f?describe)|(f?context)|(f?feature)|(f?scenario)|(f?it))'
+                         ^\s*((f?specify)|(f?example)|(f?describe)|(f?context)|(f?feature)|(f?scenario)|(f?it))
                        } +
                        applicable_files +
                        %w{
                          |
                          grep
                          -E
-                         '(:focused\s*=>)|(:focus\s*=>)|(focus:)|(focused:)|(:\d+:\s*fit\s)'
+                         (:focused\s*=>)|(:focus\s*=>)|(focus:)|(focused:)|(:\d+:\s*fit\s)
                        })
 
       unless result.stdout.empty?
