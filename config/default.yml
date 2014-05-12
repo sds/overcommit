@@ -85,6 +85,11 @@ PreCommit:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
 
+  PryBinding:
+    description: 'Checking for instances of binding.pry'
+    include: '**/*.rb'
+    include: '**/*.rake'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'
