@@ -95,6 +95,9 @@ PreCommit:
     description: 'Analyzing with JSXHint'
     include: '**/*.jsx'
 
+  MergeConflicts:
+    description: 'Checking for merge conflicts'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'
