@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
 
       applicable_files.each do |file|
         begin
-          File.open(file) {|io| JSON.load(io)}
+          File.open(file) { |io| JSON.load(io) }
         rescue JSON::ParserError => e
           output << "#{e.message} parsing #{file}"
         end
