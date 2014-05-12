@@ -85,6 +85,10 @@ PreCommit:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
 
+  LocalPathsInGemfile:
+    description: 'Checking for references to local paths in your Gemfile'
+    include: '**/Gemfile'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'
