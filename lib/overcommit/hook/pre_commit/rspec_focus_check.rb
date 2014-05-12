@@ -4,16 +4,17 @@ module Overcommit::Hook::PreCommit
   class RspecFocusCheck < Base
     def run
       result = execute(%w{
-                           grep
-                           -nIHE
-                           '^\s*((describe)|(context)|(feature)|(scenario)|(f?it))'
-                           scout_spec.rb
-                           |
-                           grep
-                           -E
-                           '(:focused\s*=>)|(:focus\s*=>)|(focus:)|(focused:)|(:\d+:\s*fit\s)'
-                         } +
-                         applicable_files)
+                         grep
+                         -nIHE
+                         '^\s*((describe)|(context)|(feature)|(scenario)|(f?it))'
+                       } +
+                       applicable_files +
+                       %w{
+                         |
+                         grep
+                         -E
+                         '(:focused\s*=>)|(:focus\s*=>)|(focus:)|(focused:)|(:\d+:\s*fit\s)'
+                       })
 
       unless result.stdout.empty?
         return :bad, "Focused RSpec spec found:\n#{result.stdout}"
