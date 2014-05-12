@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w{
                          grep
                          -nIHE
-                         '^\s*((describe)|(context)|(feature)|(scenario)|(f?it))'
+                         '^\s*((f?specify)|(f?example)|(f?describe)|(f?context)|(f?feature)|(f?scenario)|(f?it))'
                        } +
                        applicable_files +
                        %w{
