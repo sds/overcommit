@@ -85,6 +85,10 @@ PreCommit:
     description: 'Analyzing with JSHint'
     include: '**/*.js'
 
+  JsonSyntax:
+    description: 'Validating JSON syntax'
+    include: '**/*.json'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     include: '**/*.py'
