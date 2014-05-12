@@ -1,7 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Look for the multiple ways that you can focus specs with RSpec and make sure
   # that none exist.
-  class RspecFocusCheck < Base
+  class RspecFocus < Base
     def run
       result = execute(%w{
                          grep
