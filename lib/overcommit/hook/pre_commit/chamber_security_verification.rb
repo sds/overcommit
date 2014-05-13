@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'Run `gem install chamber`'
       end
 
-      result = execute(%w[chamber secure --dry-run --files] + applicable_files)
+      result = execute(%w[chamber secure --echo --files] + applicable_files)
 
       if result.stdout.empty?
         :good
