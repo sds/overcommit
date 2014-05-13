@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
         return :warn, 'Run `gem install brakeman`'
       end
 
-      result = execute(%w[brakeman --exit-on-warn --quiet --summary])
+      result = execute(%w[brakeman --exit-on-warn --quiet --summary --only-files] + applicable_files)
 
       if result.success?
         :good
