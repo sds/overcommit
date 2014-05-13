@@ -1,7 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `chamber secure` against any modified conventional Chamber settings
   # files
-  class ChamberSecurityVerification < Base
+  class ChamberSecurity < Base
     def run
       unless in_path?('chamber')
         return :warn, 'Run `gem install chamber`'
