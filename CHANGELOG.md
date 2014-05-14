@@ -14,6 +14,8 @@
   incorrectly warn about the hook's configuration having changed
 * Add `MergeConflicts` pre-commit hook which checks for unresolved merge
   conflicts in files
+* Add `RailsSchemaUpToDate` pre-commit hook which checks for
+  `schema.rb`/`structure.sql` that aren't up-to-date with the latest migration
 
 ## 0.8.0
 
