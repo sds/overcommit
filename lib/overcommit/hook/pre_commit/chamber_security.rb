@@ -1,6 +1,5 @@
 module Overcommit::Hook::PreCommit
-  # Runs `chamber secure` against any modified conventional Chamber settings
-  # files
+  # Runs `chamber secure` against any modified Chamber settings files
   class ChamberSecurity < Base
     def run
       unless in_path?('chamber')
@@ -9,11 +8,8 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[chamber secure --echo --files] + applicable_files)
 
-      if result.stdout.empty?
-        :good
-      else
-        [:bad, "These settings appear to need to be secured but were not: #{result.stdout}"]
-      end
+      return :good if result.stdout.empty?
+      [:bad, "These settings appear to need to be secured but were not: #{result.stdout}"]
     end
   end
 end
