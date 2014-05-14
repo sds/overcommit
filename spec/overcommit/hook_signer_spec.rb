@@ -45,6 +45,12 @@ describe Overcommit::HookSigner do
 
     context 'when the hook code and config are the same' do
       it { should be_false }
+
+      context 'and the user has specified they wish to skip the hook' do
+        let(:modified_hook_config) { hook_config.merge('skip' => true) }
+
+        it { should be_false }
+      end
     end
 
     context 'when the hook code has changed' do

@@ -3,6 +3,10 @@ module Overcommit
   class HookSigner
     attr_reader :hook_path, :hook_name
 
+    # We don't want to include the skip setting as it is set by Overcommit
+    # itself
+    IGNORED_CONFIG_KEYS = %w[skip]
+
     # @param hook_path [String] path to the actual hook definition
     # @param config [Overcommit::Configuration]
     # @param context [Overcommit::HookContext]
@@ -42,7 +46,9 @@ module Overcommit
     # This way, if either the plugin code changes or its configuration changes,
     # the hash will change and we can alert the user to this change.
     def signature
-      hook_config = @config.for_hook(@hook_name, @context.hook_class_name)
+      hook_config = @config.for_hook(@hook_name, @context.hook_class_name).
+                            dup.
+                            tap { |config| IGNORED_CONFIG_KEYS.each { |k| config.delete(k) } }
 
       Digest::SHA256.hexdigest(hook_contents + hook_config.to_s)
     end

@@ -10,6 +10,8 @@
   `Berksfile.lock` is out of sync with your `Berksfile`
 * Fix `BundleCheck` to use `git ls-files` instead of `git check-ignore`,
   as the latter is only available as of git 1.8
+* Fix bug where skipping a hook via the `SKIP` environment variable would
+  incorrectly warn about the hook's configuration having changed
 
 ## 0.8.0
 
