@@ -18,6 +18,8 @@
   `schema.rb`/`structure.sql` that aren't up-to-date with the latest migration
 * Add `PryBinding` pre-commit hook which checks for `binding.pry` calls that
   have been left behind in code
+* Add `LocalPathsInGemfile` pre-commit hook which checks for gem dependencies
+  pointing to local paths in a `Gemfile`
 
 ## 0.8.0
 
