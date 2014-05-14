@@ -20,6 +20,7 @@
   have been left behind in code
 * Add `LocalPathsInGemfile` pre-commit hook which checks for gem dependencies
   pointing to local paths in a `Gemfile`
+* Add `JsonSyntax` pre-commit hook which checks the syntax of all `.json` files
 
 ## 0.8.0
 
