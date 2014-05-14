@@ -54,6 +54,7 @@ PreCommit:
     quiet: true
 
   Brakeman:
+    enabled: false
     description: 'Checking for security vulnerabilities'
     include:
       - '**/*.rb'
