@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[grep -IHnE (\s*path:\s*)|(\s*:path\s*=>)] + applicable_files)
 
       unless result.stdout.empty?
-        return :warn, "Found gems in Gemfile pointing to local paths:\n#{result.stdout}"
+        return :warn, "Avoid pointing to local paths in Gemfiles:\n#{result.stdout}"
       end
 
       :good

@@ -31,7 +31,7 @@ describe Overcommit::Hook::PreCommit::LocalPathsInGemfile do
     it { should warn }
   end
 
-  context 'when file contains a local path starting with one or more spaces in Ruby 1.8 hash syntax format' do
+  context 'when file contains a local path starting with leading spaces in Ruby 1.8 hash format' do
     let(:contents) { " :path => '../fuubar'" }
 
     it { should warn }
@@ -43,13 +43,13 @@ describe Overcommit::Hook::PreCommit::LocalPathsInGemfile do
     it { should warn }
   end
 
-  context 'when file contains a local path on its own line in Ruby 1.9 hash syntax format' do
+  context 'when file contains local path on its own line in Ruby 1.9 hash syntax format' do
     let(:contents) { "path: '../fuubar'" }
 
     it { should warn }
   end
 
-  context 'when file contains a local path starting with one or more spaces in Ruby 1.9 hash syntax format' do
+  context 'when file contains local path starting with leading spaces in Ruby 1.9 hash format' do
     let(:contents) { " path: '../fuubar'" }
 
     it { should warn }
