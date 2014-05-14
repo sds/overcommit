@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[grep -IHnE ^\s*binding\.pry] + applicable_files)
 
       unless result.stdout.empty?
-        return :bad, "Found a binding.pry left in:\n#{result.stdout}"
+        return :bad, "Found a `binding.pry` call left in:\n#{result.stdout}"
       end
 
       :good

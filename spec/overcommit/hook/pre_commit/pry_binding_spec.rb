@@ -20,13 +20,13 @@ describe Overcommit::Hook::PreCommit::PryBinding do
   end
 
   context 'when file contains a binding.pry at the begining of the line' do
-    let(:contents) { "binding.pry" }
+    let(:contents) { 'binding.pry' }
 
     it { should fail_hook }
   end
 
   context 'when file contains a binding.pry after any number of spaces' do
-    let(:contents) { " binding.pry" }
+    let(:contents) { ' binding.pry' }
 
     it { should fail_hook }
   end
