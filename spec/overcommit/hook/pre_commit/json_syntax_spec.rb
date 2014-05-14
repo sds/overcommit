@@ -13,9 +13,8 @@ describe Overcommit::Hook::PreCommit::JsonSyntax do
 
   around do |example|
     repo do
-      File.open(staged_file, 'w') { |f| f.write('foo') }
+      `touch #{staged_file}`
       `git add #{staged_file}`
-
       example.run
     end
   end
