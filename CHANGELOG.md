@@ -21,6 +21,8 @@
 * Add `LocalPathsInGemfile` pre-commit hook which checks for gem dependencies
   pointing to local paths in a `Gemfile`
 * Add `JsonSyntax` pre-commit hook which checks the syntax of all `.json` files
+* Add `Brakeman` pre-commit hook which runs security checks against code
+  (disabled by default as it is slow)
 
 ## 0.8.0
 
