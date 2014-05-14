@@ -22,7 +22,7 @@ module Overcommit::Hook::PostCheckout
       result = execute(%w[git diff --exit-code --name-only] + [new_head, previous_head])
 
       result.stdout.split("\n").any? do |file|
-        Array(@config['include']).any? { |glob| File.fnmatch(glob, file) }
+        Array(@config['include']).any? { |glob| Dir[glob].include?(file) }
       end
     end
 

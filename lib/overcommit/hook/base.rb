@@ -70,22 +70,17 @@ module Overcommit::Hook
     def applicable_file?(file)
       includes = Array(@config['include']).map { |glob| convert_glob_to_absolute(glob) }
       included = includes.empty? ||
-                 includes.any? { |glob| File.fnmatch(glob, file) }
+                 includes.any? { |glob| Dir[glob].include?(file) }
 
       excludes = Array(@config['exclude']).map { |glob| convert_glob_to_absolute(glob) }
-      excluded = excludes.any? { |glob| File.fnmatch(glob, file) }
+      excluded = excludes.any? { |glob| Dir[glob].include?(file) }
 
       included && !excluded
     end
 
     def convert_glob_to_absolute(glob)
       repo_root = Overcommit::Utils.repo_root
-
-      if glob.start_with?('**')
-        repo_root + glob # Want ** to match items in the repo root as well
-      else
-        File.join(repo_root, glob)
-      end
+      File.join(repo_root, glob)
     end
   end
 end
