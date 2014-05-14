@@ -23,6 +23,9 @@
 * Add `JsonSyntax` pre-commit hook which checks the syntax of all `.json` files
 * Add `Brakeman` pre-commit hook which runs security checks against code
   (disabled by default as it is slow)
+* Add `ChamberSecurity` pre-commit hook which ensures that `chamber secure` has
+  been run before committing your changes (see the
+  [Chamber](https://github.com/thekompanee/chamber) gem for more information)
 
 ## 0.8.0
 
