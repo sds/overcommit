@@ -73,6 +73,10 @@ SignalException:
 SingleLineBlockParams:
   Enabled: false
 
+SingleSpaceBeforeFirstArg:
+  Exclude:
+    - '*.gemspec'
+
 SpecialGlobalVars:
   Enabled: false
 

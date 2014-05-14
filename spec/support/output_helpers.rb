@@ -2,7 +2,7 @@
 module OutputHelpers
   module_function
 
-  def capture_stdout(&block)
+  def capture_stdout
     original = $stdout
     $stdout = output = StringIO.new
 

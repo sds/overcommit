@@ -42,11 +42,11 @@ end
 RSpec::Matchers.define :fail_hook  do |*args|
   check_matcher = HookMatcher.new(:bad, args)
 
-  match do |check|
+  match do
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do |check|
+  failure_message_for_should do
     check_matcher.failure_message(
       actual,
       'expected that the hook would fail'
@@ -63,11 +63,11 @@ end
 RSpec::Matchers.define :pass do |*args|
   check_matcher = HookMatcher.new(:good, args)
 
-  match do |check|
+  match do
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do |check|
+  failure_message_for_should do
     check_matcher.failure_message(
       actual,
       'expected that the check would pass'
@@ -88,7 +88,7 @@ RSpec::Matchers.define :warn do |*args|
     check_matcher.matches?(check)
   end
 
-  failure_message_for_should do |check|
+  failure_message_for_should do
     check_matcher.failure_message(
       actual,
       'expected that the check would report a warning'

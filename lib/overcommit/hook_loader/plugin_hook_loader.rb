@@ -28,7 +28,7 @@ module Overcommit::HookLoader
       return if modified_plugins.empty?
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
-                       "have been added, changed, or had their configuration modified:"
+                       'have been added, changed, or had their configuration modified:'
       log.log
 
       modified_plugins.each do |signer|

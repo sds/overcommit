@@ -61,7 +61,7 @@ module Overcommit::HookContext
     #
     # By default, this returns an empty set. Subclasses should implement if
     # there is a concept of files changing for the type of hook being run.
-    def modified_lines(file)
+    def modified_lines(_file)
       Set.new
     end
   end

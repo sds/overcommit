@@ -9,7 +9,7 @@ module Overcommit
     end
 
     # Get a string of input from the user (up to the next newline character).
-    def get(&block)
+    def get
       @io.gets
     end
 
@@ -19,7 +19,7 @@ module Overcommit
     def reopen_tty
       # If the hook isn't interactive, we need to map STDIN to keyboard manually
       STDIN.reopen('/dev/tty') if STDIN.eof?
-    rescue
+    rescue # rubocop:disable HandleExceptions
       # Happens in tests run with no console available
     end
   end
