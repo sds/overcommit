@@ -12,6 +12,8 @@
   as the latter is only available as of git 1.8
 * Fix bug where skipping a hook via the `SKIP` environment variable would
   incorrectly warn about the hook's configuration having changed
+* Add `MergeConflicts` pre-commit hook which checks for unresolved merge
+  conflicts in files
 
 ## 0.8.0
 
