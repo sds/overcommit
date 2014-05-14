@@ -12,14 +12,16 @@ module Overcommit::Hook::PreCommit
         up_to_date     = schema.include?(latest_version)
 
         unless up_to_date
-          return :bad, "The latest migration version you're committing is #{latest_version} but your schema file #{schema_files.join(' or ')} is on a different version."
+          return :bad, "The latest migration version you're committing is " \
+                       "#{latest_version}, but your schema file " \
+                       "#{schema_files.join(' or ')} is on a different version."
         end
       end
 
       :good
     end
 
-    private
+  private
 
     def migration_files
       @migration_files ||= applicable_files.select do |file|
