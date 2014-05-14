@@ -8,6 +8,8 @@
   [JSXHint](https://github.com/STRML/JSXHint) project
 * Add pre-commit `BerksfileCheck` hook which warns you when your
   `Berksfile.lock` is out of sync with your `Berksfile`
+* Fix `BundleCheck` to use `git ls-files` instead of `git check-ignore`,
+  as the latter is only available as of git 1.8
 
 ## 0.8.0
 
