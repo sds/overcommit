@@ -20,13 +20,19 @@ describe Overcommit::Hook::PreCommit::MergeConflicts do
   end
 
   context 'when file contains a merge conflict marker' do
-    let(:contents) { "Just\n<<<<<<<some\nconflicting text" }
+    let(:contents) { "Just\n<<<<<<< HEAD:filename.txt\nconflicting text" }
 
     it { should fail_hook }
   end
 
   context 'when file does not have any merge conflict markers' do
     let(:contents) { 'Just some text' }
+
+    it { should pass }
+  end
+
+  context "when file contains characters that aren't conflict markers" do
+    let(:contents) { 'Just some <<<<<<< arrows' }
 
     it { should pass }
   end
