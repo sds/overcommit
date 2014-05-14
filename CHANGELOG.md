@@ -16,6 +16,8 @@
   conflicts in files
 * Add `RailsSchemaUpToDate` pre-commit hook which checks for
   `schema.rb`/`structure.sql` that aren't up-to-date with the latest migration
+* Add `PryBinding` pre-commit hook which checks for `binding.pry` calls that
+  have been left behind in code
 
 ## 0.8.0
 
