@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.9.0
 
 * Include `--force-exclusion` flag in Rubocop hook so files excluded via
   `.rubocop.yml` are actually excluded
