@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'set'
 
 module Overcommit::HookContext
@@ -10,6 +11,7 @@ module Overcommit::HookContext
     # about to be committed.
     def setup_environment
       store_modified_times
+      store_merge_state
 
       if any_changes?
         @changes_stashed = true
@@ -31,6 +33,7 @@ module Overcommit::HookContext
         `git stash apply --index --quiet`
       end
 
+      restore_merge_state
       restore_modified_times
     end
 
@@ -81,6 +84,37 @@ module Overcommit::HookContext
       end
 
       lines
+    end
+
+    def store_merge_state
+      merge_head = `git rev-parse MERGE_HEAD 2> /dev/null`.chomp
+
+      # Store the merge state if we're in the middle of resolving a merge
+      # conflict. This is necessary since stashing removes the merge state.
+      if merge_head != 'MERGE_HEAD'
+        @merge_head = merge_head
+
+        merge_msg_file = File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root)
+        @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
+      end
+    end
+
+    def restore_merge_state
+      if @merge_head
+        FileUtils.touch(File.expand_path('.git/MERGE_MODE', Overcommit::Utils.repo_root))
+
+        File.open(File.expand_path('.git/MERGE_HEAD', Overcommit::Utils.repo_root), 'w') do |f|
+          f.write("#{@merge_head}\n")
+        end
+        @merge_head = nil
+      end
+
+      if @merge_msg
+        File.open(File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root), 'w') do |f|
+          f.write("#{@merge_msg}\n")
+        end
+        @merge_msg = nil
+      end
     end
 
     def store_modified_times

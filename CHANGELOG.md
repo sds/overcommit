@@ -6,6 +6,8 @@
   shell globbing (e.g. `**` matches zero or more directories rather than 1 or
   more)
 * Don't drop stashed changes after restoring them
+* Fix bug where `MERGE_HEAD` would be lost when attempting to commit a
+  resolution to a merge conflict
 
 ## 0.9.0
 
