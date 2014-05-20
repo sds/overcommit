@@ -28,7 +28,7 @@ module Overcommit::HookContext
       `git reset --hard` # Ensure working tree is clean before popping stash
 
       if @changes_stashed
-        `git stash pop --index --quiet`
+        `git stash apply --index --quiet`
       end
 
       restore_modified_times

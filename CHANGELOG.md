@@ -5,6 +5,7 @@
 * Change format of `include`/`exclude` file globs to match that of standard
   shell globbing (e.g. `**` matches zero or more directories rather than 1 or
   more)
+* Don't drop stashed changes after restoring them
 
 ## 0.9.0
 
