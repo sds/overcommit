@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Allow custom arguments to be passed to `ctags` via `IndexTags` post-checkout
+  hook
+
 ## 0.10.0
 
 * Change format of `include`/`exclude` file globs to match that of standard
