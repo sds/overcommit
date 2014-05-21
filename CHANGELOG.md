@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.10.0
 
 * Change format of `include`/`exclude` file globs to match that of standard
   shell globbing (e.g. `**` matches zero or more directories rather than 1 or
