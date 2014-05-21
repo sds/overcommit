@@ -7,7 +7,13 @@ module GitSpecHelpers
   def repo(name = 'some-repo', &block)
     directory(name) do
       `git init --template=""` # Ensure no template directory is applied
+
       `mkdir -p .git/hooks` # Since we don't specify template, need to create ourselves
+
+      # Need to define user info since some CI contexts don't have defaults set
+      `git config --local user.name "Overcommit Tester"`
+      `git config --local user.email "overcommit@example.com"`
+
       block.call if block_given?
     end
   end
