@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.11.0
 
 * Allow custom arguments to be passed to `ctags` via `IndexTags` post-checkout
   hook
