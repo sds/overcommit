@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.11.1
 
 * Fix bug where `CHERRY_PICK_HEAD` would be lost when a pre-commit hook failed
   after attempting to cherry pick a commit with a conflict
