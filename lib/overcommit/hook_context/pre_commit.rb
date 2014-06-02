@@ -12,6 +12,7 @@ module Overcommit::HookContext
     def setup_environment
       store_modified_times
       store_merge_state
+      store_cherry_pick_state
 
       if any_changes?
         @changes_stashed = true
@@ -34,6 +35,7 @@ module Overcommit::HookContext
       end
 
       restore_merge_state
+      restore_cherry_pick_state
       restore_modified_times
     end
 
@@ -99,6 +101,16 @@ module Overcommit::HookContext
       end
     end
 
+    def store_cherry_pick_state
+      cherry_head = `git rev-parse CHERRY_PICK_HEAD 2> /dev/null`.chomp
+
+      # Store the merge state if we're in the middle of resolving a merge
+      # conflict. This is necessary since stashing removes the merge state.
+      if cherry_head != 'CHERRY_PICK_HEAD'
+        @cherry_head = cherry_head
+      end
+    end
+
     def restore_merge_state
       if @merge_head
         FileUtils.touch(File.expand_path('.git/MERGE_MODE', Overcommit::Utils.repo_root))
@@ -114,6 +126,16 @@ module Overcommit::HookContext
           f.write("#{@merge_msg}\n")
         end
         @merge_msg = nil
+      end
+    end
+
+    def restore_cherry_pick_state
+      if @cherry_head
+        File.open(File.expand_path('.git/CHERRY_PICK_HEAD',
+                                   Overcommit::Utils.repo_root), 'w') do |f|
+          f.write("#{@cherry_head}\n")
+        end
+        @cherry_head = nil
       end
     end
 
