@@ -4,6 +4,7 @@
 
 * Fix bug where `CHERRY_PICK_HEAD` would be lost when a pre-commit hook failed
   after attempting to cherry pick a commit with a conflict
+* Drop support for Ruby 1.9.2
 
 ## 0.11.0
 
