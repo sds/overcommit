@@ -28,7 +28,9 @@ describe 'commiting' do
       `git config --local user.name ''`
     end
 
-    its(:status) { should_not be_zero }
+    it 'exits with a non-zero status' do
+      subject.status.should_not == 0
+    end
   end
 
   context 'when no hooks fail' do
@@ -36,6 +38,8 @@ describe 'commiting' do
       `git config --local user.name 'John Doe'`
     end
 
-    its(:status) { should be_zero }
+    it 'exits successfully' do
+      subject.status.should == 0
+    end
   end
 end

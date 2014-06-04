@@ -37,8 +37,11 @@ describe 'resolving merge conflicts' do
     end
   end
 
-  its(:status) { should be_zero }
+  it 'exits successfully' do
+    subject.status.should == 0
+  end
 
-  # User should not get an error about MERGE_HEAD not existing
-  its(:stderr) { should_not include 'MERGE_HEAD'  }
+  it 'does not display an error about MERGE_HEAD missing' do
+    subject.stderr.should_not include 'MERGE_HEAD'
+  end
 end

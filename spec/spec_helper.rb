@@ -19,4 +19,13 @@ RSpec.configure do |config|
   config.include GitSpecHelpers
   config.include OutputHelpers
   config.include ShellHelpers
+
+  # Continue to enable the older `should` syntax for expectations
+  config.expect_with :rspec do |c|
+    c.syntax = [:expect, :should]
+  end
+
+  config.mock_with :rspec do |c|
+    c.syntax = :should
+  end
 end

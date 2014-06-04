@@ -146,7 +146,7 @@ describe Overcommit::HookContext::PreCommit do
 
       it 'deletes the file' do
         subject
-        File.exist?('tracked-file').should be_false
+        File.exist?('tracked-file').should == false
       end
     end
   end

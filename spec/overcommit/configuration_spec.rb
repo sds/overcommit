@@ -93,12 +93,12 @@ describe Overcommit::Configuration do
     subject { config.for_hook('SomeHook', 'PreCommit') }
 
     it 'returns the subset of the config for the specified hook' do
-      subject['enabled'].should be_true
-      subject['quiet'].should be_false
+      subject['enabled'].should == true
+      subject['quiet'].should == false
     end
 
     it 'merges the the hook config with the ALL section' do
-      subject['required'].should be_false
+      subject['required'].should == false
     end
   end
 
@@ -213,14 +213,14 @@ describe Overcommit::Configuration do
       let(:env) { { 'SKIP' => 'AuthorName' } }
 
       it 'sets the skip option of the hook to true' do
-        subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
+        subject.for_hook('AuthorName', 'PreCommit')['skip'].should == true
       end
 
       context 'and the hook is spelt with underscores' do
         let(:env) { { 'SKIP' => 'author_name' } }
 
         it 'sets the skip option of the hook to true' do
-          subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
+          subject.for_hook('AuthorName', 'PreCommit')['skip'].should == true
         end
       end
 
@@ -228,7 +228,7 @@ describe Overcommit::Configuration do
         let(:env) { { 'SKIP' => 'author-name' } }
 
         it 'sets the skip option of the hook to true' do
-          subject.for_hook('AuthorName', 'PreCommit')['skip'].should be_true
+          subject.for_hook('AuthorName', 'PreCommit')['skip'].should == true
         end
       end
     end
@@ -237,14 +237,14 @@ describe Overcommit::Configuration do
       let(:env) { { 'SKIP' => 'all' } }
 
       it 'sets the skip option of the ALL section to true' do
-        subject.for_hook('ALL', 'PreCommit')['skip'].should be_true
+        subject.for_hook('ALL', 'PreCommit')['skip'].should == true
       end
 
       context 'and "all" is capitalized' do
         let(:env) { { 'SKIP' => 'ALL' } }
 
         it 'sets the skip option of the special ALL config to true' do
-          subject.for_hook('ALL', 'PreCommit')['skip'].should be_true
+          subject.for_hook('ALL', 'PreCommit')['skip'].should == true
         end
       end
     end

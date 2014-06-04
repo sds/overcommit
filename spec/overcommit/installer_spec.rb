@@ -32,7 +32,7 @@ describe Overcommit::Installer do
         context 'and Overcommit hooks were not previously installed' do
           it 'installs the master hook into the hooks directory' do
             subject
-            File.file?(File.join(hooks_dir, 'overcommit-hook')).should be_true
+            File.file?(File.join(hooks_dir, 'overcommit-hook')).should == true
           end
 
           it 'symlinks all supported hooks to the master hook' do
@@ -50,7 +50,7 @@ describe Overcommit::Installer do
 
           it 'keeps the master hook' do
             expect { subject }.to_not change {
-              File.file?(File.join(hooks_dir, 'overcommit-hook')).should be_true
+              File.file?(File.join(hooks_dir, 'overcommit-hook')).should == true
             }
           end
 

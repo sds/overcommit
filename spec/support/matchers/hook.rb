@@ -46,14 +46,14 @@ RSpec::Matchers.define :fail_hook  do |*args|
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do
+  failure_message do
     check_matcher.failure_message(
       actual,
       'expected that the hook would fail'
     )
   end
 
-  failure_message_for_should_not do
+  failure_message_when_negated do
     'expected that the hook would not fail'
   end
 
@@ -67,14 +67,14 @@ RSpec::Matchers.define :pass do |*args|
     check_matcher.matches?(actual)
   end
 
-  failure_message_for_should do
+  failure_message do
     check_matcher.failure_message(
       actual,
       'expected that the check would pass'
     )
   end
 
-  failure_message_for_should_not do
+  failure_message_when_negated do
     'expected that the check would not pass'
   end
 
@@ -88,14 +88,14 @@ RSpec::Matchers.define :warn do |*args|
     check_matcher.matches?(check)
   end
 
-  failure_message_for_should do
+  failure_message do
     check_matcher.failure_message(
       actual,
       'expected that the check would report a warning'
     )
   end
 
-  failure_message_for_should_not do
+  failure_message_when_negated do
     'expected that the check would not report a warning'
   end
 

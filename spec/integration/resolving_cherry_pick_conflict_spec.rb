@@ -37,7 +37,9 @@ describe 'resolving merge conflicts' do
     end
   end
 
-  its(:status) { should == 1 }
+  it 'exits with a non-zero status' do
+    subject.status.should_not == 0
+  end
 
   it 'does not remove the CHERRY_PICK_HEAD file' do
     subject

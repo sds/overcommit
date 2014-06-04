@@ -44,12 +44,12 @@ describe Overcommit::HookSigner do
     end
 
     context 'when the hook code and config are the same' do
-      it { should be_false }
+      it { should == false }
 
       context 'and the user has specified they wish to skip the hook' do
         let(:modified_hook_config) { hook_config.merge('skip' => true) }
 
-        it { should be_false }
+        it { should == false }
       end
     end
 
@@ -64,13 +64,13 @@ describe Overcommit::HookSigner do
         end
       RUBY
 
-      it { should be_true }
+      it { should == true }
     end
 
     context 'when the hook config has changed' do
       let(:modified_hook_config) { { 'enabled' => true } }
 
-      it { should be_true }
+      it { should == true }
     end
   end
 end

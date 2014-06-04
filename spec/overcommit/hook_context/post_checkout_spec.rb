@@ -28,11 +28,11 @@ describe Overcommit::HookContext::PostCheckout do
     context 'when the flag is 0' do
       let(:branch_flag) { '0' }
 
-      it { should be_false }
+      it { should == false }
     end
 
     context 'when the flag is 1' do
-      it { should be_true }
+      it { should == true }
     end
   end
 
@@ -42,11 +42,11 @@ describe Overcommit::HookContext::PostCheckout do
     context 'when the flag is 0' do
       let(:branch_flag) { '0' }
 
-      it { should be_true }
+      it { should == true }
     end
 
     context 'when the flag is 1' do
-      it { should be_false }
+      it { should == false }
     end
   end
 end
