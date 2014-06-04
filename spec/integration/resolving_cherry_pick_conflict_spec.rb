@@ -27,10 +27,10 @@ describe 'resolving merge conflicts' do
       `git add some-file`
       `git commit -m "Add Branch 2 addition"`
       `git checkout -q master`
-      `git cherry-pick branch1`
+      `git cherry-pick branch1 > /dev/null 2>&1`
       Overcommit::Installer.new(Overcommit::Logger.silent).
                             run('.', :action => :install)
-      `git cherry-pick branch2` # Results in cherry-pick conflict
+      `git cherry-pick branch2 > /dev/null 2>&1` # Results in cherry-pick conflict
       `echo "Conflicts Resolved " > some-file` # Fail trailing whitespace hook
       `git add some-file`
       example.run
