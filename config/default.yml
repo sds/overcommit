@@ -85,6 +85,8 @@ PreCommit:
 
   HardTabs:
     description: 'Checking for hard tabs'
+    exclude:
+      - '**/*.go'
 
   ImageOptim:
     description: 'Checking for optimizable images'
