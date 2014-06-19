@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Skip `HardTabs` pre-commit hook for Golang source files by default
+* Disable `IndexTags` post-checkout hook by default
+
 ## 0.11.1
 
 * Fix bug where `CHERRY_PICK_HEAD` would be lost when a pre-commit hook failed
