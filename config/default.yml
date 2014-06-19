@@ -28,7 +28,8 @@ PostCheckout:
       - 'Gemfile.lock'
       - '*.gemspec'
   IndexTags:
-    description: 'Indexing source code tags'
+    description: 'Generating tags file from source'
+    enabled: false
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
