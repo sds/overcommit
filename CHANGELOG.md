@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.12.0
 
 * Skip `HardTabs` pre-commit hook for Golang source files by default
 * Disable `IndexTags` post-checkout hook by default
