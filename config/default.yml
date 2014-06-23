@@ -80,6 +80,10 @@ PreCommit:
     description: 'Analyzing with csslint'
     include: '**/*.css'
 
+  GoLint:
+    description: 'Analyzing with golint'
+    include: '**/*.go'
+
   HamlLint:
     description: 'Analyzing with haml-lint'
     include: '**/*.haml'

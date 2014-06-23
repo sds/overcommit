@@ -4,6 +4,7 @@
 
 * Skip `HardTabs` pre-commit hook for Golang source files by default
 * Disable `IndexTags` post-checkout hook by default
+* Add `GoLint` pre-commit hook which runs `golint` on Golang source files
 
 ## 0.11.1
 
