@@ -21,7 +21,7 @@ describe Overcommit::Hook::PreCommit::JsonSyntax do
 
   context 'when JSON files have no errors' do
     before do
-      JSON.stub(:load)
+      JSON.stub(:parse)
     end
 
     it { should pass }
@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::JsonSyntax do
 
   context 'when JSON file has errors' do
     before do
-      JSON.stub(:load).and_raise(JSON::ParserError)
+      JSON.stub(:parse).and_raise(JSON::ParserError)
     end
 
     it { should fail_hook }

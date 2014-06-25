@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Prevent `JsonSyntax` pre-commit hook from failing if `json_class` key
+  is present in JSON
+
 ## 0.12.0
 
 * Skip `HardTabs` pre-commit hook for Golang source files by default
