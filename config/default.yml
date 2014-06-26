@@ -54,6 +54,12 @@ PreCommit:
     required: true
     quiet: true
 
+  BerksfileCheck:
+    description: 'Checking Berksfile lock'
+    include:
+      - 'Berksfile'
+      - 'Berksfile.lock'
+
   Brakeman:
     enabled: false
     description: 'Checking for security vulnerabilities'
