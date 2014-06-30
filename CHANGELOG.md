@@ -4,6 +4,7 @@
 
 * Prevent `JsonSyntax` pre-commit hook from failing if `json_class` key
   is present in JSON
+* Prevent `HardTabs` pre-commit hook from warning on tabs in Makefiles
 
 ## 0.12.0
 
