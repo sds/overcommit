@@ -41,6 +41,12 @@ HashSyntax:
 IfUnlessModifier:
   Enabled: false
 
+# We want to allow multi-line lambdas using the `->` syntax which Rubocop
+# doesn't allow. We're also not too worried about people using `lambda` for
+# single-line lambdas either.
+Lambda:
+  Enabled: false
+
 LineLength:
   Max: 100
 
