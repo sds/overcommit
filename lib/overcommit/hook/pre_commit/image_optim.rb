@@ -17,9 +17,10 @@ module Overcommit::Hook::PreCommit
 
       if optimized_images.any?
         return :bad,
-          "The following images were optimized:\n" <<
+          "The following images are optimizable:\n" <<
           optimized_images.join("\n") <<
-          "\nPlease add them to your commit."
+          "\n\nOptimize them by running:\n" <<
+          "  image_optim #{optimized_images.join(' ')}"
       end
 
       :good
