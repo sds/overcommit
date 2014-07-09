@@ -99,6 +99,7 @@ PreCommit:
     exclude:
       - '**/*.go'
       - '**/Makefile'
+      - '.gitmodules'
 
   ImageOptim:
     description: 'Checking for optimizable images'

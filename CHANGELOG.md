@@ -7,6 +7,7 @@
 * Prevent `HardTabs` pre-commit hook from warning on tabs in Makefiles
 * Fix bug where `overcommit` hooks would fail for initial commit to repo
 * Add support for gracefully exiting from Ctrl-C interruptions
+* Add `.gitmodules` to the list of ignored files in `HardTabs` pre-commit hook
 
 ## 0.12.0
 
