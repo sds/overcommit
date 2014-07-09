@@ -29,7 +29,7 @@ module Overcommit::HookContext
     # as if nothing ever changed.
     def cleanup_environment
       unless initial_commit?
-        `git reset --hard` # Ensure working tree is clean before popping stash
+        `git reset --hard &> /dev/null` # Ensure working tree is clean before popping stash
       end
 
       if @changes_stashed
