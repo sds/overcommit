@@ -53,6 +53,9 @@ LineLength:
 MethodLength:
   Max: 20
 
+Next:
+  Enabled: false
+
 # Prefer curly braces except for %i/%w/%W, since those return arrays.
 PercentLiteralDelimiters:
   PreferredDelimiters:

@@ -6,6 +6,7 @@
   is present in JSON
 * Prevent `HardTabs` pre-commit hook from warning on tabs in Makefiles
 * Fix bug where `overcommit` hooks would fail for initial commit to repo
+* Add support for gracefully exiting from Ctrl-C interruptions
 
 ## 0.12.0
 

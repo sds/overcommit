@@ -33,13 +33,27 @@ module Overcommit
       if @hooks.any? { |hook| hook.run? || hook.skip? }
         log.bold "Running #{hook_script_name} hooks"
 
-        statuses = @hooks.map { |hook| run_hook(hook) }.compact
+        interrupted = false
+
+        statuses = @hooks.map do |hook|
+          hook_status = run_hook(hook)
+
+          if hook_status == :interrupted
+            # Stop running any more hooks and assume a bad result
+            interrupted = true
+            break [:bad]
+          end
+
+          hook_status
+        end.compact
 
         log.log # Newline
 
         run_failed = statuses.include?(:bad)
 
-        if run_failed
+        if interrupted
+          log.warning '⚠  Hook run interrupted by user'
+        elsif run_failed
           log.error "✗ One or more #{hook_script_name} hooks failed"
         else
           log.success "✓ All #{hook_script_name} hooks passed"
@@ -77,6 +91,9 @@ module Overcommit
       print_result(hook, status, output)
 
       status
+    rescue Interrupt
+      print_result(hook, :interrupted, nil)
+      :interrupted
     end
 
     def print_header(hook)
@@ -109,6 +126,9 @@ module Overcommit
       when :bad
         log.error 'FAILED'
         print_report(output, :bold_error)
+      when :interrupted
+        log.error 'INTERRUPTED'
+        log.bold_error('Hook was interrupted by Ctrl-C; restoring repo state...')
       end
     end
 
