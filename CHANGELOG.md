@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Ignore `db/structure.sql` in `TrailingWhitespace` pre-commit hook
+
 ## 0.13.0
 
 * Prevent `JsonSyntax` pre-commit hook from failing if `json_class` key

@@ -164,6 +164,8 @@ PreCommit:
 
   TrailingWhitespace:
     description: 'Checking for trailing whitespace'
+    exclude:
+      - '**/db/structure.sql'
 
   TravisLint:
     description: 'Checking Travis CI configuration'
