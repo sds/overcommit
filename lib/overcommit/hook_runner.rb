@@ -18,9 +18,11 @@ module Overcommit
 
     # Loads and runs the hooks registered for this {HookRunner}.
     def run
-      @context.setup_environment
-      load_hooks
-      run_hooks
+      InterruptHandler.isolate_from_interrupts do
+        @context.setup_environment
+        load_hooks
+        run_hooks
+      end
     ensure
       @context.cleanup_environment
     end
@@ -76,10 +78,19 @@ module Overcommit
       end
 
       begin
+        # Disable the interrupt handler during individual hook run so that
+        # Ctrl-C actually stops the current hook from being run, but doesn't
+        # halt the entire process.
+        InterruptHandler.disable!
         status, output = hook.run
       rescue => ex
         status = :bad
         output = "Hook raised unexpected error\n#{ex.message}"
+      rescue Interrupt
+        status = :interrupted
+        output = 'Hook was interrupted by Ctrl-C; restoring repo state...'
+      ensure
+        InterruptHandler.enable!
       end
 
       # Want to print the header in the event the result wasn't good so that the
@@ -91,9 +102,6 @@ module Overcommit
       print_result(hook, status, output)
 
       status
-    rescue Interrupt
-      print_result(hook, :interrupted, nil)
-      :interrupted
     end
 
     def print_header(hook)
@@ -128,7 +136,7 @@ module Overcommit
         print_report(output, :bold_error)
       when :interrupted
         log.error 'INTERRUPTED'
-        log.bold_error('Hook was interrupted by Ctrl-C; restoring repo state...')
+        print_report(output, :bold_error)
       end
     end
 
