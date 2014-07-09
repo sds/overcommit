@@ -162,7 +162,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       repo do
-        `git submodule add #{submodule} test-sub`
+        `git submodule add #{submodule} test-sub &> /dev/null`
         expect(subject).to_not include File.expand_path('test-sub')
       end
     end
