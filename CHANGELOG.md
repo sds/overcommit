@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.13.0
 
 * Prevent `JsonSyntax` pre-commit hook from failing if `json_class` key
   is present in JSON
