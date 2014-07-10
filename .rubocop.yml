@@ -34,6 +34,11 @@ FileName:
 FormatString:
   Enabled: false
 
+# There are a number of situations where this makes code less readable or
+# disrupts the visual flow of code.
+GuardClause:
+  Enabled: false
+
 # Ruby 1.8.7 only supports hash rockets.
 HashSyntax:
   EnforcedStyle: hash_rockets
