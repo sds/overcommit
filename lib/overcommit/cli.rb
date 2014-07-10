@@ -26,33 +26,7 @@ module Overcommit
     attr_reader :log
 
     def parse_arguments
-      @parser = OptionParser.new do |opts|
-        opts.banner = "Usage: #{opts.program_name} [options] [target-repo]"
-
-        opts.on_tail('-h', '--help', 'Show this message') do
-          print_help opts.help
-        end
-
-        opts.on_tail('-v', '--version', 'Show version') do
-          print_version(opts.program_name)
-        end
-
-        opts.on('-u', '--uninstall', 'Remove Overcommit hooks from a repository') do
-          @options[:action] = :uninstall
-        end
-
-        opts.on('-i', '--install', 'Install Overcommit hooks in a repository') do
-          @options[:action] = :install
-        end
-
-        opts.on('-f', '--force', 'Overwrite any previously installed hooks') do
-          @options[:force] = true
-        end
-
-        opts.on('-t', '--template-dir', 'Print location of template directory') do
-          @options[:action] = :template_dir
-        end
-      end
+      @parser = create_option_parser
 
       begin
         @parser.parse!(@arguments)
@@ -64,6 +38,46 @@ module Overcommit
         @options[:targets] = @arguments
       rescue OptionParser::InvalidOption => ex
         print_help @parser.help, ex
+      end
+    end
+
+    def create_option_parser
+      OptionParser.new do |opts|
+        opts.banner = "Usage: #{opts.program_name} [options] [target-repo]"
+
+        add_information_options(opts)
+        add_installation_options(opts)
+        add_other_options(opts)
+      end
+    end
+
+    def add_information_options(opts)
+      opts.on_tail('-h', '--help', 'Show this message') do
+        print_help opts.help
+      end
+
+      opts.on_tail('-v', '--version', 'Show version') do
+        print_version(opts.program_name)
+      end
+    end
+
+    def add_installation_options(opts)
+      opts.on('-u', '--uninstall', 'Remove Overcommit hooks from a repository') do
+        @options[:action] = :uninstall
+      end
+
+      opts.on('-i', '--install', 'Install Overcommit hooks in a repository') do
+        @options[:action] = :install
+      end
+
+      opts.on('-f', '--force', 'Overwrite any previously installed hooks') do
+        @options[:force] = true
+      end
+    end
+
+    def add_other_options(opts)
+      opts.on('-t', '--template-dir', 'Print location of template directory') do
+        @options[:action] = :template_dir
       end
     end
 
