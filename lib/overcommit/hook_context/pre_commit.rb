@@ -33,7 +33,7 @@ module Overcommit::HookContext
       end
 
       if @changes_stashed
-        `git stash apply --index --quiet`
+        `git stash pop --index --quiet`
       end
 
       restore_merge_state

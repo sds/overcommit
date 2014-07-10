@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Ignore `db/structure.sql` in `TrailingWhitespace` pre-commit hook
+* Drop stashed changes after restoring them (now that #55 is fixed)
 
 ## 0.13.0
 
