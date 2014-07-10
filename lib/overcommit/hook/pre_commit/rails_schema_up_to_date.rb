@@ -1,7 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Check to see whether the schema file is in line with the migrations
   class RailsSchemaUpToDate < Base
-    def run
+    def run # rubocop:disable CyclomaticComplexity
       if migration_files.any? && schema_files.none?
         return :bad, "It looks like you're adding a migration, but did not update the schema file"
       elsif migration_files.none? && schema_files.any?
