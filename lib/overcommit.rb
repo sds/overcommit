@@ -1,5 +1,6 @@
 require 'overcommit/constants'
 require 'overcommit/exceptions'
+require 'overcommit/configuration_validator'
 require 'overcommit/configuration'
 require 'overcommit/configuration_loader'
 require 'overcommit/hook/base'

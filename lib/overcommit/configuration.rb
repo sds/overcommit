@@ -3,8 +3,7 @@ module Overcommit
   class Configuration
     # Creates a configuration from the given hash.
     def initialize(hash)
-      @hash = hash
-      validate
+      @hash = ConfigurationValidator.new.validate(hash)
     end
 
     def ==(other)
@@ -104,13 +103,6 @@ module Overcommit
       true
     end
 
-    # Validates the configuration for any invalid options, normalizing it where
-    # possible.
-    def validate
-      @hash = convert_nils_to_empty_hashes(@hash)
-      ensure_hook_type_sections_exist(@hash)
-    end
-
     def smart_merge(parent, child)
       parent.merge(child) do |_key, old, new|
         case old
@@ -121,26 +113,6 @@ module Overcommit
         else
           new
         end
-      end
-    end
-
-    def ensure_hook_type_sections_exist(hash)
-      Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash[hook_type] ||= {}
-        hash[hook_type]['ALL'] ||= {}
-      end
-    end
-
-    def convert_nils_to_empty_hashes(hash)
-      hash.inject({}) do |h, (key, value)|
-        h[key] =
-          case value
-          when nil  then {}
-          when Hash then convert_nils_to_empty_hashes(value)
-          else
-            value
-          end
-        h
       end
     end
   end
