@@ -30,7 +30,7 @@ class HookMatcher
 
     if status_matches?(actual_status)
       error_message <<
-        " with message matching #{@expected_message.inspect}," <<
+        " with message matching #{@expected_message.inspect}," \
         " but was #{actual_message.inspect}"
     end
 
