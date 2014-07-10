@@ -36,34 +36,25 @@ module Overcommit
         log.bold "Running #{hook_script_name} hooks"
 
         interrupted = false
+        run_failed = false
 
-        statuses = @hooks.map do |hook|
+        @hooks.each do |hook|
           hook_status = run_hook(hook)
+
+          run_failed = true if hook_status == :bad
 
           if hook_status == :interrupted
             # Stop running any more hooks and assume a bad result
             interrupted = true
             break [:bad]
           end
-
-          hook_status
         end.compact
 
         log.log # Newline
-
-        run_failed = statuses.include?(:bad)
-
-        if interrupted
-          log.warning '⚠  Hook run interrupted by user'
-        elsif run_failed
-          log.error "✗ One or more #{hook_script_name} hooks failed"
-        else
-          log.success "✓ All #{hook_script_name} hooks passed"
-        end
-
+        print_summary(run_failed, interrupted)
         log.log # Newline
 
-        !run_failed
+        !(run_failed || interrupted)
       else
         log.success "✓ No applicable #{hook_script_name} hooks to run"
         true # Run was successful
@@ -95,9 +86,7 @@ module Overcommit
 
       # Want to print the header in the event the result wasn't good so that the
       # user knows what failed
-      if hook.quiet? && status != :good
-        print_header(hook)
-      end
+      print_header(hook) if hook.quiet? && status != :good
 
       print_result(hook, status, output)
 
@@ -142,6 +131,16 @@ module Overcommit
 
     def print_report(output, format = :log)
       log.send(format, output) unless output.nil? || output.empty?
+    end
+
+    def print_summary(run_failed, was_interrupted)
+      if was_interrupted
+        log.warning '⚠  Hook run interrupted by user'
+      elsif run_failed
+        log.error "✗ One or more #{hook_script_name} hooks failed"
+      else
+        log.success "✓ All #{hook_script_name} hooks passed"
+      end
     end
 
     def load_hooks
