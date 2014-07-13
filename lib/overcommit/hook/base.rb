@@ -90,8 +90,7 @@ module Overcommit::Hook
     def matches_path?(pattern, path)
       File.fnmatch?(pattern, path,
                     File::FNM_PATHNAME | # Wildcard doesn't match separator
-                    File::FNM_DOTMATCH | # Wildcards match dotfiles
-                    File::FNM_EXTGLOB    # Support {,} globbing
+                    File::FNM_DOTMATCH   # Wildcards match dotfiles
       )
     end
   end
