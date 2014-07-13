@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[jscs --reporter=inline] + applicable_files)
       return :good if result.success?
 
-      if /Config.*not found/i =~ result.stderr
+      if result.status == 1
         return :warn, result.stderr.chomp
       end
 

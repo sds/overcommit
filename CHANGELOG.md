@@ -4,6 +4,8 @@
 
 * Ignore `db/structure.sql` in `TrailingWhitespace` pre-commit hook
 * Drop stashed changes after restoring them (now that #55 is fixed)
+* Change `JSCS` pre-commit hook to check status code instead of using
+  regex to determine type of error
 
 ## 0.13.0
 
