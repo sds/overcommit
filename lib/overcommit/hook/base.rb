@@ -70,10 +70,10 @@ module Overcommit::Hook
     def applicable_file?(file)
       includes = Array(@config['include']).map { |glob| convert_glob_to_absolute(glob) }
       included = includes.empty? ||
-                 includes.any? { |glob| Dir[glob].include?(file) }
+                 includes.any? { |glob| matches_path?(glob, file) }
 
       excludes = Array(@config['exclude']).map { |glob| convert_glob_to_absolute(glob) }
-      excluded = excludes.any? { |glob| Dir[glob].include?(file) }
+      excluded = excludes.any? { |glob| matches_path?(glob, file) }
 
       included && !excluded
     end
@@ -81,6 +81,14 @@ module Overcommit::Hook
     def convert_glob_to_absolute(glob)
       repo_root = Overcommit::Utils.repo_root
       File.join(repo_root, glob)
+    end
+
+    # Return whether a pattern matches the given path.
+    #
+    # @param pattern [String]
+    # @param path [String]
+    def matches_path?(pattern, path)
+      File.fnmatch?(pattern, path, File::FNM_PATHNAME)
     end
   end
 end

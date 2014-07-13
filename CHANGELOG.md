@@ -6,6 +6,8 @@
 * Drop stashed changes after restoring them (now that #55 is fixed)
 * Change `JSCS` pre-commit hook to check status code instead of using
   regex to determine type of error
+* Fix performance regression where running Overcommit in a repository
+  with a lot of files would be very slow
 
 ## 0.13.0
 
