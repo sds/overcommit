@@ -8,6 +8,7 @@
   regex to determine type of error
 * Fix performance regression where running Overcommit in a repository
   with a lot of files would be very slow
+* Wildcards in include/exclude globs now match files beginning with `.`
 
 ## 0.13.0
 
