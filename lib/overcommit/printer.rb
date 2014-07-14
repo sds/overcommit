@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Overcommit
   # Provide a set of callbacks which can be executed as events occur during the
   # course of {HookRunner#run}.

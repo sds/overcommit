@@ -28,6 +28,9 @@ DotPosition:
 EachWithObject:
   Enabled: false
 
+Encoding:
+  EnforcedStyle: when_needed
+
 FileName:
   Exclude:
     - 'template-dir/hooks/*'
