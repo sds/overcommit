@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.14.0
 
 * Ignore `db/structure.sql` in `TrailingWhitespace` pre-commit hook
 * Drop stashed changes after restoring them (now that #55 is fixed)
