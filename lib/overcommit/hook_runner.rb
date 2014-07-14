@@ -46,9 +46,9 @@ module Overcommit
           if hook_status == :interrupted
             # Stop running any more hooks and assume a bad result
             interrupted = true
-            break [:bad]
+            break
           end
-        end.compact
+        end
 
         log.log # Newline
         print_summary(run_failed, interrupted)
