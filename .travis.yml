@@ -8,4 +8,6 @@ rvm:
 before_script:
   - git config --global user.email "travis@ci.com"
   - git config --global user.name "Travis CI"
-script: bundle exec rspec
+script:
+  - bundle exec rspec
+  - bundle exec rubocop

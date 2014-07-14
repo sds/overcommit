@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency             'childprocess', '>= 0.5.1'
   s.add_dependency             'json', '>= 1.8' # For 1.8.7. support only
 
-  s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'image_optim', '~> 0.13.0'
+  s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'rubocop', '0.24.1' # Pin for Travis builds
 end
