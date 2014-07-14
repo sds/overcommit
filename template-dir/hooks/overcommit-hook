@@ -65,7 +65,8 @@ begin
 
   input = Overcommit::UserInput.new(STDIN)
 
-  runner = Overcommit::HookRunner.new(config, logger, context, input)
+  printer = Overcommit::Printer.new(logger, context)
+  runner = Overcommit::HookRunner.new(config, logger, context, input, printer)
 
   status = runner.run
 

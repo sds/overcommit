@@ -8,11 +8,12 @@ module Overcommit
     # @param logger [Overcommit::Logger]
     # @param context [Overcommit::HookContext]
     # @param input [Overcommit::UserInput]
-    def initialize(config, logger, context, input)
+    def initialize(config, logger, context, input, printer)
       @config = config
       @log = logger
       @context = context
       @input = input
+      @printer = printer
       @hooks = []
     end
 
@@ -33,7 +34,7 @@ module Overcommit
 
     def run_hooks
       if @hooks.any? { |hook| hook.run? || hook.skip? }
-        log.bold "Running #{hook_script_name} hooks"
+        @printer.start_run
 
         interrupted = false
         run_failed = false
@@ -50,13 +51,11 @@ module Overcommit
           end
         end
 
-        log.log # Newline
-        print_summary(run_failed, interrupted)
-        log.log # Newline
+        @printer.end_run(interrupted, run_failed)
 
         !(run_failed || interrupted)
       else
-        log.success "✓ No applicable #{hook_script_name} hooks to run"
+        @printer.nothing_to_run
         true # Run was successful
       end
     end
@@ -64,9 +63,7 @@ module Overcommit
     def run_hook(hook)
       return if should_skip?(hook)
 
-      unless hook.quiet?
-        print_header(hook)
-      end
+      @printer.start_hook(hook)
 
       begin
         # Disable the interrupt handler during individual hook run so that
@@ -84,18 +81,9 @@ module Overcommit
         InterruptHandler.enable!
       end
 
-      # Want to print the header in the event the result wasn't good so that the
-      # user knows what failed
-      print_header(hook) if hook.quiet? && status != :good
-
-      print_result(hook, status, output)
+      @printer.end_hook(hook, status, output)
 
       status
-    end
-
-    def print_header(hook)
-      log.partial hook.description
-      log.partial '.' * (70 - hook.description.length)
     end
 
     def should_skip?(hook)
@@ -103,44 +91,14 @@ module Overcommit
 
       if hook.skip?
         if hook.required?
-          log.warning "Cannot skip #{hook.name} since it is required"
+          @printer.required_hook_not_skipped
         else
-          log.warning "Skipping #{hook.name}"
+          @printer.hook_skipped
           return true
         end
       end
 
       !hook.run?
-    end
-
-    def print_result(hook, status, output)
-      case status
-      when :good
-        log.success 'OK' unless hook.quiet?
-      when :warn
-        log.warning 'WARNING'
-        print_report(output, :bold_warning)
-      when :bad
-        log.error 'FAILED'
-        print_report(output, :bold_error)
-      when :interrupted
-        log.error 'INTERRUPTED'
-        print_report(output, :bold_error)
-      end
-    end
-
-    def print_report(output, format = :log)
-      log.send(format, output) unless output.nil? || output.empty?
-    end
-
-    def print_summary(run_failed, was_interrupted)
-      if was_interrupted
-        log.warning '⚠  Hook run interrupted by user'
-      elsif run_failed
-        log.error "✗ One or more #{hook_script_name} hooks failed"
-      else
-        log.success "✓ All #{hook_script_name} hooks passed"
-      end
     end
 
     def load_hooks
@@ -150,10 +108,6 @@ module Overcommit
 
       # Load plugin hooks after so they can subclass existing hooks
       @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log, @input).load_hooks
-    end
-
-    def hook_script_name
-      @context.hook_script_name
     end
   end
 end
