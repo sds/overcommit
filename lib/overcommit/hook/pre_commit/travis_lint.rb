@@ -2,6 +2,8 @@ module Overcommit::Hook::PreCommit
   # Checks the syntax of any modified Travis CI files with the travis-yaml gem.
   class TravisLint < Base
     def run
+      return :warn, 'travis-yaml is not usable on JRuby due to its dependence Psych' if using_jruby?
+
       begin
         require_travis_yaml
       rescue LoadError
@@ -38,6 +40,10 @@ module Overcommit::Hook::PreCommit
 
     def require_travis_yaml
       require 'travis/yaml'
+    end
+
+    def using_jruby?
+      RUBY_PLATFORM == 'java'
     end
   end
 end

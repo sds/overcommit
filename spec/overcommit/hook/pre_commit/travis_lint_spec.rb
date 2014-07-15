@@ -18,6 +18,16 @@ describe Overcommit::Hook::PreCommit::TravisLint do
     end
   end
 
+  context 'when using JRuby' do
+    let(:contents) { 'language: ruby' }
+
+    before do
+      subject.stub(:using_jruby?).and_return(true)
+    end
+
+    it { should warn }
+  end
+
   context 'when travis-yaml is not installed' do
     let(:contents) { 'language: ruby' }
 
