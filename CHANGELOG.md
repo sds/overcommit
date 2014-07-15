@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.14.1
 
 * Fix hook skipping regression
 
