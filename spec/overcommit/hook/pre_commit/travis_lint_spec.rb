@@ -38,29 +38,31 @@ describe Overcommit::Hook::PreCommit::TravisLint do
     it { should warn }
   end
 
-  context 'when travis-yaml has no warnings' do
-    let(:contents) { 'language: ruby' }
+  if RUBY_PLATFORM != 'java'
+    context 'when travis-yaml has no warnings' do
+      let(:contents) { 'language: ruby' }
 
-    it { should pass }
-  end
-
-  context 'when travis-yaml has warnings' do
-    let(:contents) do
-      <<-EOS
-      language: foo
-      bar: baz
-      notifications:
-        email:
-          illegal: key
-      EOS
+      it { should pass }
     end
 
-    it { should fail_hook(/#{staged_file}/m) }
+    context 'when travis-yaml has warnings' do
+      let(:contents) do
+        <<-EOS
+        language: foo
+        bar: baz
+        notifications:
+          email:
+            illegal: key
+        EOS
+      end
 
-    it { should fail_hook(/language section - illegal value "foo"/) }
+      it { should fail_hook(/#{staged_file}/m) }
 
-    it { should fail_hook(/notifications.email section/) }
+      it { should fail_hook(/language section - illegal value "foo"/) }
 
-    it { should fail_hook(/unexpected key "bar"/) }
+      it { should fail_hook(/notifications.email section/) }
+
+      it { should fail_hook(/unexpected key "bar"/) }
+    end
   end
 end
