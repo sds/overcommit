@@ -89,9 +89,9 @@ module Overcommit
 
       if hook.skip?
         if hook.required?
-          @printer.required_hook_not_skipped
+          @printer.required_hook_not_skipped(hook)
         else
-          @printer.hook_skipped
+          @printer.hook_skipped(hook)
           return true
         end
       end

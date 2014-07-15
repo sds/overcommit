@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix hook skipping regression
+
 ## 0.14.0
 
 * Ignore `db/structure.sql` in `TrailingWhitespace` pre-commit hook
