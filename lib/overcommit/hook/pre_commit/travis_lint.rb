@@ -1,15 +1,43 @@
 module Overcommit::Hook::PreCommit
-  # Runs `travis-lint` against any modified Travis CI files.
+  # Checks the syntax of any modified Travis CI files with the travis-yaml gem.
   class TravisLint < Base
     def run
-      unless in_path?('travis-lint')
-        return :warn, 'Run `gem install travis-lint`'
+      begin
+        require_travis_yaml
+      rescue LoadError
+        return :warn, 'travis-yaml not installed -- run `gem install travis-yaml`'
       end
 
-      result = execute(%w[travis-lint] + applicable_files)
-      return :good if result.success?
+      return :good if success?
 
-      [:bad, result.stdout.strip]
+      [:bad, formatted_results.strip]
+    end
+
+  private
+
+    def results
+      @results ||= applicable_files.each_with_object({}) do |file, results|
+        results[file] = Travis::Yaml.parse(IO.read(file)).nested_warnings
+      end
+    end
+
+    def success?
+      results.values.all?(&:empty?)
+    end
+
+    def formatted_results
+      results.each_with_object('') do |(filename, warnings), string|
+        string << "#{filename}:\n"
+        warnings.each do |key, message|
+          warning = key.empty? ? "  #{message}" : "  #{key.join('.')} section - #{message}\n"
+          string << warning
+        end
+        string << "\n"
+      end
+    end
+
+    def require_travis_yaml
+      require 'travis/yaml'
     end
   end
 end
