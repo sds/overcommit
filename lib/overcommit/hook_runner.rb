@@ -49,7 +49,7 @@ module Overcommit
           end
         end
 
-        @printer.end_run(interrupted, run_failed)
+        @printer.end_run(run_failed, interrupted)
 
         !(run_failed || interrupted)
       else

@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix bug where incorrect "hook run interrupted" message displayed when
+  hook run failed
+
 ## 0.14.1
 
 * Fix hook skipping regression
