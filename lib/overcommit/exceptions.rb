@@ -5,6 +5,9 @@ module Overcommit::Exceptions
   # Raised when trying to read/write to/from the local repo git config fails.
   class GitConfigError < StandardError; end
 
+  # Raised when a {HookContext} is unable to setup the environment before a run.
+  class HookSetupFailed < StandardError; end
+
   # Raised when a hook run was cancelled by the user.
   class HookCancelled < StandardError; end
 

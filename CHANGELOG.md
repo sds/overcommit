@@ -4,6 +4,7 @@
 
 * Fix bug where incorrect "hook run interrupted" message displayed when
   hook run failed
+* Gracefully handle `git stash` failures in pre-commit hook runs
 
 ## 0.14.1
 

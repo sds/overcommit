@@ -16,10 +16,22 @@ module Overcommit::HookContext
       Overcommit::GitRepo.store_cherry_pick_state
 
       if !initial_commit? && any_changes?
+        @stash_attempted = true
+
+        result = Overcommit::Utils.execute(
+          %w[git stash save --keep-index --quiet] +
+          ["Overcommit: Stash of repo state before hook run at #{Time.now}"]
+        )
+
+        unless result.success?
+          # Failure to stash in this case is likely due to a configuration
+          # issue (e.g. author/email not set or GPG signing key incorrect)
+          raise Overcommit::Exceptions::HookSetupFailed,
+                "Unable to setup environment for #{hook_script_name} hook run:" \
+                "\n#{result.stderr}"
+        end
+
         @changes_stashed = true
-        `git stash save --keep-index --quiet #{<<-MSG}`
-          "Overcommit: Stash of repo state before hook run at #{Time.now}"
-        MSG
       end
 
       # While running the hooks make it appear as if nothing changed
@@ -29,7 +41,7 @@ module Overcommit::HookContext
     # Restore unstaged changes and reset file modification times so it appears
     # as if nothing ever changed.
     def cleanup_environment
-      unless initial_commit?
+      unless initial_commit? || (@stash_attempted && !@changes_stashed)
         `git reset --hard &> /dev/null` # Ensure working tree is clean before popping stash
       end
 
