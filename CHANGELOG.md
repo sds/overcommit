@@ -9,7 +9,6 @@
   updated hook
 * Display message when `overcommit-hook` file is automatically updated
 * Deprecate `:bad` status in favor of `:fail`
-Blah
 * Deprecate `:good` status in favor of `:pass`
 * Allow hook statuses to be transformed via `on_fail` and `on_warn`
   configuration options
