@@ -15,12 +15,12 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[bundle check])
       unless result.success?
-        return :bad, result.stdout
+        return :fail, result.stdout
       end
 
       result = execute(%w[git diff --quiet --] + [LOCK_FILE])
       unless result.success?
-        return :bad, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
+        return :fail, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
       end
 
       :good

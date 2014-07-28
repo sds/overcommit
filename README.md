@@ -192,7 +192,7 @@ module Overcommit::Hook::PreCommit
       end
     end
 
-    return :bad, errors.join("\n") if errors.any?
+    return :fail, errors.join("\n") if errors.any?
 
     :good
   end

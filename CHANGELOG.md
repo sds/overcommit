@@ -8,6 +8,7 @@
 * Fix `overcommit-hook` auto-updating not passing original arguments to
   updated hook
 * Display message when `overcommit-hook` file is automatically updated
+* Deprecate `:bad` status in favor of `:fail`
 
 ## 0.14.1
 

@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[grep -IHn ^<<<<<<<\s] + applicable_files)
 
       unless result.stdout.empty?
-        return :bad, "Merge conflict markers detected:\n#{result.stdout}"
+        return :fail, "Merge conflict markers detected:\n#{result.stdout}"
       end
 
       :good

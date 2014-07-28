@@ -12,11 +12,11 @@ module Overcommit::Hook::PreCommit
         begin
           optimize_images(applicable_files)
         rescue ::ImageOptim::BinNotFoundError => e
-          return :bad, "#{e.message}. The image_optim gem is dependendent on this binary."
+          return :fail, "#{e.message}. The image_optim gem is dependendent on this binary."
         end
 
       if optimized_images.any?
-        return :bad,
+        return :fail,
           "The following images are optimizable:\n#{optimized_images.join("\n")}" \
           "\n\nOptimize them by running:\n" \
           "  image_optim #{optimized_images.join(' ')}"

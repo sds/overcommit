@@ -40,7 +40,7 @@ module Overcommit
         @hooks.each do |hook|
           hook_status = run_hook(hook)
 
-          run_failed = true if hook_status == :bad
+          run_failed = true if [:bad, :fail].include?(hook_status)
 
           if hook_status == :interrupted
             # Stop running any more hooks and assume a bad result
@@ -70,7 +70,7 @@ module Overcommit
         InterruptHandler.disable!
         status, output = hook.run
       rescue => ex
-        status = :bad
+        status = :fail
         output = "Hook raised unexpected error\n#{ex.message}"
       rescue Interrupt
         status = :interrupted

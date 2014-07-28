@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
     def run
       result = execute(%w[grep -IHn \s$] + applicable_files)
       unless result.stdout.empty?
-        return :bad, "Trailing whitespace detected:\n#{result.stdout}"
+        return :fail, "Trailing whitespace detected:\n#{result.stdout}"
       end
 
       :good

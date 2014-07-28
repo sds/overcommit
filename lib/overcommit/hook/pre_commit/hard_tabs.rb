@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       # Catches hard tabs
       result = execute(%w[grep -IHn] + ["\t"] + applicable_files)
       unless result.stdout.empty?
-        return :bad, "Hard tabs detected:\n#{result.stdout}"
+        return :fail, "Hard tabs detected:\n#{result.stdout}"
       end
 
       :good

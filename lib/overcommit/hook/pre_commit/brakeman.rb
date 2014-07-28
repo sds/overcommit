@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
                        applicable_files)
       return :good if result.success?
 
-      [:bad, result.stdout]
+      [:fail, result.stdout]
     end
   end
 end

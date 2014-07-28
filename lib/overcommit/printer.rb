@@ -66,7 +66,7 @@ module Overcommit
       log.partial '.' * (70 - hook.description.length)
     end
 
-    def print_result(hook, status, output)
+    def print_result(hook, status, output) # rubocop:disable CyclomaticComplexity, MethodLength
       case status
       when :good
         log.success 'OK' unless hook.quiet?
@@ -75,10 +75,19 @@ module Overcommit
         print_report(output, :bold_warning)
       when :bad
         log.error 'FAILED'
+        log.bold_error 'Hook returned a status of `:bad`. This is deprecated ' \
+                       'in favor of `:fail` and will be removed in a future ' \
+                       'version of Overcommit'
+        print_report(output, :bold_error)
+      when :fail
+        log.error 'FAILED'
         print_report(output, :bold_error)
       when :interrupted
         log.error 'INTERRUPTED'
         print_report(output, :bold_error)
+      else
+        log.error '???'
+        log.bold_error "Hook returned unknown status `#{status.inspect}` -- ignoring." \
       end
     end
 

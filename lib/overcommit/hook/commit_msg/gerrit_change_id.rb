@@ -12,7 +12,7 @@ module Overcommit::Hook::CommitMsg
       result = execute([SCRIPT_LOCATION, commit_message_file])
       return :good if result.success?
 
-      [:bad, result.stdout]
+      [:fail, result.stdout]
     end
   end
 end

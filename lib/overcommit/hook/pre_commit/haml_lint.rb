@@ -18,7 +18,7 @@ module Overcommit::Hook::PreCommit
         modified_lines(file).include?(line.to_i)
       end
 
-      return :bad, error_lines.join("\n") unless error_lines.empty?
+      return :fail, error_lines.join("\n") unless error_lines.empty?
 
       [:warn, "Modified files have lints (on lines you didn't modify)\n" <<
               warning_lines.join("\n")]

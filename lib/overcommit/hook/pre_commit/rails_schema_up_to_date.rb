@@ -3,16 +3,16 @@ module Overcommit::Hook::PreCommit
   class RailsSchemaUpToDate < Base
     def run # rubocop:disable CyclomaticComplexity
       if migration_files.any? && schema_files.none?
-        return :bad, "It looks like you're adding a migration, but did not update the schema file"
+        return :fail, "It looks like you're adding a migration, but did not update the schema file"
       elsif migration_files.none? && schema_files.any?
-        return :bad, "You're trying to change the schema without adding a migration file"
+        return :fail, "You're trying to change the schema without adding a migration file"
       elsif migration_files.any? && schema_files.any?
         latest_version = migration_files.map  { |file| file[/\d+/] }.sort.last
         schema         = schema_files.map     { |file| File.read(file) }.join
         up_to_date     = schema.include?(latest_version)
 
         unless up_to_date
-          return :bad, "The latest migration version you're committing is " \
+          return :fail, "The latest migration version you're committing is " \
                        "#{latest_version}, but your schema file " \
                        "#{schema_files.join(' or ')} is on a different version."
         end

@@ -15,7 +15,7 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[berks list --quiet])
       unless result.success?
-        return :bad, result.stderr
+        return :fail, result.stderr
       end
 
       :good

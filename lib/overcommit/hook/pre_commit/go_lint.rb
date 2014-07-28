@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
       # Unfortunately the exit code is always 0
       return :good if result.stdout.empty?
 
-      [:bad, result.stdout]
+      [:fail, result.stdout]
     end
   end
 end
