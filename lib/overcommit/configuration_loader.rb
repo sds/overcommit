@@ -4,11 +4,11 @@ module Overcommit
   # Manages configuration file loading.
   class ConfigurationLoader
     DEFAULT_CONFIG_PATH = File.join(OVERCOMMIT_HOME, 'config', 'default.yml')
-    FILE_NAME = '.overcommit.yml'
 
     class << self
       def load_repo_config
-        overcommit_yml = File.join(Overcommit::Utils.repo_root, FILE_NAME)
+        overcommit_yml = File.join(Overcommit::Utils.repo_root,
+                                   OVERCOMMIT_CONFIG_FILE_NAME)
 
         if File.exist?(overcommit_yml)
           load_file(overcommit_yml)
