@@ -55,7 +55,7 @@ begin
   # Ensure master hook is up-to-date
   installer = Overcommit::Installer.new(logger)
   if installer.run(Overcommit::Utils.repo_root, :action => :update)
-    exec $0 # Execute the updated hook
+    exec($0, *ARGV) # Execute the updated hook with all original arguments
   end
 
   config = Overcommit::ConfigurationLoader.load_repo_config
