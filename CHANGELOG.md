@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.15.0
 
 * Fix bug where incorrect "hook run interrupted" message displayed when
   hook run failed
