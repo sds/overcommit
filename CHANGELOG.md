@@ -13,6 +13,8 @@ Blah
 * Deprecate `:good` status in favor of `:pass`
 * Allow hook statuses to be transformed via `on_fail` and `on_warn`
   configuration options
+* Add `config` attribute as the preferred method to access hook
+  configurations in hook implementations
 
 ## 0.14.1
 

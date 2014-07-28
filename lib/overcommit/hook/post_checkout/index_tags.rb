@@ -17,7 +17,7 @@ module Overcommit::Hook::PostCheckout
     SCRIPT_LOCATION = Overcommit::Utils.script_path('index-tags')
 
     def index_tags_in_background
-      ctags_args = @config['ctags_arguments']
+      ctags_args = config['ctags_arguments']
 
       # TODO: come up with Ruby 1.8-friendly way to do this
       Process.detach(Process.spawn("#{SCRIPT_LOCATION} #{ctags_args}"))

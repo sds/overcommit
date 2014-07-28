@@ -6,6 +6,7 @@ module Overcommit::Hook
     extend Forwardable
 
     def_delegators :@context, :modified_files
+    attr_reader :config
 
     def initialize(config, context)
       @config = config.for_hook(self)

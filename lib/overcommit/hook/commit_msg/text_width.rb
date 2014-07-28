@@ -5,8 +5,8 @@ module Overcommit::Hook::CommitMsg
     def run
       errors = []
 
-      max_subject_width = @config['max_subject_width']
-      max_body_width = @config['max_body_width']
+      max_subject_width = config['max_subject_width']
+      max_body_width = config['max_body_width']
 
       if commit_message_lines.first.size > max_subject_width
         errors << "Please keep the subject <= #{max_subject_width} characters"

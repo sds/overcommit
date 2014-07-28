@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[git config --get user.email])
       email = result.stdout.chomp
 
-      unless email =~ /#{@config['pattern']}/
+      unless email =~ /#{config['pattern']}/
         return :fail,
                "Author has an invalid email address: '#{email}'\n" \
                'Set your email with ' \
