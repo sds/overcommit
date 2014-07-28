@@ -8,7 +8,7 @@ module Overcommit::Hook::CommitMsg
         return :warn, 'You seem to have authored a Russian novel; congratulations!'
       end
 
-      :good
+      :pass
     end
   end
 end

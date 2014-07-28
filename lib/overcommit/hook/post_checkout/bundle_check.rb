@@ -11,7 +11,7 @@ module Overcommit::Hook::PostCheckout
         return :warn, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
       end
 
-      :good
+      :pass
     end
 
   private

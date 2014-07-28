@@ -14,7 +14,7 @@ module Overcommit::Hook::PreCommit
         end
       end
 
-      return :good if output.empty?
+      return :pass if output.empty?
 
       [:fail, output]
     end

@@ -10,7 +10,7 @@ module Overcommit::Hook::CommitMsg
 
     def run
       result = execute([SCRIPT_LOCATION, commit_message_file])
-      return :good if result.success?
+      return :pass if result.success?
 
       [:fail, result.stdout]
     end

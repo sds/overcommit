@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
         return :fail, "Merge conflict markers detected:\n#{result.stdout}"
       end
 
-      :good
+      :pass
     end
   end
 end

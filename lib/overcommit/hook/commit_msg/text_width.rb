@@ -25,7 +25,7 @@ module Overcommit::Hook::CommitMsg
 
       return :warn, errors.join("\n") if errors.any?
 
-      :good
+      :pass
     end
   end
 end

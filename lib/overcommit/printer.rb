@@ -54,7 +54,7 @@ module Overcommit
     def end_hook(hook, status, output)
       # Want to print the header for quiet hooks only if the result wasn't good
       # so that the user knows what failed
-      print_header(hook) if hook.quiet? && status != :good
+      print_header(hook) if hook.quiet? && ![:good, :pass].include?(status)
 
       print_result(hook, status, output)
     end
@@ -68,8 +68,13 @@ module Overcommit
 
     def print_result(hook, status, output) # rubocop:disable CyclomaticComplexity, MethodLength
       case status
-      when :good
+      when :pass
         log.success 'OK' unless hook.quiet?
+      when :good
+        log.success 'OK'
+        log.bold_error 'Hook returned a status of `:good`. This is deprecated ' \
+                       'in favor of `:pass` and will be removed in a future ' \
+                       'version of Overcommit'
       when :warn
         log.warning 'WARNING'
         print_report(output, :bold_warning)

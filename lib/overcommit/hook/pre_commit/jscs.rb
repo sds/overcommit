@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
       end
 
       result = execute(%w[jscs --reporter=inline] + applicable_files)
-      return :good if result.success?
+      return :pass if result.success?
 
       if result.status == 1
         return :warn, result.stderr.chomp

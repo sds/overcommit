@@ -16,7 +16,7 @@ describe Overcommit::HookSigner do
       module Overcommit::Hook::PreCommit
         class SomeHook
           def run
-            :good
+            :pass
           end
         end
       end

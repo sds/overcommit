@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
         return :warn, "Avoid pointing to local paths in Gemfiles:\n#{result.stdout}"
       end
 
-      :good
+      :pass
     end
   end
 end

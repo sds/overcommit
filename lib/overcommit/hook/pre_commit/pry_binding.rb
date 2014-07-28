@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
         return :fail, "Found a `binding.pry` call left in:\n#{result.stdout}"
       end
 
-      :good
+      :pass
     end
   end
 end

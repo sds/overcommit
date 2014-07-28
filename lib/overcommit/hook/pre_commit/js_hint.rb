@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       result = execute(%w[jshint] + applicable_files)
       output = result.stdout
 
-      return :good if output.empty?
+      return :pass if output.empty?
 
       [:fail, output]
     end

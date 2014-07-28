@@ -194,7 +194,7 @@ module Overcommit::Hook::PreCommit
 
     return :fail, errors.join("\n") if errors.any?
 
-    :good
+    :pass
   end
 end
 ```

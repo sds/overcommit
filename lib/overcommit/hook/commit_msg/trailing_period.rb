@@ -6,7 +6,7 @@ module Overcommit::Hook::CommitMsg
         return :warn, 'Please omit trailing period from commit message subject'
       end
 
-      :good
+      :pass
     end
   end
 end

@@ -61,7 +61,7 @@ RSpec::Matchers.define :fail_hook  do |*args|
 end
 
 RSpec::Matchers.define :pass do |*args|
-  check_matcher = HookMatcher.new(:good, args)
+  check_matcher = HookMatcher.new(:pass, args)
 
   match do
     check_matcher.matches?(actual)

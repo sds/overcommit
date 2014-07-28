@@ -6,7 +6,7 @@ module Overcommit::Hook::CommitMsg
         return :warn, 'Subject should be one line and followed by a blank line'
       end
 
-      :good
+      :pass
     end
   end
 end

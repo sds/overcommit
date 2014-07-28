@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[golint] + applicable_files)
       # Unfortunately the exit code is always 0
-      return :good if result.stdout.empty?
+      return :pass if result.stdout.empty?
 
       [:fail, result.stdout]
     end

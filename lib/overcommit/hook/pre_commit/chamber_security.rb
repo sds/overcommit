@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[chamber secure --echo --files] + applicable_files)
 
-      return :good if result.stdout.empty?
+      return :pass if result.stdout.empty?
       [:fail, "These settings appear to need to be secured but were not: #{result.stdout}"]
     end
   end

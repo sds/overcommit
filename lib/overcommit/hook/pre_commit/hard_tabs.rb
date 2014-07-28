@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
         return :fail, "Hard tabs detected:\n#{result.stdout}"
       end
 
-      :good
+      :pass
     end
   end
 end

@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
                "\nSet your name with `git config --global user.name 'Your Name'`"
       end
 
-      :good
+      :pass
     end
   end
 end

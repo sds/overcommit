@@ -18,7 +18,7 @@ module Overcommit::Hook::PreCommit
         end
       end
 
-      :good
+      :pass
     end
 
   private

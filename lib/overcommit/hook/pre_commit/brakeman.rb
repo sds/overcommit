@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[brakeman --exit-on-warn --quiet --summary --only-files] +
                        applicable_files)
-      return :good if result.success?
+      return :pass if result.success?
 
       [:fail, result.stdout]
     end

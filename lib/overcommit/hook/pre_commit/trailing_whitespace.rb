@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
         return :fail, "Trailing whitespace detected:\n#{result.stdout}"
       end
 
-      :good
+      :pass
     end
   end
 end

@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
       end
 
       result = execute(%w[rubocop --format=emacs --force-exclusion] + applicable_files)
-      return :good if result.success?
+      return :pass if result.success?
 
       output = result.stdout + result.stderr
 

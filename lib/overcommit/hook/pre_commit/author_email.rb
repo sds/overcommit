@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
                '`git config --global user.email your_email@example.com`'
       end
 
-      :good
+      :pass
     end
   end
 end

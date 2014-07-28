@@ -4,12 +4,12 @@ module Overcommit::Hook::PostCheckout
   class IndexTags < Base
     def run
       unless in_path?('ctags')
-        return :good # Silently ignore
+        return :pass # Silently ignore
       end
 
       index_tags_in_background
 
-      :good
+      :pass
     end
 
   private

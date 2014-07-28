@@ -7,7 +7,7 @@ module Overcommit::Hook::CommitMsg
         return :warn, "Don't use hard tabs in commit messages"
       end
 
-      :good
+      :pass
     end
   end
 end

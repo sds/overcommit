@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
       end
 
       result = execute(%w[haml-lint] + applicable_files)
-      return :good if result.success?
+      return :pass if result.success?
 
       # Keep lines from the output for files that we actually modified
       error_lines, warning_lines = result.stdout.split("\n").partition do |output_line|

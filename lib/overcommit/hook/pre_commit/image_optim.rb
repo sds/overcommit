@@ -22,7 +22,7 @@ module Overcommit::Hook::PreCommit
           "  image_optim #{optimized_images.join(' ')}"
       end
 
-      :good
+      :pass
     end
 
   private
