@@ -7,6 +7,7 @@
 * Gracefully handle `git stash` failures in pre-commit hook runs
 * Fix `overcommit-hook` auto-updating not passing original arguments to
   updated hook
+* Display message when `overcommit-hook` file is automatically updated
 
 ## 0.14.1
 

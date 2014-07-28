@@ -51,6 +51,8 @@ module Overcommit
       unless FileUtils.compare_file(MASTER_HOOK, master_hook_install_path)
         install_master_hook
         install_hook_symlinks
+
+        log.success "Hooks updated to Overcommit version #{Overcommit::VERSION}"
         true
       end
     end
