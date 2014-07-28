@@ -68,7 +68,7 @@ module Overcommit
         # Ctrl-C actually stops the current hook from being run, but doesn't
         # halt the entire process.
         InterruptHandler.disable!
-        status, output = hook.run
+        status, output = hook.run_and_transform
       rescue => ex
         status = :fail
         output = "Hook raised unexpected error\n#{ex.message}"

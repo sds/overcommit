@@ -151,6 +151,11 @@ Within a configuration file, the following high-level concepts exist:
     only if a file matching the pattern has been modified--note that the
     concept of "modified" varies for different types of hooks)
   * `exclude`: Glob patterns of files that are ignored by this hook
+  * `on_fail`: Allows you to change the status of a failed hook run to either
+    `warn` or `pass` (use this with care, as you are potentially hiding
+    important information)
+  * `on_warn`: Similar to `on_fail`, change the status of hooks that return
+    a warning to either `pass` or `fail`
 
   On top of the above built-in configuration options, each hook can support
   individual configuration. As an example, the `AuthorEmail` hook allows you

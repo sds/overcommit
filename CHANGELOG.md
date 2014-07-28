@@ -11,6 +11,8 @@
 * Deprecate `:bad` status in favor of `:fail`
 Blah
 * Deprecate `:good` status in favor of `:pass`
+* Allow hook statuses to be transformed via `on_fail` and `on_warn`
+  configuration options
 
 ## 0.14.1
 
