@@ -33,6 +33,7 @@ module Overcommit
       ensure_hooks_directory
       install_master_hook
       install_hook_symlinks
+      install_starter_config
 
       log.success "Successfully installed hooks into #{@target}"
     end
@@ -119,6 +120,13 @@ module Overcommit
           FileUtils.rm_rf(hook_type) if overcommit_symlink?(hook_type)
         end
       end
+    end
+
+    def install_starter_config
+      repo_config_file = File.join(@target, '.overcommit.yml')
+
+      return if File.exist?(repo_config_file)
+      FileUtils.cp(File.join(OVERCOMMIT_HOME, 'config', 'starter.yml'), repo_config_file)
     end
 
     def overcommit_symlink?(file)

@@ -15,6 +15,8 @@ Blah
   configuration options
 * Add `config` attribute as the preferred method to access hook
   configurations in hook implementations
+* Generate starter configuration on install with instructions on how to
+  configure overcommit if an `.overcommit.yml` file does not yet exist
 
 ## 0.14.1
 

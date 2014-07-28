@@ -90,6 +90,38 @@ describe Overcommit::Installer do
             end
           end
         end
+
+        context 'and a repo configuration file is already present' do
+          let(:existing_content) { '# Hello World' }
+
+          around do |example|
+            Dir.chdir(target) do
+              File.open('.overcommit.yml', 'w') { |f| f.write(existing_content) }
+              example.run
+            end
+          end
+
+          it 'does not overwrite the existing configuration' do
+            subject
+            File.open('.overcommit.yml').read.should == existing_content
+          end
+        end
+
+        context 'and a repo configuration file is not present' do
+          around do |example|
+            Dir.chdir(target) do
+              example.run
+            end
+          end
+
+          it 'creates a starter configuration file' do
+            subject
+            FileUtils.compare_file(
+              '.overcommit.yml',
+              File.join(Overcommit::OVERCOMMIT_HOME, 'config', 'starter.yml')
+            ).should == true
+          end
+        end
       end
 
       context 'and an uninstall is requested' do
