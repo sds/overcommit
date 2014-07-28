@@ -42,7 +42,7 @@ module Overcommit
 
           run_failed = true if [:bad, :fail].include?(hook_status)
 
-          if hook_status == :interrupted
+          if hook_status == :interrupt
             # Stop running any more hooks and assume a bad result
             interrupted = true
             break
@@ -73,7 +73,7 @@ module Overcommit
         status = :fail
         output = "Hook raised unexpected error\n#{ex.message}"
       rescue Interrupt
-        status = :interrupted
+        status = :interrupt
         output = 'Hook was interrupted by Ctrl-C; restoring repo state...'
       ensure
         InterruptHandler.enable!

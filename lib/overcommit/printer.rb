@@ -87,7 +87,7 @@ module Overcommit
       when :fail
         log.error 'FAILED'
         print_report(output, :bold_error)
-      when :interrupted
+      when :interrupt
         log.error 'INTERRUPTED'
         print_report(output, :bold_error)
       else
