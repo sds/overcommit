@@ -62,8 +62,10 @@ module Overcommit
   private
 
     def print_header(hook)
+      hook_name = "[#{hook.name}] "
       log.partial hook.description
-      log.partial '.' * (70 - hook.description.length)
+      log.partial '.' * [70 - hook.description.length - hook_name.length, 0].max
+      log.partial hook_name
     end
 
     def print_result(hook, status, output) # rubocop:disable CyclomaticComplexity, MethodLength
@@ -92,7 +94,8 @@ module Overcommit
         print_report(output, :bold_error)
       else
         log.error '???'
-        log.bold_error "Hook returned unknown status `#{status.inspect}` -- ignoring." \
+        print_report("Hook returned unknown status `#{status.inspect}` -- ignoring.",
+                     :bold_error)
       end
     end
 

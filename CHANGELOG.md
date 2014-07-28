@@ -17,6 +17,8 @@ Blah
   configurations in hook implementations
 * Generate starter configuration on install with instructions on how to
   configure overcommit if an `.overcommit.yml` file does not yet exist
+* Include name of hook in output (to make it easier to find out which name
+  to use when skipping)
 
 ## 0.14.1
 
