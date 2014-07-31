@@ -63,20 +63,23 @@ module Overcommit
 
       @printer.start_hook(hook)
 
+      status, output = nil, nil
+
       begin
         # Disable the interrupt handler during individual hook run so that
         # Ctrl-C actually stops the current hook from being run, but doesn't
         # halt the entire process.
-        InterruptHandler.disable!
-        status, output = hook.run_and_transform
+        InterruptHandler.disable_until_finished_or_interrupted do
+          status, output = hook.run_and_transform
+        end
       rescue => ex
         status = :fail
         output = "Hook raised unexpected error\n#{ex.message}"
       rescue Interrupt
+        # At this point, interrupt has been handled and protection is back in
+        # effect thanks to the InterruptHandler.
         status = :interrupt
         output = 'Hook was interrupted by Ctrl-C; restoring repo state...'
-      ensure
-        InterruptHandler.enable!
       end
 
       @printer.end_hook(hook, status, output)

@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix edge case where hitting Ctrl-C twice rapidly could result in work
+  tree being lost
+
 ## 0.15.0
 
 * Fix bug where incorrect "hook run interrupted" message displayed when
