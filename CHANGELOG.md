@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.16.0
 
 * Fix edge case where hitting Ctrl-C twice rapidly could result in work
   tree being lost
