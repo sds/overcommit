@@ -42,11 +42,11 @@ module Overcommit::HookContext
     # as if nothing ever changed.
     def cleanup_environment
       unless initial_commit? || (@stash_attempted && !@changes_stashed)
-        `git reset --hard &> /dev/null` # Ensure working tree is clean before popping stash
+        clear_working_tree # Ensure working tree is clean before restoring it
       end
 
       if @changes_stashed
-        `git stash pop --index --quiet`
+        restore_working_tree
       end
 
       Overcommit::GitRepo.restore_merge_state
@@ -68,6 +68,26 @@ module Overcommit::HookContext
     end
 
   private
+
+    # Clears the working tree so that the stash can be applied.
+    def clear_working_tree
+      result = Overcommit::Utils.execute(%w[git reset --hard])
+      unless result.success?
+        raise Overcommit::Exceptions::HookCleanupFailed,
+              "Unable to cleanup working tree after #{hook_script_name} hooks run:" \
+              "\n#{result.stderr}"
+      end
+    end
+
+    # Applies the stash to the working tree to restore the user's state.
+    def restore_working_tree
+      result = Overcommit::Utils.execute(%w[git stash pop --index --quiet])
+      unless result.success?
+        raise Overcommit::Exceptions::HookCleanupFailed,
+              "Unable to restore working tree after #{hook_script_name} hooks run:" \
+              "\n#{result.stderr}"
+      end
+    end
 
     # Returns whether there are any changes to the working tree, staged or
     # otherwise.

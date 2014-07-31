@@ -8,6 +8,9 @@ module Overcommit::Exceptions
   # Raised when a {HookContext} is unable to setup the environment before a run.
   class HookSetupFailed < StandardError; end
 
+  # Raised when a {HookContext} is unable to clean the environment after a run.
+  class HookCleanupFailed < StandardError; end
+
   # Raised when a hook run was cancelled by the user.
   class HookCancelled < StandardError; end
 

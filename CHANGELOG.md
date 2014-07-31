@@ -7,6 +7,9 @@
 * Fix edge case where hitting Ctrl-C after all pre-commit hooks had run
   but before the cleanup had finished would result in a lost working
   tree
+* Handle edge case where if a file was created in the working directory by a
+  separate process in between the working tree being reset and the stash being
+  applied, the hook runner would silently fail
 
 ## 0.15.0
 
