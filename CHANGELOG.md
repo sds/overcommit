@@ -10,6 +10,8 @@
 * Handle edge case where if a file was created in the working directory by a
   separate process in between the working tree being reset and the stash being
   applied, the hook runner would silently fail
+* Prevent stack traces from appearing during early interrupt before Overcommit
+  has loaded its code
 
 ## 0.15.0
 

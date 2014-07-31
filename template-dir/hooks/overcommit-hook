@@ -4,6 +4,14 @@
 # in all of your git hooks being symlinked to this file, allowing the framework
 # to manage your hooks for you.
 
+# Prevent a Ruby stack trace from appearing when we interrupt the hook.
+# Note that this will be overridden when Overcommit is loaded, since the
+# InterruptHandler will redefine the trap at that time.
+Signal.trap('INT') do
+  puts 'Hook run interrupted'
+  exit 130
+end
+
 # Required for Ruby 1.8 compatibility (for older OSX versions)
 if RUBY_VERSION.split('.')[0..1] == %w[1 8]
   require 'rubygems'
@@ -84,7 +92,7 @@ rescue Overcommit::Exceptions::HookSetupFailed,
   exit 74 # EX_IOERR
 rescue Overcommit::Exceptions::HookCancelled
   puts 'You cancelled the hook run'
-  exit 1
+  exit 130 # Ctrl-C cancel
 rescue Overcommit::Exceptions::InvalidGitRepo => error
   puts error
   exit 64 # EX_USAGE
