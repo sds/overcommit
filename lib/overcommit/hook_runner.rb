@@ -17,13 +17,18 @@ module Overcommit
 
     # Loads and runs the hooks registered for this {HookRunner}.
     def run
+      # ASSUMPTION: we assume the setup and cleanup calls will never need to be
+      # interrupted, i.e. they will finish quickly. Should further evidence
+      # suggest this assumption does not hold, we will have to separately wrap
+      # these calls to allow some sort of "are you sure?" double-interrupt
+      # functionality, but until that's deemed necessary let's keep it simple.
       InterruptHandler.isolate_from_interrupts do
         @context.setup_environment
         load_hooks
-        run_hooks
+        result = run_hooks
+        @context.cleanup_environment
+        result
       end
-    ensure
-      @context.cleanup_environment
     end
 
   private

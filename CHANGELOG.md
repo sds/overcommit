@@ -4,6 +4,9 @@
 
 * Fix edge case where hitting Ctrl-C twice rapidly could result in work
   tree being lost
+* Fix edge case where hitting Ctrl-C after all pre-commit hooks had run
+  but before the cleanup had finished would result in a lost working
+  tree
 
 ## 0.15.0
 
