@@ -12,6 +12,7 @@
   applied, the hook runner would silently fail
 * Prevent stack traces from appearing during early interrupt before Overcommit
   has loaded its code
+* Remove `BundleCheck` post-checkout hook as it was a bit overzealous
 
 ## 0.15.0
 

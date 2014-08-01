@@ -21,12 +21,6 @@ PostCheckout:
   ALL:
     required: false
     quiet: false
-  BundleCheck:
-    description: 'Checking Gemfile dependencies'
-    include:
-      - 'Gemfile'
-      - 'Gemfile.lock'
-      - '*.gemspec'
   IndexTags:
     description: 'Generating tags file from source'
     enabled: false
