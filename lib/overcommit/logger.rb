@@ -19,7 +19,7 @@ module Overcommit
     end
 
     def bold(str)
-      color('1;37', str)
+      color('1', str)
     end
 
     def error(str)

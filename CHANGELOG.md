@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Change commit hook header text to bold instead of bold white so that it
+  displays on terminals with a white background
+
 ## 0.16.0
 
 * Fix edge case where hitting Ctrl-C twice rapidly could result in work

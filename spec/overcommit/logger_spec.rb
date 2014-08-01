@@ -85,7 +85,7 @@ describe Overcommit::Logger do
   describe '#bold' do
     it_behaves_like 'colorized output' do
       let(:method) { :bold }
-      let(:color_code) { '1;37' }
+      let(:color_code) { '1' }
     end
   end
 
