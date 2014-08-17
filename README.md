@@ -183,8 +183,9 @@ against our code to catch common errors. For example, since we use
 [RSpec](http://rspec.info/), we want to make sure all spec files contain the
 line `require 'spec_helper'`.
 
-Inside our repository, we can add the following file to `.git-hooks/pre_commit`
-in order to automatically check our spec files:
+Inside our repository, we can add the file
+`.git-hooks/pre_commit/ensure_spec_helper.rb` in order to automatically check
+our spec files:
 
 ```ruby
 module Overcommit::Hook::PreCommit
@@ -212,6 +213,10 @@ PreCommit:
     description: 'Checking for missing inclusion of spec_helper'
     include: '**/*_spec.rb'
 ```
+
+You can see a great example of writing custom Overcommit hooks from the
+following blog post: [How to Write a Custom Overcommit PreCommit
+Git Hook in 4 Steps](http://www.guoxiang.me/posts/28-how-to-write-a-custom-overcommit-precommit-git-hook-in-4-steps)
 
 ## Security
 
