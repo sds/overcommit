@@ -68,8 +68,6 @@ module Overcommit
         end
       end
 
-    private
-
       # Calls a block of code with a modified set of environment variables,
       # restoring them once the code has executed.
       def with_environment(env)

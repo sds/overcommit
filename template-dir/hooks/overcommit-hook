@@ -12,6 +12,12 @@ Signal.trap('INT') do
   exit 130
 end
 
+# Allow hooks to be disabled via environment variable so git commands can be run
+# in scripts without Overcommit running hooks
+if ENV['OVERCOMMIT_DISABLE'].to_i != 0 || ENV['OVERCOMMIT_DISABLED'].to_i != 0
+  exit
+end
+
 # Required for Ruby 1.8 compatibility (for older OSX versions)
 if RUBY_VERSION.split('.')[0..1] == %w[1 8]
   require 'rubygems'

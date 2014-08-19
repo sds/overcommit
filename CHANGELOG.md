@@ -4,6 +4,8 @@
 
 * Change commit hook header text to bold instead of bold white so that it
   displays on terminals with a white background
+* Add support for `OVERCOMMIT_DISABLE` environment variable, which when set
+  prevents Overcommit hooks from running
 
 ## 0.16.0
 

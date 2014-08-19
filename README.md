@@ -108,6 +108,16 @@ Use this feature sparingly, as there is no point to having the hook in the first
 place if you're just going to ignore it. If you want to ensure a hook is never
 skipped, set the `required` option to `true` in its configuration.
 
+### Disabling Overcommit
+
+If you have scripts that execute `git` commands where you don't want Overcommit
+hooks to run, you can disable Overcommit entirely by setting the
+`OVERCOMMIT_DISABLE` environment variable.
+
+```bash
+OVERCOMMIT_DISABLE=1 ./my-custom-script
+```
+
 ## Configuration
 
 Overcommit provides a flexible configuration system that allows you to tailor
