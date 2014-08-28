@@ -59,6 +59,10 @@ module Overcommit
       opts.on_tail('-v', '--version', 'Show version') do
         print_version(opts.program_name)
       end
+
+      opts.on_tail('-l', '--list-hooks', 'List installed hooks') do
+        print_installed_hooks
+      end
     end
 
     def add_installation_options(opts)
@@ -120,6 +124,33 @@ module Overcommit
     def print_version(program_name)
       log.log "#{program_name} #{Overcommit::VERSION}"
       halt
+    end
+
+    # Prints to console the hooks available in the current repo with their
+    # current status.
+    def print_installed_hooks
+      config = Overcommit::ConfigurationLoader.load_repo_config
+      all_hooks = config.all_hooks
+
+      all_hooks.each do |context_name, hook_names|
+        print_hooks_for_context(hook_names, context_name, config)
+      end
+
+      halt
+    end
+
+    def print_hooks_for_context(hooks, context_name, config)
+      # Necessary for determining if a hook is enabled.
+      context = Overcommit::HookContext.create(context_name, config, ARGV, STDIN)
+
+      log.log "#{context_name}:"
+      hooks.each do |hook_name|
+        next if hook_name == 'ALL'
+
+        state =
+          config.hook_enabled?(context, hook_name) ? 'enabled' : 'disabled'
+        log.log "  #{hook_name}: #{state}"
+      end
     end
 
     # Used for ease of stubbing in tests
