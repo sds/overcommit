@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.17.0
 
 * Change commit hook header text to bold instead of bold white so that it
   displays on terminals with a white background
