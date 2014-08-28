@@ -6,6 +6,8 @@
   displays on terminals with a white background
 * Add support for `OVERCOMMIT_DISABLE` environment variable, which when set
   prevents Overcommit hooks from running
+* Fix bug that prevented RailsSchemaUpToDate from working in directories that
+  contained decimals
 
 ## 0.16.0
 

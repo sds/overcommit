@@ -142,6 +142,34 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     it { should pass }
   end
 
+  context 'when schema file w/ latest version and migrations are added in dir w/ number' do
+    let(:user_dir) { 'hdd418/' }
+    before do
+      files = (migration_files << sql_schema_file).map do |file|
+        "#{user_dir}#{file}"
+      end
+      subject.stub(:applicable_files).and_return(files)
+    end
+
+    around do |example|
+      repo do
+        FileUtils.mkdir_p('hdd418/db/migrate')
+
+        File.open(user_dir + sql_schema_file, 'w') { |f| f.write('20140305123456') }
+        `git add #{user_dir}#{sql_schema_file}`
+
+        migration_files.each do |migration_file|
+          File.open(user_dir + migration_file, 'w') { |f| f.write('migration') }
+          `git add #{user_dir}#{migration_file}`
+        end
+
+        example.run
+      end
+    end
+
+    it { should pass }
+  end
+
   context 'when a SQL schema file which is not at the latest version and migrations are added' do
     before do
       subject.stub(:applicable_files).and_return(migration_files << sql_schema_file)
