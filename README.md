@@ -200,17 +200,19 @@ our spec files:
 ```ruby
 module Overcommit::Hook::PreCommit
   class EnsureSpecHelper < Base
-    errors = []
+    def run
+      errors = []
 
-    applicable_files.each do |file|
-      if File.open(file, 'r').read !~ /^require 'spec_helper'/
-        errors << "#{file}: missing `require 'spec_helper'`"
+      applicable_files.each do |file|
+        if File.open(file, 'r').read !~ /^require 'spec_helper'/
+          errors << "#{file}: missing `require 'spec_helper'`"
+        end
       end
+
+      return :fail, errors.join("\n") if errors.any?
+
+      :pass
     end
-
-    return :fail, errors.join("\n") if errors.any?
-
-    :pass
   end
 end
 ```
