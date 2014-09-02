@@ -28,7 +28,7 @@ module Overcommit::HookContext
           # issue (e.g. author/email not set or GPG signing key incorrect)
           raise Overcommit::Exceptions::HookSetupFailed,
                 "Unable to setup environment for #{hook_script_name} hook run:" \
-                "\n#{result.stderr}"
+                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
         end
 
         @changes_stashed = true
@@ -75,7 +75,7 @@ module Overcommit::HookContext
       unless result.success?
         raise Overcommit::Exceptions::HookCleanupFailed,
               "Unable to cleanup working tree after #{hook_script_name} hooks run:" \
-              "\n#{result.stderr}"
+              "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
       end
     end
 
@@ -85,7 +85,7 @@ module Overcommit::HookContext
       unless result.success?
         raise Overcommit::Exceptions::HookCleanupFailed,
               "Unable to restore working tree after #{hook_script_name} hooks run:" \
-              "\n#{result.stderr}"
+              "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
       end
     end
 

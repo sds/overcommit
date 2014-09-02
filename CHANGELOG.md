@@ -10,6 +10,8 @@
   contained decimals
 * Warn when trying to pipe commands using the `execute` helper, as this is not
   supported
+* Include both standard out/error streams in exception messages in pre-commit
+  hook context
 
 ## 0.16.0
 
