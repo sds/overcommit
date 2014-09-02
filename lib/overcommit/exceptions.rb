@@ -20,6 +20,10 @@ module Overcommit::Exceptions
   # Raised when a {HookRunner} could not be loaded.
   class HookContextLoadError < StandardError; end
 
+  # Raised when a pipe character is used in the `execute` helper, as this was
+  # likely used in error.
+  class InvalidCommandArgs < StandardError; end
+
   # Raised when an installation target is not a valid git repository.
   class InvalidGitRepo < StandardError; end
 

@@ -68,4 +68,25 @@ describe Overcommit::Utils do
 
     it { should =~ %w[CommitMsg PreCommit PostCheckout] }
   end
+
+  describe '.execute' do
+    let(:arguments) { %w[echo -n Hello World] }
+    subject { described_class.execute(arguments) }
+
+    it 'returns result with the output' do
+      subject.stdout.should == 'Hello World'
+    end
+
+    it 'returns result with the exit status' do
+      subject.status.should == 0
+    end
+
+    context 'when one of the arguments is a lone pipe character' do
+      let(:arguments) { %w[ps aux | grep bash] }
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error Overcommit::Exceptions::InvalidCommandArgs
+      end
+    end
+  end
 end

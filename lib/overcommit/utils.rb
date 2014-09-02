@@ -63,6 +63,11 @@ module Overcommit
       # specified in Overcommit's Gemfile--a nasty consequence of using
       # `bundle exec overcommit` while developing locally.
       def execute(args)
+        if args.include?('|')
+          raise Overcommit::Exceptions::InvalidCommandArgs,
+                'Cannot pipe commands with the `execute` helper'
+        end
+
         with_environment 'RUBYOPT' => nil do
           Subprocess.spawn(args)
         end

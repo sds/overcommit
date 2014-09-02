@@ -8,6 +8,8 @@
   prevents Overcommit hooks from running
 * Fix bug that prevented RailsSchemaUpToDate from working in directories that
   contained decimals
+* Warn when trying to pipe commands using the `execute` helper, as this is not
+  supported
 
 ## 0.16.0
 
