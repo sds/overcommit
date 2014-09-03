@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::ImageOptim do
 
   context 'when a dependency of image_optim is not installed' do
     before do
-      subject.stub(:optimize_images).and_raise(::ImageOptim::BinNotFoundError)
+      subject.stub(:optimize_images).and_raise(::ImageOptim::BinResolver::BinNotFound)
     end
 
     it { should fail_hook }

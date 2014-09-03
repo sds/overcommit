@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency             'childprocess', '>= 0.5.1'
 
-  s.add_development_dependency 'image_optim', '~> 0.14.0'
+  s.add_development_dependency 'image_optim', '~> 0.15.0'
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rubocop', '0.25.0' # Pin for Travis builds
 end

@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Update minimum version of `image_optim` gem to 0.15.0 (breaking change in
+  name of exception classes)
+
 ## 0.17.0
 
 * Change commit hook header text to bold instead of bold white so that it
