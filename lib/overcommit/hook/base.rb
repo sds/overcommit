@@ -8,6 +8,8 @@ module Overcommit::Hook
     def_delegators :@context, :modified_files
     attr_reader :config
 
+    # @param config [Overcommit::Configuration]
+    # @param context [Overcommit::HookContext]
     def initialize(config, context)
       @config = config.for_hook(self)
       @context = context

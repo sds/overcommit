@@ -3,7 +3,7 @@ require 'optparse'
 module Overcommit
   # Responsible for parsing command-line options and executing appropriate
   # application logic based on those options.
-  class CLI
+  class CLI # rubocop:disable ClassLength
     def initialize(arguments, logger)
       @arguments = arguments
       @log       = logger
@@ -126,30 +126,28 @@ module Overcommit
       halt
     end
 
-    # Prints to console the hooks available in the current repo with their
-    # current status.
+    # Prints the hooks available in the current repo and whether they're
+    # enabled/disabled.
     def print_installed_hooks
       config = Overcommit::ConfigurationLoader.load_repo_config
-      all_hooks = config.all_hooks
 
-      all_hooks.each do |context_name, hook_names|
-        print_hooks_for_context(hook_names, context_name, config)
+      config.all_hook_configs.each do |hook_type, hook_configs|
+        print_hooks_for_hook_type(hook_configs, hook_type)
       end
 
       halt
     end
 
-    def print_hooks_for_context(hooks, context_name, config)
-      # Necessary for determining if a hook is enabled.
-      context = Overcommit::HookContext.create(context_name, config, ARGV, STDIN)
+    def print_hooks_for_hook_type(hook_configs, hook_type)
+      log.log "#{hook_type}:"
+      hook_configs.each do |hook_name, config|
+        log.partial "  #{hook_name}: "
 
-      log.log "#{context_name}:"
-      hooks.each do |hook_name|
-        next if hook_name == 'ALL'
-
-        state =
-          config.hook_enabled?(context, hook_name) ? 'enabled' : 'disabled'
-        log.log "  #{hook_name}: #{state}"
+        if config['enabled']
+          log.success('enabled')
+        else
+          log.error('disabled')
+        end
       end
     end
 
