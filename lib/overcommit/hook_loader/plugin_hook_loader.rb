@@ -18,12 +18,12 @@ module Overcommit::HookLoader
       end
     end
 
-  private
+    private
 
     def check_for_modified_plugins(plugin_paths)
       modified_plugins = plugin_paths.
         map { |path| Overcommit::HookSigner.new(path, @config, @context) }.
-        select { |signer| signer.signature_changed? }
+        select(&:signature_changed?)
 
       return if modified_plugins.empty?
 
@@ -45,7 +45,7 @@ module Overcommit::HookLoader
         raise Overcommit::Exceptions::HookCancelled
       end
 
-      modified_plugins.each { |signer| signer.update_signature! }
+      modified_plugins.each(&:update_signature!)
     end
   end
 end

@@ -13,7 +13,7 @@ module Overcommit
       @io.gets
     end
 
-  private
+    private
 
     # Git hooks are not interactive and will close STDIN by default.
     def reopen_tty

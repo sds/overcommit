@@ -38,7 +38,7 @@ module Overcommit
       end
     end
 
-  private
+    private
 
     # Calculates a hash of a hook using a combination of its configuration and
     # file contents.

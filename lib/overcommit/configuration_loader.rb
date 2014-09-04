@@ -21,7 +21,7 @@ module Overcommit
         @default_config ||= load_from_file(DEFAULT_CONFIG_PATH)
       end
 
-    private
+      private
 
       # Loads a configuration, ensuring it extends the default configuration.
       def load_file(file)

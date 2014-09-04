@@ -66,11 +66,11 @@ module Overcommit
       end
     end
 
-  protected
+    protected
 
     attr_reader :hash
 
-  private
+    private
 
     def built_in_hook?(hook_context, hook_name)
       hook_name = Overcommit::Utils.snake_case(hook_name)

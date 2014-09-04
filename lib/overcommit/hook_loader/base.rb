@@ -20,7 +20,7 @@ module Overcommit::HookLoader
       raise NotImplementedError
     end
 
-  private
+    private
 
     attr_reader :log
 

@@ -25,7 +25,7 @@ module Overcommit::Hook::PreCommit
       :pass
     end
 
-  private
+    private
 
     def optimize_images(image_paths)
       image_optim = ::ImageOptim.new(:pngout => false)

@@ -9,7 +9,7 @@ module Overcommit
       hash
     end
 
-  private
+    private
 
     # Ensures that keys for all supported hook types exist (PreCommit,
     # CommitMsg, etc.)

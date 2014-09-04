@@ -28,7 +28,7 @@ module Overcommit::Hook::PreCommit
       :pass
     end
 
-  private
+    private
 
     def migration_files
       @migration_files ||= applicable_files.select do |file|

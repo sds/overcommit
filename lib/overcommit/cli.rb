@@ -21,7 +21,7 @@ module Overcommit
       end
     end
 
-  private
+    private
 
     attr_reader :log
 

@@ -42,7 +42,7 @@ module Overcommit
       # Returns a list of supported hook classes (PreCommit, CommitMsg, etc.)
       def supported_hook_type_classes
         supported_hook_types.map do |file|
-          file.split('-').map { |part| part.capitalize }.join
+          file.split('-').map(&:capitalize).join
         end
       end
 

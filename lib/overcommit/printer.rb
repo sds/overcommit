@@ -59,7 +59,7 @@ module Overcommit
       print_result(hook, status, output)
     end
 
-  private
+    private
 
     def print_header(hook)
       hook_name = "[#{hook.name}] "

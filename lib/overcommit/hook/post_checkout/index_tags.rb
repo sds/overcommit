@@ -12,7 +12,7 @@ module Overcommit::Hook::PostCheckout
       :pass
     end
 
-  private
+    private
 
     SCRIPT_LOCATION = Overcommit::Utils.script_path('index-tags')
 

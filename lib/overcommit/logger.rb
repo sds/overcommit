@@ -42,7 +42,7 @@ module Overcommit
       color('1;33', str)
     end
 
-  private
+    private
 
     def color(code, str)
       log(@out.tty? ? "\033[#{code}m#{str}\033[0m" : str)

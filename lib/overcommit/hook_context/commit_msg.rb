@@ -23,7 +23,7 @@ module Overcommit::HookContext
       @args[0]
     end
 
-  private
+    private
 
     def raw_commit_message_lines
       ::IO.readlines(commit_message_file)

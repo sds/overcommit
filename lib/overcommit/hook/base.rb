@@ -74,7 +74,7 @@ module Overcommit::Hook
       @applicable_files ||= modified_files.select { |file| applicable_file?(file) }
     end
 
-  private
+    private
 
     def requires_modified_files?
       @config['requires_files']

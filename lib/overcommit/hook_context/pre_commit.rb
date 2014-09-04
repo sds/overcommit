@@ -67,7 +67,7 @@ module Overcommit::HookContext
       @modified_lines[file] ||= Overcommit::GitRepo.extract_modified_lines(file, :staged => true)
     end
 
-  private
+    private
 
     # Clears the working tree so that the stash can be applied.
     def clear_working_tree
