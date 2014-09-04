@@ -4,6 +4,8 @@
 
 * Update minimum version of `image_optim` gem to 0.15.0 (breaking change in
   name of exception classes)
+* Add `--list-hooks` flag which displays all hooks for a repository and
+  whether they are enabled/disabled
 
 ## 0.17.0
 
