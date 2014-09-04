@@ -132,21 +132,27 @@ module Overcommit
       config = Overcommit::ConfigurationLoader.load_repo_config
 
       config.all_hook_configs.each do |hook_type, hook_configs|
-        print_hooks_for_hook_type(hook_configs, hook_type)
+        print_hooks_for_hook_type(config, hook_configs, hook_type)
       end
 
       halt
     end
 
-    def print_hooks_for_hook_type(hook_configs, hook_type)
+    def print_hooks_for_hook_type(repo_config, hook_configs, hook_type)
       log.log "#{hook_type}:"
       hook_configs.each do |hook_name, config|
         log.partial "  #{hook_name}: "
 
         if config['enabled']
-          log.success('enabled')
+          log.success('enabled', true)
         else
-          log.error('disabled')
+          log.error('disabled', true)
+        end
+
+        if repo_config.plugin_hook?(hook_type, hook_name)
+          log.warning(' (plugin)')
+        else
+          log.log
         end
       end
     end

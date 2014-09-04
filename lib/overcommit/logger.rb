@@ -18,34 +18,35 @@ module Overcommit
       @out.puts(*args)
     end
 
-    def bold(str)
-      color('1', str)
+    def bold(*args)
+      color('1', *args)
     end
 
-    def error(str)
-      color(31, str)
+    def error(*args)
+      color(31, *args)
     end
 
-    def bold_error(str)
-      color('1;31', str)
+    def bold_error(*args)
+      color('1;31', *args)
     end
 
-    def success(str)
-      color(32, str)
+    def success(*args)
+      color(32, *args)
     end
 
-    def warning(str)
-      color(33, str)
+    def warning(*args)
+      color(33, *args)
     end
 
-    def bold_warning(str)
-      color('1;33', str)
+    def bold_warning(*args)
+      color('1;33', *args)
     end
 
     private
 
-    def color(code, str)
-      log(@out.tty? ? "\033[#{code}m#{str}\033[0m" : str)
+    def color(code, str, partial = false)
+      send(partial ? :partial : :log,
+           @out.tty? ? "\033[#{code}m#{str}\033[0m" : str)
     end
   end
 end

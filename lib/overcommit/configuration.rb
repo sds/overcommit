@@ -1,6 +1,6 @@
 module Overcommit
   # Stores configuration for Overcommit and the hooks it runs.
-  class Configuration
+  class Configuration # rubocop:disable ClassLength
     # Creates a configuration from the given hash.
     def initialize(hash)
       @hash = ConfigurationValidator.new.validate(hash)
@@ -25,6 +25,13 @@ module Overcommit
     #
     # @return [Hash]
     def all_hook_configs
+      smart_merge(all_builtin_hook_configs, all_plugin_hook_configs)
+    end
+
+    # Returns configuration for all built-in hooks in each hook type.
+    #
+    # @return [Hash]
+    def all_builtin_hook_configs
       hook_configs = {}
 
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
@@ -33,6 +40,32 @@ module Overcommit
         hook_configs[hook_type] = Hash[
           hook_names.map do |hook_name|
             [hook_name, for_hook(hook_name, hook_type)]
+          end
+        ]
+      end
+
+      hook_configs
+    end
+
+    # Returns configuration for all plugin hooks in each hook type.
+    #
+    # @return [Hash]
+    def all_plugin_hook_configs
+      hook_configs = {}
+
+      Overcommit::Utils.supported_hook_types.each do |hook_type|
+        hook_type_class_name = Overcommit::Utils.camel_case(hook_type)
+
+        directory = File.join(plugin_directory, hook_type.gsub('-', '_'))
+        plugin_paths = Dir[File.join(directory, '*.rb')].sort
+
+        hook_names = plugin_paths.map do |path|
+          Overcommit::Utils.camel_case(File.basename(path, '.rb'))
+        end
+
+        hook_configs[hook_type_class_name] = Hash[
+          hook_names.map do |hook_name|
+            [hook_name, for_hook(hook_name, Overcommit::Utils.camel_case(hook_type))]
           end
         ]
       end
@@ -91,6 +124,18 @@ module Overcommit
       end
     end
 
+    def plugin_hook?(hook_context_or_type, hook_name)
+      hook_type_name =
+        if hook_context_or_type.is_a?(String)
+          Overcommit::Utils.snake_case(hook_context_or_type)
+        else
+          hook_context_or_type.hook_type_name
+        end
+      hook_name = Overcommit::Utils.snake_case(hook_name)
+
+      File.exist?(File.join(plugin_directory, hook_type_name, "#{hook_name}.rb"))
+    end
+
     protected
 
     attr_reader :hash
@@ -104,14 +149,6 @@ module Overcommit
                             hook_context.hook_type_name, "#{hook_name}.rb"))
     end
 
-    def plugin_hook?(hook_context, hook_name)
-      hook_name = Overcommit::Utils.snake_case(hook_name)
-
-      File.exist?(File.join(plugin_directory,
-                            hook_context.hook_type_name,
-                            "#{hook_name}.rb"))
-    end
-
     def hook_exists?(hook_context, hook_name)
       built_in_hook?(hook_context, hook_name) ||
         plugin_hook?(hook_context, hook_name)
@@ -121,7 +158,7 @@ module Overcommit
       hook_type = hook_context_or_type.is_a?(String) ? hook_context_or_type :
                                                        hook_context_or_type.hook_class_name
 
-      individual_enabled = @hash[hook_type][hook_name]['enabled']
+      individual_enabled = @hash[hook_type].fetch(hook_name, {})['enabled']
       return individual_enabled unless individual_enabled.nil?
 
       all_enabled = @hash[hook_type]['ALL']['enabled']

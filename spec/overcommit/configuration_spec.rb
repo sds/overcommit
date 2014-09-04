@@ -144,8 +144,8 @@ describe Overcommit::Configuration do
         let(:child) { { 'PreCommit' => { 'SomeOtherHook' => { 'something' => 2 } } } }
 
         it 'merges the hashes together' do
-          subject.for_hook('SomeHook', 'PreCommit').should == { 'some-value' => 1 }
-          subject.for_hook('SomeOtherHook', 'PreCommit').should == { 'something' => 2 }
+          subject.for_hook('SomeHook', 'PreCommit').should include('some-value' => 1)
+          subject.for_hook('SomeOtherHook', 'PreCommit').should include('something' => 2)
         end
       end
 
@@ -153,8 +153,8 @@ describe Overcommit::Configuration do
         let(:child) { { 'CommitMsg' => { 'SomeHook' => { 'some-value' => 2 } } } }
 
         it 'appends the item to the parent array' do
-          subject.for_hook('SomeHook', 'PreCommit').should == { 'some-value' => 1 }
-          subject.for_hook('SomeHook', 'CommitMsg').should == { 'some-value' => 2 }
+          subject.for_hook('SomeHook', 'PreCommit').should include('some-value' => 1)
+          subject.for_hook('SomeHook', 'CommitMsg').should include('some-value' => 2)
         end
       end
     end
