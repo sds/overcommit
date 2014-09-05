@@ -3,11 +3,7 @@ module Overcommit::Hook::PreCommit
   # files.
   class Jscs < Base
     def run
-      unless in_path?('jscs')
-        return :warn, 'jscs not installed -- run `npm install -g jscs`'
-      end
-
-      result = execute(%w[jscs --reporter=inline] + applicable_files)
+      result = execute(%W[#{executable} --reporter=inline] + applicable_files)
       return :pass if result.success?
 
       if result.status == 1

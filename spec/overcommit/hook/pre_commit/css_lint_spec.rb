@@ -6,16 +6,7 @@ describe Overcommit::Hook::PreCommit::CssLint do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:in_path?).and_return(true)
     subject.stub(:applicable_files).and_return(%w[file1.css file2.css])
-  end
-
-  context 'when csslint is not installed' do
-    before do
-      subject.stub(:in_path?).and_return(false)
-    end
-
-    it { should warn }
   end
 
   context 'when csslint exits with no output' do

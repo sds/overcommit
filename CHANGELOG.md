@@ -9,6 +9,7 @@
 * Add `required_executable` and `install_command` options that allow a hook
   to define an executable that must be in the `PATH` in order for it to work,
   and a command the user can use to install the executable if it doesn't exist
+* All built-in hooks will now fail if the required executable is not present
 
 ## 0.17.0
 

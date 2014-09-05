@@ -22,8 +22,8 @@ PostCheckout:
     required: false
     quiet: false
   IndexTags:
-    description: 'Generating tags file from source'
     enabled: false
+    description: 'Generating tags file from source'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
@@ -50,6 +50,8 @@ PreCommit:
 
   BerksfileCheck:
     description: 'Checking Berksfile lock'
+    required_executable: 'berks'
+    install_command: 'gem install berks'
     include:
       - 'Berksfile'
       - 'Berksfile.lock'
@@ -57,11 +59,15 @@ PreCommit:
   Brakeman:
     enabled: false
     description: 'Checking for security vulnerabilities'
+    required_executable: 'brakeman'
+    install_command: 'gem install brakeman'
     include:
       - '**/*.rb'
 
   BundleCheck:
     description: 'Checking Gemfile dependencies'
+    required_executable: 'bundle'
+    install_command: 'gem install bundler'
     include:
       - 'Gemfile'
       - 'Gemfile.lock'
@@ -70,22 +76,32 @@ PreCommit:
   ChamberSecurity:
     enabled: false
     description: 'Checking that settings have been secured with Chamber'
+    required_executable: 'chamber'
+    install_command: 'gem install chamber'
     include: 'config/settings.yml'
 
   CoffeeLint:
     description: 'Analyzing with coffeelint'
+    required_executable: 'coffeelint'
+    install_command: 'npm install -g coffeelint'
     include: '**/*.coffee'
 
   CssLint:
     description: 'Analyzing with csslint'
+    required_executable: 'csslint'
+    install_command: 'npm install -g csslint'
     include: '**/*.css'
 
   GoLint:
     description: 'Analyzing with golint'
+    required_executable: 'golint'
+    install_command: 'go get github.com/golang/lint/golint'
     include: '**/*.go'
 
   HamlLint:
     description: 'Analyzing with haml-lint'
+    required_executable: 'haml-lint'
+    install_command: 'gem install haml-lint'
     include: '**/*.haml'
 
   HardTabs:
@@ -105,10 +121,14 @@ PreCommit:
 
   Jscs:
     description: 'Analyzing with JSCS'
+    required_executable: 'jscs'
+    install_command: 'npm install -g jscs'
     include: '**/*.js'
 
   JsHint:
     description: 'Analyzing with JSHint'
+    required_executable: 'jshint'
+    install_command: 'npm install -g jshint'
     include: '**/*.js'
 
   JsonSyntax:
@@ -117,6 +137,8 @@ PreCommit:
 
   JsxHint:
     description: 'Analyzing with JSXHint'
+    required_executable: 'jsxhint'
+    install_command: 'npm install -g jsxhint'
     include: '**/*.jsx'
 
   LocalPathsInGemfile:
@@ -134,6 +156,8 @@ PreCommit:
 
   PythonFlake8:
     description: 'Analyzing with flake8'
+    required_executable: 'flake8'
+    install_command: 'pip install flake8'
     include: '**/*.py'
 
   RailsSchemaUpToDate:
@@ -145,6 +169,8 @@ PreCommit:
 
   Rubocop:
     description: 'Analyzing with Rubocop'
+    required_executable: 'rubocop'
+    install_command: 'gem install rubocop'
     include:
       - '**/*.gemspec'
       - '**/*.rake'
@@ -154,6 +180,8 @@ PreCommit:
 
   ScssLint:
     description: 'Analyzing with scss-lint'
+    required_executable: 'scss-lint'
+    install_command: 'gem install scss-lint'
     include: '**/*.scss'
 
   TrailingWhitespace:
@@ -163,6 +191,8 @@ PreCommit:
 
   TravisLint:
     description: 'Checking Travis CI configuration'
+    required_executable: 'travis-lint'
+    install_command: 'gem install travis-lint'
     include: '.travis.yml'
 
   YamlSyntax:

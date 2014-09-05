@@ -2,11 +2,7 @@ module Overcommit::Hook::PreCommit
   # Runs `haml-lint` against any modified HAML files.
   class HamlLint < Base
     def run
-      unless in_path?('haml-lint')
-        return :warn, 'haml-lint not installed -- run `gem install haml-lint`'
-      end
-
-      result = execute(%w[haml-lint] + applicable_files)
+      result = execute([executable] + applicable_files)
       return :pass if result.success?
 
       # Keep lines from the output for files that we actually modified

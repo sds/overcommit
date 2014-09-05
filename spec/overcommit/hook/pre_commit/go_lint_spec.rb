@@ -6,16 +6,7 @@ describe Overcommit::Hook::PreCommit::GoLint do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:in_path?).and_return(true)
     subject.stub(:applicable_files).and_return(%w[file1.go file2.go])
-  end
-
-  context 'when golint is not installed' do
-    before do
-      subject.stub(:in_path?).and_return(false)
-    end
-
-    it { should warn }
   end
 
   context 'when golint exits successfully' do

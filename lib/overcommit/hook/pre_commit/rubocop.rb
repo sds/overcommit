@@ -2,11 +2,7 @@ module Overcommit::Hook::PreCommit
   # Runs `rubocop` against any modified Ruby files.
   class Rubocop < Base
     def run
-      unless in_path?('rubocop')
-        return :warn, 'Rubocop not installed -- run `gem install rubocop`'
-      end
-
-      result = execute(%w[rubocop --format=emacs --force-exclusion] + applicable_files)
+      result = execute(%W[#{executable} --format=emacs --force-exclusion] + applicable_files)
       return :pass if result.success?
 
       output = result.stdout + result.stderr

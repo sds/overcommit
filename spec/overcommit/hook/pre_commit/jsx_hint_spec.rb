@@ -6,16 +6,7 @@ describe Overcommit::Hook::PreCommit::JsxHint do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:in_path?).and_return(true)
     subject.stub(:applicable_files).and_return(%w[file1.js.jsx file2.js.jsx])
-  end
-
-  context 'when jsxhint is not installed' do
-    before do
-      subject.stub(:in_path?).and_return(false)
-    end
-
-    it { should warn }
   end
 
   context 'when jsxhint exits with no output' do

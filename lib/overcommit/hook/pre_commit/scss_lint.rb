@@ -2,11 +2,7 @@ module Overcommit::Hook::PreCommit
   # Runs `scss-lint` against any modified SCSS files.
   class ScssLint < Base
     def run
-      unless in_path?('scss-lint')
-        return :warn, 'scss-lint not installed -- run `gem install scss-lint`'
-      end
-
-      result = execute(%w[scss-lint] + applicable_files)
+      result = execute([executable] + applicable_files)
       return :pass if result.success?
 
       # Keep lines from the output for files that we actually modified

@@ -6,16 +6,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:in_path?).and_return(true)
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
-  end
-
-  context 'when jscs is not installed' do
-    before do
-      subject.stub(:in_path?).and_return(false)
-    end
-
-    it { should warn }
   end
 
   context 'when no configuration is found' do

@@ -5,22 +5,18 @@ module Overcommit::Hook::PreCommit
     LOCK_FILE = 'Gemfile.lock'
 
     def run
-      unless in_path?('bundle')
-        return :warn, 'bundler not installed -- run `gem install bundler`'
-      end
-
       # Ignore if Gemfile.lock is not tracked by git
       ignored_files = execute(%w[git ls-files -o -i --exclude-standard]).stdout.split("\n")
       return :pass if ignored_files.include?(LOCK_FILE)
 
-      result = execute(%w[bundle check])
+      result = execute(%W[#{executable} check])
       unless result.success?
         return :fail, result.stdout
       end
 
       result = execute(%w[git diff --quiet --] + [LOCK_FILE])
       unless result.success?
-        return :fail, "#{LOCK_FILE} is not up-to-date -- run `bundle check`"
+        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{executable} check`"
       end
 
       :pass
