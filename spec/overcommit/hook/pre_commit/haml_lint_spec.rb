@@ -6,16 +6,7 @@ describe Overcommit::Hook::PreCommit::HamlLint do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:in_path?).and_return(true)
     subject.stub(:applicable_files).and_return(%w[file1.haml file2.haml])
-  end
-
-  context 'when haml-lint is not installed' do
-    before do
-      subject.stub(:in_path?).and_return(false)
-    end
-
-    it { should warn }
   end
 
   context 'when haml-lint exits successfully' do
