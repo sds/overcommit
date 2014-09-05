@@ -27,7 +27,11 @@ module Overcommit::Hook
     # implement `#run`, and we needed a wrapper step to transform the status
     # based on any custom configuration.
     def run_and_transform
-      status, output = run
+      if output = check_for_executable
+        status = :fail
+      else
+        status, output = run
+      end
 
       [transform_status(status), output]
     end
@@ -70,6 +74,14 @@ module Overcommit::Hook
       Overcommit::Utils.execute(cmd)
     end
 
+    def executable
+      @config['required_executable']
+    end
+
+    def install_command
+      @config['install_command']
+    end
+
     # Gets a list of staged files that apply to this hook based on its
     # configured `include` and `exclude` lists.
     def applicable_files
@@ -107,6 +119,20 @@ module Overcommit::Hook
                     File::FNM_PATHNAME | # Wildcard doesn't match separator
                     File::FNM_DOTMATCH   # Wildcards match dotfiles
       )
+    end
+
+    # If the hook defines a required executable, check if it's in the path and
+    # display the install command if one exists.
+    def check_for_executable
+      return unless executable && !in_path?(executable)
+
+      output = "'#{executable}' is not installed (or is not in your PATH)"
+
+      if install_command
+        output += "\nInstall it by running: #{install_command}"
+      end
+
+      output
     end
 
     # Transforms the hook's status based on custom configuration.

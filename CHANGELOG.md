@@ -6,6 +6,9 @@
   name of exception classes)
 * Add `--list-hooks` flag which displays all hooks for a repository and
   whether they are enabled/disabled
+* Add `required_executable` and `install_command` options that allow a hook
+  to define an executable that must be in the `PATH` in order for it to work,
+  and a command the user can use to install the executable if it doesn't exist
 
 ## 0.17.0
 

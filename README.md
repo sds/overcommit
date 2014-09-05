@@ -167,6 +167,10 @@ Within a configuration file, the following high-level concepts exist:
     important information)
   * `on_warn`: Similar to `on_fail`, change the status of hooks that return
     a warning to either `pass` or `fail`
+  * `required_executable`: Name of an executable that needs to exist in order
+    for the hook to run
+  * `install_command`: Command the user can run to install the
+    `required_executable`
 
   On top of the above built-in configuration options, each hook can support
   individual configuration. As an example, the `AuthorEmail` hook allows you
