@@ -91,7 +91,9 @@ module Overcommit
       #
       # @return [true,false]
       def broken_symlink?(file)
-        File.symlink?(file) && !File.exist?(file)
+        # JRuby's implementation of File.exist? returns true for broken
+        # symlinks, so we need use File.size?
+        File.symlink?(file) && File.size?(file).nil?
       end
     end
   end
