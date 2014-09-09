@@ -64,6 +64,10 @@ PreCommit:
     include:
       - '**/*.rb'
 
+  BrokenSymlinks:
+    description: 'Checking for broken symlinks'
+    quiet: true
+
   BundleCheck:
     description: 'Checking Gemfile dependencies'
     required_executable: 'bundle'

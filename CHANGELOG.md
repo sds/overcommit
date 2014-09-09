@@ -12,6 +12,7 @@
 * All built-in hooks will now fail if the required executable is not present
 * Fix bug where pre-commit hook would crash if user attempted to commit a
   broken symlink
+* Add `BrokenSymlinks` pre-commit hook which checks for broken symlinks
 
 ## 0.17.0
 
