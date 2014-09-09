@@ -114,6 +114,7 @@ module Overcommit::HookContext
       @modified_times = {}
 
       modified_files.each do |file|
+        next if Overcommit::Utils.broken_symlink?(file)
         @modified_times[file] = File.mtime(file)
       end
     end
@@ -122,6 +123,7 @@ module Overcommit::HookContext
     # appear like they never changed.
     def restore_modified_times
       modified_files.each do |file|
+        next if Overcommit::Utils.broken_symlink?(file)
         time = @modified_times[file]
         File.utime(time, time, file)
       end

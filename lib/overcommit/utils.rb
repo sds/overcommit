@@ -86,6 +86,13 @@ module Overcommit
       ensure
         old_env.each { |var, value| ENV[var.to_s] = value }
       end
+
+      # Returns whether a file is a broken symlink.
+      #
+      # @return [true,false]
+      def broken_symlink?(file)
+        File.symlink?(file) && !File.exist?(file)
+      end
     end
   end
 end

@@ -66,6 +66,22 @@ describe Overcommit::HookContext::PreCommit do
           to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
       end
     end
+
+    context 'when a broken symlink is staged' do
+      around do |example|
+        repo do
+          `ln -s non-existent-file symlink`
+          `git add symlink`
+          example.run
+        end
+      end
+
+      it 'does not attempt to update/restore the modification time of the file' do
+        File.should_not_receive(:mtime)
+        File.should_not_receive(:utime)
+        subject
+      end
+    end
   end
 
   describe '#cleanup_environment' do
