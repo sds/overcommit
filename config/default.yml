@@ -82,7 +82,9 @@ PreCommit:
     description: 'Checking that settings have been secured with Chamber'
     required_executable: 'chamber'
     install_command: 'gem install chamber'
-    include: 'config/settings.yml'
+    include:
+      - 'config/settings.yml'
+      - 'config/settings/**/*.yml'
 
   CoffeeLint:
     description: 'Analyzing with coffeelint'
