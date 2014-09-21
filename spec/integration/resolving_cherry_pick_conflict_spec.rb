@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'resolving merge conflicts' do
+describe 'resolving cherry-pick conflicts' do
   subject { shell(%w[git commit -m "Resolve conflicts" -i some-file]) }
 
   let(:config) { <<-YML }
@@ -44,5 +44,10 @@ describe 'resolving merge conflicts' do
   it 'does not remove the CHERRY_PICK_HEAD file' do
     subject
     `ls -al .git`.should include 'CHERRY_PICK_HEAD'
+  end
+
+  it 'keeps the commit message from the cherry-picked commit' do
+    subject
+    `cat .git/MERGE_MSG`.should include 'Add Branch 2 addition'
   end
 end

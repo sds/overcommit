@@ -15,6 +15,8 @@
 * Add `BrokenSymlinks` pre-commit hook which checks for broken symlinks
 * Fix Chamber integration
 * Fix 'include' path for ChamberSecurity
+* Fix bug where commit message from cherry-picked commit would be lost if
+  there were conflicts
 
 ## 0.17.0
 

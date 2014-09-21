@@ -66,10 +66,10 @@ module Overcommit
       # conflict. This is necessary since stashing removes the merge state.
       if merge_head != 'MERGE_HEAD'
         @merge_head = merge_head
-
-        merge_msg_file = File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root)
-        @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
       end
+
+      merge_msg_file = File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root)
+      @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
     end
 
     # Store any relevant files that are present when repo is in the middle of a
