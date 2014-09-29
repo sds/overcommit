@@ -1,5 +1,8 @@
 # Overcommit Changelog
 
+## master (unreleased)
+* Add `--no-pngout` flag for `image_optim` command on `:fail` message
+
 ## 0.18.0
 
 * Update minimum version of `image_optim` gem to 0.15.0 (breaking change in
