@@ -2,6 +2,7 @@
 
 ## master (unreleased)
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
+* Fix `Brakeman` pre-commit hook when multiple files have been staged
 
 ## 0.18.0
 
