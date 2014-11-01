@@ -40,13 +40,20 @@ module Overcommit::HookContext
 
     # Restore unstaged changes and reset file modification times so it appears
     # as if nothing ever changed.
+    #
+    # We want to restore the modification times for each of the files after
+    # every step to ensure as little time as possible has passed while the
+    # modification time on the file was newer. This helps us play more nicely
+    # with file watchers.
     def cleanup_environment
       unless initial_commit? || (@stash_attempted && !@changes_stashed)
         clear_working_tree # Ensure working tree is clean before restoring it
+        restore_modified_times
       end
 
       if @changes_stashed
         restore_working_tree
+        restore_modified_times
       end
 
       Overcommit::GitRepo.restore_merge_state
@@ -124,6 +131,7 @@ module Overcommit::HookContext
     def restore_modified_times
       modified_files.each do |file|
         next if Overcommit::Utils.broken_symlink?(file)
+        next unless File.exist?(file)
         time = @modified_times[file]
         File.utime(time, time, file)
       end

@@ -3,6 +3,9 @@
 ## master (unreleased)
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
 * Fix `Brakeman` pre-commit hook when multiple files have been staged
+* Reset modification times more frequently when cleaning up the environment
+  after running pre-commit hooks. This should help overcommit work with file
+  watchers a little more nicely.
 
 ## 0.18.0
 
