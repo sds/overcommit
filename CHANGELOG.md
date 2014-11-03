@@ -6,6 +6,8 @@
 * Reset modification times more frequently when cleaning up the environment
   after running pre-commit hooks. This should help overcommit work with file
   watchers a little more nicely.
+* Add pre-commit JavaScript style checking with
+  [JSXCS](https://github.com/orktes/node-jsxcs)
 
 ## 0.18.0
 

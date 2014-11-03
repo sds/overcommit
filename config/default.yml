@@ -131,6 +131,12 @@ PreCommit:
     install_command: 'npm install -g jscs'
     include: '**/*.js'
 
+  Jsxcs:
+    description: 'Analyzing with JSXCS'
+    required_executable: 'jsxcs'
+    install_command: 'npm install -g jsxcs'
+    include: '**/*.jsx'
+
   JsHint:
     description: 'Analyzing with JSHint'
     required_executable: 'jshint'
