@@ -179,6 +179,17 @@ PreCommit:
       - 'db/schema.rb'
       - 'db/structure.sql'
 
+  Reek:
+    description: 'Analyzing with Reek'
+    required_executable: 'reek'
+    install_command: 'gem install reek'
+    include:
+      - '**/*.gemspec'
+      - '**/*.rake'
+      - '**/*.rb'
+      - '**/Gemfile'
+      - '**/Rakefile'
+
   Rubocop:
     description: 'Analyzing with Rubocop'
     required_executable: 'rubocop'
