@@ -8,6 +8,8 @@
   watchers a little more nicely.
 * Add pre-commit JavaScript style checking with
   [JSXCS](https://github.com/orktes/node-jsxcs)
+* Add pre-commit Ruby code smell checking with
+  [Reek](https://github.com/troessner/reek)
 
 ## 0.18.0
 
