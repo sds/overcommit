@@ -9,11 +9,47 @@ module Overcommit
       end
 
       # Returns an absolute path to the root of the repository.
+      #
+      # We do this ourselves rather than call `git rev-parse --show-toplevel` to
+      # solve an issue where the .git directory might not actually be valid in
+      # tests.
+      #
+      # @return [String]
       def repo_root
         @repo_root ||=
           begin
-            result = `git rev-parse --show-toplevel`.chomp
-            result if $?.success?
+            git_dir = Pathname.new(File.expand_path('.')).enum_for(:ascend).find do |path|
+              File.exist?(File.join(path, '.git'))
+            end
+
+            unless git_dir
+              raise Overcommit::Exceptions::InvalidGitRepo, 'no .git directory found'
+            end
+
+            git_dir.to_s
+          end
+      end
+
+      # Returns an absolute path to the .git directory for a repo.
+      #
+      # @param repo_dir [String] root directory of git repo
+      # @return [String]
+      def git_dir(repo_dir = repo_root)
+        @git_dir ||=
+          begin
+            git_dir = File.expand_path('.git', repo_dir)
+
+            # .git could also be a file that contains the location of the git directory
+            unless File.directory?(git_dir)
+              git_dir = File.read(git_dir)[/^gitdir: (.*)$/, 1]
+
+              # Resolve relative paths
+              unless git_dir.start_with?('/')
+                git_dir = File.expand_path(git_dir, repo_dir)
+              end
+            end
+
+            git_dir
           end
       end
 

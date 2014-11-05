@@ -68,7 +68,7 @@ module Overcommit
         @merge_head = merge_head
       end
 
-      merge_msg_file = File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root)
+      merge_msg_file = File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir)
       @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
     end
 
@@ -90,16 +90,16 @@ module Overcommit
     # of a merge.
     def restore_merge_state
       if @merge_head
-        FileUtils.touch(File.expand_path('.git/MERGE_MODE', Overcommit::Utils.repo_root))
+        FileUtils.touch(File.expand_path('MERGE_MODE', Overcommit::Utils.git_dir))
 
-        File.open(File.expand_path('.git/MERGE_HEAD', Overcommit::Utils.repo_root), 'w') do |f|
+        File.open(File.expand_path('MERGE_HEAD', Overcommit::Utils.git_dir), 'w') do |f|
           f.write("#{@merge_head}\n")
         end
         @merge_head = nil
       end
 
       if @merge_msg
-        File.open(File.expand_path('.git/MERGE_MSG', Overcommit::Utils.repo_root), 'w') do |f|
+        File.open(File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir), 'w') do |f|
           f.write("#{@merge_msg}\n")
         end
         @merge_msg = nil
@@ -110,8 +110,8 @@ module Overcommit
     # of a cherry-pick.
     def restore_cherry_pick_state
       if @cherry_head
-        File.open(File.expand_path('.git/CHERRY_PICK_HEAD',
-                                   Overcommit::Utils.repo_root), 'w') do |f|
+        File.open(File.expand_path('CHERRY_PICK_HEAD',
+                                   Overcommit::Utils.git_dir), 'w') do |f|
           f.write("#{@cherry_head}\n")
         end
         @cherry_head = nil

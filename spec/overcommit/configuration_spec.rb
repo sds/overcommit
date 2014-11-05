@@ -4,10 +4,6 @@ describe Overcommit::Configuration do
   let(:hash) { {} }
   let(:config) { described_class.new(hash) }
 
-  before do
-    Overcommit::Utils.instance_variable_set(:@repo_root, nil)
-  end
-
   describe '#new' do
     let(:internal_hash) { config.instance_variable_get(:@hash) }
     subject { config }

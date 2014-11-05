@@ -60,7 +60,7 @@ module Overcommit
 
     def hooks_path
       absolute_target = File.expand_path(@target)
-      File.join(absolute_target, '.git', 'hooks')
+      File.join(Overcommit::Utils.git_dir(absolute_target), 'hooks')
     end
 
     def master_hook_install_path

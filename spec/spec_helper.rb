@@ -28,4 +28,12 @@ RSpec.configure do |config|
   config.mock_with :rspec do |c|
     c.syntax = :should
   end
+
+  # Much of Overcommit depends on these helpers, so they are aggressively
+  # cached. Unset them before each example so we always get fresh values.
+  config.before(:each) do
+    %w[git_dir repo_root].each do |var|
+      Overcommit::Utils.instance_variable_set(:"@#{var}", nil)
+    end
+  end
 end

@@ -6,10 +6,10 @@
 
 set -e
 
-trap "rm -f .git/tags.$$" EXIT
-err_file=.git/ctags.err
-if ctags --tag-relative -Rf.git/tags.$$ --exclude=.git "$@" 2>${err_file}; then
-  mv .git/tags.$$ .git/tags
+trap "rm -f $GIT_DIR/tags.$$" EXIT
+err_file=$GIT_DIR/ctags.err
+if ctags --tag-relative -Rf$GIT_DIR/tags.$$ --exclude=.git "$@" 2>${err_file}; then
+  mv $GIT_DIR/tags.$$ $GIT_DIR/tags
   [ -e ${err_file} ] && rm -f ${err_file}
 else
   # Ignore STDERR unless `ctags` returned a non-zero exit code

@@ -10,6 +10,7 @@
   [JSXCS](https://github.com/orktes/node-jsxcs)
 * Add pre-commit Ruby code smell checking with
   [Reek](https://github.com/troessner/reek)
+* Gracefully handle `.git` files that point to an external git directory
 
 ## 0.18.0
 

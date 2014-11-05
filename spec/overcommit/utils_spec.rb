@@ -13,10 +13,6 @@ describe Overcommit::Utils do
     let(:repo_dir) { repo }
     subject { described_class.repo_root }
 
-    before do
-      described_class.instance_variable_set(:@repo_root, nil)
-    end
-
     around do |example|
       Dir.chdir(repo_dir) do
         example.run
@@ -24,7 +20,57 @@ describe Overcommit::Utils do
     end
 
     it 'returns the path to the repository root' do
-      subject.should end_with repo_dir
+      subject.should == repo_dir
+    end
+
+    context 'when there is no .git directory' do
+      before do
+        `rm -rf .git`
+      end
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error Overcommit::Exceptions::InvalidGitRepo
+      end
+    end
+  end
+
+  describe '.git_dir' do
+    let(:repo_dir) { repo }
+    subject { described_class.git_dir }
+
+    around do |example|
+      Dir.chdir(repo_dir) do
+        example.run
+      end
+    end
+
+    context 'when .git is a directory' do
+      it 'returns the path to the directory' do
+        subject.should end_with File.join(repo_dir, '.git')
+      end
+    end
+
+    context 'when .git is a file' do
+      before do
+        `rm -rf .git`
+        `echo "gitdir: #{git_dir_path}" > .git`
+      end
+
+      context 'and is a relative path' do
+        let(:git_dir_path) { '../.git' }
+
+        it 'returns the path contained in the file' do
+          subject.should == File.join(File.dirname(repo_dir), '.git')
+        end
+      end
+
+      context 'and is an absolute path' do
+        let(:git_dir_path) { '/some/arbitrary/path/.git' }
+
+        it 'returns the path contained in the file' do
+          subject.should == git_dir_path
+        end
+      end
     end
   end
 

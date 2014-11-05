@@ -4,11 +4,6 @@ describe Overcommit::ConfigurationLoader do
   describe '.load_repo_config' do
     subject { described_class.load_repo_config }
 
-    before do
-      # Ensure memoized repo root gets reset
-      Overcommit::Utils.instance_variable_set(:@repo_root, nil)
-    end
-
     context 'when repo does not contain a configuration file' do
       around do |example|
         repo do
