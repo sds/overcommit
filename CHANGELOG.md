@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.19.0
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
 * Fix `Brakeman` pre-commit hook when multiple files have been staged
 * Reset modification times more frequently when cleaning up the environment
