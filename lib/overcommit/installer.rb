@@ -2,7 +2,7 @@ require 'fileutils'
 
 module Overcommit
   # Manages the installation of Overcommit hooks in a git repository.
-  class Installer
+  class Installer # rubocop:disable ClassLength
     MASTER_HOOK =
       File.join(OVERCOMMIT_HOME, 'template-dir', 'hooks', 'overcommit-hook')
 
@@ -78,7 +78,11 @@ module Overcommit
         raise Overcommit::Exceptions::InvalidGitRepo, 'is not a directory'
       end
 
-      unless File.directory?(File.join(absolute_target, '.git'))
+      git_dir_check = Dir.chdir(absolute_target) do
+        Overcommit::Utils.execute(%w[git rev-parse --git-dir])
+      end
+
+      unless git_dir_check.success?
         raise Overcommit::Exceptions::InvalidGitRepo, 'does not appear to be a git repository'
       end
     end

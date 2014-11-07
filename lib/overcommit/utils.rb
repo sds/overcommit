@@ -1,3 +1,4 @@
+require 'pathname'
 require 'overcommit/subprocess'
 
 module Overcommit
