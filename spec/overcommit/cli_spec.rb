@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'overcommit/cli'
+require 'overcommit/hook_context/run_all'
 
 describe Overcommit::CLI do
   describe '#run' do
@@ -94,6 +95,33 @@ describe Overcommit::CLI do
 
       it 'prints the location of the template directory' do
         capture_stdout { subject }.chomp.should end_with 'template-dir'
+      end
+    end
+
+    context 'with the run switch specified' do
+      let(:arguments) { ['--run'] }
+      let(:config) do
+        Overcommit::ConfigurationLoader.load_repo_config
+      end
+
+      before do
+        cli.stub(:halt)
+      end
+
+      it 'creates a hookrunner with the run-all context' do
+        Overcommit::HookRunner.should_receive(:new).
+                               with(config,
+                                    logger,
+                                    instance_of(Overcommit::HookContext::RunAll),
+                                    nil,
+                                    instance_of(Overcommit::Printer)).
+                               and_call_original
+        subject
+      end
+
+      it 'runs the hookrunner' do
+        Overcommit::HookRunner.any_instance.should_receive(:run)
+        subject
       end
     end
   end
