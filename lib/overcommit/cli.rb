@@ -18,6 +18,8 @@ module Overcommit
         install_or_uninstall
       when :template_dir
         print_template_directory_path
+      when :run_all
+        run_all
       end
     end
 
@@ -76,6 +78,10 @@ module Overcommit
 
       opts.on('-f', '--force', 'Overwrite any previously installed hooks') do
         @options[:force] = true
+      end
+
+      opts.on('-r', '--run', 'Run pre-commit hook against all git tracked files') do
+        @options[:action] = :run_all
       end
     end
 
@@ -155,6 +161,19 @@ module Overcommit
           log.log
         end
       end
+    end
+
+    def run_all
+      config  = Overcommit::ConfigurationLoader.load_repo_config
+      context = Overcommit::HookContext.create('run-all', config, @arguments, nil)
+      config.apply_environment!(context, ENV)
+
+      printer = Overcommit::Printer.new(log, context)
+      runner  = Overcommit::HookRunner.new(config, log, context, nil, printer)
+
+      status = runner.run
+
+      halt(status ? 0 : 65)
     end
 
     # Used for ease of stubbing in tests

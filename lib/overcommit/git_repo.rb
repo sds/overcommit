@@ -49,6 +49,15 @@ module Overcommit
         map { |relative_file| File.expand_path(relative_file) }
     end
 
+    # Returns the names of all files that are tracked by git.
+    #
+    # @return [Array<String>] list of absolute file paths
+    def all_files
+      `git ls-files`.
+        split(/\n/).
+        map { |relative_file| File.expand_path(relative_file) }
+    end
+
     # Returns whether the current git branch is empty (has no commits).
     # @return [true,false]
     def initial_commit?
