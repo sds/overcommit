@@ -154,7 +154,7 @@ PreCommit:
     include: '**/*.jsx'
 
   LocalPathsInGemfile:
-    description: 'Checking for references to local paths in your Gemfile'
+    description: 'Checking for local paths in Gemfile'
     include: '**/Gemfile'
 
   MergeConflicts:
