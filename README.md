@@ -94,6 +94,7 @@ Command Line Flag         | Description
 `-t`/`--template-dir`     | Print location of template directory
 `-h`/`--help`             | Show command-line flag documentation
 `-v`/`--version`          | Show version
+`-r`/`--run`              | Run pre-commit hook against all git tracked files
 
 ### Skipping Hooks
 
