@@ -20,7 +20,8 @@ describe Overcommit::Utils do
     end
 
     it 'returns the path to the repository root' do
-      subject.should == repo_dir
+      # realpath is so spec passes on Mac OS X
+      subject.should == File.realpath(repo_dir)
     end
 
     context 'when there is no .git directory' do
@@ -60,7 +61,8 @@ describe Overcommit::Utils do
         let(:git_dir_path) { '../.git' }
 
         it 'returns the path contained in the file' do
-          subject.should == File.join(File.dirname(repo_dir), '.git')
+          # realpath is so spec passes on Mac OS X
+          subject.should == File.join(File.realpath(File.dirname(repo_dir)), '.git')
         end
       end
 
