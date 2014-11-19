@@ -91,10 +91,10 @@ Command Line Flag         | Description
 `-u`/`--uninstall`        | Remove Overcommit hooks from a repository
 `-f`/`--force`            | Don't bail on install if other hooks already exist--overwrite them
 `-l`/`--list-hooks`       | Display all available hooks in the current repository
+`-r`/`--run`              | Run pre-commit hook against all tracked files in repository
 `-t`/`--template-dir`     | Print location of template directory
 `-h`/`--help`             | Show command-line flag documentation
 `-v`/`--version`          | Show version
-`-r`/`--run`              | Run pre-commit hook against all git tracked files
 
 ### Skipping Hooks
 
@@ -119,6 +119,19 @@ hooks to run, you can disable Overcommit entirely by setting the
 ```bash
 OVERCOMMIT_DISABLE=1 ./my-custom-script
 ```
+
+## Continuous Integration
+
+You can run the same set of hooks that would be executed in a pre-commit hook
+against your entire repository by running `overcommit --run`. This makes it
+easy to have the checks verified by a CI service such as
+[Travis CI](https://travis-ci.com/), including custom hooks you've written
+yourself.
+
+The `--run` flag works by creating a pre-commit context that assumes _all_ the
+files in your repository have changed, and follows the same rules as a normal
+pre-commit check. If any hook fails with an error, it will return a non-zero
+exit code.
 
 ## Configuration
 

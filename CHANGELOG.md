@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `--run` flag which runs all configured pre-commit hooks against the
+  entire repository
+
 ## 0.19.0
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
 * Fix `Brakeman` pre-commit hook when multiple files have been staged
