@@ -100,15 +100,13 @@ describe Overcommit::CLI do
 
     context 'with the run switch specified' do
       let(:arguments) { ['--run'] }
-      let(:config) do
-        Overcommit::ConfigurationLoader.load_repo_config
-      end
+      let(:config) { Overcommit::ConfigurationLoader.default_configuration }
 
       before do
         cli.stub(:halt)
       end
 
-      it 'creates a hookrunner with the run-all context' do
+      it 'creates a HookRunner with the run-all context' do
         Overcommit::HookRunner.should_receive(:new).
                                with(config,
                                     logger,
@@ -119,7 +117,7 @@ describe Overcommit::CLI do
         subject
       end
 
-      it 'runs the hookrunner' do
+      it 'runs the HookRunner' do
         Overcommit::HookRunner.any_instance.should_receive(:run)
         subject
       end
