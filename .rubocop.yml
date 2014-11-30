@@ -98,6 +98,9 @@ SingleSpaceBeforeFirstArg:
 SpecialGlobalVars:
   Enabled: false
 
+Style/MultilineOperationIndentation:
+  Enabled: false
+
 TrailingComma:
   Enabled: false
 
