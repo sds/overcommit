@@ -55,7 +55,8 @@ module Overcommit::Hook::PreCommit
 
     def extract_type(match, message, type_categorizer)
       if type_categorizer
-        type = type_categorizer.call(match[:type])
+        type_match = match.names.include?('type') ? match[:type] : nil
+        type = type_categorizer.call(type_match)
         unless Overcommit::Hook::MESSAGE_TYPES.include?(type)
           raise "Invalid message type '#{type}' for '#{message}': must " \
                 "be one of #{Overcommit::Hook::MESSAGE_TYPES.inspect}"
