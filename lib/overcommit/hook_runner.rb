@@ -54,12 +54,22 @@ module Overcommit
           end
         end
 
-        @printer.end_run(run_failed, interrupted)
+        print_results(run_failed, interrupted)
 
         !(run_failed || interrupted)
       else
         @printer.nothing_to_run
         true # Run was successful
+      end
+    end
+
+    def print_results(failed, interrupted)
+      if interrupted
+        @printer.run_interrupted
+      elsif failed
+        @printer.run_failed
+      else
+        @printer.run_succeeded
       end
     end
 

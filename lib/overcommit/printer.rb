@@ -20,21 +20,6 @@ module Overcommit
       log.success "✓ No applicable #{hook_script_name} hooks to run"
     end
 
-    # Executed at the very end of running the collection of hooks.
-    def end_run(run_failed, interrupted)
-      log.newline
-
-      if interrupted
-        log.warning '⚠  Hook run interrupted by user'
-      elsif run_failed
-        log.error "✗ One or more #{hook_script_name} hooks failed"
-      else
-        log.success "✓ All #{hook_script_name} hooks passed"
-      end
-
-      log.newline
-    end
-
     # Executed at the start of an individual hook run.
     def start_hook(hook)
       unless hook.quiet?
@@ -57,6 +42,27 @@ module Overcommit
       print_header(hook) if hook.quiet? && ![:good, :pass].include?(status)
 
       print_result(hook, status, output)
+    end
+
+    # Executed when a hook run was interrupted/cancelled by user.
+    def run_interrupted
+      log.newline
+      log.warning '⚠  Hook run interrupted by user'
+      log.newline
+    end
+
+    # Executed when one or more hooks by the end of the run.
+    def run_failed
+      log.newline
+      log.error "✗ One or more #{hook_script_name} hooks failed"
+      log.newline
+    end
+
+    # Executed when no hooks failed by the end of the run.
+    def run_succeeded
+      log.newline
+      log.success "✓ All #{hook_script_name} hooks passed"
+      log.newline
     end
 
     private
@@ -101,18 +107,6 @@ module Overcommit
 
     def print_report(output, format = :log)
       log.send(format, output) unless output.nil? || output.empty?
-    end
-
-    def run_interrupted
-      log.warning '⚠  Hook run interrupted by user'
-    end
-
-    def run_failed
-      log.error "✗ One or more #{hook_script_name} hooks failed"
-    end
-
-    def run_succeeded
-      log.success "✓ All #{hook_script_name} hooks passed"
     end
 
     def hook_script_name
