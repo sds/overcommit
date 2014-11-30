@@ -63,7 +63,7 @@ module Overcommit::Hook
     def run?
       enabled? &&
         (!skip? || required?) &&
-        !(requires_modified_files? && applicable_files.empty?)
+        !(@config['requires_files'] && applicable_files.empty?)
     end
 
     def in_path?(cmd)
@@ -78,10 +78,6 @@ module Overcommit::Hook
       @config['required_executable']
     end
 
-    def install_command
-      @config['install_command']
-    end
-
     # Gets a list of staged files that apply to this hook based on its
     # configured `include` and `exclude` lists.
     def applicable_files
@@ -90,35 +86,24 @@ module Overcommit::Hook
 
     private
 
-    def requires_modified_files?
-      @config['requires_files']
-    end
-
     def applicable_file?(file)
-      includes = Array(@config['include']).map { |glob| convert_glob_to_absolute(glob) }
-      included = includes.empty? ||
-                 includes.any? { |glob| matches_path?(glob, file) }
+      includes = Array(@config['include']).map do |glob|
+        Overcommit::Utils.convert_glob_to_absolute(glob)
+      end
 
-      excludes = Array(@config['exclude']).map { |glob| convert_glob_to_absolute(glob) }
-      excluded = excludes.any? { |glob| matches_path?(glob, file) }
+      included = includes.empty? || includes.any? do |glob|
+        Overcommit::Utils.matches_path?(glob, file)
+      end
+
+      excludes = Array(@config['exclude']).map do |glob|
+        Overcommit::Utils.convert_glob_to_absolute(glob)
+      end
+
+      excluded = excludes.any? do |glob|
+        Overcommit::Utils.matches_path?(glob, file)
+      end
 
       included && !excluded
-    end
-
-    def convert_glob_to_absolute(glob)
-      repo_root = Overcommit::Utils.repo_root
-      File.join(repo_root, glob)
-    end
-
-    # Return whether a pattern matches the given path.
-    #
-    # @param pattern [String]
-    # @param path [String]
-    def matches_path?(pattern, path)
-      File.fnmatch?(pattern, path,
-                    File::FNM_PATHNAME | # Wildcard doesn't match separator
-                    File::FNM_DOTMATCH   # Wildcards match dotfiles
-      )
     end
 
     # If the hook defines a required executable, check if it's in the path and
@@ -128,7 +113,7 @@ module Overcommit::Hook
 
       output = "'#{executable}' is not installed (or is not in your PATH)"
 
-      if install_command
+      if install_command = @config['install_command']
         output += "\nInstall it by running: #{install_command}"
       end
 

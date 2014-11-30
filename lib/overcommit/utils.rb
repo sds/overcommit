@@ -132,6 +132,26 @@ module Overcommit
         # symlinks, so we need use File.size?
         File.symlink?(file) && File.size?(file).nil?
       end
+
+      # Convert a glob pattern to an absolute path glob pattern rooted from the
+      # repository root directory.
+      #
+      # @param glob [String]
+      # @return [String]
+      def convert_glob_to_absolute(glob)
+        File.join(repo_root, glob)
+      end
+
+      # Return whether a pattern matches the given path.
+      #
+      # @param pattern [String]
+      # @param path [String]
+      def matches_path?(pattern, path)
+        File.fnmatch?(pattern, path,
+                      File::FNM_PATHNAME | # Wildcard doesn't match separator
+                      File::FNM_DOTMATCH   # Wildcards match dotfiles
+        )
+      end
     end
   end
 end
