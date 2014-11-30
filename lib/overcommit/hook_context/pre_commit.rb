@@ -67,11 +67,19 @@ module Overcommit::HookContext
       @modified_files ||= Overcommit::GitRepo.modified_files(:staged => true)
     end
 
+    # @deprecated
+    # TODO: Remove this once we've moved all existing hooks to stop using this
+    # endpoint
+    def modified_lines(file)
+      modified_lines_in_file(file)
+    end
+
     # Returns the set of line numbers corresponding to the lines that were
     # changed in a specified file.
-    def modified_lines(file)
+    def modified_lines_in_file(file)
       @modified_lines ||= {}
-      @modified_lines[file] ||= Overcommit::GitRepo.extract_modified_lines(file, :staged => true)
+      @modified_lines[file] ||=
+        Overcommit::GitRepo.extract_modified_lines(file, :staged => true)
     end
 
     private

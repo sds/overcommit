@@ -31,6 +31,7 @@ PostCheckout:
 # created.
 PreCommit:
   ALL:
+    problem_on_unmodified_line: warn
     requires_files: true
     required: false
     quiet: false

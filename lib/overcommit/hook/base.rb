@@ -1,6 +1,18 @@
 require 'forwardable'
+require 'overcommit/message_processor'
 
+# Container for top-level hook-related classes and constants.
 module Overcommit::Hook
+  # Helper containing metadata about error/warning messages returned by hooks.
+  Message = Struct.new(:type, :file, :line, :content) do
+    def to_s
+      content
+    end
+  end
+
+  # Possible types of messages.
+  MESSAGE_TYPES = [:error, :warning]
+
   # Functionality common to all hooks.
   class Base
     extend Forwardable
@@ -30,10 +42,36 @@ module Overcommit::Hook
       if output = check_for_executable
         status = :fail
       else
-        status, output = run
+        status, output = process_hook_return_value(run)
       end
 
       [transform_status(status), output]
+    end
+
+    # Converts the hook's return value into a canonical form of a tuple
+    # containing status (pass/warn/fail) and output.
+    #
+    # This is intended to support various shortcuts for writing hooks so that
+    # hook authors don't need to work with {Overcommit::Hook::Message} objects
+    # for simple pass/fail hooks. It also saves you from needing to manually
+    # encode logic like "if there are errors, fail; if there are warnings, warn,
+    # otherwise pass." by simply returning an array of
+    # {Overcommit::Hook::Message} objects.
+    #
+    # @param hook_return_value [Symbol, Array<Symbol,String>, Array<Message>]
+    # @return [Array<Symbol,String>] tuple of status and output
+    def process_hook_return_value(hook_return_value)
+      if hook_return_value.is_a?(Array) &&
+         hook_return_value.first.is_a?(Message)
+        # Process messages into a status and output
+        Overcommit::MessageProcessor.new(
+          self,
+          @config['problem_on_unmodified_line'],
+        ).hook_result(hook_return_value)
+      else
+        # Otherwise return as-is
+        hook_return_value
+      end
     end
 
     def name
