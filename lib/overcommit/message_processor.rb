@@ -54,9 +54,6 @@ module Overcommit
         WARNINGS_UNMODIFIED_HEADER
       )
 
-      unless @setting == 'report'
-      end
-
       [transform_status(status, messages_on_modified_lines), output]
     end
 

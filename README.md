@@ -176,6 +176,12 @@ Within a configuration file, the following high-level concepts exist:
     only if a file matching the pattern has been modified--note that the
     concept of "modified" varies for different types of hooks)
   * `exclude`: Glob patterns of files that are ignored by this hook
+  * `problem_on_umodified_line`: How to treat errors reported on lines that
+     weren't modified. Valid values are `report` (report errors/warnings as-is
+     regardless of line location); `warn` (report errors as warnings if they
+     are on lines you didn't modify); `ignore` (don't display errors/warnings
+     at all if they are on lines you didn't modify--this option is not
+     recommended)
   * `on_fail`: Allows you to change the status of a failed hook run to either
     `warn` or `pass` (use this with care, as you are potentially hiding
     important information)
