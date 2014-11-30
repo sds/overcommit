@@ -7,8 +7,26 @@ class HookMatcher
   end
 
   def matches?(check)
-    actual_status, actual_message = [check.run].flatten
-    status_matches?(actual_status) && message_matches?(actual_message)
+    result = [check.run].flatten
+    # TODO: Deprecate symbol/message tuple form in favor of returning an array
+    # of Messages
+    if result.is_a?(Array) && result.first.is_a?(Overcommit::Hook::Message)
+      messages_match?(result)
+    else
+      actual_status, actual_message = result
+      status_matches?(actual_status) && message_matches?(actual_message)
+    end
+  end
+
+  def messages_match?(messages)
+    case @expected_status
+    when :fail
+      messages.any? { |message| message.type == :error }
+    when :warn
+      messages.any? { |message| message.type == :warning }
+    else
+      messages.empty?
+    end
   end
 
   def status_matches?(actual_status)

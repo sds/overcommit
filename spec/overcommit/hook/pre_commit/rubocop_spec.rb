@@ -27,27 +27,27 @@ describe Overcommit::Hook::PreCommit::Rubocop do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'and it reports lines that were not modified by the commit' do
+    context 'and it reports a warning' do
       before do
         result.stub(:stdout).and_return([
-          'file1.rb:1:1: C: Missing top-level class documentation',
+          'file1.rb:1:1: W: Useless assignment to variable - my_var.',
         ].join("\n"))
         result.stub(:stderr).and_return('')
 
-        subject.stub(:modified_lines).and_return([2, 3])
+        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
     end
 
-    context 'and it reports lines that were modified by the commit' do
+    context 'and it reports an error' do
       before do
         result.stub(:stdout).and_return([
           'file1.rb:1:1: C: Missing top-level class documentation',
         ].join("\n"))
         result.stub(:stderr).and_return('')
 
-        subject.stub(:modified_lines).and_return([1, 2])
+        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }
