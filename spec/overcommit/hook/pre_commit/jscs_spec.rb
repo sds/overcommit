@@ -29,25 +29,13 @@ describe Overcommit::Hook::PreCommit::Jscs do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'and it reports lines that were not modified by the commit' do
+    context 'and it reports an error' do
       before do
         result.stub(:stdout).and_return([
           'file1.js: line 1, col 4, Missing space after `if` keyword'
         ].join("\n"))
 
-        subject.stub(:modified_lines).and_return([2, 3])
-      end
-
-      it { should warn }
-    end
-
-    context 'and it reports lines that were modified by the commit' do
-      before do
-        result.stub(:stdout).and_return([
-          'file1.js: line 1, col 4, Missing space after `if` keyword'
-        ].join("\n"))
-
-        subject.stub(:modified_lines).and_return([1, 2])
+        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should fail_hook }
