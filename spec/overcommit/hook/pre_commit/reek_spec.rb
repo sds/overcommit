@@ -27,7 +27,7 @@ describe Overcommit::Hook::PreCommit::Reek do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'and it reports lines that were not modified by the commit' do
+    context 'and it reports warnings' do
       before do
         result.stub(:stdout).and_return([
           'file1.rb -- 1 warning:',
@@ -35,30 +35,10 @@ describe Overcommit::Hook::PreCommit::Reek do
         ].join("\n"))
         result.stub(:stderr).and_return('')
 
-        subject.stub(:modified_lines).and_return([2, 3])
+        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
-      expected_message = "Modified files have lints (on lines you didn't modify)\n" \
-        'file1.rb:1: MyClass#my_method performs a nil-check. (NilCheck)'
-
-      it { should warn expected_message }
-    end
-
-    context 'and it reports lines that were modified by the commit' do
-      before do
-        result.stub(:stdout).and_return([
-          'file1.rb -- 2 warnings:',
-          'file1.rb:1: MyClass#my_method1 performs a nil-check. (NilCheck)',
-          'file1.rb:3: MyClass#my_method3 performs a nil-check. (NilCheck)'
-        ].join("\n"))
-        result.stub(:stderr).and_return('')
-
-        subject.stub(:modified_lines).and_return([1, 2])
-      end
-
-      expected_message = 'file1.rb:1: MyClass#my_method1 performs a nil-check. (NilCheck)'
-
-      it { should fail_hook expected_message }
+      it { should fail_hook }
     end
   end
 end
