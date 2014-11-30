@@ -89,7 +89,7 @@ module Overcommit
         end
       rescue => ex
         status = :fail
-        output = "Hook raised unexpected error\n#{ex.message}"
+        output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
       rescue Interrupt
         # At this point, interrupt has been handled and protection is back in
         # effect thanks to the InterruptHandler.
