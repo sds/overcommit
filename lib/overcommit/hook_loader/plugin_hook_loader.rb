@@ -29,16 +29,16 @@ module Overcommit::HookLoader
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
                        'have been added, changed, or had their configuration modified:'
-      log.log
+      log.newline
 
       modified_plugins.each do |signer|
         log.warning " * #{signer.hook_name} in #{signer.hook_path}"
       end
 
-      log.log
+      log.newline
       log.bold_warning 'You should verify the changes before continuing'
       log.log "For more information, see #{Overcommit::REPO_URL}#security"
-      log.log
+      log.newline
       log.partial 'Continue? (y/n) '
 
       unless (answer = @input.get) && answer.strip.downcase.start_with?('y')

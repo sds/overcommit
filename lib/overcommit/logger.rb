@@ -14,6 +14,11 @@ module Overcommit
       @out.print(*args)
     end
 
+    # Prints a newline character (alias for readability).
+    def newline
+      log
+    end
+
     def log(*args)
       @out.puts(*args)
     end

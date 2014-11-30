@@ -22,7 +22,7 @@ module Overcommit
 
     # Executed at the very end of running the collection of hooks.
     def end_run(run_failed, interrupted)
-      log.log # Newline
+      log.newline
 
       if interrupted
         log.warning '⚠  Hook run interrupted by user'
@@ -32,7 +32,7 @@ module Overcommit
         log.success "✓ All #{hook_script_name} hooks passed"
       end
 
-      log.log # Newline
+      log.newline
     end
 
     # Executed at the start of an individual hook run.

@@ -158,7 +158,7 @@ module Overcommit
         if repo_config.plugin_hook?(hook_type, hook_name)
           log.warning(' (plugin)')
         else
-          log.log
+          log.newline
         end
       end
     end
