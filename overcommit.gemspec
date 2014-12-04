@@ -30,5 +30,4 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'image_optim', '~> 0.15.0'
   s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'rubocop', '0.26.0' # Pin for Travis builds
 end
