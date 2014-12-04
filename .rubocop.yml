@@ -62,6 +62,9 @@ LineLength:
 MethodLength:
   Max: 20
 
+Metrics/AbcSize:
+  Enabled: false
+
 Next:
   Enabled: false
 
