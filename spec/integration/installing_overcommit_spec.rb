@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'installing Overcommit' do
   context 'when template directory points to the Overcommit template directory' do
     around do |example|
-      repo(:template_dir => Overcommit::Installer::TEMPLATE_DIRECTORY) do
+      repo(template_dir: Overcommit::Installer::TEMPLATE_DIRECTORY) do
         example.run
       end
     end

@@ -30,7 +30,7 @@ describe 'resolving merge conflicts' do
       `git merge branch1`
       `git merge branch2` # Results in merge conflict
       Overcommit::Installer.new(Overcommit::Logger.silent).
-                            run('.', :action => :install)
+                            run('.', action: :install)
       `echo "Conflicts Resolved" > some-file`
       `git add some-file`
       example.run

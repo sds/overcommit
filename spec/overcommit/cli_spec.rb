@@ -19,7 +19,7 @@ describe Overcommit::CLI do
         Overcommit::Installer.any_instance.
                               should_receive(:run).
                               with('current-dir',
-                                   hash_including(:action => :install))
+                                   hash_including(action: :install))
         subject
       end
     end
@@ -45,7 +45,7 @@ describe Overcommit::CLI do
         Overcommit::Installer.any_instance.
                               should_receive(:run).
                               with('current-dir',
-                                   hash_including(:action => :uninstall))
+                                   hash_including(action: :uninstall))
         subject
       end
 
@@ -56,7 +56,7 @@ describe Overcommit::CLI do
           Overcommit::Installer.any_instance.
                                 should_receive(:run).
                                 with('target-dir',
-                                     hash_including(:action => :uninstall))
+                                     hash_including(action: :uninstall))
           subject
         end
       end
@@ -69,7 +69,7 @@ describe Overcommit::CLI do
         Overcommit::Installer.any_instance.
                               should_receive(:run).
                               with('current-dir',
-                                   hash_including(:action => :install))
+                                   hash_including(action: :install))
         subject
       end
 
@@ -80,7 +80,7 @@ describe Overcommit::CLI do
           Overcommit::Installer.any_instance.
                                 should_receive(:run).
                                 with('target-dir',
-                                     hash_including(:action => :install))
+                                     hash_including(action: :install))
           subject
         end
       end

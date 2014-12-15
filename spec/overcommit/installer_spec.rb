@@ -5,7 +5,7 @@ describe Overcommit::Installer do
   let(:installer) { described_class.new(logger) }
 
   describe '#run' do
-    let(:options) { { :action => :install } }
+    let(:options) { { action: :install } }
     subject { installer.run(target.to_s, options) }
 
     context 'when the target is not a directory' do
@@ -45,7 +45,7 @@ describe Overcommit::Installer do
 
         context 'and Overcommit hooks were previously installed' do
           before do
-            installer.run(target, :action => :install)
+            installer.run(target, action: :install)
           end
 
           it 'keeps the master hook' do
@@ -77,7 +77,7 @@ describe Overcommit::Installer do
           end
 
           context 'and the force option is specified' do
-            let(:options) { super().merge(:force => true) }
+            let(:options) { super().merge(force: true) }
 
             it 'does not raise an error' do
               expect { subject }.to_not raise_error
@@ -126,11 +126,11 @@ describe Overcommit::Installer do
       end
 
       context 'and an uninstall is requested' do
-        let(:options) { { :action => :uninstall } }
+        let(:options) { { action: :uninstall } }
 
         context 'and Overcommit hooks were previously installed' do
           before do
-            installer.run(target, :action => :install)
+            installer.run(target, action: :install)
           end
 
           it 'removes the master hook from the hooks directory' do

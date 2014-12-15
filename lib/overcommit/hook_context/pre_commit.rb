@@ -64,7 +64,7 @@ module Overcommit::HookContext
     # Get a list of added, copied, or modified files that have been staged.
     # Renames and deletions are ignored, since there should be nothing to check.
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.modified_files(:staged => true)
+      @modified_files ||= Overcommit::GitRepo.modified_files(staged: true)
     end
 
     # @deprecated
@@ -79,7 +79,7 @@ module Overcommit::HookContext
     def modified_lines_in_file(file)
       @modified_lines ||= {}
       @modified_lines[file] ||=
-        Overcommit::GitRepo.extract_modified_lines(file, :staged => true)
+        Overcommit::GitRepo.extract_modified_lines(file, staged: true)
     end
 
     private

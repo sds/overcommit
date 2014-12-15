@@ -26,7 +26,7 @@ module Overcommit
     # together, since it's easier to merge two hashes than to have to check if
     # one of the values is nil.
     def convert_nils_to_empty_hashes(hash)
-      hash.inject({}) do |h, (key, value)|
+      hash.each_with_object({}) do |(key, value), h|
         h[key] =
           case value
           when nil  then {}
@@ -34,7 +34,6 @@ module Overcommit
           else
             value
           end
-        h
       end
     end
   end

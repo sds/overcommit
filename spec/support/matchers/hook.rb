@@ -1,7 +1,7 @@
 # General spec matcher logic for checking hook status and output.
 class HookMatcher
   def initialize(status, args)
-    options = args.empty? ? {} : { :message => args.first }
+    options = args.empty? ? {} : { message: args.first }
     @expected_status = status
     @expected_message = options[:message]
   end

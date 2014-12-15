@@ -18,11 +18,6 @@ if ENV['OVERCOMMIT_DISABLE'].to_i != 0 || ENV['OVERCOMMIT_DISABLED'].to_i != 0
   exit
 end
 
-# Required for Ruby 1.8 compatibility (for older OSX versions)
-if RUBY_VERSION.split('.')[0..1] == %w[1 8]
-  require 'rubygems'
-end
-
 hook_type = File.basename($0)
 if hook_type == 'overcommit-hook'
   puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " \
@@ -68,7 +63,7 @@ begin
 
   # Ensure master hook is up-to-date
   installer = Overcommit::Installer.new(logger)
-  if installer.run(Overcommit::Utils.repo_root, :action => :update)
+  if installer.run(Overcommit::Utils.repo_root, action: :update)
     exec($0, *ARGV) # Execute the updated hook with all original arguments
   end
 

@@ -15,15 +15,8 @@ Documentation:
   Exclude:
     - 'spec/overcommit/**/*'
 
-# Ruby 1.8.7 only supports trailing dots in method chains, but Rubocop still
-# reports it as an error for method calls chained onto do...end blocks. That's
-# too much noise, so remove it.
-DotPosition:
-  Enabled: false
-
-# Ruby 1.8.7 doesn't have `each_with_object` defined.
-EachWithObject:
-  Enabled: false
+Style/DotPosition:
+  EnforcedStyle: trailing
 
 Encoding:
   EnforcedStyle: when_needed
@@ -42,10 +35,6 @@ FormatString:
 # disrupts the visual flow of code.
 GuardClause:
   Enabled: false
-
-# Ruby 1.8.7 only supports hash rockets.
-HashSyntax:
-  EnforcedStyle: hash_rockets
 
 IfUnlessModifier:
   Enabled: false

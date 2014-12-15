@@ -62,8 +62,8 @@ describe Overcommit::Configuration do
     subject { config.enabled_builtin_hooks(context) }
 
     before do
-      context.stub(:hook_class_name => 'PreCommit',
-                   :hook_type_name => 'pre_commit')
+      context.stub(hook_class_name: 'PreCommit',
+                   hook_type_name: 'pre_commit')
     end
 
     it 'includes hooks that are not disabled' do

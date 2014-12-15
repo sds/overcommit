@@ -18,7 +18,7 @@ describe 'commiting' do
     repo do
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
       Overcommit::Installer.new(Overcommit::Logger.silent).
-                            run('.', :action => :install)
+                            run('.', action: :install)
       example.run
     end
   end
@@ -61,7 +61,7 @@ describe 'commiting to an empty repo' do
   around do |example|
     repo do
       Overcommit::Installer.new(Overcommit::Logger.silent).
-                            run('.', :action => :install)
+                            run('.', action: :install)
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
       File.open('test.txt', 'w') { |f| f.write(file_contents) }
       `git add test.txt`

@@ -28,7 +28,7 @@ module Overcommit::Hook::PreCommit
     private
 
     def optimize_images(image_paths)
-      image_optim = ::ImageOptim.new(:skip_missing_workers => true)
+      image_optim = ::ImageOptim.new(skip_missing_workers: true)
 
       optimized_images =
         image_optim.optimize_images(image_paths) do |path, optimized|
