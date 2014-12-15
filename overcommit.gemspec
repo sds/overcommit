@@ -28,6 +28,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency             'childprocess', '>= 0.5.1'
 
-  s.add_development_dependency 'image_optim', '~> 0.15.0'
+  s.add_development_dependency 'image_optim', '~> 0.18.0'
   s.add_development_dependency 'rspec', '~> 3.0'
 end

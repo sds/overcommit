@@ -19,7 +19,7 @@ module Overcommit::Hook::PreCommit
         return :fail,
           "The following images are optimizable:\n#{optimized_images.join("\n")}" \
           "\n\nOptimize them by running:\n" \
-          "  image_optim --no-pngout #{optimized_images.join(' ')}"
+          "  image_optim --skip-missing-workers #{optimized_images.join(' ')}"
       end
 
       :pass
@@ -28,10 +28,10 @@ module Overcommit::Hook::PreCommit
     private
 
     def optimize_images(image_paths)
-      image_optim = ::ImageOptim.new(:pngout => false)
+      image_optim = ::ImageOptim.new(:skip_missing_workers => true)
 
       optimized_images =
-        image_optim.optimize_images!(image_paths) do |path, optimized|
+        image_optim.optimize_images(image_paths) do |path, optimized|
           path if optimized
         end
 
