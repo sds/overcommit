@@ -3,8 +3,8 @@ require 'fileutils'
 module Overcommit
   # Manages the installation of Overcommit hooks in a git repository.
   class Installer # rubocop:disable ClassLength
-    MASTER_HOOK =
-      File.join(OVERCOMMIT_HOME, 'template-dir', 'hooks', 'overcommit-hook')
+    TEMPLATE_DIRECTORY = File.join(OVERCOMMIT_HOME, 'template-dir')
+    MASTER_HOOK = File.join(TEMPLATE_DIRECTORY, 'hooks', 'overcommit-hook')
 
     def initialize(logger)
       @log = logger

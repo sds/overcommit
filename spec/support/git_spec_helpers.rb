@@ -4,11 +4,11 @@ require 'tmpdir'
 module GitSpecHelpers
   module_function
 
-  def repo(name = 'some-repo', &block)
-    directory(name) do
-      `git init --template=""` # Ensure no template directory is applied
+  def repo(options = {}, &block)
+    directory('some-repo') do
+      `git init --template="#{options[:template_dir]}"`
 
-      `mkdir -p .git/hooks` # Since we don't specify template, need to create ourselves
+      `mkdir -p .git/hooks` # Since we may not specify template, need to create ourselves
 
       # Need to define user info since some CI contexts don't have defaults set
       `git config --local user.name "Overcommit Tester"`
