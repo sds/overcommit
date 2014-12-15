@@ -100,7 +100,6 @@ module Overcommit::Hook
 
     def run?
       enabled? &&
-        (!skip? || required?) &&
         !(@config['requires_files'] && applicable_files.empty?)
     end
 

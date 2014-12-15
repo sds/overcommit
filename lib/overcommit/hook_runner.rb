@@ -36,7 +36,7 @@ module Overcommit
     attr_reader :log
 
     def run_hooks
-      if @hooks.any? { |hook| hook.run? || hook.skip? }
+      if @hooks.any?(&:enabled?)
         @printer.start_run
 
         interrupted = false
@@ -109,7 +109,8 @@ module Overcommit
         if hook.required?
           @printer.required_hook_not_skipped(hook)
         else
-          @printer.hook_skipped(hook)
+          # Tell user if hook was skipped only if it actually would have run
+          @printer.hook_skipped(hook) if hook.run?
           return true
         end
       end
