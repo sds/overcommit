@@ -115,13 +115,13 @@ module Overcommit
     def can_replace_file?(file)
       @options[:force] ||
         !File.exist?(file) ||
-        overcommit_symlink?(file)
+        overcommit_hook?(file)
     end
 
     def uninstall_hook_symlinks
       Dir.chdir(hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
-          FileUtils.rm_rf(hook_type) if overcommit_symlink?(hook_type)
+          FileUtils.rm_rf(hook_type) if overcommit_hook?(hook_type)
         end
       end
     end
@@ -133,7 +133,9 @@ module Overcommit
       FileUtils.cp(File.join(OVERCOMMIT_HOME, 'config', 'starter.yml'), repo_config_file)
     end
 
-    def overcommit_symlink?(file)
+    def overcommit_hook?(file)
+      return true if File.read(file) =~ /OVERCOMMIT_DISABLE/
+      # TODO: Remove these checks once we hit version 1.0
       File.symlink?(file) && File.readlink(file) == 'overcommit-hook'
     rescue Errno::ENOENT
       # Some Ruby implementations (e.g. JRuby) raise an error when the file

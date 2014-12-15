@@ -4,6 +4,7 @@
 
 * Add `--run` flag which runs all configured pre-commit hooks against the
   entire repository
+* Fix installer to work with Overcommit hooks created via `GIT_TEMPLATE_DIR`
 
 ## 0.19.0
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
