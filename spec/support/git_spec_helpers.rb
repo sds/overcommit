@@ -13,6 +13,7 @@ module GitSpecHelpers
       # Need to define user info since some CI contexts don't have defaults set
       `git config --local user.name "Overcommit Tester"`
       `git config --local user.email "overcommit@example.com"`
+      `git config --local rerere.enabled 0` # Don't record resolutions in tests
 
       block.call if block_given?
     end
