@@ -7,8 +7,7 @@ describe Overcommit::HookContext::PostCheckout do
   let(:previous_head) { random_hash }
   let(:new_head) { random_hash }
   let(:branch_flag) { '1' }
-  let(:input) { '' }
-  let(:context) { described_class.new(config, args, input) }
+  let(:context) { described_class.new(config, args) }
 
   describe '#previous_head' do
     subject { context.previous_head }

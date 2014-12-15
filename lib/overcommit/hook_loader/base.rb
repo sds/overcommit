@@ -4,12 +4,10 @@ module Overcommit::HookLoader
     # @param config [Overcommit::Configuration]
     # @param context [Overcommit::HookContext]
     # @param logger [Overcommit::Logger]
-    # @param input [Overcommit::UserInput]
-    def initialize(config, context, logger, input)
+    def initialize(config, context, logger)
       @config = config
       @context = context
       @log = logger
-      @input = input
     end
 
     # When implemented in subclasses, loads the hooks for which that subclass is

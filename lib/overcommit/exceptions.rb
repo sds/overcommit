@@ -27,6 +27,9 @@ module Overcommit::Exceptions
   # Raised when an installation target is not a valid git repository.
   class InvalidGitRepo < StandardError; end
 
+  # Raised when one or more hook plugin signatures have changed.
+  class InvalidHookSignature < StandardError; end
+
   # Raised when an installation target already contains non-Overcommit hooks.
   class PreExistingHooks < StandardError; end
 end

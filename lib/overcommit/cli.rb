@@ -18,9 +18,14 @@ module Overcommit
         install_or_uninstall
       when :template_dir
         print_template_directory_path
+      when :sign_plugins
+        sign_plugins
       when :run_all
         run_all
       end
+    rescue Overcommit::Exceptions::HookContextLoadError => ex
+      puts ex
+      exit 64 # EX_USAGE
     end
 
     private
@@ -86,6 +91,11 @@ module Overcommit
     end
 
     def add_other_options(opts)
+      opts.on('-s', '--sign hook', 'Update plugin signatures for hook', String) do |hook|
+        @options[:action] = :sign_plugins
+        @options[:hook_to_sign] = hook
+      end
+
       opts.on('-t', '--template-dir', 'Print location of template directory') do
         @options[:action] = :template_dir
       end
@@ -163,13 +173,24 @@ module Overcommit
       end
     end
 
+    def sign_plugins
+      config = Overcommit::ConfigurationLoader.load_repo_config
+      context = Overcommit::HookContext.create(@options[:hook_to_sign],
+                                               config,
+                                               @arguments)
+      Overcommit::HookLoader::PluginHookLoader.new(config,
+                                                   context,
+                                                   log).update_signatures
+      halt
+    end
+
     def run_all
       config  = Overcommit::ConfigurationLoader.load_repo_config
-      context = Overcommit::HookContext.create('run-all', config, @arguments, nil)
+      context = Overcommit::HookContext.create('run-all', config, @arguments)
       config.apply_environment!(context, ENV)
 
       printer = Overcommit::Printer.new(log, context)
-      runner  = Overcommit::HookRunner.new(config, log, context, nil, printer)
+      runner  = Overcommit::HookRunner.new(config, log, context, printer)
 
       status = runner.run
 

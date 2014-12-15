@@ -5,10 +5,7 @@ module Overcommit::HookLoader
   # is running in.
   class PluginHookLoader < Base
     def load_hooks
-      directory = File.join(@config.plugin_directory, @context.hook_type_name)
-      plugin_paths = Dir[File.join(directory, '*.rb')].sort
-
-      check_for_modified_plugins(plugin_paths) if @config.verify_plugin_signatures?
+      check_for_modified_plugins if @config.verify_plugin_signatures?
 
       plugin_paths.map do |plugin_path|
         require plugin_path
@@ -18,13 +15,29 @@ module Overcommit::HookLoader
       end
     end
 
+    def update_signatures
+      log.success('No plugin signatures have changed') if modified_plugins.empty?
+
+      modified_plugins.each do |plugin|
+        plugin.update_signature!
+        log.warning "Updated signature of plugin #{plugin.hook_name}"
+      end
+    end
+
     private
 
-    def check_for_modified_plugins(plugin_paths)
-      modified_plugins = plugin_paths.
+    def plugin_paths
+      directory = File.join(@config.plugin_directory, @context.hook_type_name)
+      Dir[File.join(directory, '*.rb')].sort
+    end
+
+    def modified_plugins
+      plugin_paths.
         map { |path| Overcommit::HookSigner.new(path, @config, @context) }.
         select(&:signature_changed?)
+    end
 
+    def check_for_modified_plugins
       return if modified_plugins.empty?
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
@@ -36,16 +49,13 @@ module Overcommit::HookLoader
       end
 
       log.newline
-      log.bold_warning 'You should verify the changes before continuing'
-      log.log "For more information, see #{Overcommit::REPO_URL}#security"
+      log.bold_warning 'You should verify the changes and then run:'
       log.newline
-      log.partial 'Continue? (y/n) '
+      log.warning "overcommit --sign #{@context.hook_script_name}"
+      log.newline
+      log.log "For more information, see #{Overcommit::REPO_URL}#security"
 
-      unless (answer = @input.get) && answer.strip.downcase.start_with?('y')
-        raise Overcommit::Exceptions::HookCancelled
-      end
-
-      modified_plugins.each(&:update_signature!)
+      raise Overcommit::Exceptions::InvalidHookSignature
     end
   end
 end

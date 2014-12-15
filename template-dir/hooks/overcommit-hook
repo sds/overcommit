@@ -28,26 +28,10 @@ end
 begin
   require 'overcommit'
 rescue LoadError
-  puts 'Overcommit is not installed. Install it to manage git hooks for ' \
-       'this repository? (y/n)'
-
-  # If the hook isn't interactive, we need to map STDIN to keyboard manually
-  STDIN.reopen('/dev/tty') if STDIN.eof?
-
-  if (answer = gets) && answer.strip.downcase.start_with?('y')
-    puts 'Installing...'
-    if system('gem install overcommit')
-      Gem.clear_paths # Reset load paths so newly installed gem is found
-      require 'overcommit'
-    else
-      puts 'Unable to install Overcommit -- try running `gem install overcommit`'
-      exit 69 # EX_UNAVAILABLE
-    end
-  else
-    puts 'You chose not to install Overcommit'
-    puts "No hooks were run for '#{hook_type}'"
-    exit
-  end
+  puts 'This repository contains hooks installed by Overcommit, but the ' \
+       "overcommit gem is not installed.\n" \
+       'Install it with `gem install overcommit`.'
+  exit
 end
 
 if Gem::Version.new(Overcommit::VERSION) < Gem::Version.new('0.6.0')
@@ -69,13 +53,11 @@ begin
 
   config = Overcommit::ConfigurationLoader.load_repo_config
 
-  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
+  context = Overcommit::HookContext.create(hook_type, config, ARGV)
   config.apply_environment!(context, ENV)
 
-  input = Overcommit::UserInput.new(STDIN)
-
   printer = Overcommit::Printer.new(logger, context)
-  runner = Overcommit::HookRunner.new(config, logger, context, input, printer)
+  runner = Overcommit::HookRunner.new(config, logger, context, printer)
 
   status = runner.run
 
@@ -97,6 +79,8 @@ rescue Overcommit::Exceptions::HookCancelled
 rescue Overcommit::Exceptions::InvalidGitRepo => error
   puts error
   exit 64 # EX_USAGE
+rescue Overcommit::Exceptions::InvalidHookSignature
+  exit 1
 rescue => error
   puts error.message
   puts error.backtrace

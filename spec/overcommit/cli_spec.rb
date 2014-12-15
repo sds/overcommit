@@ -111,7 +111,6 @@ describe Overcommit::CLI do
                                with(config,
                                     logger,
                                     instance_of(Overcommit::HookContext::RunAll),
-                                    nil,
                                     instance_of(Overcommit::Printer)).
                                and_call_original
         subject

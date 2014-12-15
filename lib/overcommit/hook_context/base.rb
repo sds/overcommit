@@ -11,10 +11,11 @@ module Overcommit::HookContext
   # calculations can be memoized across all hooks in a single object, which
   # helps with performance.
   class Base
-    def initialize(config, args, input)
+    # @param config [Overcommit::Configuration]
+    # @param args [Array<String>]
+    def initialize(config, args)
       @config = config
       @args = args
-      @input = input
     end
 
     # Returns the camel-cased type of this hook (e.g. PreCommit)

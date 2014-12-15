@@ -9,6 +9,9 @@
   run
 * Change `ImageOptim` hook to use `skip_missing_workers` option and update
   dependency to 0.18.0
+* Remove interactive prompt support from overcommit hooks
+* Change hook signing from interactive flow to be done via
+  `overcommit --sign <hook-type>` command
 
 ## 0.19.0
 * Add `--no-pngout` flag for `image_optim` command on `:fail` message
