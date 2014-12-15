@@ -8,8 +8,6 @@ module GitSpecHelpers
     directory('some-repo') do
       `git init --template="#{options[:template_dir]}"`
 
-      `mkdir -p .git/hooks` # Since we may not specify template, need to create ourselves
-
       # Need to define user info since some CI contexts don't have defaults set
       `git config --local user.name "Overcommit Tester"`
       `git config --local user.email "overcommit@example.com"`

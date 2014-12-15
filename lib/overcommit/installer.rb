@@ -119,6 +119,8 @@ module Overcommit
     end
 
     def uninstall_hook_symlinks
+      return unless File.directory?(hooks_path)
+
       Dir.chdir(hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           FileUtils.rm_rf(hook_type) if overcommit_hook?(hook_type)

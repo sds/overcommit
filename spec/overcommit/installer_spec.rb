@@ -65,6 +65,7 @@ describe Overcommit::Installer do
 
         context 'and non-Overcommit hooks were previously installed' do
           before do
+            FileUtils.mkdir_p(hooks_dir)
             Dir.chdir(hooks_dir) do
               FileUtils.touch('commit-msg')
               FileUtils.touch('pre-commit')
@@ -155,6 +156,7 @@ describe Overcommit::Installer do
 
         context 'and non-Overcommit hooks were previously installed' do
           before do
+            FileUtils.mkdir_p(hooks_dir)
             Dir.chdir(hooks_dir) do
               FileUtils.touch('commit-msg')
               FileUtils.touch('pre-commit')
