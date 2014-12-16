@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.20.0
 
 * Add `--run` flag which runs all configured pre-commit hooks against the
   entire repository
