@@ -14,4 +14,4 @@ before_script:
 
 script:
   - bundle exec rspec
-  - bundle exec rubocop
+  - bundle exec bin/overcommit --run
