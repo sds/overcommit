@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'image_optim', '~> 0.18.0'
   s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'travis-lint', '~> 2.0'
 end
