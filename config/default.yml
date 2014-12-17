@@ -218,8 +218,8 @@ PreCommit:
 
   TravisLint:
     description: 'Checking Travis CI configuration'
-    required_executable: 'travis-lint'
-    install_command: 'gem install travis-lint'
+    required_executable: 'travis'
+    install_command: 'gem install travis'
     include: '.travis.yml'
 
   YamlSyntax:

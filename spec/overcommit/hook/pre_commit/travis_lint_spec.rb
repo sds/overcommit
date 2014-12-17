@@ -24,6 +24,7 @@ describe Overcommit::Hook::PreCommit::TravisLint do
       result = double('result')
       result.stub(:success?).and_return(false)
       result.stub(:stdout).and_return('Some error message')
+      result.stub(:stderr).and_return('')
       subject.stub(:execute).and_return(result)
     end
 

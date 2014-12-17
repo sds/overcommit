@@ -4,6 +4,8 @@
 
 * Change `HardTabs`, `MergeConflicts`, and `PryBinding` pre-commit hooks to
   be `quiet` by default
+* Switch `TravisLint` pre-commit hook from deprecated `travis-lint` gem to
+  `travis` gem
 
 ## 0.20.0
 
