@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Change `HardTabs`, `MergeConflicts`, and `PryBinding` pre-commit hooks to
+  be `quiet` by default
+
 ## 0.20.0
 
 * Add `--run` flag which runs all configured pre-commit hooks against the

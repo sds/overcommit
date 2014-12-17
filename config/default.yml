@@ -113,6 +113,7 @@ PreCommit:
 
   HardTabs:
     description: 'Checking for hard tabs'
+    quiet: true
     exclude:
       - '**/*.go'
       - '**/Makefile'
@@ -160,9 +161,11 @@ PreCommit:
 
   MergeConflicts:
     description: 'Checking for merge conflicts'
+    quiet: true
 
   PryBinding:
     description: 'Checking for instances of binding.pry'
+    quiet: true
     include:
       - '**/*.rb'
       - '**/*.rake'
