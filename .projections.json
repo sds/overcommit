@@ -1,0 +1,10 @@
+{
+  "lib/overcommit/*.rb": {
+    "alternate": "spec/overcommit/{}_spec.rb",
+    "type": "source"
+  },
+  "spec/overcommit/*_spec.rb": {
+    "alternate": "lib/overcommit/{}.rb",
+    "type": "test"
+  }
+}

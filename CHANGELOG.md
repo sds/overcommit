@@ -6,6 +6,7 @@
   be `quiet` by default
 * Switch `TravisLint` pre-commit hook from deprecated `travis-lint` gem to
   `travis` gem
+* Add .projections.json configuration file
 
 ## 0.20.0
 
