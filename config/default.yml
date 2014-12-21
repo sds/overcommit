@@ -211,6 +211,11 @@ PreCommit:
     install_command: 'gem install scss-lint'
     include: '**/*.scss'
 
+  ShellCheck:
+    description: 'Analyzing with ShellCheck'
+    required_executable: 'shellcheck'
+    include: '**/*.sh'
+
   TrailingWhitespace:
     description: 'Checking for trailing whitespace'
     exclude:

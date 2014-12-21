@@ -7,6 +7,8 @@
 * Switch `TravisLint` pre-commit hook from deprecated `travis-lint` gem to
   `travis` gem
 * Add .projections.json configuration file
+* Add pre-commit static analysis and linting for sh/bash scripts with
+  [ShellCheck](http://www.shellcheck.net/)
 
 ## 0.20.0
 
