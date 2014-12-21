@@ -32,7 +32,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
     context 'and it reports an error' do
       before do
         result.stub(:stdout).and_return([
-          'file1.js: line 1, col 4, Missing space after `if` keyword'
+          'file1.js: line 1, col 4, ruleName: Missing space after `if` keyword'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([2, 3])

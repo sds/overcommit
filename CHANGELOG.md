@@ -9,6 +9,7 @@
 * Add .projections.json configuration file
 * Add pre-commit static analysis and linting for sh/bash scripts with
   [ShellCheck](http://www.shellcheck.net/)
+* Use `--verbose` flag when running JSCS to include name of offending rule
 
 ## 0.20.0
 
