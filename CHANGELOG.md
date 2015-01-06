@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.21.0
 
 * Change `HardTabs`, `MergeConflicts`, and `PryBinding` pre-commit hooks to
   be `quiet` by default
