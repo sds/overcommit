@@ -184,6 +184,7 @@ PreCommit:
       - 'db/structure.sql'
 
   Reek:
+    enabled: false
     description: 'Analyzing with Reek'
     required_executable: 'reek'
     install_command: 'gem install reek'

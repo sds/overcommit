@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Disable `Reek` pre-commit hook by default
+
 ## 0.21.0
 
 * Change `HardTabs`, `MergeConflicts`, and `PryBinding` pre-commit hooks to
