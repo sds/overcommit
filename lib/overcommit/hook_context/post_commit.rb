@@ -19,7 +19,9 @@ module Overcommit::HookContext
         Overcommit::GitRepo.extract_modified_lines(file, subcmd: subcmd)
     end
 
-    # Returns whether the current git branch has only one commit.
+    # Returns whether the commit that triggered this hook is the first commit on
+    # the branch.
+    #
     # @return [true,false]
     def initial_commit?
       return @initial_commit unless @initial_commit.nil?

@@ -20,7 +20,7 @@ module Overcommit
       lines = Set.new
 
       flags = '--cached' if options[:staged]
-      refs  = options[:refs]
+      refs = options[:refs]
       subcmd = options[:subcmd] || 'diff'
 
       `git #{subcmd} --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
