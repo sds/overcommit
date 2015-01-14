@@ -21,6 +21,7 @@ module Overcommit
       refs = options[:refs]
 
       flags = '--cached' if options[:staged]
+      refs  = options[:refs]
 
       `git diff --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
