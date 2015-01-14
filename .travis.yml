@@ -1,5 +1,9 @@
 language: ruby
 
+sudo: false
+
+cache: bundler
+
 rvm:
   - 1.9.3
   - 2.0.0
@@ -9,7 +13,7 @@ rvm:
   - jruby-19mode
 
 before_script:
-  - git config --global user.email "travis@ci.com"
+  - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
 
 script:
