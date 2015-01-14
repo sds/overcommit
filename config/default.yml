@@ -262,3 +262,14 @@ CommitMsg:
 
   TrailingPeriod:
     description: 'Checking for trailing periods in subject'
+
+PostCommit:
+  ALL:
+    requires_files: false
+    required: false
+    quiet: false
+
+  GitGuilt:
+    description: 'Calculating changes in blame since last commit'
+    required_executable: 'git-guilt'
+    install_command: 'npm install -g git-guilt'
