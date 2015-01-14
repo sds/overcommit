@@ -286,4 +286,5 @@ CommitMsg:
 PostCommit:
   ALL:
     requires_files: false
+    required: false
     quiet: false
