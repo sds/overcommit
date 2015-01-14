@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Disable `Reek` pre-commit hook by default
+* Allow `required_executable` to include paths that are in the repo root
 
 ## 0.21.0
 

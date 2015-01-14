@@ -83,10 +83,16 @@ module Overcommit
         end
       end
 
-      # Returns whether a command can be found given the current environment path.
+      # @param cmd [String]
+      # @return [true,false] whether a command can be found given the current
+      #   environment path.
       def in_path?(cmd)
-        exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+        # ENV['PATH'] doesn't include the repo root, but that is a valid
+        # location for executables, so we want to add it to the list of places
+        # we are checking for the executable.
+        paths = [repo_root] + ENV['PATH'].split(File::PATH_SEPARATOR)
+        exts  = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+        paths.each do |path|
           exts.each do |ext|
             exe = File.join(path, "#{cmd}#{ext}")
             return true if File.executable?(exe)
