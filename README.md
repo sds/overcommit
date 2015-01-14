@@ -31,12 +31,11 @@ about Overcommit on our [engineering blog](http://causes.github.io).
 
 ## Requirements
 
-The following Ruby versions are supported:
+This project aims to support the following Ruby runtimes:
 
-* 1.9.3
-* 2.0.0
-* 2.1.x
-* JRuby 1.7.9 in Ruby 1.9 mode
+* MRI 1.9.3 & 2.x
+* JRuby 1.7.x
+* Rubinius 2.x
 
 ### Dependencies
 
