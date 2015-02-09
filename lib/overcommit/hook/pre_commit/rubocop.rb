@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def run
-      result = execute(%W[#{executable} --format=emacs --force-exclusion] + applicable_files)
+      result = execute(command + %w[--format=emacs --force-exclusion] + applicable_files)
       return :pass if result.success?
 
       extract_messages(

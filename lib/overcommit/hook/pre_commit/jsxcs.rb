@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   # against any modified JavaScript files.
   class Jsxcs < Base
     def run
-      result = execute(%W[#{executable} --reporter=inline] + applicable_files)
+      result = execute(command + %w[--reporter=inline] + applicable_files)
       return :pass if result.success?
 
       if result.status == 1

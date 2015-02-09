@@ -9,14 +9,14 @@ module Overcommit::Hook::PreCommit
       ignored_files = execute(%w[git ls-files -o -i --exclude-standard]).stdout.split("\n")
       return :pass if ignored_files.include?(LOCK_FILE)
 
-      result = execute(%W[#{executable} check])
+      result = execute(command + ['check'])
       unless result.success?
         return :fail, result.stdout
       end
 
       result = execute(%w[git diff --quiet --] + [LOCK_FILE])
       unless result.success?
-        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{executable} check`"
+        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{command.join(' ')} check`"
       end
 
       :pass

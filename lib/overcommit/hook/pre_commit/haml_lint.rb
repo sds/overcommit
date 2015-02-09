@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def run
-      result = execute([executable] + applicable_files)
+      result = execute(command + applicable_files)
       return :pass if result.success?
 
       extract_messages(

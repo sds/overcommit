@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   # files.
   class Jscs < Base
     def run
-      result = execute(%W[#{executable} --reporter=inline --verbose] + applicable_files)
+      result = execute(command + %w[--reporter=inline --verbose] + applicable_files)
       return :pass if result.success?
 
       if result.status == 1

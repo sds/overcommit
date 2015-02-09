@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       ignored_files = execute(%w[git ls-files -o -i --exclude-standard]).stdout.split("\n")
       return :pass if ignored_files.include?(LOCK_FILE)
 
-      result = execute(%W[#{executable} list --quiet])
+      result = execute(command + %w[list --quiet])
       unless result.success?
         return :fail, result.stderr
       end

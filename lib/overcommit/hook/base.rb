@@ -111,8 +111,18 @@ module Overcommit::Hook
       Overcommit::Utils.execute(cmd)
     end
 
-    def executable
+    def required_executable
       @config['required_executable']
+    end
+
+    # Return command to execute for this hook.
+    #
+    # This is intended to be configurable so hooks can prefix their commands
+    # with `bundle exec` or similar.
+    #
+    # @return [Array<String>]
+    def command
+      Array(@config['command'] || required_executable)
     end
 
     # Gets a list of staged files that apply to this hook based on its
@@ -146,9 +156,9 @@ module Overcommit::Hook
     # If the hook defines a required executable, check if it's in the path and
     # display the install command if one exists.
     def check_for_executable
-      return unless executable && !in_path?(executable)
+      return unless required_executable && !in_path?(required_executable)
 
-      output = "'#{executable}' is not installed (or is not in your PATH)"
+      output = "'#{required_executable}' is not installed (or is not in your PATH)"
 
       if install_command = @config['install_command']
         output += "\nInstall it by running: #{install_command}"

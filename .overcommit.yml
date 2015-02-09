@@ -5,3 +5,9 @@ CommitMsg:
 PreCommit:
   Reek:
     enabled: false
+
+  Rubocop:
+    command: ['bundle', 'exec', 'rubocop']
+
+  Travis:
+    command: ['bundle', 'exec', 'travis']

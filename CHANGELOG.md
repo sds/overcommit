@@ -4,6 +4,8 @@
 
 * Disable `Reek` pre-commit hook by default
 * Allow `required_executable` to include paths that are in the repo root
+* Add `command` hook option allowing the actual command that is executed
+  to be configured (useful to invoke command via `bundle exec` or similar)
 
 ## 0.21.0
 

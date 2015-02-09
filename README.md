@@ -189,6 +189,11 @@ Within a configuration file, the following high-level concepts exist:
     a warning to either `pass` or `fail`
   * `required_executable`: Name of an executable that needs to exist in order
     for the hook to run
+  * `command`: Array of command line arguments to use as the command. How each
+    hook uses this is different, but it ultimately allows hooks to customize
+    how they are run so they can be invoked in a different context, for example
+    running `bundle exec rubocop` instead of just `rubocop` so you can use gem
+    versions specified in your local `Gemfile.lock`
   * `install_command`: Command the user can run to install the
     `required_executable`
 
