@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.22.0
 
 * Disable `Reek` pre-commit hook by default
 * Allow `required_executable` to include paths that are in the repo root
