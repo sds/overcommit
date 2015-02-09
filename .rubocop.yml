@@ -1,64 +1,70 @@
-AmbiguousRegexpLiteral:
+Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
-AssignmentInCondition:
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Lint/Void:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/AbcSize:
   Enabled: false
 
 # Enforcing this results in a lot of unnecessary indentation.
-ClassAndModuleChildren:
+Style/ClassAndModuleChildren:
   Enabled: false
 
-CollectionMethods:
-  Enabled: false
-
-Documentation:
+Style/Documentation:
   Exclude:
     - 'spec/overcommit/**/*'
 
 Style/DotPosition:
   EnforcedStyle: trailing
 
-Encoding:
+Style/Encoding:
   EnforcedStyle: when_needed
 
-FileName:
+Style/FileName:
   Exclude:
     - 'template-dir/hooks/*'
     - 'Gemfile'
     - 'Rakefile'
     - '*.gemspec'
 
-FormatString:
+Style/FirstParameterIndentation:
+  Enabled: false
+
+Style/FormatString:
   Enabled: false
 
 # There are a number of situations where this makes code less readable or
 # disrupts the visual flow of code.
-GuardClause:
+Style/GuardClause:
   Enabled: false
 
-IfUnlessModifier:
+Style/IfUnlessModifier:
   Enabled: false
 
 # We want to allow multi-line lambdas using the `->` syntax which Rubocop
 # doesn't allow. We're also not too worried about people using `lambda` for
 # single-line lambdas either.
-Lambda:
+Style/Lambda:
   Enabled: false
 
-LineLength:
-  Max: 100
-
-MethodLength:
-  Max: 20
-
-Metrics/AbcSize:
+Style/MultilineOperationIndentation:
   Enabled: false
 
-Next:
+Style/Next:
   Enabled: false
 
 # Prefer curly braces except for %i/%w/%W, since those return arrays.
-PercentLiteralDelimiters:
+Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%': '{}'
     '%i': '[]'
@@ -72,29 +78,23 @@ PercentLiteralDelimiters:
 
 # Renaming `has_something?` to `something?` obfuscates whether it is a "is-a" or
 # a "has-a" relationship.
-PredicateName:
+Style/PredicateName:
   Enabled: false
 
-SignalException:
+Style/SignalException:
   Enabled: false
 
 # Forcing a particular name (e.g. |a, e|) for inject methods prevents you from
 # choosing intention-revealing names.
-SingleLineBlockParams:
+Style/SingleLineBlockParams:
   Enabled: false
 
-SingleSpaceBeforeFirstArg:
+Style/SingleSpaceBeforeFirstArg:
   Exclude:
     - '*.gemspec'
 
-SpecialGlobalVars:
+Style/SpecialGlobalVars:
   Enabled: false
 
-Style/MultilineOperationIndentation:
-  Enabled: false
-
-TrailingComma:
-  Enabled: false
-
-Void:
+Style/TrailingComma:
   Enabled: false
