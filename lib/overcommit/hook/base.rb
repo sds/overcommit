@@ -14,7 +14,7 @@ module Overcommit::Hook
   MESSAGE_TYPES = [:error, :warning]
 
   # Functionality common to all hooks.
-  class Base
+  class Base # rubocop:disable Metrics/ClassLength
     extend Forwardable
 
     def_delegators :@context, :modified_files
@@ -118,11 +118,33 @@ module Overcommit::Hook
     # Return command to execute for this hook.
     #
     # This is intended to be configurable so hooks can prefix their commands
-    # with `bundle exec` or similar.
+    # with `bundle exec` or similar. It will appends the command line flags
+    # specified by the `flags` option after.
+    #
+    # Note that any files intended to be passed must be handled by the hook
+    # itself.
     #
     # @return [Array<String>]
     def command
-      Array(@config['command'] || required_executable)
+      Array(@config['command'] || required_executable) + flags
+    end
+
+    # Return command line flags to be passed to the command.
+    #
+    # This excludes the list of files, as that must be handled by the hook
+    # itself.
+    #
+    # The intention here is to provide flexibility for when a tool
+    # removes/renames its flags. Rather than wait for Overcommit to update the
+    # flags it uses, you can update your configuration to use the new flags
+    # right away without being blocked.
+    #
+    # Also note that any flags containing dynamic content must be passed in the
+    # hook's {#run} method.
+    #
+    # @return [Array<String>]
+    def flags
+      Array(@config['flags'])
     end
 
     # Gets a list of staged files that apply to this hook based on its

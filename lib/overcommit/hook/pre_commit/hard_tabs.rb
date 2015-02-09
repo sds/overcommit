@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   class HardTabs < Base
     def run
       # Catches hard tabs
-      result = execute(%w[grep -IHn] + ["\t"] + applicable_files)
+      result = execute(command + applicable_files)
       unless result.stdout.empty?
         return :fail, "Hard tabs detected:\n#{result.stdout}"
       end

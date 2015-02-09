@@ -52,6 +52,7 @@ PreCommit:
   BerksfileCheck:
     description: 'Checking Berksfile lock'
     required_executable: 'berks'
+    flags: ['list', '--quiet']
     install_command: 'gem install berks'
     include:
       - 'Berksfile'
@@ -61,6 +62,7 @@ PreCommit:
     enabled: false
     description: 'Checking for security vulnerabilities'
     required_executable: 'brakeman'
+    flags: ['--exit-on-warn', '--quiet', '--summary', '--only-files']
     install_command: 'gem install brakeman'
     include:
       - '**/*.rb'
@@ -72,6 +74,7 @@ PreCommit:
   BundleCheck:
     description: 'Checking Gemfile dependencies'
     required_executable: 'bundle'
+    flags: ['check']
     install_command: 'gem install bundler'
     include:
       - 'Gemfile'
@@ -82,6 +85,7 @@ PreCommit:
     enabled: false
     description: 'Checking that settings have been secured with Chamber'
     required_executable: 'chamber'
+    flags: ['secure', '--files']
     install_command: 'gem install chamber'
     include:
       - 'config/settings.yml'
@@ -90,12 +94,14 @@ PreCommit:
   CoffeeLint:
     description: 'Analyzing with coffeelint'
     required_executable: 'coffeelint'
+    flags: ['--quiet']
     install_command: 'npm install -g coffeelint'
     include: '**/*.coffee'
 
   CssLint:
     description: 'Analyzing with csslint'
     required_executable: 'csslint'
+    flags: ['--quiet', '--format=compact']
     install_command: 'npm install -g csslint'
     include: '**/*.css'
 
@@ -114,6 +120,8 @@ PreCommit:
   HardTabs:
     description: 'Checking for hard tabs'
     quiet: true
+    required_executable: 'grep'
+    flags: ['-IHn', "\t"]
     exclude:
       - '**/*.go'
       - '**/Makefile'
@@ -130,12 +138,14 @@ PreCommit:
   Jscs:
     description: 'Analyzing with JSCS'
     required_executable: 'jscs'
+    flags: ['--reporter=inline', '--verbose']
     install_command: 'npm install -g jscs'
     include: '**/*.js'
 
   Jsxcs:
     description: 'Analyzing with JSXCS'
     required_executable: 'jsxcs'
+    flags: ['--reporter=inline']
     install_command: 'npm install -g jsxcs'
     include: '**/*.jsx'
 
@@ -157,11 +167,15 @@ PreCommit:
 
   LocalPathsInGemfile:
     description: 'Checking for local paths in Gemfile'
+    required_executable: 'grep'
+    flags: ['-IHnE', '(\bpath:)|(:path\s*=>)']
     include: '**/Gemfile'
 
   MergeConflicts:
     description: 'Checking for merge conflicts'
     quiet: true
+    required_executable: 'grep'
+    flags: ['-IHn', '^<<<<<<<\s']
 
   PryBinding:
     description: 'Checking for instances of binding.pry'
@@ -187,6 +201,7 @@ PreCommit:
     enabled: false
     description: 'Analyzing with Reek'
     required_executable: 'reek'
+    flags: ['--single-line', '--no-color']
     install_command: 'gem install reek'
     include:
       - '**/*.gemspec'
@@ -198,6 +213,7 @@ PreCommit:
   Rubocop:
     description: 'Analyzing with Rubocop'
     required_executable: 'rubocop'
+    flags: ['--format=emacs', '--force-exclusion']
     install_command: 'gem install rubocop'
     include:
       - '**/*.gemspec'
@@ -215,16 +231,20 @@ PreCommit:
   ShellCheck:
     description: 'Analyzing with ShellCheck'
     required_executable: 'shellcheck'
+    flags: ['--format=gcc']
     include: '**/*.sh'
 
   TrailingWhitespace:
     description: 'Checking for trailing whitespace'
+    required_executable: 'grep'
+    flags: ['-IHn', '\s$']
     exclude:
       - '**/db/structure.sql'
 
   TravisLint:
     description: 'Checking Travis CI configuration'
     required_executable: 'travis'
+    flags: ['lint']
     install_command: 'gem install travis'
     include: '.travis.yml'
 

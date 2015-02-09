@@ -6,6 +6,8 @@
 * Allow `required_executable` to include paths that are in the repo root
 * Add `command` hook option allowing the actual command that is executed
   to be configured (useful to invoke command via `bundle exec` or similar)
+* Add `flags` hook option allowing the flags passed on the command line
+  to be configured
 
 ## 0.21.0
 

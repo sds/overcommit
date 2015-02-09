@@ -194,6 +194,10 @@ Within a configuration file, the following high-level concepts exist:
     how they are run so they can be invoked in a different context, for example
     running `bundle exec rubocop` instead of just `rubocop` so you can use gem
     versions specified in your local `Gemfile.lock`
+  * `flags`: Array of command line arguments to pass as the flags. This is
+    useful for when a newer version of a tool removes/renames existing flags,
+    so you can update the flags via your configuration and not wait on an
+    upstream fix in Overcommit
   * `install_command`: Command the user can run to install the
     `required_executable`
 
