@@ -56,7 +56,7 @@ describe Overcommit::HookContext::RunAll do
     let(:modified_file) { 'some-file' }
     subject { context.modified_lines_in_file(modified_file) }
 
-    context 'when repo contains files' do
+    context 'when file contains a trailing newline' do
       around do |example|
         repo do
           File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
@@ -67,6 +67,23 @@ describe Overcommit::HookContext::RunAll do
       end
 
       it { should == Set.new(1..4) }
+    end
+
+    context 'when file does not contain a trailing newline' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') do |f|
+            (1..2).each { |i| f.write("#{i}\n") }
+            f.write(3)
+          end
+
+          `git add #{modified_file}`
+          `git commit -m "Add files"`
+          example.run
+        end
+      end
+
+      it { should == Set.new(1..3) }
     end
   end
 end
