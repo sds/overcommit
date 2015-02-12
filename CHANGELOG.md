@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `--run` flag to consider all lines in all files as modified rather than none
+
 ## 0.22.0
 
 * Disable `Reek` pre-commit hook by default
