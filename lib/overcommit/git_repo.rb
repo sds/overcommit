@@ -54,7 +54,8 @@ module Overcommit
     def all_files
       `git ls-files`.
         split(/\n/).
-        map { |relative_file| File.expand_path(relative_file) }
+        map { |relative_file| File.expand_path(relative_file) }.
+        reject { |file| File.directory?(file) } # Exclude submodule directories
     end
 
     # Returns whether the current git branch is empty (has no commits).
