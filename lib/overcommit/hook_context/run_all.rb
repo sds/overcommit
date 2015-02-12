@@ -7,7 +7,7 @@ module Overcommit::HookContext
   # which is useful for automated CI scripts.
   class RunAll < Base
     def modified_files
-      all_files
+      @modified_files ||= Overcommit::GitRepo.all_files
     end
 
     # Returns all lines in the file since in this context the entire repo is
@@ -33,10 +33,6 @@ module Overcommit::HookContext
     end
 
     private
-
-    def all_files
-      @all_files ||= Overcommit::GitRepo.all_files
-    end
 
     def count_lines(file)
       result = Overcommit::Utils.execute(%w[wc -l] + [file])
