@@ -293,4 +293,5 @@ PostCommit:
     enabled: false
     description: 'Calculating changes in blame since last commit'
     required_executable: 'git-guilt'
+    flags: ['HEAD~', 'HEAD']
     install_command: 'npm install -g git-guilt'

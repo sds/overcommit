@@ -3,7 +3,7 @@ module Overcommit::Hook::PostCommit
   class GitGuilt < Base
     def run
       return :pass unless previous_commit?
-      result = execute([required_executable, 'HEAD~', 'HEAD'])
+      result = execute(command)
       puts result.stdout
       :pass
     end
