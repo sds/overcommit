@@ -22,8 +22,9 @@ module Overcommit
 
       flags = '--cached' if options[:staged]
       refs  = options[:refs]
+      subcmd = options[:subcmd] || 'diff'
 
-      `git diff --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
+      `git #{subcmd} --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
         lines_added = (lines_added || 1).to_i # When blank, one line was added
         cur_line = start_line.to_i
@@ -45,8 +46,9 @@ module Overcommit
     def modified_files(options)
       flags = '--cached' if options[:staged]
       refs = options[:refs]
+      subcmd = options[:subcmd] || 'diff'
 
-      `git diff --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
+      `git #{subcmd} --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
         map { |relative_file| File.expand_path(relative_file) }
     end
