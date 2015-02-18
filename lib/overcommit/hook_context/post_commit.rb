@@ -5,16 +5,16 @@ module Overcommit::HookContext
     # Get a list of files that were added, copied, or modified in the last
     # commit. Renames and deletions are ignored, since there should be nothing
     # to check.
-    def modified_files_last_commit
-      @modified_files_last_commit ||= Overcommit::GitRepo.modified_files_last_commit
+    def modified_files
+      @modified_files ||= Overcommit::GitRepo.modified_files(refs: 'HEAD~ HEAD')
     end
 
     # Returns the set of line numbers corresponding to the lines that were
     # changed in a specified file.
-    def modified_lines_in_file_last_commit(file)
-      @modified_lines_last_commit ||= {}
-      @modified_lines_last_commit[file] ||=
-        Overcommit::GitRepo.extract_modified_lines_last_commit(file)
+    def modified_lines_in_file(file)
+      @modified_lines ||= {}
+      @modified_lines[file] ||=
+        Overcommit::GitRepo.extract_modified_lines(file, refs: 'HEAD~ HEAD')
     end
   end
 end

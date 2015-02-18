@@ -20,7 +20,7 @@ module Overcommit
       lines = Set.new
 
       flags = '--cached' if options[:staged]
-      refs  = 'HEAD~ HEAD' if options[:last_commit]
+      refs  = options[:refs]
 
       `git diff --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
@@ -36,15 +36,6 @@ module Overcommit
       lines
     end
 
-    # Extract the set of modified lines from a given file.
-    #
-    # @param file_path [String]
-    # @param options [Hash]
-    # @return [Set] line numbers that have been modified in file
-    def extract_modified_lines_last_commit(file_path)
-      extract_modified_lines(file_path, last_commit: true)
-    end
-
     # Returns the names of all files that have been modified from compared to
     # HEAD.
     #
@@ -52,18 +43,11 @@ module Overcommit
     # @return [Array<String>] list of absolute file paths
     def modified_files(options)
       flags = '--cached' if options[:staged]
-      refs  = 'HEAD~ HEAD' if options[:last_commit]
+      refs  = options[:refs]
 
       `git diff --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
         map { |relative_file| File.expand_path(relative_file) }
-    end
-
-    # Returns the names of all files that were modified in the last commit.
-    #
-    # @return [Array<String>] lsit of absolute file paths
-    def modified_files_last_commit
-      modified_files(last_commit: true)
     end
 
     # Returns the names of all files that are tracked by git.

@@ -5,7 +5,6 @@ module Overcommit::Hook::PostCommit
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegators :@context, :modified_files_last_commit,
-                   :modified_lines_in_file_last_commit
+    def_delegators :@context, :modified_lines_in_file
   end
 end
