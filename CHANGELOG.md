@@ -4,6 +4,7 @@
 
 * Fix `--run` flag to consider all lines in all files as modified rather than none
 * Fix `--run` flag to exclude submodule directories from the list of modified files
+* Add pre-commit [ESLint](http://eslint.org/) hook
 
 ## 0.22.0
 
