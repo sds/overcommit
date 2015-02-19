@@ -229,6 +229,13 @@ PreCommit:
     flags: ['--format=gcc']
     include: '**/*.sh'
 
+  Standard:
+    description: 'Analyzing with standard'
+    required_executable: 'standard'
+    flags: ['--verbose']
+    install_command: 'npm install -g standard'
+    include: '**/*.js'
+
   TrailingWhitespace:
     description: 'Checking for trailing whitespace'
     required_executable: 'grep'
