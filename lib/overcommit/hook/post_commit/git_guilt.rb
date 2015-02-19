@@ -9,6 +9,7 @@ module Overcommit::Hook::PostCommit
     def run
       return :pass if initial_commit?
       result = execute(command)
+      return :fail, result.stderr unless result.success?
 
       puts if result.stdout.strip
       result.stdout.scan(PLUS_MINUS_REGEX) do |user, plus, minus|
