@@ -105,6 +105,13 @@ PreCommit:
     install_command: 'npm install -g csslint'
     include: '**/*.css'
 
+  EsLint:
+    description: 'Analyzing with ESLint'
+    required_executable: 'eslint'
+    flags: ['--format=compact']
+    install_command: 'npm install -g eslint'
+    include: '**/*.js'
+
   GoLint:
     description: 'Analyzing with golint'
     required_executable: 'golint'
