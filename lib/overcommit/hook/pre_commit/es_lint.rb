@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       # example message:
       #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
       extract_messages(
-        output.split("\n"),
+        output.split("\n").grep(/Warning|Error/),
         /^(?<file>[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/,
         lambda { |type| type.downcase.to_sym }
       )
