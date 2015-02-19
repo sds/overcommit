@@ -9,23 +9,52 @@ describe Overcommit::Hook::PreCommit::JsHint do
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
-  context 'when jshint exits with no output' do
+  context 'when jshint exits successfully' do
+    let(:result) { double('result') }
+
     before do
       result = double('result')
-      result.stub(:stdout).and_return('')
+      result.stub(:success? => true, :stdout => '')
       subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
   end
 
-  context 'when jshint exits with output' do
+  context 'when jshint exits unsucessfully' do
+    let(:result) { double('result') }
+
     before do
-      result = double('result')
-      result.stub(:stdout).and_return('Undefined variable')
+      result.stub(:success?).and_return(false)
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_hook }
+    context 'and it reports a warning' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.js: line 1, col 0, Missing semicolon. (W033)',
+          '',
+          '1 error'
+        ].join("\n"))
+
+        subject.stub(:modified_lines_in_file).and_return([2, 3])
+      end
+
+      it { should warn }
+    end
+
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.js: line 1, col 0, Missing "use strict" statement. (E007)',
+          '',
+          '1 error'
+        ].join("\n"))
+
+        subject.stub(:modified_lines_in_file).and_return([1, 2])
+      end
+
+      it { should fail_hook }
+    end
   end
 end
