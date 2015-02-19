@@ -29,6 +29,8 @@ describe Overcommit::Hook::PreCommit::EsLint do
       before do
         result.stub(:stdout).and_return([
           'file1.js: line 1, col 0, Warning - Missing "use strict" statement. (strict)',
+          '',
+          '1 problem'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([2, 3])
@@ -50,6 +52,8 @@ describe Overcommit::Hook::PreCommit::EsLint do
       before do
         result.stub(:stdout).and_return([
           'file1.js: line 1, col 0, Error - Missing "use strict" statement. (strict)',
+          '',
+          '1 problem'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([1, 2])
