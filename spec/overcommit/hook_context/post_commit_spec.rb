@@ -113,4 +113,31 @@ describe Overcommit::HookContext::PostCommit do
       it { should == Set.new(1..3) }
     end
   end
+
+  describe '#initial_commit?' do
+    subject { context.initial_commit? }
+
+    context 'when a previous commit exists' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          `git commit --allow-empty -m "Another commit"`
+          example.run
+        end
+      end
+
+      it { should == false }
+    end
+
+    context 'when no previous commit exists' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          example.run
+        end
+      end
+
+      it { should == true }
+    end
+  end
 end
