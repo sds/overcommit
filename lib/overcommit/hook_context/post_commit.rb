@@ -19,13 +19,11 @@ module Overcommit::HookContext
         Overcommit::GitRepo.extract_modified_lines(file, subcmd: subcmd)
     end
 
-    private
-
-    # Returns whether a previous commit exists on the current git branch.
+    # Returns whether the current git branch has only one commit.
     # @return [true,false]
-    def previous_commit?
-      return @previous_commit unless @previous_commit.nil?
-      @previous_commit = Overcommit::Utils.execute(%w[git rev-parse HEAD~]).success?
+    def initial_commit?
+      return @initial_commit unless @initial_commit.nil?
+      @initial_commit = !Overcommit::Utils.execute(%w[git rev-parse HEAD~]).success?
     end
   end
 end
