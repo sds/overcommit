@@ -217,6 +217,14 @@ PreCommit:
       - '**/Gemfile'
       - '**/Rakefile'
 
+  SemiStandard:
+    enabled: false
+    description: 'Analyzing with semistandard'
+    required_executable: 'semistandard'
+    flags: ['--verbose']
+    install_command: 'npm install -g semistandard'
+    include: '**/*.js'
+
   ScssLint:
     description: 'Analyzing with scss-lint'
     required_executable: 'scss-lint'
