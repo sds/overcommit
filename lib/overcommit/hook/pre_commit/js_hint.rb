@@ -3,11 +3,17 @@ module Overcommit::Hook::PreCommit
   class JsHint < Base
     def run
       result = execute(command + applicable_files)
-      output = result.stdout
+      output = result.stdout.chomp
 
-      return :pass if output.empty?
+      return :pass if result.success? && output.empty?
 
-      [:fail, output]
+      # example message:
+      #   path/to/file.js: line 1, col 0, Error message (E001)
+      extract_messages(
+        output.split("\n").grep(/E|W/),
+        /^(?<file>[^:]+):[^\d]+(?<line>\d+).+\((?<type>E|W)\d+\)/,
+        lambda { |type| type.include?('W') ? :warning : :error }
+      )
     end
   end
 end

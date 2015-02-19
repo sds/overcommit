@@ -159,6 +159,7 @@ PreCommit:
   JsHint:
     description: 'Analyzing with JSHint'
     required_executable: 'jshint'
+    flags: ['--verbose']
     install_command: 'npm install -g jshint'
     include: '**/*.js'
 
