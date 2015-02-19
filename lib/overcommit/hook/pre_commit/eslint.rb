@@ -3,11 +3,16 @@ module Overcommit::Hook::PreCommit
   class EsLint < Base
     def run
       result = execute(command + applicable_files)
-      output = result.stdout
+      output = result.stdout.chomp
+      return :pass if result.success? && output.empty?
 
-      return :pass if output.empty?
-
-      [:fail, output]
+      # example message:
+      #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
+      extract_messages(
+        output.split("\n"),
+        /^(?<file>[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/,
+        lambda { |type| type.downcase.to_sym }
+      )
     end
   end
 end
