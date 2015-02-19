@@ -18,10 +18,11 @@ module Overcommit
     # @return [Set] line numbers that have been modified in file
     def extract_modified_lines(file_path, options)
       lines = Set.new
+      refs = options[:refs]
 
       flags = '--cached' if options[:staged]
 
-      `git diff --no-ext-diff -U0 #{flags} -- #{file_path}`.
+      `git diff --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
         lines_added = (lines_added || 1).to_i # When blank, one line was added
         cur_line = start_line.to_i
@@ -42,8 +43,9 @@ module Overcommit
     # @return [Array<String>] list of absolute file paths
     def modified_files(options)
       flags = '--cached' if options[:staged]
+      refs = options[:refs]
 
-      `git diff --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags}`.
+      `git diff --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
         map { |relative_file| File.expand_path(relative_file) }
     end
