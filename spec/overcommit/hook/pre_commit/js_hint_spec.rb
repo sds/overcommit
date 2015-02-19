@@ -10,8 +10,6 @@ describe Overcommit::Hook::PreCommit::JsHint do
   end
 
   context 'when jshint exits successfully' do
-    let(:result) { double('result') }
-
     before do
       result = double('result')
       result.stub(:success? => true, :stdout => '')
