@@ -149,13 +149,6 @@ PreCommit:
     install_command: 'npm install -g jscs'
     include: '**/*.js'
 
-  Jsxcs:
-    description: 'Analyzing with JSXCS'
-    required_executable: 'jsxcs'
-    flags: ['--reporter=inline']
-    install_command: 'npm install -g jsxcs'
-    include: '**/*.jsx'
-
   JsHint:
     description: 'Analyzing with JSHint'
     required_executable: 'jshint'
@@ -166,12 +159,6 @@ PreCommit:
   JsonSyntax:
     description: 'Validating JSON syntax'
     include: '**/*.json'
-
-  JsxHint:
-    description: 'Analyzing with JSXHint'
-    required_executable: 'jsxhint'
-    install_command: 'npm install -g jsxhint'
-    include: '**/*.jsx'
 
   LocalPathsInGemfile:
     description: 'Checking for local paths in Gemfile'

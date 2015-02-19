@@ -6,6 +6,8 @@
 * Fix `--run` flag to exclude submodule directories from the list of modified files
 * Add pre-commit [ESLint](http://eslint.org/) hook
 * Parse JSHint errors more precisely
+* Remove JsxHint and Jsxcs pre-commit hooks in favor of using the
+  `required_executable` option on the JsHint and Jscs pre-commit hooks
 
 ## 0.22.0
 
