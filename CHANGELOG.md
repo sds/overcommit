@@ -8,6 +8,8 @@
 * Parse JSHint errors more precisely
 * Remove JsxHint and Jsxcs pre-commit hooks in favor of using the
   `required_executable` option on the JsHint and Jscs pre-commit hooks
+* Add pre-commit hooks for [standard](https://github.com/feross/standard) and
+  [semistandard](https://github.com/Flet/semistandard) JavaScript linters
 
 ## 0.22.0
 
