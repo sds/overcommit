@@ -55,7 +55,7 @@ describe Overcommit::HookContext::PostCommit do
           `git commit -m 'Initial commit'`
           `echo Hello > some-file`
           `git add some-file`
-          `git commit -m "Initial commit"`
+          `git commit -m 'Modify some-file'`
           example.run
         end
       end
@@ -70,7 +70,7 @@ describe Overcommit::HookContext::PostCommit do
           `git add some-file`
           `git commit -m 'Initial commit'`
           `git rm some-file`
-          `git commit -m "Initial commit"`
+          `git commit -m 'Delete some-file'`
           example.run
         end
       end
