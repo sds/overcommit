@@ -9,23 +9,53 @@ describe Overcommit::Hook::PreCommit::EsLint do
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
-  context 'when eslint exits with no output' do
+  context 'when eslint exits successfully' do
+    let(:result) { double('result') }
+
     before do
-      result = double('result')
-      result.stub(:stdout).and_return('')
+      result.stub(:success?).and_return(true)
       subject.stub(:execute).and_return(result)
     end
 
-    it { should pass }
+    context 'with no output' do
+      before do
+        result.stub(:stdout).and_return('')
+      end
+
+      it { should pass }
+    end
+
+    context 'and it reports a warning' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.js: line 1, col 0, Warning - Missing "use strict" statement. (strict)',
+        ].join("\n"))
+
+        subject.stub(:modified_lines_in_file).and_return([2, 3])
+      end
+
+      it { should warn }
+    end
   end
 
-  context 'when eslint exits with output' do
+  context 'when eslint exits unsucessfully' do
+    let(:result) { double('result') }
+
     before do
-      result = double('result')
-      result.stub(:stdout).and_return('Undefined variable')
+      result.stub(:success?).and_return(false)
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_hook }
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.js: line 1, col 0, Error - Missing "use strict" statement. (strict)',
+        ].join("\n"))
+
+        subject.stub(:modified_lines_in_file).and_return([1, 2])
+      end
+
+      it { should fail_hook }
+    end
   end
 end
