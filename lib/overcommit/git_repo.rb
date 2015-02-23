@@ -49,6 +49,8 @@ module Overcommit
 
       `git #{subcmd} --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
+        map(&:strip).
+        reject(&:empty?).
         map { |relative_file| File.expand_path(relative_file) }
     end
 
