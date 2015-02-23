@@ -4,6 +4,12 @@
 
 * Fix `--run` flag to consider all lines in all files as modified rather than none
 * Fix `--run` flag to exclude submodule directories from the list of modified files
+* Add pre-commit [ESLint](http://eslint.org/) hook
+* Parse JSHint errors more precisely
+* Remove JsxHint and Jsxcs pre-commit hooks in favor of using the
+  `required_executable` option on the JsHint and Jscs pre-commit hooks
+* Add pre-commit hooks for [standard](https://github.com/feross/standard) and
+  [semistandard](https://github.com/Flet/semistandard) JavaScript linters
 
 ## 0.22.0
 

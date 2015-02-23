@@ -20,7 +20,7 @@ module Overcommit
       lines = Set.new
 
       flags = '--cached' if options[:staged]
-      refs  = options[:refs]
+      refs = options[:refs]
       subcmd = options[:subcmd] || 'diff'
 
       `git #{subcmd} --no-ext-diff -U0 #{flags} #{refs} -- #{file_path}`.
@@ -44,11 +44,13 @@ module Overcommit
     # @return [Array<String>] list of absolute file paths
     def modified_files(options)
       flags = '--cached' if options[:staged]
-      refs  = options[:refs]
+      refs = options[:refs]
       subcmd = options[:subcmd] || 'diff'
 
       `git #{subcmd} --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
+        map(&:strip).
+        reject(&:empty?).
         map { |relative_file| File.expand_path(relative_file) }
     end
 
