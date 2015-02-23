@@ -15,9 +15,9 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git commit --allow-empty -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --squash child`
           example.run
         end
@@ -30,9 +30,9 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git commit --allow-empty -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -51,9 +51,9 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git commit --allow-empty -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --squash child`
           example.run
         end
@@ -66,9 +66,9 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git commit --allow-empty -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -90,10 +90,10 @@ describe Overcommit::HookContext::PostMerge do
 
       repo do
         `git commit --allow-empty -m "Initial commit"`
-        `git checkout -b child`
+        `git checkout -b child &> /dev/null`
         `git submodule add #{submodule} test-sub 2>&1 > /dev/null`
         `git commit -m "Add submodule"`
-        `git checkout master`
+        `git checkout master &> /dev/null`
         `git merge --no-ff --no-edit child`
         expect(subject).to_not include File.expand_path('test-sub')
       end
@@ -103,9 +103,9 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git commit --allow-empty -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -118,11 +118,11 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -137,11 +137,11 @@ describe Overcommit::HookContext::PostMerge do
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m 'Initial commit'`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `echo Hello > some-file`
           `git add some-file`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -156,10 +156,10 @@ describe Overcommit::HookContext::PostMerge do
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m 'Initial commit'`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           `git rm some-file`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -174,11 +174,11 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --squash child`
           example.run
         end
@@ -196,11 +196,11 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
           `git add #{modified_file}`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -213,14 +213,14 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           File.open(modified_file, 'w') do |f|
             (1..2).each { |i| f.write("#{i}\n") }
             f.write(3)
           end
           `git add #{modified_file}`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --no-ff --no-edit child`
           example.run
         end
@@ -235,11 +235,11 @@ describe Overcommit::HookContext::PostMerge do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `git checkout -b child`
+          `git checkout -b child &> /dev/null`
           File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
           `git add #{modified_file}`
           `git commit -m "Branch commit"`
-          `git checkout master`
+          `git checkout master &> /dev/null`
           `git merge --squash child`
           example.run
         end
