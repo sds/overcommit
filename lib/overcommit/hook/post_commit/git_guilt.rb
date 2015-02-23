@@ -1,7 +1,6 @@
 module Overcommit::Hook::PostCommit
   # Calculates the change in blame since the last revision.
   class GitGuilt < Base
-
     PLUS_MINUS_REGEX = /^(.*?)(?:(\++)|(-+))$/
     GREEN = 32
     RED = 31
@@ -11,14 +10,16 @@ module Overcommit::Hook::PostCommit
       result = execute(command)
       return :fail, result.stderr unless result.success?
 
-      puts if result.stdout.strip
+      return :pass if result.stdout.strip.empty?
+
+      output = []
       result.stdout.scan(PLUS_MINUS_REGEX) do |user, plus, minus|
         plus = color(GREEN, plus)
         minus = color(RED, minus)
-        puts("#{user}#{plus}#{minus}")
+        output << "#{user}#{plus}#{minus}"
       end
 
-      :pass
+      [:warn, output.join("\n")]
     end
 
     private

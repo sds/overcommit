@@ -26,7 +26,7 @@ describe Overcommit::Hook::PostCommit::GitGuilt do
         result.stub(:stdout).and_return('GitGuilt Tester +++')
       end
 
-      it { should pass }
+      it { should warn }
     end
   end
 
