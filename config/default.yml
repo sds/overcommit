@@ -292,3 +292,9 @@ CommitMsg:
 
   TrailingPeriod:
     description: 'Checking for trailing periods in subject'
+
+PostCommit:
+  ALL:
+    requires_files: false
+    required: false
+    quiet: false
