@@ -18,7 +18,6 @@ module Overcommit
     # @return [Set] line numbers that have been modified in file
     def extract_modified_lines(file_path, options)
       lines = Set.new
-      refs = options[:refs]
 
       flags = '--cached' if options[:staged]
       refs  = options[:refs]
