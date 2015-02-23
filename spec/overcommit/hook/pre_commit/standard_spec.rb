@@ -1,38 +1,37 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::Jsxcs do
+describe Overcommit::Hook::PreCommit::Standard do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:applicable_files).and_return(%w[file1.js.jsx file2.js.jsx])
+    subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
-  context 'when no configuration is found' do
+  context 'when standard exits successfully' do
     before do
       result = double('result')
-      result.stub(:success? => false,
-                  :status => 1,
-                  :stderr => 'Configuration file some-path/.jscs.json was not found.')
+      result.stub(:success? => true, :stderr => '')
       subject.stub(:execute).and_return(result)
     end
 
-    it { should warn }
+    it { should pass }
   end
 
-  context 'when jsxcs exits unsucessfully' do
+  context 'when standard exits unsucessfully' do
     let(:result) { double('result') }
 
     before do
-      result.stub(:success? => false, :stderr => '', :status => 2)
+      result.stub(:success?).and_return(false)
       subject.stub(:execute).and_return(result)
     end
 
     context 'and it reports an error' do
       before do
-        result.stub(:stdout).and_return([
-          'file1.js.jsx: line 1, col 4, Missing space after `if` keyword'
+        result.stub(:stderr).and_return([
+          'Error: Use JavaScript Standard Style (https://github.com/feross/standard)',
+          'file1.js:1:1: Extra semicolon. (eslint/semi)'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([1, 2])

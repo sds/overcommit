@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::JsHint do
+describe Overcommit::Hook::PreCommit::SemiStandard do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -9,17 +9,17 @@ describe Overcommit::Hook::PreCommit::JsHint do
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
-  context 'when jshint exits successfully' do
+  context 'when semistandard exits successfully' do
     before do
       result = double('result')
-      result.stub(:success? => true, :stdout => '')
+      result.stub(:success? => true, :stderr => '')
       subject.stub(:execute).and_return(result)
     end
 
     it { should pass }
   end
 
-  context 'when jshint exits unsucessfully' do
+  context 'when semistandard exits unsucessfully' do
     let(:result) { double('result') }
 
     before do
@@ -27,26 +27,11 @@ describe Overcommit::Hook::PreCommit::JsHint do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'and it reports a warning' do
-      before do
-        result.stub(:stdout).and_return([
-          'file1.js: line 1, col 0, Missing semicolon. (W033)',
-          '',
-          '1 error'
-        ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
-      end
-
-      it { should warn }
-    end
-
     context 'and it reports an error' do
       before do
-        result.stub(:stdout).and_return([
-          'file1.js: line 1, col 0, Missing "use strict" statement. (E007)',
-          '',
-          '1 error'
+        result.stub(:stderr).and_return([
+          'Error: Code style check failed:',
+          'file1.js:1:1: Extra semicolon. (eslint/semi)'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([1, 2])

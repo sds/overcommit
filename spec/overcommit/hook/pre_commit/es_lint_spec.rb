@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::JsHint do
+describe Overcommit::Hook::PreCommit::EsLint do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -9,30 +9,28 @@ describe Overcommit::Hook::PreCommit::JsHint do
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
-  context 'when jshint exits successfully' do
-    before do
-      result = double('result')
-      result.stub(:success? => true, :stdout => '')
-      subject.stub(:execute).and_return(result)
-    end
-
-    it { should pass }
-  end
-
-  context 'when jshint exits unsucessfully' do
+  context 'when eslint exits successfully' do
     let(:result) { double('result') }
 
     before do
-      result.stub(:success?).and_return(false)
+      result.stub(:success?).and_return(true)
       subject.stub(:execute).and_return(result)
+    end
+
+    context 'with no output' do
+      before do
+        result.stub(:stdout).and_return('')
+      end
+
+      it { should pass }
     end
 
     context 'and it reports a warning' do
       before do
         result.stub(:stdout).and_return([
-          'file1.js: line 1, col 0, Missing semicolon. (W033)',
+          'file1.js: line 1, col 0, Warning - Missing "use strict" statement. (strict)',
           '',
-          '1 error'
+          '1 problem'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([2, 3])
@@ -40,13 +38,22 @@ describe Overcommit::Hook::PreCommit::JsHint do
 
       it { should warn }
     end
+  end
+
+  context 'when eslint exits unsucessfully' do
+    let(:result) { double('result') }
+
+    before do
+      result.stub(:success?).and_return(false)
+      subject.stub(:execute).and_return(result)
+    end
 
     context 'and it reports an error' do
       before do
         result.stub(:stdout).and_return([
-          'file1.js: line 1, col 0, Missing "use strict" statement. (E007)',
+          'file1.js: line 1, col 0, Error - Missing "use strict" statement. (strict)',
           '',
-          '1 error'
+          '1 problem'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([1, 2])
