@@ -258,6 +258,7 @@ PreCommit:
     include: '**/*.sh'
 
   Standard:
+    enabled: false
     description: 'Analyzing with standard'
     required_executable: 'standard'
     flags: ['--verbose']
