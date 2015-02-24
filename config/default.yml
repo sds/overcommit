@@ -291,6 +291,7 @@ PostCheckout:
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
+    required_executable: 'ctags'
 
 # Hooks that run after a commit is created.
 PostCommit:
@@ -307,14 +308,29 @@ PostCommit:
     flags: ['HEAD~', 'HEAD']
     install_command: 'npm install -g git-guilt'
 
+  IndexTags:
+    enabled: false
+    description: 'Generating tags file from source'
+    required_executable: 'ctags'
+
 # Hooks that run after `git merge` executes successfully (no merge conflicts).
 PostMerge:
   ALL:
     requires_files: false
     quiet: false
 
+  IndexTags:
+    enabled: false
+    description: 'Generating tags file from source'
+    required_executable: 'ctags'
+
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
   ALL:
     requires_files: false
     quiet: false
+
+  IndexTags:
+    enabled: false
+    description: 'Generating tags file from source'
+    required_executable: 'ctags'

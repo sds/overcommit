@@ -17,6 +17,8 @@
   replace the old value instead of appending to it
 * Add `execute_in_background` helper to provide a standardized way to start
   long-running processes without blocking the hook run
+* Add `IndexTags` hook for `post-commit`, `post-merge`, and `post-rewrite`
+  hook types so tags index can always be kept up to date via `ctags`
 
 ## 0.22.0
 

@@ -1,6 +1,5 @@
-module Overcommit::Hook::PostCheckout
-  # Scans source code each time HEAD changes to generate an up-to-date index of
-  # all function/variable definitions, etc.
+module Overcommit::Hook::PostCommit
+  # Updates ctags index for all source code in the repository.
   class IndexTags < Base
     # Location of the tag indexing script.
     SCRIPT_LOCATION = Overcommit::Utils.script_path('index-tags')
