@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_dependency             'childprocess', '~> 0.5'
+  s.add_dependency             'childprocess', '~> 0.5.0'
 
   s.add_development_dependency 'image_optim', '~> 0.20.0'
   s.add_development_dependency 'rspec', '~> 3.0'
