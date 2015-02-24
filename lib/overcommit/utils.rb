@@ -101,19 +101,20 @@ module Overcommit
         false
       end
 
-      # Wrap external subshell calls. This is necessary in order to allow
-      # Overcommit to call other Ruby executables without requiring that they be
-      # specified in Overcommit's Gemfile--a nasty consequence of using
-      # `bundle exec overcommit` while developing locally.
+      # Wrap external subshell calls.
+      #
+      # This is intended to provide a centralized place to perform any checks or
+      # filtering of the command before executing it.
+      #
+      # @param args [Array<String>]
+      # @return [Overcommit::Subprocess::Result] status, stdout, and stderr
       def execute(args)
         if args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Cannot pipe commands with the `execute` helper'
         end
 
-        with_environment 'RUBYOPT' => nil do
-          Subprocess.spawn(args)
-        end
+        Subprocess.spawn(args)
       end
 
       # Calls a block of code with a modified set of environment variables,
