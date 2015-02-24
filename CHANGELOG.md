@@ -6,10 +6,13 @@
 * Fix `--run` flag to exclude submodule directories from the list of modified files
 * Add pre-commit [ESLint](http://eslint.org/) hook
 * Parse JSHint errors more precisely
-* Remove JsxHint and Jsxcs pre-commit hooks in favor of using the
+* Remove `JsxHint` and `Jsxcs` pre-commit hooks in favor of using the
   `required_executable` option on the JsHint and Jscs pre-commit hooks
 * Add pre-commit hooks for [standard](https://github.com/feross/standard) and
   [semistandard](https://github.com/Flet/semistandard) JavaScript linters
+* Add support for `post-commit` and `post-merge` hooks
+* Add `GitGuilt` `post-commit` hook to display changes in blame ownership for
+  modified files
 
 ## 0.22.0
 
