@@ -111,6 +111,10 @@ module Overcommit::Hook
       Overcommit::Utils.execute(cmd)
     end
 
+    def execute_in_background(cmd)
+      Overcommit::Utils.execute_in_background(cmd)
+    end
+
     def required_executable
       @config['required_executable']
     end
