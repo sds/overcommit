@@ -10,7 +10,7 @@
   `required_executable` option on the JsHint and Jscs pre-commit hooks
 * Add pre-commit hooks for [standard](https://github.com/feross/standard) and
   [semistandard](https://github.com/Flet/semistandard) JavaScript linters
-* Add support for `post-commit` and `post-merge` hooks
+* Add support for `post-commit`, `post-merge`, and `post-rewrite` hooks
 * Add `GitGuilt` `post-commit` hook to display changes in blame ownership for
   modified files
 * Change behavior of configuration options containing array values to always

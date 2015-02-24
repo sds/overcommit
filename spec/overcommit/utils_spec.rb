@@ -108,13 +108,13 @@ describe Overcommit::Utils do
   describe '.supported_hook_types' do
     subject { described_class.supported_hook_types }
 
-    it { should =~ %w[commit-msg pre-commit post-checkout post-commit post-merge] }
+    it { should =~ %w[commit-msg pre-commit post-checkout post-commit post-merge post-rewrite] }
   end
 
   describe '.supported_hook_type_classes' do
     subject { described_class.supported_hook_type_classes }
 
-    it { should =~ %w[CommitMsg PreCommit PostCheckout PostCommit PostMerge] }
+    it { should =~ %w[CommitMsg PreCommit PostCheckout PostCommit PostMerge PostRewrite] }
   end
 
   describe '.execute' do

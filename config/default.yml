@@ -306,3 +306,9 @@ PostCommit:
     required_executable: 'git-guilt'
     flags: ['HEAD~', 'HEAD']
     install_command: 'npm install -g git-guilt'
+
+# Hooks that run every time a commit is modified by an amend or rebase.
+PostRewrite:
+  ALL:
+    requires_files: false
+    quiet: false
