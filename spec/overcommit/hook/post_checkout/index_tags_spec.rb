@@ -7,7 +7,7 @@ describe Overcommit::Hook::PostCheckout::IndexTags do
 
   before do
     subject.stub(:in_path?).and_return(installed)
-    subject.stub(:index_tags_in_background)
+    subject.stub(:execute_in_background)
   end
 
   context 'when ctags is not installed' do

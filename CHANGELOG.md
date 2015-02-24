@@ -15,6 +15,8 @@
   modified files
 * Change behavior of configuration options containing array values to always
   replace the old value instead of appending to it
+* Add `execute_in_background` helper to provide a standardized way to start
+  long-running processes without blocking the hook run
 
 ## 0.22.0
 

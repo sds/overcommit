@@ -137,4 +137,20 @@ describe Overcommit::Utils do
       end
     end
   end
+
+  describe '.execute_in_background' do
+    let(:arguments) { %w[touch some-file] }
+    subject { described_class.execute_in_background(arguments) }
+
+    around do |example|
+      directory do
+        example.run
+      end
+    end
+
+    it 'executes the command' do
+      wait_until { subject.stop? } # Make sure process terminated before checking
+      File.exist?('some-file').should == true
+    end
+  end
 end

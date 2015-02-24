@@ -101,7 +101,8 @@ module Overcommit
         false
       end
 
-      # Wrap external subshell calls.
+      # Execute a command in a subprocess, capturing exit status and output from
+      # both standard and error streams.
       #
       # This is intended to provide a centralized place to perform any checks or
       # filtering of the command before executing it.
@@ -115,6 +116,23 @@ module Overcommit
         end
 
         Subprocess.spawn(args)
+      end
+
+      # Execute a command in a subprocess, returning immediately.
+      #
+      # This provides a convenient way to execute long-running processes for
+      # which we do not need to know the result.
+      #
+      # @param args [Array<String>]
+      # @return [Thread] thread watching the resulting child process
+      def execute_in_background(args)
+        if args.include?('|')
+          raise Overcommit::Exceptions::InvalidCommandArgs,
+                'Cannot pipe commands with the `execute_in_background` helper'
+        end
+
+        # Dissociate process from parent's input/output streams
+        Process.detach(Process.spawn({}, *args, [:in, :out, :err] => '/dev/null'))
       end
 
       # Calls a block of code with a modified set of environment variables,
