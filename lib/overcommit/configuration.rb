@@ -170,8 +170,6 @@ module Overcommit
     def smart_merge(parent, child)
       parent.merge(child) do |_key, old, new|
         case old
-        when Array
-          old + Array(new)
         when Hash
           smart_merge(old, new)
         else

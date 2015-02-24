@@ -13,6 +13,8 @@
 * Add support for `post-commit` and `post-merge` hooks
 * Add `GitGuilt` `post-commit` hook to display changes in blame ownership for
   modified files
+* Change behavior of configuration options containing array values to always
+  replace the old value instead of appending to it
 
 ## 0.22.0
 
