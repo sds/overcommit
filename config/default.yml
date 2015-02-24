@@ -14,16 +14,36 @@ plugin_directory: '.git-hooks'
 # See https://github.com/causes/overcommit#security for more information.
 verify_plugin_signatures: true
 
-# Hooks that run after HEAD changes or a file is explicitly checked out. Useful
-# for updating source tags (e.g. via ctags) or warning about new migrations,
-# etc.
-PostCheckout:
+# Hooks that are run against every commit message after a user has written it.
+# These hooks are useful for enforcing policies on commit messages written for a
+# project.
+CommitMsg:
   ALL:
-    required: false
+    requires_files: false
     quiet: false
-  IndexTags:
+
+  GerritChangeId:
     enabled: false
-    description: 'Generating tags file from source'
+    description: 'Ensuring Gerrit Change-Id is present'
+    required: true
+
+  HardTabs:
+    description: 'Checking for hard tabs'
+
+  RussianNovel:
+    description: 'Checking length of commit message'
+    quiet: true
+
+  SingleLineSubject:
+    description: 'Checking subject line'
+
+  TextWidth:
+    description: 'Checking text width'
+    max_subject_width: 60
+    max_body_width: 72
+
+  TrailingPeriod:
+    description: 'Checking for trailing periods in subject'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
@@ -262,37 +282,17 @@ PreCommit:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
 
-# Hooks that are run against every commit message after a user has written it.
-# These hooks are useful for enforcing policies on commit messages written for a
-# project.
-CommitMsg:
+# Hooks that run after HEAD changes or a file is explicitly checked out.
+PostCheckout:
   ALL:
-    requires_files: false
+    required: false
     quiet: false
 
-  GerritChangeId:
+  IndexTags:
     enabled: false
-    description: 'Ensuring Gerrit Change-Id is present'
-    required: true
+    description: 'Generating tags file from source'
 
-  HardTabs:
-    description: 'Checking for hard tabs'
-
-  RussianNovel:
-    description: 'Checking length of commit message'
-    quiet: true
-
-  SingleLineSubject:
-    description: 'Checking subject line'
-
-  TextWidth:
-    description: 'Checking text width'
-    max_subject_width: 60
-    max_body_width: 72
-
-  TrailingPeriod:
-    description: 'Checking for trailing periods in subject'
-
+# Hooks that run after a commit is created.
 PostCommit:
   ALL:
     requires_files: false
@@ -307,7 +307,13 @@ PostCommit:
     flags: ['HEAD~', 'HEAD']
     install_command: 'npm install -g git-guilt'
 
-# Hooks that run every time a commit is modified by an amend or rebase.
+# Hooks that run after `git merge` executes successfully (no merge conflicts).
+PostMerge:
+  ALL:
+    requires_files: false
+    quiet: false
+
+# Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
   ALL:
     requires_files: false
