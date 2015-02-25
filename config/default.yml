@@ -283,7 +283,7 @@ PreCommit:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
 
-  W3cCssValidator:
+  W3cCss:
     enabled: false
     description: 'Analyzing with W3C CSS validation service'
     validator_uri: 'http://jigsaw.w3.org/css-validator/validator'
@@ -293,7 +293,7 @@ PreCommit:
     include:
       - '**/*.css'
 
-  W3cHtmlValidator:
+  W3cHtml:
     enabled: false
     description: 'Analyzing with W3C HTML validation service'
     validator_uri: 'http://validator.w3.org/check'

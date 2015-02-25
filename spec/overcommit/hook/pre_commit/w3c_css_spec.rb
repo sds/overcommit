@@ -1,13 +1,13 @@
 require 'spec_helper'
 require 'w3c_validators'
 
-describe Overcommit::Hook::PreCommit::W3cHtmlValidator do
+describe Overcommit::Hook::PreCommit::W3cCss do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:applicable_files).and_return(%w[file1.html file2.html])
+    subject.stub(:applicable_files).and_return(%w[file1.css file2.css])
   end
 
   context 'when w3c_validators exits with an exception' do
@@ -46,7 +46,7 @@ describe Overcommit::Hook::PreCommit::W3cHtmlValidator do
 
     context 'with no errors or warnings' do
       before do
-        results.stub(:errors => [], :warnings => [])
+        results.stub(errors: [], warnings: [])
       end
 
       it { should pass }
@@ -54,8 +54,8 @@ describe Overcommit::Hook::PreCommit::W3cHtmlValidator do
 
     context 'with a warning' do
       before do
-        message.stub(:type => :warning, :line => '1', :message => '')
-        results.stub(:errors => [], :warnings => [message])
+        message.stub(type: :warning, line: '1', message: '')
+        results.stub(errors: [], warnings: [message])
         subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
@@ -64,8 +64,8 @@ describe Overcommit::Hook::PreCommit::W3cHtmlValidator do
 
     context 'with an error' do
       before do
-        message.stub(:type => :error, :line => '1', :message => '')
-        results.stub(:errors => [message], :warnings => [])
+        message.stub(type: :error, line: '1', message: '')
+        results.stub(errors: [message], warnings: [])
         subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 

@@ -1,6 +1,6 @@
 module Overcommit::Hook::PreCommit
   # Runs `w3c_validators` against any modified CSS files.
-  class W3cCssValidator < Base
+  class W3cCss < Base
     def run
       begin
         require 'w3c_validators'
@@ -10,31 +10,34 @@ module Overcommit::Hook::PreCommit
 
       result_messages =
         begin
-          applicable_files.collect do |path|
-            results = validator.validate_file(path)
-            messages = results.errors + results.warnings
-            messages.collect do |msg|
-              # Some warnings are not per-line, so use 0 as a default
-              line = Integer(msg.line || 0)
-
-              # Build message by hand to reduce noise from the validator response
-              text = "#{msg.type.to_s.upcase}; URI: #{path}; line #{line}: #{msg.message.strip}"
-              Overcommit::Hook::Message.new(msg.type, path, line, text)
-            end
-          end
+          collect_messages
         rescue W3CValidators::ValidatorUnavailable => e
           return :fail, e.message
         rescue W3CValidators::ParsingError => e
           return :fail, e.message
         end
 
-      result_messages.flatten!
       return :pass if result_messages.empty?
 
       result_messages
     end
 
     private
+
+    def collect_messages
+      applicable_files.collect do |path|
+        results = validator.validate_file(path)
+        messages = results.errors + results.warnings
+        messages.collect do |msg|
+          # Some warnings are not per-line, so use 0 as a default
+          line = Integer(msg.line || 0)
+
+          # Build message by hand to reduce noise from the validator response
+          text = "#{msg.type.to_s.upcase}; URI: #{path}; line #{line}: #{msg.message.strip}"
+          Overcommit::Hook::Message.new(msg.type, path, line, text)
+        end
+      end.flatten
+    end
 
     def validator
       unless @validator

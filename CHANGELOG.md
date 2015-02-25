@@ -21,6 +21,8 @@
   hook types so tags index can always be kept up to date via `ctags`
 * Change `ImageOptim` hook to fail instead of warn if the `image_optim` gem
   cannot be found
+* Add `W3cCss` and `W3cHtml` pre-commit hooks which integrate with the
+  `w3c_validator` gem
 
 ## 0.22.0
 

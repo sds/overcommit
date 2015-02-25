@@ -1,6 +1,6 @@
 module Overcommit::Hook::PreCommit
   # Runs `w3c_validators` against any modified HTML files.
-  class W3cHtmlValidator < Base
+  class W3cHtml < Base
     def run
       begin
         require 'w3c_validators'
@@ -10,25 +10,13 @@ module Overcommit::Hook::PreCommit
 
       result_messages =
         begin
-          applicable_files.collect do |path|
-            results = validator.validate_file(path)
-            messages = results.errors + results.warnings
-            messages.collect do |msg|
-              # Some warnings are not per-line, so use 0 as a default
-              line = Integer(msg.line || 0)
-
-              # Build message by hand to reduce noise from the validator response
-              text = "#{msg.type.to_s.upcase}; URI: #{path}; line #{line}: #{msg.message.strip}"
-              Overcommit::Hook::Message.new(msg.type, path, line, text)
-            end
-          end
+          collect_messages
         rescue W3CValidators::ValidatorUnavailable => e
           return :fail, e.message
         rescue W3CValidators::ParsingError => e
           return :fail, e.message
         end
 
-      result_messages.flatten!
       return :pass if result_messages.empty?
 
       result_messages
@@ -36,11 +24,26 @@ module Overcommit::Hook::PreCommit
 
     private
 
+    def collect_messages
+      applicable_files.collect do |path|
+        results = validator.validate_file(path)
+        messages = results.errors + results.warnings
+        messages.collect do |msg|
+          # Some warnings are not per-line, so use 0 as a default
+          line = Integer(msg.line || 0)
+
+          # Build message by hand to reduce noise from the validator response
+          text = "#{msg.type.to_s.upcase}; URI: #{path}; line #{line}: #{msg.message.strip}"
+          Overcommit::Hook::Message.new(msg.type, path, line, text)
+        end
+      end.flatten
+    end
+
     def validator
       unless @validator
         @validator = W3CValidators::MarkupValidator.new(opts)
-        @validator.set_charset!(charset, only_as_fallback = true) unless charset.nil?
-        @validator.set_doctype!(doctype, only_as_fallback = true) unless doctype.nil?
+        @validator.set_charset!(charset, true) unless charset.nil?
+        @validator.set_doctype!(doctype, true) unless doctype.nil?
         @validator.set_debug!
       end
       @validator
