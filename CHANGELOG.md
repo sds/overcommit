@@ -23,6 +23,8 @@
   cannot be found
 * Add `W3cCss` and `W3cHtml` pre-commit hooks which integrate with the
   `w3c_validator` gem
+* Add `Scalastyle` pre-commit hook that runs
+  [scalastyle](http://www.scalastyle.org/) against Scala code
 
 ## 0.22.0
 
