@@ -25,6 +25,8 @@
   `w3c_validator` gem
 * Add `Scalastyle` pre-commit hook that runs
   [scalastyle](http://www.scalastyle.org/) against Scala code
+* Fix handling of files with spaces in their name when calculating modified
+  lines in a file
 
 ## 0.22.0
 
