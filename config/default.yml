@@ -294,6 +294,7 @@ PreCommit:
       - '**/*.css'
 
   W3cHtmlValidator:
+    enabled: false
     description: 'Analyzing with W3C HTML validation service'
     validator_uri: 'http://validator.w3.org/check'
     charset: 'utf-8'
