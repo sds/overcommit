@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       begin
         require 'w3c_validators'
       rescue LoadError
-        return :warn, 'w3c_validators not installed -- run `gem install w3c_validators`'
+        return :fail, 'w3c_validators not installed -- run `gem install w3c_validators`'
       end
 
       result_messages =
