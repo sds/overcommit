@@ -237,6 +237,11 @@ PreCommit:
       - '**/Gemfile'
       - '**/Rakefile'
 
+  Scalastyle:
+    description: 'Analyzing with Scalastyle'
+    required_executable: 'scalastyle'
+    include: '**/*.scala'
+
   SemiStandard:
     enabled: false
     description: 'Analyzing with semistandard'
