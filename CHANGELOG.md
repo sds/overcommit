@@ -19,6 +19,8 @@
   long-running processes without blocking the hook run
 * Add `IndexTags` hook for `post-commit`, `post-merge`, and `post-rewrite`
   hook types so tags index can always be kept up to date via `ctags`
+* Change `ImageOptim` hook to fail instead of warn if the `image_optim` gem
+  cannot be found
 
 ## 0.22.0
 
