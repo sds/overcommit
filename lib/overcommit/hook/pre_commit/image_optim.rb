@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
       begin
         require 'image_optim'
       rescue LoadError
-        return :warn, 'image_optim not installed -- run `gem install image_optim`'
+        return :fail, 'image_optim not installed -- run `gem install image_optim`'
       end
 
       optimized_images =
