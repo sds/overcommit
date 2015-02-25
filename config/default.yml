@@ -283,6 +283,25 @@ PreCommit:
     description: 'Checking YAML syntax'
     include: '**/*.yml'
 
+  W3cCssValidator:
+    enabled: false
+    description: 'Analyzing with W3C CSS validation service'
+    validator_uri: 'http://jigsaw.w3.org/css-validator/validator'
+    language: 'en'
+    profile: 'css3'
+    warn_level: 2
+    include:
+      - '**/*.css'
+
+  W3cHtmlValidator:
+    enabled: false
+    description: 'Analyzing with W3C HTML validation service'
+    validator_uri: 'http://validator.w3.org/check'
+    charset: 'utf-8'
+    doctype: 'HTML5'
+    include:
+      - '**/*.html'
+
 # Hooks that run after HEAD changes or a file is explicitly checked out.
 PostCheckout:
   ALL:
