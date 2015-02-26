@@ -154,6 +154,12 @@ PreCommit:
       - '**/Makefile'
       - '.gitmodules'
 
+  HtmlTidy:
+    description: 'Analyzing HTML with tidy'
+    required_executable: 'tidy'
+    flags: ['-errors', '-quiet', '-utf8']
+    include: '**/*.html'
+
   ImageOptim:
     description: 'Checking for optimizable images'
     include:
