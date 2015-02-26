@@ -212,6 +212,13 @@ PreCommit:
       - '**/*.rb'
       - '**/*.rake'
 
+  Pyflakes:
+    enabled: false
+    description: 'Analyzing with pyflakes'
+    required_executable: 'pyflakes'
+    install_command: 'pip install pyflakes'
+    include: '**/*.py'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     required_executable: 'flake8'
