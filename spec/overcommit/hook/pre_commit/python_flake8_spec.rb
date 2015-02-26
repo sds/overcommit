@@ -30,7 +30,7 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
     context 'and it reports a warning' do
       before do
         result.stub(:stdout).and_return([
-          'file1.py:1:80: E501 line too long (80 > 79 characters)'
+          'file1.py:1:1: W292 no newline at end of file'
         ].join("\n"))
 
         subject.stub(:modified_lines_in_file).and_return([2, 3])
