@@ -38,6 +38,8 @@
 * Add `Pep257` pre-commit hook to check Python files with
   [pep257](https://pypi.python.org/pypi/pep257)
 * Remove `ctags_arguments` option from `IndexTags` hooks
+* Improve `PythonFlake8` pre-commit hook to differentiate between errors
+  and warnings
 
 ## 0.22.0
 
