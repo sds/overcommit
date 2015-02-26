@@ -111,12 +111,6 @@ PreCommit:
       - 'config/settings.yml'
       - 'config/settings/**/*.yml'
 
-  Checkstyle:
-    description: 'Analyzing with checkstyle'
-    required_executable: 'checkstyle'
-    flags: ['-c', '/sun_checks.xml']
-    include: '**/*.java'
-
   CoffeeLint:
     description: 'Analyzing with coffeelint'
     required_executable: 'coffeelint'
@@ -167,6 +161,12 @@ PreCommit:
       - '**/*.jpg'
       - '**/*.jpeg'
       - '**/*.png'
+
+  JavaCheckstyle:
+    description: 'Analyzing with checkstyle'
+    required_executable: 'checkstyle'
+    flags: ['-c', '/sun_checks.xml']
+    include: '**/*.java'
 
   Jscs:
     description: 'Analyzing with JSCS'

@@ -1,6 +1,6 @@
 module Overcommit::Hook::PreCommit
   # Runs `checkstyle` against any modified Java files.
-  class Checkstyle < Base
+  class JavaCheckstyle < Base
     MESSAGE_REGEX = /^(?<file>[^:]+):(?<line>\d+)/
 
     def run
