@@ -33,6 +33,8 @@
   [checkstyle](http://checkstyle.sourceforge.net/)
 * Add `Pep8` pre-commit hook to check Python files with
   [pep8](https://pypi.python.org/pypi/pep8)
+* Add `Pyflakes` pre-commit hook to check Python files with
+  [pyflakes](https://pypi.python.org/pypi/pyflakes)
 
 ## 0.22.0
 
