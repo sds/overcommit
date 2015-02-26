@@ -31,6 +31,8 @@
   [xmllint](http://xmlsoft.org/xmllint.html)
 * Add `JavaCheckstyle` pre-commit hook to check style of Java files with
   [checkstyle](http://checkstyle.sourceforge.net/)
+* Add `Pep8` pre-commit hook to check Python files with
+  [pep8](https://pypi.python.org/pypi/pep8)
 
 ## 0.22.0
 
