@@ -27,7 +27,10 @@
   [scalastyle](http://www.scalastyle.org/) against Scala code
 * Fix handling of files with spaces in their name when calculating modified
   lines in a file
-* Add `XmlLint` pre-commit hook to check XML files
+* Add `XmlLint` pre-commit hook to check XML files with
+  [xmllint](http://xmlsoft.org/xmllint.html)
+* Add `JavaCheckstyle` pre-commit hook to check style of Java files with
+  [checkstyle](http://checkstyle.sourceforge.net/)
 
 ## 0.22.0
 
