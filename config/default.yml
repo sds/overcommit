@@ -268,6 +268,12 @@ PreCommit:
     required_executable: 'scalastyle'
     include: '**/*.scala'
 
+  ScssLint:
+    description: 'Analyzing with scss-lint'
+    required_executable: 'scss-lint'
+    install_command: 'gem install scss-lint'
+    include: '**/*.scss'
+
   SemiStandard:
     enabled: false
     description: 'Analyzing with semistandard'
@@ -275,12 +281,6 @@ PreCommit:
     flags: ['--verbose']
     install_command: 'npm install -g semistandard'
     include: '**/*.js'
-
-  ScssLint:
-    description: 'Analyzing with scss-lint'
-    required_executable: 'scss-lint'
-    install_command: 'gem install scss-lint'
-    include: '**/*.scss'
 
   ShellCheck:
     description: 'Analyzing with ShellCheck'
