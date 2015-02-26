@@ -198,6 +198,12 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', '^<<<<<<<\s']
 
+  Pep257:
+    description: 'Analyzing with pep257'
+    required_executable: 'pep257'
+    install_command: 'pip install pep257'
+    include: '**/*.py'
+
   Pep8:
     enabled: false
     description: 'Analyzing with pep8'
