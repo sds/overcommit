@@ -198,6 +198,13 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', '^<<<<<<<\s']
 
+  Pep8:
+    enabled: false
+    description: 'Analyzing with pep8'
+    required_executable: 'pep8'
+    install_command: 'pip install pep8'
+    include: '**/*.py'
+
   PryBinding:
     description: 'Checking for instances of binding.pry'
     quiet: true
