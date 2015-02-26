@@ -35,6 +35,8 @@
   [pep8](https://pypi.python.org/pypi/pep8)
 * Add `Pyflakes` pre-commit hook to check Python files with
   [pyflakes](https://pypi.python.org/pypi/pyflakes)
+* Add `Pep257` pre-commit hook to check Python files with
+  [pep257](https://pypi.python.org/pypi/pep257)
 
 ## 0.22.0
 
