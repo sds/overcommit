@@ -37,6 +37,7 @@
   [pyflakes](https://pypi.python.org/pypi/pyflakes)
 * Add `Pep257` pre-commit hook to check Python files with
   [pep257](https://pypi.python.org/pypi/pep257)
+* Remove `ctags_arguments` option from `IndexTags` hooks
 
 ## 0.22.0
 
