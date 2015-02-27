@@ -33,8 +33,6 @@ describe Overcommit::Hook::PreCommit::Pep257 do
           'file1.py:1 in public method `foo`:',
           '        D102: Docstring missing'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should fail_hook }

@@ -33,8 +33,6 @@ describe Overcommit::Hook::PreCommit::Standard do
           'Error: Use JavaScript Standard Style (https://github.com/feross/standard)',
           'file1.js:1:1: Extra semicolon. (eslint/semi)'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

@@ -34,8 +34,6 @@ describe Overcommit::Hook::PreCommit::ShellCheck do
            options. [SC2035]",
         ].join("\n"))
         result.stub(:stderr).and_return('')
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -48,8 +46,6 @@ describe Overcommit::Hook::PreCommit::ShellCheck do
            won't interpret it. [SC2061]",
         ].join("\n"))
         result.stub(:stderr).and_return('')
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }
