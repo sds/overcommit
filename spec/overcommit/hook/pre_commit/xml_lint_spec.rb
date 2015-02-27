@@ -39,8 +39,6 @@ describe Overcommit::Hook::PreCommit::XmlLint do
         result.stub(:stderr).and_return([
           "file1.xml:1: parser error : expected '='"
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

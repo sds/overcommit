@@ -34,8 +34,6 @@ describe Overcommit::Hook::PreCommit::Reek do
           'file1.rb:1: MyClass#my_method performs a nil-check. (NilCheck)'
         ].join("\n"))
         result.stub(:stderr).and_return('')
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should fail_hook }

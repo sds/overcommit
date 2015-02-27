@@ -32,8 +32,6 @@ describe Overcommit::Hook::PreCommit::EsLint do
           '',
           '1 problem'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -55,8 +53,6 @@ describe Overcommit::Hook::PreCommit::EsLint do
           '',
           '1 problem'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

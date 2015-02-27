@@ -56,7 +56,6 @@ describe Overcommit::Hook::PreCommit::W3cCss do
       before do
         message.stub(type: :warning, line: '1', message: '')
         results.stub(errors: [], warnings: [message])
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -66,7 +65,6 @@ describe Overcommit::Hook::PreCommit::W3cCss do
       before do
         message.stub(type: :error, line: '1', message: '')
         results.stub(errors: [message], warnings: [])
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

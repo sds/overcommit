@@ -32,8 +32,6 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
         result.stub(:stdout).and_return([
           'file1.py:1:1: W292 no newline at end of file'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -44,8 +42,6 @@ describe Overcommit::Hook::PreCommit::PythonFlake8 do
         result.stub(:stdout).and_return([
           'file1.py:2:13: F812 list comprehension redefines name from line 1'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

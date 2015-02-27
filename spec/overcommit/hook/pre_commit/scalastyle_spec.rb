@@ -39,8 +39,6 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
           'Found 1 warnings',
           'Finished in 490 ms'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -64,8 +62,6 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
           'Found 0 warnings',
           'Finished in 490 ms'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

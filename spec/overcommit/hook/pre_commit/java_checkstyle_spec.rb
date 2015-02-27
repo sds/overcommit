@@ -44,8 +44,6 @@ describe Overcommit::Hook::PreCommit::JavaCheckstyle do
           'file1.java:1: Missing a Javadoc comment.',
           'Audit done.'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }

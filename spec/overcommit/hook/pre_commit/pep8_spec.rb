@@ -32,8 +32,6 @@ describe Overcommit::Hook::PreCommit::Pep8 do
         result.stub(:stdout).and_return([
           'file1.py:1:1: W391 blank line at end of file'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -44,8 +42,6 @@ describe Overcommit::Hook::PreCommit::Pep8 do
         result.stub(:stdout).and_return([
           'file1.py:1:80: E501 line too long (80 > 79 characters)'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }
