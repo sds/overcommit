@@ -1,32 +1,23 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.23.0
 
-* Fix `--run` flag to consider all lines in all files as modified rather than none
-* Fix `--run` flag to exclude submodule directories from the list of modified files
+### New Features
+
 * Add pre-commit [ESLint](http://eslint.org/) hook
-* Parse JSHint errors more precisely
-* Remove `JsxHint` and `Jsxcs` pre-commit hooks in favor of using the
-  `required_executable` option on the JsHint and Jscs pre-commit hooks
 * Add pre-commit hooks for [standard](https://github.com/feross/standard) and
   [semistandard](https://github.com/Flet/semistandard) JavaScript linters
 * Add support for `post-commit`, `post-merge`, and `post-rewrite` hooks
 * Add `GitGuilt` `post-commit` hook to display changes in blame ownership for
   modified files
-* Change behavior of configuration options containing array values to always
-  replace the old value instead of appending to it
 * Add `execute_in_background` helper to provide a standardized way to start
   long-running processes without blocking the hook run
 * Add `IndexTags` hook for `post-commit`, `post-merge`, and `post-rewrite`
   hook types so tags index can always be kept up to date via `ctags`
-* Change `ImageOptim` hook to fail instead of warn if the `image_optim` gem
-  cannot be found
 * Add `W3cCss` and `W3cHtml` pre-commit hooks which integrate with the
   `w3c_validator` gem
 * Add `Scalastyle` pre-commit hook that runs
   [scalastyle](http://www.scalastyle.org/) against Scala code
-* Fix handling of files with spaces in their name when calculating modified
-  lines in a file
 * Add `XmlLint` pre-commit hook to check XML files with
   [xmllint](http://xmlsoft.org/xmllint.html)
 * Add `JavaCheckstyle` pre-commit hook to check style of Java files with
@@ -37,15 +28,32 @@
   [pyflakes](https://pypi.python.org/pypi/pyflakes)
 * Add `Pep257` pre-commit hook to check Python files with
   [pep257](https://pypi.python.org/pypi/pep257)
-* Remove `ctags_arguments` option from `IndexTags` hooks
-* Improve `PythonFlake8` pre-commit hook to differentiate between errors
-  and warnings
 * Add `HtmlTidy` pre-commit hook to check HTML files with
   [tidy](http://www.html-tidy.org/)
 * Add `Pylint` pre-commit hook to check Python files with
   [pylint](http://www.pylint.org/)
+
+### Changes
+
+* Parse JSHint errors more precisely
+* Remove `JsxHint` and `Jsxcs` pre-commit hooks in favor of using the
+  `required_executable` option on the JsHint and Jscs pre-commit hooks
+* Change behavior of configuration options containing array values to always
+  replace the old value instead of appending to it
+* Change `ImageOptim` hook to fail instead of warn if the `image_optim` gem
+  cannot be found
+* Remove `ctags_arguments` option from `IndexTags` hooks
+* Improve `PythonFlake8` pre-commit hook to differentiate between errors
+  and warnings
 * Improve `CssLint` pre-commit hook to differentiate between errors and
   warnings
+
+### Bug Fixes
+
+* Fix `--run` flag to consider all lines in all files as modified rather than none
+* Fix `--run` flag to exclude submodule directories from the list of modified files
+* Fix handling of files with spaces in their name when calculating modified
+  lines in a file
 
 ## 0.22.0
 
