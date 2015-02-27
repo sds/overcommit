@@ -42,6 +42,8 @@
   and warnings
 * Add `HtmlTidy` pre-commit hook to check HTML files with
   [tidy](http://www.html-tidy.org/)
+* Add `Pylint` pre-commit hook to check Python files with
+  [pylint](http://www.pylint.org/)
 
 ## 0.22.0
 
