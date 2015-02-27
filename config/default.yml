@@ -155,6 +155,7 @@ PreCommit:
       - '.gitmodules'
 
   HtmlTidy:
+    enabled: false
     description: 'Analyzing HTML with tidy'
     required_executable: 'tidy'
     flags: ['-errors', '-quiet', '-utf8']
