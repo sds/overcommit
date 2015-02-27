@@ -40,6 +40,8 @@
 * Remove `ctags_arguments` option from `IndexTags` hooks
 * Improve `PythonFlake8` pre-commit hook to differentiate between errors
   and warnings
+* Add `HtmlTidy` pre-commit hook to check HTML files with
+  [tidy](http://www.html-tidy.org/)
 
 ## 0.22.0
 
