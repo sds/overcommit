@@ -44,6 +44,8 @@
   [tidy](http://www.html-tidy.org/)
 * Add `Pylint` pre-commit hook to check Python files with
   [pylint](http://www.pylint.org/)
+* Improve `CssLint` pre-commit hook to differentiate between errors and
+  warnings
 
 ## 0.22.0
 
