@@ -39,8 +39,6 @@ describe Overcommit::Hook::PreCommit::HtmlTidy do
         result.stub(:stderr).and_return([
           'line 4 column 24 - Warning: <html> proprietary attribute "class"'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([2, 3])
       end
 
       it { should warn }
@@ -51,8 +49,6 @@ describe Overcommit::Hook::PreCommit::HtmlTidy do
         result.stub(:stderr).and_return([
           'line 1 column 1 - Error: <foo> is not recognized!'
         ].join("\n"))
-
-        subject.stub(:modified_lines_in_file).and_return([1, 2])
       end
 
       it { should fail_hook }
