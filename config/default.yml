@@ -232,6 +232,16 @@ PreCommit:
     install_command: 'pip install pyflakes'
     include: '**/*.py'
 
+  Pylint:
+    description: 'Analyzing with Pylint'
+    required_executable: 'pylint'
+    install_command: 'pip install pylint'
+    flags:
+      - '--msg-template="{path}:{line}:{C}: {msg} ({symbol})"'
+      - '--reports=n'
+      - '--persistent=n'
+    include: '**/*.py'
+
   PythonFlake8:
     description: 'Analyzing with flake8'
     required_executable: 'flake8'
