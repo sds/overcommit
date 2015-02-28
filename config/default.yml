@@ -196,7 +196,7 @@ PreCommit:
   LocalPathsInGemfile:
     description: 'Checking for local paths in Gemfile'
     required_executable: 'grep'
-    flags: ['-IHnE', '(\bpath:)|(:path\s*=>)']
+    flags: ['-IHnE', '^[^#]*((\bpath:)|(:path\s*=>))']
     include: '**/Gemfile'
 
   MergeConflicts:
