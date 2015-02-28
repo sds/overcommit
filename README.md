@@ -209,8 +209,9 @@ Within a configuration file, the following high-level concepts exist:
 
 ## Built-In Hooks
 
-Currently, Overcommit supports `commit-msg`, `pre-commit`, and `post-checkout`
-hooks, but it can easily be expanded to support others.
+Currently, Overcommit supports `commit-msg`, `pre-commit`, `post-checkout`,
+`post-commit`, `post-merge`, and `post-rewrite` hooks, but it can easily be
+expanded to support others.
 
 You can see the full list of hooks by checking out the
 [hooks directory](https://github.com/causes/overcommit/blob/master/lib/overcommit/hook),
