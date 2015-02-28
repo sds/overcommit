@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `LocalPathsInGemfile` to not report lints for commented paths
+
 ## 0.23.0
 
 ### New Features
