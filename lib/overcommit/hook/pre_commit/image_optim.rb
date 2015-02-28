@@ -2,12 +2,6 @@ module Overcommit::Hook::PreCommit
   # Checks for images that can be optimized with `image_optim`.
   class ImageOptim < Base
     def run
-      begin
-        require 'image_optim'
-      rescue LoadError
-        return :fail, 'image_optim not installed -- run `gem install image_optim`'
-      end
-
       optimized_images =
         begin
           optimize_images(applicable_files)

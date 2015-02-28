@@ -3,6 +3,8 @@
 ## master (unreleased)
 
 * Fix `LocalPathsInGemfile` to not report lints for commented paths
+* Add `required_library`/`required_libraries` hook option which specifies
+  a list of paths a hook should load with `Kernel.require` before running
 
 ## 0.23.0
 

@@ -163,6 +163,8 @@ PreCommit:
 
   ImageOptim:
     description: 'Checking for optimizable images'
+    required_library: 'image_optim'
+    install_command: 'gem install image_optim'
     include:
       - '**/*.gif'
       - '**/*.jpg'
@@ -191,6 +193,8 @@ PreCommit:
 
   JsonSyntax:
     description: 'Validating JSON syntax'
+    required_library: 'json'
+    install_command: 'gem install json'
     include: '**/*.json'
 
   LocalPathsInGemfile:
@@ -330,6 +334,8 @@ PreCommit:
   W3cCss:
     enabled: false
     description: 'Analyzing with W3C CSS validation service'
+    required_library: 'w3c_validators'
+    install_command: 'gem install w3c_validators'
     validator_uri: 'http://jigsaw.w3.org/css-validator/validator'
     language: 'en'
     profile: 'css3'
@@ -340,6 +346,8 @@ PreCommit:
   W3cHtml:
     enabled: false
     description: 'Analyzing with W3C HTML validation service'
+    required_library: 'w3c_validators'
+    install_command: 'gem install w3c_validators'
     validator_uri: 'http://validator.w3.org/check'
     charset: 'utf-8'
     doctype: 'HTML5'
@@ -354,6 +362,7 @@ PreCommit:
 
   YamlSyntax:
     description: 'Checking YAML syntax'
+    required_library: 'yaml'
     include:
       - '**/*.yaml'
       - '**/*.yml'

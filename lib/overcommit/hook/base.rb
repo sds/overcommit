@@ -39,7 +39,7 @@ module Overcommit::Hook
     # implement `#run`, and we needed a wrapper step to transform the status
     # based on any custom configuration.
     def run_and_transform
-      if output = check_for_executable
+      if output = check_for_requirements
         status = :fail
       else
         status, output = process_hook_return_value(run)
@@ -119,6 +119,10 @@ module Overcommit::Hook
       @config['required_executable']
     end
 
+    def required_libraries
+      Array(@config['required_library'] || @config['required_libraries'])
+    end
+
     # Return command to execute for this hook.
     #
     # This is intended to be configurable so hooks can prefix their commands
@@ -179,6 +183,13 @@ module Overcommit::Hook
       included && !excluded
     end
 
+    # Check for any required executables or libraries.
+    #
+    # Returns output if any requirements are not met.
+    def check_for_requirements
+      check_for_executable || check_for_libraries
+    end
+
     # If the hook defines a required executable, check if it's in the path and
     # display the install command if one exists.
     def check_for_executable
@@ -191,6 +202,27 @@ module Overcommit::Hook
       end
 
       output
+    end
+
+    # If the hook defines required library paths that it wants to load, attempt
+    # to load them.
+    def check_for_libraries
+      output = []
+
+      required_libraries.each do |library|
+        begin
+          require library
+        rescue LoadError
+          install_command = @config['install_command']
+          install_command = " -- install via #{install_command}" if install_command
+
+          output << "Unable to load '#{library}'#{install_command}"
+        end
+      end
+
+      return if output.empty?
+
+      output.join("\n")
     end
 
     # Transforms the hook's status based on custom configuration.

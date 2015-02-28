@@ -189,6 +189,8 @@ Within a configuration file, the following high-level concepts exist:
     a warning to either `pass` or `fail`
   * `required_executable`: Name of an executable that needs to exist in order
     for the hook to run
+  * `required_library`/`required_libraries`: List of paths to load with
+    `Kernel.require` before the hook runs
   * `command`: Array of command line arguments to use as the command. How each
     hook uses this is different, but it ultimately allows hooks to customize
     how they are run so they can be invoked in a different context, for example
@@ -199,7 +201,7 @@ Within a configuration file, the following high-level concepts exist:
     so you can update the flags via your configuration and not wait on an
     upstream fix in Overcommit
   * `install_command`: Command the user can run to install the
-    `required_executable`
+    `required_executable` (or alternately the specified `required_libraries`)
 
   On top of the above built-in configuration options, each hook can support
   individual configuration. As an example, the `AuthorEmail` hook allows you

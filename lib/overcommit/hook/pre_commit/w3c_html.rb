@@ -2,12 +2,6 @@ module Overcommit::Hook::PreCommit
   # Runs `w3c_validators` against any modified HTML files.
   class W3cHtml < Base
     def run
-      begin
-        require 'w3c_validators'
-      rescue LoadError
-        return :fail, 'w3c_validators not installed -- run `gem install w3c_validators`'
-      end
-
       collect_messages
     rescue W3CValidators::ParsingError,
            W3CValidators::ValidatorUnavailable => e
