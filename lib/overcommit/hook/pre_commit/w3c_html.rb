@@ -9,9 +9,8 @@ module Overcommit::Hook::PreCommit
       end
 
       collect_messages
-    rescue W3CValidators::ValidatorUnavailable => e
-      [:fail, e.message]
-    rescue W3CValidators::ParsingError => e
+    rescue W3CValidators::ParsingError,
+           W3CValidators::ValidatorUnavailable => e
       [:fail, e.message]
     end
 
