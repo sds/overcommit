@@ -60,4 +60,17 @@ describe Overcommit::Hook::PreCommit::LocalPathsInGemfile do
 
     it { should pass }
   end
+
+  context 'when the file contains local paths, but only in comments' do
+    let(:contents) do
+      [
+        "# gem 'fuubar', :path => '../fuubar'",
+        "# :path => '../fuubar'",
+        "# gem 'fuubar', path: '../fuubar'",
+        "# path: '../fuubar'",
+      ].join("\n")
+    end
+
+    it { should pass }
+  end
 end
