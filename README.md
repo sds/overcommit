@@ -25,6 +25,7 @@ about Overcommit on our [engineering blog](http://causes.github.io).
   * [Hooks](#hooks)
   * [Hook Categories](#hook-categories)
   * [Plugin Directory](#plugin-directory)
+  * [Signature Verification](#signature-verification)
 * [Built-In Hooks](#built-in-hooks)
 * [Repo-Specific Hooks](#repo-specific-hooks)
 * [Security](#security)
@@ -226,6 +227,12 @@ detailed examples of how the `ALL` hook can be used.
 
 You can change the directory that project-specific hooks are loaded from via
 the `plugin_directory' option. The default directory is `.git-hooks`.
+
+### Signature Verification
+
+You can disable manual verification of plugin signatures by setting
+`verify_plugin_signatures` to `false`. See the [Security](#security) section
+for more information on this option and what exactly it controls.
 
 ## Built-In Hooks
 
