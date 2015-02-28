@@ -10,7 +10,8 @@ class HookMatcher
     result = [check.run].flatten
     # TODO: Deprecate symbol/message tuple form in favor of returning an array
     # of Messages
-    if result.is_a?(Array) && result.first.is_a?(Overcommit::Hook::Message)
+    if result.is_a?(Array) &&
+       (result.first.is_a?(Overcommit::Hook::Message) || result.empty?)
       messages_match?(result)
     else
       actual_status, actual_message = result

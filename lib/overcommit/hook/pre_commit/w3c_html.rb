@@ -8,18 +8,11 @@ module Overcommit::Hook::PreCommit
         return :fail, 'w3c_validators not installed -- run `gem install w3c_validators`'
       end
 
-      result_messages =
-        begin
-          collect_messages
-        rescue W3CValidators::ValidatorUnavailable => e
-          return :fail, e.message
-        rescue W3CValidators::ParsingError => e
-          return :fail, e.message
-        end
-
-      return :pass if result_messages.empty?
-
-      result_messages
+      collect_messages
+    rescue W3CValidators::ValidatorUnavailable => e
+      [:fail, e.message]
+    rescue W3CValidators::ParsingError => e
+      [:fail, e.message]
     end
 
     private

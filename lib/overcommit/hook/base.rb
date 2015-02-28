@@ -62,7 +62,7 @@ module Overcommit::Hook
     # @return [Array<Symbol,String>] tuple of status and output
     def process_hook_return_value(hook_return_value)
       if hook_return_value.is_a?(Array) &&
-         hook_return_value.first.is_a?(Message)
+         (hook_return_value.first.is_a?(Message) || hook_return_value.empty?)
         # Process messages into a status and output
         Overcommit::MessageProcessor.new(
           self,
