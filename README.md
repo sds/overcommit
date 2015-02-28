@@ -157,9 +157,9 @@ PreCommit:
 
 ### Hooks
 
-Individual hooks expose both framework-level configuration options as well
-as their own custom options unique to each hook. The following table lists
-options that are available on all hooks.
+Individual hooks expose both built-in configuration options as well as their
+own custom options unique to each hook. The following table lists all built-in
+configuration options:
 
 Option                                  | Description
 ----------------------------------------|--------------------------------------
@@ -170,22 +170,22 @@ Option                                  | Description
 `requires_files`                        | If `true`, this hook runs only if files that are applicable to it have been modified. See `include` and `exclude` for how to specify applicable files.
 `include`                               | File paths or glob patterns of files that apply to this hook. The hook will only run on the applicable files when they have been modified. Note that the concept of modified varies for different types of hooks. By default, `include` matches every file until you specify a list of patterns.
 `exclude`                               | File paths or glob patterns of files that do not apply to this hook. This is used to exclude any files that would have been matched by `include`.
-`problem_on_unmodified_line`            | How to treat errors reported on lines that weren't modified during the action captured by this hook (e.g. for pre-commit hooks, changes that were not staged with `git add` are probably not changes you care about getting errors for). Valid values are `report` (report errors/warnings as-is regardless of line location); `warn` (report errors as warnings if they are on lines you didn't modify); and `ignore` (don't display errors/warnings at all if they are on lines you didn't modify--this option is _not_ recommended.
+`problem_on_unmodified_line`            | How to treat errors reported on lines that weren't modified during the action captured by this hook (e.g. for pre-commit hooks, changes that were not staged with `git add` are probably not changes you care about getting errors for). Valid values are `report`: report errors/warnings as-is regardless of line location; `warn`: report errors as warnings if they are on lines you didn't modify; and `ignore`: don't display errors/warnings at all if they are on lines you didn't modify (`ignore` is _not_ recommended).
 `on_fail`                               | Change the status of a failed hook to `warn` or `pass`. This allows you to treat failures as warnings or potentially ignore them entirely, but you should use caution when doing so as you might be hiding important information.
-`on_warn`                               | Simliar to `on_fail`, change the status of a hook that returns a warning status to either `pass` or `fail`. Useful you wish to silence warnings entirely or if you want to treat all warnings as errors.
-`required_executable`                   | Name of an executable that needs to exist in user's `PATH` in order for the hook to run
-`required_library`/`required_libraries` | List of paths to load with `Kernel.require` before the hook runs.
+`on_warn`                               | Simliar to `on_fail`, change the status of a hook that returns a warning status to either `pass` (you wish to silence warnings entirely) or `fail` (you wish to treat all warnings as errors).
+`required_executable`                   | Name of an executable that must exist in the `PATH` in order for the hook to run
+`required_library`/`required_libraries` | List of Ruby libraries to load with `Kernel.require` before the hook runs. This is specifically for hooks that integrate with external Ruby libraries.
 `command`                               | Array of arguments to use as the command. How each hook uses this is different, but it allows hooks to change the context with which they run. For example, you can change the command to be `bundle exec rubocop` instead of just `rubocop` so that you can use the gem versions specified in your local `Gemfile.lock`. This defaults to the name of the `required_executable`.
-`flags`                                 | Array of arguments to append to the `command`. This is useful for when a newer version of a tool removes/renames existing flags, so you can update the flags via your `.overcommit.yml` instead of waiting for an upstream fix in Overcommit.
-`install_command`                       | Command the user can run to install the `required_executable` (or alternately the specified `required_libraries`). This is intended for documentation purposes--Overcommit does not install software on your behalf, as there are too many edge cases where such behavior does not do what you want.
+`flags`                                 | Array of arguments to append to the `command`. This is useful for customizing the behavior of a tool. It's also useful when a newer version of a tool removes/renames existing flags, so you can update the flags via your `.overcommit.yml` instead of waiting for an upstream fix in Overcommit.
+`install_command`                       | Command the user can run to install the `required_executable` (or alternately the specified `required_libraries`). This is intended for documentation purposes, as Overcommit does not install software on your behalf since there are too many edge cases where such behavior would result in incorrectly configured installations (e.g. installing a Python package in the global package space instead of in a virtual environment).
 
-On top of the above built-in configuration options, each hook can support
-individual configuration. As an example, the `AuthorEmail` hook allows you to
-customize the regex used to check emails via the `pattern` option, which is
-useful if you want to enforce developers to use a company email address for
-their commits. This provides incredible flexibility for hook authors as you
-can make your hooks sufficiently generic such that they can be customized to
-multiple projects.
+In addition to the built-in configuration options, each hook can expose its
+own unique configuration options. The `AuthorEmail` hook, for example, allows
+you to customize the regex used to check commit author emails via the `pattern`
+option (useful if you want to enforce developers to use a company
+email address for their commits). This provides incredible flexibility for hook
+authors as you can make your hooks sufficiently generic and then customize them
+on a per-project basis.
 
 ### Hook Categories
 
@@ -198,7 +198,7 @@ hooks are located under `PostCommit`. See the
 
 Within a hook category, there is a special type of hook configuration that
 applies to _all_ hooks in the category. This configuration looks like a normal
-hook configuration except it has the name `ALL` in all uppercase characters.
+hook configuration, except it has the name `ALL`:
 
 ```yaml
 PreCommit:
@@ -214,13 +214,13 @@ PreCommit:
   ...
 ```
 
-This is useful for when you want to
+The `ALL` configuration is useful for when you want to
 [DRY](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) up your
 configuration, or when you want to apply changes across an entire category of
 hooks.
 
 Again, you can consult the [default configuration](config/default.yml) for
-detailed examplesj of how the `ALL` hook can be used.
+detailed examples of how the `ALL` hook can be used.
 
 ### Plugin Directory
 
