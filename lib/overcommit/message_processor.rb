@@ -126,6 +126,9 @@ module Overcommit
     end
 
     def message_on_modified_line?(message)
+      # Message without line number assumed to apply to entire file
+      return true unless message.line
+
       @hook.modified_lines_in_file(message.file).include?(message.line)
     end
   end

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 
 describe Overcommit::Hook::PreCommit::JsonSyntax do
   let(:config)      { Overcommit::ConfigurationLoader.default_configuration }

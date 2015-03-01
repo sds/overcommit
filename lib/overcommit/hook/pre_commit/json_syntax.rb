@@ -2,19 +2,18 @@ module Overcommit::Hook::PreCommit
   # Checks the syntax of any modified JSON files.
   class JsonSyntax < Base
     def run
-      output = []
+      messages = []
 
       applicable_files.each do |file|
         begin
           JSON.parse(IO.read(file))
         rescue JSON::ParserError => e
-          output << "#{e.message} parsing #{file}"
+          error = "#{e.message} parsing #{file}"
+          messages << Overcommit::Hook::Message.new(:error, file, nil, error)
         end
       end
 
-      return :pass if output.empty?
-
-      [:fail, output]
+      messages
     end
   end
 end
