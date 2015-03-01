@@ -304,6 +304,7 @@ PreCommit:
     include: '**/*.js'
 
   ShellCheck:
+    enabled: false
     description: 'Analyzing with ShellCheck'
     required_executable: 'shellcheck'
     flags: ['--format=gcc']

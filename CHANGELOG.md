@@ -5,6 +5,7 @@
 * Fix `LocalPathsInGemfile` to not report lints for commented paths
 * Add `required_library`/`required_libraries` hook option which specifies
   a list of paths a hook should load with `Kernel.require` before running
+* Disable `ShellCheck` pre-commit hook by default
 
 ## 0.23.0
 
