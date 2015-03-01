@@ -2,19 +2,17 @@ module Overcommit::Hook::PreCommit
   # Checks the syntax of any modified YAML files.
   class YamlSyntax < Base
     def run
-      output = []
+      messages = []
 
       applicable_files.each do |file|
         begin
           YAML.load_file(file)
-        rescue ArgumentError => e
-          output << "#{e.message} parsing #{file}"
+        rescue ArgumentError, Psych::SyntaxError => e
+          messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
         end
       end
 
-      return :pass if output.empty?
-
-      [:fail, output]
+      messages
     end
   end
 end
