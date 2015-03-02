@@ -6,6 +6,7 @@
 * Add `required_library`/`required_libraries` hook option which specifies
   a list of paths a hook should load with `Kernel.require` before running
 * Disable `ShellCheck` pre-commit hook by default
+* Fix `CssLint` pre-commit hook to ignore blank lines in `csslint` output
 
 ## 0.23.0
 
