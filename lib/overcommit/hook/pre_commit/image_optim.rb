@@ -2,34 +2,23 @@ module Overcommit::Hook::PreCommit
   # Checks for images that can be optimized with `image_optim`.
   class ImageOptim < Base
     def run
-      optimized_images =
-        begin
-          optimize_images(applicable_files)
-        rescue ::ImageOptim::BinResolver::BinNotFound => e
-          return :fail, "#{e.message}. The image_optim gem is dependendent on this binary."
-        end
+      result = execute(command + applicable_files)
+      return [:fail, result.stdout + result.stderr] unless result.success?
 
-      if optimized_images.any?
-        return :fail,
-          "The following images are optimizable:\n#{optimized_images.join("\n")}" \
-          "\n\nOptimize them by running:\n" \
-          "  image_optim --skip-missing-workers #{optimized_images.join(' ')}"
-      end
+      optimized_files = extract_optimized_files(result.stdout)
+      return :pass if optimized_files.empty?
 
-      :pass
+      output = "The following images are optimizable:\n#{optimized_files.join("\n")}"
+      output += "\n\nOptimize them by running `#{command.join(' ')} #{optimized_files.join(' ')}`"
+      [:fail, output]
     end
 
     private
 
-    def optimize_images(image_paths)
-      image_optim = ::ImageOptim.new(skip_missing_workers: true)
-
-      optimized_images =
-        image_optim.optimize_images(image_paths) do |path, optimized|
-          path if optimized
-        end
-
-      optimized_images.compact
+    def extract_optimized_files(output)
+      output.split("\n").
+             select { |line| line =~ /^\d+/ }.
+             map    { |line| line.split(/\s+/).last }
     end
   end
 end

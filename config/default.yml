@@ -163,7 +163,7 @@ PreCommit:
 
   ImageOptim:
     description: 'Checking for optimizable images'
-    required_library: 'image_optim'
+    required_executable: 'image_optim'
     install_command: 'gem install image_optim'
     include:
       - '**/*.gif'

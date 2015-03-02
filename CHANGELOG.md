@@ -7,6 +7,7 @@
   a list of paths a hook should load with `Kernel.require` before running
 * Disable `ShellCheck` pre-commit hook by default
 * Fix `CssLint` pre-commit hook to ignore blank lines in `csslint` output
+* Switch `ImageOptim` hook to use executable instead of Ruby API
 
 ## 0.23.0
 
