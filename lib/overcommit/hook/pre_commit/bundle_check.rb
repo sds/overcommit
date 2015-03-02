@@ -16,7 +16,7 @@ module Overcommit::Hook::PreCommit
 
       result = execute(%w[git diff --quiet --] + [LOCK_FILE])
       unless result.success?
-        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{command.join(' ')} check`"
+        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{command.join(' ')}`"
       end
 
       :pass
