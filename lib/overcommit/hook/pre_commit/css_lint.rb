@@ -13,17 +13,10 @@ module Overcommit::Hook::PreCommit
       return :pass if result.success? && output.empty?
 
       extract_messages(
-        output.split("\n").reject(&:empty?).collect(&method(:add_line_number)),
+        output.split("\n").reject(&:empty?),
         MESSAGE_REGEX,
         lambda { |type| type.downcase.to_sym }
       )
-    end
-
-    private
-
-    # Hack to include messages that apply to the entire file
-    def add_line_number(message)
-      message.sub(/(?<!\d,\s)(Error|Warning)/, 'line 0, \1')
     end
   end
 end
