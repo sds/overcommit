@@ -13,7 +13,7 @@ module Overcommit::Hook::PreCommit
       return :pass if result.success? && output.empty?
 
       extract_messages(
-        output.split("\n").collect(&method(:add_line_number)),
+        output.split("\n").reject(&:empty?).collect(&method(:add_line_number)),
         MESSAGE_REGEX,
         lambda { |type| type.downcase.to_sym }
       )
