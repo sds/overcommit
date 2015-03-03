@@ -1,5 +1,3 @@
-require 'json'
-
 module Overcommit::Hook::PreCommit
   # Runs `coffeelint` against any modified CoffeeScript files.
   class CoffeeLint < Base
