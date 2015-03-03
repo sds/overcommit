@@ -10,23 +10,79 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
   end
 
   context 'when coffeelint exits successfully' do
+    let(:result) { double('result') }
+
     before do
-      result = double('result')
       result.stub(:success?).and_return(true)
       subject.stub(:execute).and_return(result)
     end
 
-    it { should pass }
+    context 'with no warnings' do
+      before do
+        result.stub(:stdout).and_return('{
+          "file1.coffee": []
+        }')
+      end
+
+      it { should pass }
+    end
+
+    context 'and it reports a warning' do
+      before do
+        result.stub(:stdout).and_return('{
+          "file1.coffee": [
+            {
+              "name": "ensure_comprehensions",
+              "level": "warn",
+              "message": "Comprehensions must have parentheses around them",
+              "description": "This rule makes sure that parentheses are around comprehensions.",
+              "context": "",
+              "lineNumber": 31,
+              "line": "cubes = math.cube num for num in list",
+              "rule": "ensure_comprehensions"
+            }
+          ]
+        }')
+      end
+
+      it { should warn }
+    end
   end
 
   context 'when coffeelint exits unsucessfully' do
+    let(:result) { double('result') }
+
     before do
-      result = double('result')
       result.stub(:success?).and_return(false)
-      result.stub(:stdout)
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_hook }
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return('{
+          "file1.coffee": [
+            {
+              "name": "duplicate_key",
+              "level": "error",
+              "message": "Duplicate key defined in object or class",
+              "description": "Prevents defining duplicate keys in object literals and classes",
+              "lineNumber": 17,
+              "line": "  root: foo",
+              "rule": "duplicate_key"
+            }
+          ]
+        }')
+      end
+
+      it { should fail_hook }
+    end
+
+    context 'and its output is not valid JSON' do
+      before do
+        result.stub(:stdout).and_return('foo')
+      end
+
+      it { should fail_hook }
+    end
   end
 end
