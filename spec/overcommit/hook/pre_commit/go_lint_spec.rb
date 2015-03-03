@@ -10,30 +10,28 @@ describe Overcommit::Hook::PreCommit::GoLint do
   end
 
   context 'when golint exits successfully' do
+    let(:result) { double('result') }
+
     before do
-      stdout = double('tempfile')
-      stdout.stub(:empty?).and_return(true)
-
-      result = double('result')
-      result.stub(:stdout).and_return(stdout)
-
       subject.stub(:execute).and_return(result)
     end
 
-    it { should pass }
-  end
+    context 'with no output' do
+      before do
+        result.stub(:stdout).and_return('')
+      end
 
-  context 'when golint exits with stdout' do
-    before do
-      stdout = double('tempfile')
-      stdout.stub(:empty?).and_return(false)
-
-      result = double('result')
-      result.stub(:stdout).and_return(stdout)
-
-      subject.stub(:execute).and_return(result)
+      it { should pass }
     end
 
-    it { should fail_hook }
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.go:1:1: error should be the last type when returning multiple items'
+        ].join("\n"))
+      end
+
+      it { should fail_hook }
+    end
   end
 end
