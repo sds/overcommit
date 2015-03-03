@@ -9,6 +9,7 @@
 * Fix `CssLint` pre-commit hook to ignore blank lines in `csslint` output
 * Switch `ImageOptim` hook to use executable instead of Ruby API
 * Fix error instructions typo in `BundleCheck` pre-commit hook
+* Ignore hard tabs in `Godeps/Godeps.json` by default
 
 ## 0.23.0
 
