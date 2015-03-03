@@ -151,9 +151,9 @@ PreCommit:
     flags: ['-IHn', "\t"]
     exclude:
       - '**/*.go'
-      - 'Godeps/Godeps.json'
       - '**/Makefile'
       - '.gitmodules'
+      - 'Godeps/Godeps.json'
 
   HtmlTidy:
     enabled: false
