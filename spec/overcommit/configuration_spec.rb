@@ -153,6 +153,25 @@ describe Overcommit::Configuration do
           subject.for_hook('SomeHook', 'CommitMsg').should include('some-value' => 2)
         end
       end
+
+      context 'and child item contains a hash under the ALL key' do
+        let(:child) do
+          {
+            'PreCommit' => {
+              'ALL' => { 'some-value' => 2 },
+              'SomeOtherHook' => { 'some-value' => 3 },
+            },
+          }
+        end
+
+        it 'overrides the value in the parent item' do
+          subject.for_hook('SomeHook', 'PreCommit').should include('some-value' => 2)
+        end
+
+        it 'does not override the value in other child items' do
+          subject.for_hook('SomeOtherHook', 'PreCommit').should include('some-value' => 3)
+        end
+      end
     end
 
     context 'when parent item contains an array' do
