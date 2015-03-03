@@ -154,6 +154,7 @@ PreCommit:
       - 'Godeps/Godeps.json'
       - '**/Makefile'
       - '.gitmodules'
+      - 'Godeps/Godeps.json'
 
   HtmlTidy:
     enabled: false
