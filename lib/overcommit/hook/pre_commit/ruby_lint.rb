@@ -1,0 +1,19 @@
+module Overcommit::Hook::PreCommit
+  # Runs `ruby-lint` against any modified Ruby files.
+  class RubyLint < Base
+    MESSAGE_TYPE_CATEGORIZER = lambda do |type|
+      type.include?('W') ? :warning : :error
+    end
+
+    def run
+      result = execute(command + applicable_files)
+      return :pass if result.success?
+
+      extract_messages(
+        result.stdout.split("\n"),
+        /^(?<file>[^:]+):(?<type>[^:]+):(?<line>\d+)/,
+        MESSAGE_TYPE_CATEGORIZER
+      )
+    end
+  end
+end
