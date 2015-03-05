@@ -293,6 +293,16 @@ PreCommit:
       - '**/Gemfile'
       - '**/Rakefile'
 
+  RubyLint:
+    enabled: false
+    description: 'Analyzing with ruby-lint'
+    required_executable: 'ruby-lint'
+    flags: ['--presenter=syntastic', '--levels=error,warning']
+    install_command: 'gem install ruby-lint'
+    include:
+      - '**/*.gemspec'
+      - '**/*.rb'
+
   Scalastyle:
     description: 'Analyzing with Scalastyle'
     required_executable: 'scalastyle'
