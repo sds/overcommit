@@ -10,6 +10,7 @@
 * Switch `ImageOptim` hook to use executable instead of Ruby API
 * Fix error instructions typo in `BundleCheck` pre-commit hook
 * Ignore hard tabs in `Godeps/Godeps.json` by default
+* Exclude `*.md` files from `TrailingWhitespace`
 
 ## 0.23.0
 
