@@ -192,6 +192,12 @@ PreCommit:
     install_command: 'npm install -g jshint'
     include: '**/*.js'
 
+  Jsl:
+    description: 'Analyzing with JSL'
+    required_executable: 'jsl'
+    flags: ['-nologo', '-nofilelisting', '-nocontext', '-nosummary']
+    include: '**/*.js'
+
   JsonSyntax:
     description: 'Validating JSON syntax'
     required_library: 'json'
