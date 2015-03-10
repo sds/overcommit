@@ -11,6 +11,18 @@
 * Fix error instructions typo in `BundleCheck` pre-commit hook
 * Ignore hard tabs in `Godeps/Godeps.json` by default
 * Exclude `*.md` files from `TrailingWhitespace`
+* Improve `CoffeeLint` pre-commit hook to differentiate between errors and
+  warnings
+* Improve `GoLint` pre-commit hook to extract file and line information
+* Change configuration loading behavior to prefer user-defined `ALL` hook
+  configuration over default `ALL` configuration, and user-defined hook
+  configuration over default `ALL` configuration
+* Add `JsLint` pre-commit hook that checks the style of JavaScript files with
+  [JSLint](http://www.jslint.com/)
+* Add `RubyLint` pre-commit hook that statically analyzes Ruby files with
+  [ruby-lint](https://github.com/YorickPeterse/ruby-lint)
+* Add `Jsl` pre-commit hook that checks the style of JavaScript files with
+  [JavaScript Lint](http://www.javascriptlint.com/)
 
 ## 0.23.0
 
