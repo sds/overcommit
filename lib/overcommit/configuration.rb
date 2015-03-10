@@ -168,6 +168,10 @@ module Overcommit
     end
 
     def smart_merge(parent, child)
+      child_all = child['ALL']
+      unless child_all.nil?
+        parent = Hash[parent.collect { |k, v| [k, smart_merge(v, child_all)] }]
+      end
       parent.merge(child) do |_key, old, new|
         case old
         when Hash
