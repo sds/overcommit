@@ -201,6 +201,7 @@ PreCommit:
     include: '**/*.js'
 
   Jsl:
+    enabled: false
     description: 'Analyzing with JSL'
     required_executable: 'jsl'
     flags: ['-nologo', '-nofilelisting', '-nocontext', '-nosummary']
