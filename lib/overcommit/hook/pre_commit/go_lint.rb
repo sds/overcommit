@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   class GoLint < Base
     def run
       result = execute(command + applicable_files)
-      output = result.stdout
+      output = result.stdout + result.stderr
       # Unfortunately the exit code is always 0
       return :pass if output.empty?
 
