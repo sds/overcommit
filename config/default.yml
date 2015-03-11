@@ -22,6 +22,9 @@ CommitMsg:
     requires_files: false
     quiet: false
 
+  CapitalizedSubject:
+    description: 'Checking subject capitalization'
+
   GerritChangeId:
     enabled: false
     description: 'Ensuring Gerrit Change-Id is present'

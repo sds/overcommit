@@ -23,6 +23,7 @@
   [ruby-lint](https://github.com/YorickPeterse/ruby-lint)
 * Add `Jsl` pre-commit hook that checks the style of JavaScript files with
   [JavaScript Lint](http://www.javascriptlint.com/)
+* Add `CapitalizedSubject` commit message hook
 
 ## 0.23.0
 
