@@ -196,12 +196,17 @@ module Overcommit::Hook
       return unless required_executable && !in_path?(required_executable)
 
       output = "'#{required_executable}' is not installed (or is not in your PATH)"
-
-      if install_command = @config['install_command']
-        output += "\nInstall it by running: #{install_command}"
-      end
+      output << install_command_prompt
 
       output
+    end
+
+    def install_command_prompt
+      if install_command = @config['install_command']
+        "\nInstall it by running: #{install_command}"
+      else
+        ''
+      end
     end
 
     # If the hook defines required library paths that it wants to load, attempt
