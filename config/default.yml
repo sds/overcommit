@@ -142,6 +142,13 @@ PreCommit:
     install_command: 'go get github.com/golang/lint/golint'
     include: '**/*.go'
 
+  GoVet:
+    description: 'Analyzing with go vet'
+    required_executable: 'go'
+    flags: ['tool', 'vet']
+    install_command: 'go get golang.org/x/tools/cmd/vet'
+    include: '**/*.go'
+
   HamlLint:
     description: 'Analyzing with haml-lint'
     required_executable: 'haml-lint'
