@@ -24,6 +24,7 @@
 * Add `Jsl` pre-commit hook that checks the style of JavaScript files with
   [JavaScript Lint](http://www.javascriptlint.com/)
 * Add `CapitalizedSubject` commit message hook
+* Add `GoVet` pre-commit hook
 
 ## 0.23.0
 
