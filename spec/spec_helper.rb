@@ -1,8 +1,9 @@
+# Bootstrap code coverage instrumentation. This must happen first!
 require 'coveralls'
+Coveralls.wear!
+
 require 'overcommit'
 require 'tempfile'
-
-Coveralls.wear!
 
 hook_types = Dir[File.join(Overcommit::OVERCOMMIT_HOME, 'lib/overcommit/hook/*')].
   select { |f| File.directory?(f) }.
