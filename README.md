@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
 [![Build Status](https://travis-ci.org/causes/overcommit.svg)](https://travis-ci.org/causes/overcommit)
+[![Coverage Status](https://coveralls.io/repos/causes/overcommit/badge.svg)](https://coveralls.io/r/causes/overcommit)
 [![Code Climate](https://codeclimate.com/github/causes/overcommit.png)](https://codeclimate.com/github/causes/overcommit)
 [![Dependency Status](https://gemnasium.com/causes/overcommit.svg)](https://gemnasium.com/causes/overcommit)
 [![Inline docs](http://inch-ci.org/github/causes/overcommit.svg?branch=master)](http://inch-ci.org/github/causes/overcommit)
