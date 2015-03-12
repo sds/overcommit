@@ -1,3 +1,4 @@
 Gemfile.lock
 pkg/
 .bundle
+coverage
