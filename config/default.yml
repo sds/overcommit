@@ -397,6 +397,11 @@ PreCommit:
     flags: ['--noout']
     include: '**/*.xml'
 
+  XmlSyntax:
+    description: 'Checking XML syntax'
+    required_library: 'rexml/document'
+    include: '**/*.xml'
+
   YamlSyntax:
     description: 'Checking YAML syntax'
     required_library: 'yaml'
