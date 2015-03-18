@@ -104,6 +104,10 @@ PreCommit:
       - 'Gemfile.lock'
       - '*.gemspec'
 
+  CaseConflicts:
+    description: 'Checking for case-insensitivity conflicts'
+    quiet: true
+
   ChamberSecurity:
     enabled: false
     description: 'Checking that settings have been secured with Chamber'
