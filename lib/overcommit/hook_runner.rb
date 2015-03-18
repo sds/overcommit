@@ -22,11 +22,13 @@ module Overcommit
       # these calls to allow some sort of "are you sure?" double-interrupt
       # functionality, but until that's deemed necessary let's keep it simple.
       InterruptHandler.isolate_from_interrupts do
-        @context.setup_environment
-        load_hooks
-        result = run_hooks
-        @context.cleanup_environment
-        result
+        begin
+          @context.setup_environment
+          load_hooks
+          run_hooks
+        ensure
+          @context.cleanup_environment
+        end
       end
     end
 
