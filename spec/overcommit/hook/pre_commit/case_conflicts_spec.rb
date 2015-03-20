@@ -6,7 +6,7 @@ describe Overcommit::Hook::PreCommit::CaseConflicts do
   subject { described_class.new(config, context) }
 
   before do
-    Overcommit::GitRepo.stub(:all_files) { %w[foo] + subject.applicable_files }
+    Overcommit::GitRepo.stub(:list_files).and_return(%w[foo])
   end
 
   context 'when a new file conflicts with an existing file' do
