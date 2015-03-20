@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
 
       conflict_files.map do |file|
         conflicts = conflict_hash[file.downcase].map { |f| File.basename(f) }
-        msg = "Case-insensitivity conflict detected: #{conflicts.join(', ')}"
+        msg = "Conflict detected for case-insensitive file systems: #{conflicts.join(', ')}"
         Overcommit::Hook::Message.new(:error, file, nil, msg)
       end
     end
