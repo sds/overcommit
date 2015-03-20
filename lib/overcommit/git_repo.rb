@@ -54,6 +54,19 @@ module Overcommit
         map { |relative_file| File.expand_path(relative_file) }
     end
 
+    # Returns the names of files in the given paths that are tracked by git.
+    #
+    # @param paths [Array<String>] list of paths to check
+    # @option options [String] ref ('HEAD') Git ref to check
+    # @return [Array<String>] list of absolute file paths
+    def list_files(paths = [], options = {})
+      ref = options[:ref] || 'HEAD'
+      `git ls-tree --name-only #{ref} #{paths.join(' ')}`.
+        split(/\n/).
+        map { |relative_file| File.expand_path(relative_file) }.
+        reject { |file| File.directory?(file) } # Exclude submodule directories
+    end
+
     # Returns the names of all files that are tracked by git.
     #
     # @return [Array<String>] list of absolute file paths
