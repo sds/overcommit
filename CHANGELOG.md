@@ -27,6 +27,8 @@
 * Add `GoVet` pre-commit hook that examines Go source files with
   [vet](https://godoc.org/golang.org/x/tools/cmd/vet)
 * Add `XmlSyntax` pre-commit hook to check that XML files are valid
+* Fix bug where stashed changes were not restored when plugin signature
+  validation failed
 
 ## 0.23.0
 
