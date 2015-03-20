@@ -26,6 +26,7 @@
 * Add `CapitalizedSubject` commit message hook
 * Add `GoVet` pre-commit hook that examines Go source files with
   [vet](https://godoc.org/golang.org/x/tools/cmd/vet)
+* Add `XmlSyntax` pre-commit hook to check that XML files are valid
 
 ## 0.23.0
 
