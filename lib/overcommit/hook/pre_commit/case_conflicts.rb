@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   # Adapted from https://github.com/pre-commit/pre-commit-hooks
   class CaseConflicts < Base
     def run
-      paths = Set.new(applicable_files.map { |file| File.dirname(file) })
+      paths = Set.new(applicable_files.map { |file| File.dirname(file) + File::SEPARATOR })
       repo_files = Set.new(Overcommit::GitRepo.list_files(paths.to_a) + applicable_files)
       conflict_hash = repo_files.classify(&:downcase).
         select { |_, files| files.size > 1 }
