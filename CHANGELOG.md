@@ -29,6 +29,8 @@
 * Add `XmlSyntax` pre-commit hook to check that XML files are valid
 * Fix bug where stashed changes were not restored when plugin signature
   validation failed
+* Add `CaseConflicts` pre-commit hook which checks for file names in the same
+  directory which differ by letter casing
 
 ## 0.23.0
 
