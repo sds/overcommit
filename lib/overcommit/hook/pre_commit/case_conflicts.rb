@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
       conflict_hash = repo_files.classify(&:downcase).
         select { |_, files| files.size > 1 }
       conflict_files = applicable_files.
-        select { |file| conflict_hash.include? file.downcase }
+        select { |file| conflict_hash.include?(file.downcase) }
 
       conflict_files.map do |file|
         conflicts = conflict_hash[file.downcase].map { |f| File.basename(f) }
