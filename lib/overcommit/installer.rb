@@ -132,6 +132,8 @@ module Overcommit
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         hook_file = File.join(hooks_path, hook_type)
         unless can_replace_file?(hook_file)
+          log.warning "Hook '#{File.expand_path(hook_type)}' already exists and " \
+                      "was not installed by Overcommit. Moving to '#{old_hooks_path}'"
           FileUtils.mv(hook_file, old_hooks_path)
         end
       end
@@ -142,6 +144,8 @@ module Overcommit
     def restore_old_hooks
       return unless File.directory?(old_hooks_path)
 
+      log.log "Restoring old hooks from #{old_hooks_path}"
+
       Dir.chdir(old_hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           FileUtils.mv(hook_type, hooks_path) if File.exist?(hook_type)
@@ -149,6 +153,8 @@ module Overcommit
       end
       # Remove old-hooks directory if empty
       FileUtils.rmdir(old_hooks_path)
+
+      log.success "Successfully restored old hooks from #{old_hooks_path}"
     end
 
     def uninstall_hook_symlinks
