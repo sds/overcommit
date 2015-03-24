@@ -42,8 +42,8 @@ module Overcommit
     def uninstall
       log.log "Removing hooks from #{@target}"
 
-      uninstall_master_hook
       uninstall_hook_symlinks
+      uninstall_master_hook
       restore_old_hooks
 
       log.success "Successfully removed hooks from #{@target}"
