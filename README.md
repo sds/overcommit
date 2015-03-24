@@ -69,6 +69,10 @@ git init
 overcommit --install
 ```
 
+Any existing hooks for your repository which Overcommit would have replaced
+will be backed up. You can restore everything to the way it was by running
+`overcommit --uninstall`.
+
 ### Automatically Install Overcommit Hooks
 
 If you want to use `overcommit` for all repositories you create/clone going

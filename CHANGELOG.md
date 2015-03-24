@@ -31,6 +31,8 @@
   validation failed
 * Add `CaseConflicts` pre-commit hook which checks for file names in the same
   directory which differ by letter casing
+* Preserve existing git hooks in a repository when installing Overcommit hooks,
+  and restore them on uninstall
 
 ## 0.23.0
 
