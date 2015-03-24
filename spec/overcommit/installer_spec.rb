@@ -152,7 +152,8 @@ describe Overcommit::Installer do
           it 'removes all symlinks from the hooks directory' do
             expect { subject }.to change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                File.exist?(File.join(hooks_dir, hook_type))
+                hook_file = File.join(hooks_dir, hook_type)
+                File.exist?(hook_file) || File.symlink?(hook_file)
               end
             }.from(true).to(false)
           end
