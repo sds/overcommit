@@ -27,6 +27,7 @@ describe Overcommit::Installer do
     context 'when the target is a git repo' do
       let(:target) { repo }
       let(:hooks_dir) { File.join(target, '.git', 'hooks') }
+      let(:old_hooks_dir) { File.join(hooks_dir, 'old-hooks') }
 
       context 'and an install is requested' do
         context 'and Overcommit hooks were not previously installed' do
@@ -64,16 +65,25 @@ describe Overcommit::Installer do
         end
 
         context 'and non-Overcommit hooks were previously installed' do
+          let(:old_hooks) { %w[commit-msg pre-commit] }
+
           before do
             FileUtils.mkdir_p(hooks_dir)
             Dir.chdir(hooks_dir) do
-              FileUtils.touch('commit-msg')
-              FileUtils.touch('pre-commit')
+              old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
             end
           end
 
-          it 'raises an error' do
-            expect { subject }.to raise_error Overcommit::Exceptions::PreExistingHooks
+          it 'does not raise an error' do
+            expect { subject }.to_not raise_error
+          end
+
+          it 'moves them to a subdirectory' do
+            expect { subject }.to change {
+              old_hooks.all? do |hook_type|
+                File.exist?(File.join(old_hooks_dir, hook_type))
+              end
+            }.from(false).to(true)
           end
 
           context 'and the force option is specified' do
@@ -142,7 +152,8 @@ describe Overcommit::Installer do
           it 'removes all symlinks from the hooks directory' do
             expect { subject }.to change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                File.exist?(File.join(hooks_dir, hook_type))
+                hook_file = File.join(hooks_dir, hook_type)
+                File.exist?(hook_file) || File.symlink?(hook_file)
               end
             }.from(true).to(false)
           end
@@ -155,20 +166,40 @@ describe Overcommit::Installer do
         end
 
         context 'and non-Overcommit hooks were previously installed' do
-          before do
-            FileUtils.mkdir_p(hooks_dir)
-            Dir.chdir(hooks_dir) do
-              FileUtils.touch('commit-msg')
-              FileUtils.touch('pre-commit')
+          let(:old_hooks) { %w[commit-msg pre-commit] }
+
+          context 'before installing Overcommit hooks' do
+            before do
+              FileUtils.mkdir_p(old_hooks_dir)
+              Dir.chdir(old_hooks_dir) do
+                old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
+              end
+            end
+
+            it 'restores the previously existing hooks' do
+              expect { subject }.to change {
+                old_hooks.all? do |hook_type|
+                  File.exist?(File.join(hooks_dir, hook_type))
+                end
+              }.from(false).to(true)
             end
           end
 
-          it 'does not remove the previously existing hooks' do
-            expect { subject }.to_not change {
-              %w[commit-msg pre-commit].all? do |hook_type|
-                File.exist?(File.join(hooks_dir, hook_type))
+          context 'after installing Overcommit hooks' do
+            before do
+              FileUtils.mkdir_p(hooks_dir)
+              Dir.chdir(hooks_dir) do
+                old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
               end
-            }
+            end
+
+            it 'does not remove the previously existing hooks' do
+              expect { subject }.to_not change {
+                old_hooks.all? do |hook_type|
+                  File.exist?(File.join(hooks_dir, hook_type))
+                end
+              }
+            end
           end
         end
       end
