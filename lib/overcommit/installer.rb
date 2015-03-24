@@ -135,6 +135,8 @@ module Overcommit
           FileUtils.mv(hook_file, old_hooks_path)
         end
       end
+      # Remove old-hooks directory if empty
+      FileUtils.rmdir(old_hooks_path)
     end
 
     def restore_old_hooks
@@ -145,6 +147,7 @@ module Overcommit
           FileUtils.mv(hook_type, hooks_path)
         end
       end
+      # Remove old-hooks directory if empty
       FileUtils.rmdir(old_hooks_path)
     end
 
