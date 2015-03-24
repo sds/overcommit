@@ -144,7 +144,7 @@ module Overcommit
 
       Dir.chdir(old_hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
-          FileUtils.mv(hook_type, hooks_path)
+          FileUtils.mv(hook_type, hooks_path) if File.exist?(hook_type)
         end
       end
       # Remove old-hooks directory if empty
