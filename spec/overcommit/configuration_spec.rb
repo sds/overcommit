@@ -196,16 +196,16 @@ describe Overcommit::Configuration do
       context 'and child item contains an array' do
         let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => [4, 5] } } } }
 
-        it 'concatenates the arrays together' do
-          subject.for_hook('SomeHook', 'PreCommit')['list'].should == [1, 2, 3, 4, 5]
+        it 'overrides the value in the parent item' do
+          subject.for_hook('SomeHook', 'PreCommit')['list'].should == [4, 5]
         end
       end
 
       context 'and child item contains a single item' do
         let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => 4 } } } }
 
-        it 'appends the item to the parent array' do
-          subject.for_hook('SomeHook', 'PreCommit')['list'].should == [1, 2, 3, 4]
+        it 'overrides the value in the parent item' do
+          subject.for_hook('SomeHook', 'PreCommit')['list'].should == 4
         end
       end
     end
