@@ -31,7 +31,8 @@ module Overcommit::HookContext
                 "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
         end
 
-        @changes_stashed = true
+        # False if only submodule references were changed
+        @changes_stashed = modified_files.any?
       end
 
       # While running the hooks make it appear as if nothing changed

@@ -66,6 +66,30 @@ describe Overcommit::HookContext::PreCommit do
       end
     end
 
+    context 'when only a submodule change is staged' do
+      around do |example|
+        submodule = repo do
+          `git commit --allow-empty -m "Initial commit"`
+        end
+
+        repo do
+          `git submodule add #{submodule} sub &>/dev/null`
+          `git commit -m "Add submodule"`
+          `echo "Hello World" > sub/submodule-file`
+          `git submodule foreach 'git add submodule-file'`
+          `git submodule foreach 'git commit -m "Another commit"'`
+          `git add sub`
+          example.run
+        end
+      end
+
+      it 'keeps staged submodule change' do
+        expect { subject }.to_not change {
+          (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
+        }.from(false)
+      end
+    end
+
     context 'when a broken symlink is staged' do
       around do |example|
         repo do
@@ -162,6 +186,30 @@ describe Overcommit::HookContext::PreCommit do
       it 'deletes the file' do
         subject
         File.exist?('tracked-file').should == false
+      end
+    end
+
+    context 'when only a submodule change was staged' do
+      around do |example|
+        submodule = repo do
+          `git commit --allow-empty -m "Initial commit"`
+        end
+
+        repo do
+          `git submodule add #{submodule} sub &>/dev/null`
+          `git commit -m "Add submodule"`
+          `echo "Hello World" > sub/submodule-file`
+          `git submodule foreach 'git add submodule-file'`
+          `git submodule foreach 'git commit -m "Another commit"'`
+          `git add sub`
+          example.run
+        end
+      end
+
+      it 'keeps staged submodule change' do
+        expect { subject }.to_not change {
+          (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
+        }.from(false)
       end
     end
   end
