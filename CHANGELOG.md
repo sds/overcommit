@@ -33,6 +33,8 @@
   directory which differ by letter casing
 * Preserve existing git hooks in a repository when installing Overcommit hooks,
   and restore them on uninstall
+* Don't clear working tree after pre-commit hook when only submodule changes
+  are present
 
 ## 0.23.0
 
