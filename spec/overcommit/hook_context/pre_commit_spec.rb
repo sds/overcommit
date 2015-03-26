@@ -84,9 +84,9 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps staged submodule change' do
-        subject
-        `git diff`.should be_empty
-        File.open('sub/submodule-file', 'r').read.should == "Hello World\n"
+        expect { subject }.to_not change {
+          (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
+        }.from(false)
       end
     end
 
@@ -207,9 +207,9 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps staged submodule change' do
-        subject
-        `git diff`.should be_empty
-        File.open('sub/submodule-file', 'r').read.should == "Hello World\n"
+        expect { subject }.to_not change {
+          (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
+        }.from(false)
       end
     end
   end
