@@ -197,7 +197,7 @@ describe Overcommit::Configuration do
         let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => [4, 5] } } } }
 
         it 'concatenates the arrays together' do
-          subject.for_hook('SomeHook', 'PreCommit')['list'] == [1, 2, 3, 4, 5]
+          subject.for_hook('SomeHook', 'PreCommit')['list'].should == [1, 2, 3, 4, 5]
         end
       end
 
@@ -205,7 +205,7 @@ describe Overcommit::Configuration do
         let(:child) { { 'PreCommit' => { 'SomeHook' => { 'list' => 4 } } } }
 
         it 'appends the item to the parent array' do
-          subject.for_hook('SomeHook', 'PreCommit')['list'] == [1, 2, 3, 4]
+          subject.for_hook('SomeHook', 'PreCommit')['list'].should == [1, 2, 3, 4]
         end
       end
     end
