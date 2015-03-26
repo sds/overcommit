@@ -22,12 +22,12 @@ describe Overcommit::HookContext::PreCommit do
 
       it 'keeps already-committed files' do
         subject
-        File.open('tracked-file', 'r').read == 'Hello World'
+        File.open('tracked-file', 'r').read.should == "Hello World\n"
       end
 
       it 'keeps untracked files' do
         subject
-        File.open('untracked-file', 'r').read == 'Hello Again'
+        File.open('untracked-file', 'r').read.should == "Hello Again\n"
       end
 
       it 'keeps modification times the same' do
@@ -52,12 +52,12 @@ describe Overcommit::HookContext::PreCommit do
 
       it 'keeps staged changes' do
         subject
-        File.open('tracked-file', 'r').read == 'Hello WorldSome more text'
+        File.open('tracked-file', 'r').read.should == "Hello World\nSome more text\n"
       end
 
       it 'keeps untracked files' do
         subject
-        File.open('untracked-file', 'r').read == 'Hello Again'
+        File.open('untracked-file', 'r').read.should == "Hello Again\n"
       end
 
       it 'keeps modification times the same' do
