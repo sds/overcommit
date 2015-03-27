@@ -42,11 +42,13 @@ module Overcommit
 
         interrupted = false
         run_failed = false
+        run_warned = false
 
         @hooks.each do |hook|
           hook_status = run_hook(hook)
 
           run_failed = true if [:bad, :fail].include?(hook_status)
+          run_warned = true if hook_status == :warn
 
           if hook_status == :interrupt
             # Stop running any more hooks and assume a bad result
@@ -55,7 +57,7 @@ module Overcommit
           end
         end
 
-        print_results(run_failed, interrupted)
+        print_results(run_failed, run_warned, interrupted)
 
         !(run_failed || interrupted)
       else
@@ -64,11 +66,16 @@ module Overcommit
       end
     end
 
-    def print_results(failed, interrupted)
+    # @param failed [Boolean]
+    # @param warned [Boolean]
+    # @param interrupted [Boolean]
+    def print_results(failed, warned, interrupted)
       if interrupted
         @printer.run_interrupted
       elsif failed
         @printer.run_failed
+      elsif warned
+        @printer.run_warned
       else
         @printer.run_succeeded
       end

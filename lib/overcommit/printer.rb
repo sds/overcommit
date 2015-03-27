@@ -58,6 +58,13 @@ module Overcommit
       log.newline
     end
 
+    # Executed when no hooks failed by the end of the run, but some warned.
+    def run_warned
+      log.newline
+      log.warning "⚠ All #{hook_script_name} hooks passed, but with warnings"
+      log.newline
+    end
+
     # Executed when no hooks failed by the end of the run.
     def run_succeeded
       log.newline

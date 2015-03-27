@@ -35,6 +35,7 @@
   and restore them on uninstall
 * Don't clear working tree after pre-commit hook when only submodule changes
   are present
+* Change hook summary message to mention warnings if there were any
 
 ## 0.23.0
 
