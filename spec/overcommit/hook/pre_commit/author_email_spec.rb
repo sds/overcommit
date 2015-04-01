@@ -34,7 +34,7 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
       super().merge(Overcommit::Configuration.new(
         'PreCommit' => {
           'AuthorEmail' => {
-            'pattern' => '^[^@]+@causes\.com$'
+            'pattern' => '^[^@]+@brigade\.com$'
           }
         }
       ))
@@ -47,7 +47,7 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
     end
 
     context 'and the email matches the pattern' do
-      let(:email) { 'email@causes.com' }
+      let(:email) { 'email@brigade.com' }
 
       it { should pass }
     end

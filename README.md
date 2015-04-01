@@ -1,9 +1,9 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
-[![Build Status](https://travis-ci.org/causes/overcommit.svg)](https://travis-ci.org/causes/overcommit)
-[![Coverage Status](https://coveralls.io/repos/causes/overcommit/badge.svg)](https://coveralls.io/r/causes/overcommit)
-[![Code Climate](https://codeclimate.com/github/causes/overcommit.png)](https://codeclimate.com/github/causes/overcommit)
-[![Dependency Status](https://gemnasium.com/causes/overcommit.svg)](https://gemnasium.com/causes/overcommit)
-[![Inline docs](http://inch-ci.org/github/causes/overcommit.svg?branch=master)](http://inch-ci.org/github/causes/overcommit)
+[![Build Status](https://travis-ci.org/brigade/overcommit.svg)](https://travis-ci.org/brigade/overcommit)
+[![Coverage Status](https://coveralls.io/repos/brigade/overcommit/badge.svg)](https://coveralls.io/r/brigade/overcommit)
+[![Code Climate](https://codeclimate.com/github/brigade/overcommit.png)](https://codeclimate.com/github/brigade/overcommit)
+[![Dependency Status](https://gemnasium.com/brigade/overcommit.svg)](https://gemnasium.com/brigade/overcommit)
+[![Inline docs](http://inch-ci.org/github/brigade/overcommit.svg?branch=master)](http://inch-ci.org/github/brigade/overcommit)
 
 # Overcommit
 
@@ -12,10 +12,7 @@
 
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a
-repository (but unlike regular Git hooks, are stored with that repository).
-
-[Read more](http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/)
-about Overcommit on our [engineering blog](http://causes.github.io).
+repository (but unlike regular Git hooks, are stored in source control).
 
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
@@ -46,7 +43,7 @@ This project aims to support the following Ruby runtimes:
 
 Some of the hooks have third-party dependencies. For example, to lint your
 [SCSS](http://sass-lang.com/) files, you're going to need our
-[scss-lint gem](https://github.com/causes/scss-lint).
+[scss-lint gem](https://github.com/brigade/scss-lint).
 
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
@@ -246,8 +243,8 @@ Currently, Overcommit supports `commit-msg`, `pre-commit`, `post-checkout`,
 expanded to support others.
 
 You can see the full list of hooks by checking out the
-[hooks directory](https://github.com/causes/overcommit/blob/master/lib/overcommit/hook),
-and view their [default configuration](config/default.yml).
+[hooks directory](lib/overcommit/hook), and view their
+[default configuration](config/default.yml).
 
 ## Repo-Specific hooks
 
@@ -255,7 +252,7 @@ Out of the box, `overcommit` comes with a set of hooks that enforce a variety of
 styles and lints. However, some hooks only make sense in the context of a given
 repository.
 
-At Causes, for example, we have a number of ad hoc Ruby checks that we run
+At Brigade, for example, we have a number of ad hoc Ruby checks that we run
 against our code to catch common errors. For example, since we use
 [RSpec](http://rspec.info/), we want to make sure all spec files contain the
 line `require 'spec_helper'`.

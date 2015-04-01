@@ -286,8 +286,7 @@
   post-checkout `BundleCheck` hook
 * Add support for hook plugin signature verification so that you don't
   automatically execute repo-specific hooks that changed since you last
-  ran them. See [Security](https://github.com/causes/overcommit#security)
-  for more information
+  ran them. See [Security](README.md#security) for more information
 * Automatically update `overcommit-hook` master hook and any other symlinks
   before hook run. Run `overcommit --install` if you're upgrading to save
   you from having to run `overcommit --install` in the future
@@ -372,7 +371,7 @@
 ## 0.2.6
 
 * Added check for linting HAML files with
-  [haml-lint](https://github.com/causes/haml-lint)
+  [haml-lint](https://github.com/brigade/haml-lint)
 
 ## 0.2.5
 

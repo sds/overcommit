@@ -11,7 +11,7 @@ plugin_directory: '.git-hooks'
 # Whether to check if a hook plugin has changed since Overcommit last ran it.
 # This is a defense mechanism when working with repositories which can contain
 # untrusted code (e.g. when you fetch a pull request from a third party).
-# See https://github.com/causes/overcommit#security for more information.
+# See https://github.com/brigade/overcommit#security for more information.
 verify_plugin_signatures: true
 
 # Hooks that are run against every commit message after a user has written it.
