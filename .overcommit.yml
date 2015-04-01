@@ -1,11 +1,4 @@
-CommitMsg:
-  GerritChangeId:
-    enabled: true
-
 PreCommit:
-  Reek:
-    enabled: false
-
   Rubocop:
     command: ['bundle', 'exec', 'rubocop']
 
