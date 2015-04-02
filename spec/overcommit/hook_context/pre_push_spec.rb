@@ -30,9 +30,7 @@ describe Overcommit::HookContext::PrePush do
     let(:remote_sha1) { random_hash }
 
     before do
-      ARGF.stub(:read).and_return([
-        "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
-      ].join("\n"))
+      input.stub(:read).and_return("#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
     end
 
     it 'should parse commit info from the input' do
