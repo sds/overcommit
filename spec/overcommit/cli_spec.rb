@@ -5,7 +5,8 @@ require 'overcommit/hook_context/run_all'
 describe Overcommit::CLI do
   describe '#run' do
     let(:logger) { Overcommit::Logger.silent }
-    let(:cli) { described_class.new(arguments, logger) }
+    let(:input) { double('input') }
+    let(:cli) { described_class.new(arguments, input, logger) }
     subject { cli.run }
 
     before do

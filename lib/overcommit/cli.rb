@@ -4,8 +4,9 @@ module Overcommit
   # Responsible for parsing command-line options and executing appropriate
   # application logic based on those options.
   class CLI # rubocop:disable ClassLength
-    def initialize(arguments, logger)
+    def initialize(arguments, input, logger)
       @arguments = arguments
+      @input     = input
       @log       = logger
       @options   = {}
     end
@@ -177,7 +178,8 @@ module Overcommit
       config = Overcommit::ConfigurationLoader.load_repo_config
       context = Overcommit::HookContext.create(@options[:hook_to_sign],
                                                config,
-                                               @arguments)
+                                               @arguments,
+                                               @input)
       Overcommit::HookLoader::PluginHookLoader.new(config,
                                                    context,
                                                    log).update_signatures
@@ -186,7 +188,7 @@ module Overcommit
 
     def run_all
       config  = Overcommit::ConfigurationLoader.load_repo_config
-      context = Overcommit::HookContext.create('run-all', config, @arguments)
+      context = Overcommit::HookContext.create('run-all', config, @arguments, @input)
       config.apply_environment!(context, ENV)
 
       printer = Overcommit::Printer.new(log, context)
