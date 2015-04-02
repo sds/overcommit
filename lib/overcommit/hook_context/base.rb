@@ -66,5 +66,10 @@ module Overcommit::HookContext
     def modified_lines(_file)
       Set.new
     end
+
+    # Returns an array of lines passed to the hook via STDIN.
+    def input_lines
+      @input_lines ||= @input.read.split("\n")
+    end
   end
 end
