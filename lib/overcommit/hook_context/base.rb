@@ -13,9 +13,10 @@ module Overcommit::HookContext
   class Base
     # @param config [Overcommit::Configuration]
     # @param args [Array<String>]
-    def initialize(config, args)
+    def initialize(config, args, input)
       @config = config
       @args = args
+      @input = input
     end
 
     # Returns the camel-cased type of this hook (e.g. PreCommit)

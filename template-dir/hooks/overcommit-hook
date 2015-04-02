@@ -45,7 +45,7 @@ begin
 
   config = Overcommit::ConfigurationLoader.load_repo_config
 
-  context = Overcommit::HookContext.create(hook_type, config, ARGV)
+  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
   config.apply_environment!(context, ENV)
 
   printer = Overcommit::Printer.new(logger, context)
