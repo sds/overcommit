@@ -108,13 +108,17 @@ describe Overcommit::Utils do
   describe '.supported_hook_types' do
     subject { described_class.supported_hook_types }
 
-    it { should =~ %w[commit-msg pre-commit post-checkout post-commit post-merge post-rewrite] }
+    # rubocop:disable Metrics/LineLength
+    it { should =~ %w[commit-msg pre-commit post-checkout post-commit post-merge post-rewrite pre-push] }
+    # rubocop:enable Metrics/LineLength
   end
 
   describe '.supported_hook_type_classes' do
     subject { described_class.supported_hook_type_classes }
 
-    it { should =~ %w[CommitMsg PreCommit PostCheckout PostCommit PostMerge PostRewrite] }
+    # rubocop:disable Metrics/LineLength
+    it { should =~ %w[CommitMsg PreCommit PostCheckout PostCommit PostMerge PostRewrite PrePush] }
+    # rubocop:enable Metrics/LineLength
   end
 
   describe '.execute' do
