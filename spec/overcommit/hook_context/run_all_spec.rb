@@ -4,7 +4,8 @@ require 'overcommit/hook_context/run_all'
 describe Overcommit::HookContext::RunAll do
   let(:config) { double('config') }
   let(:args) { [] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#modified_files' do
     subject { context.modified_files }
