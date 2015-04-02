@@ -4,10 +4,11 @@ require 'overcommit/hook_context/post_checkout'
 describe Overcommit::HookContext::PostCheckout do
   let(:config) { double('config') }
   let(:args) { [previous_head, new_head, branch_flag] }
+  let(:input) { double('input') }
   let(:previous_head) { random_hash }
   let(:new_head) { random_hash }
   let(:branch_flag) { '1' }
-  let(:context) { described_class.new(config, args) }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#previous_head' do
     subject { context.previous_head }

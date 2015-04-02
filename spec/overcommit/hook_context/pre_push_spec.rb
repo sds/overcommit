@@ -4,9 +4,10 @@ require 'overcommit/hook_context/pre_push'
 describe Overcommit::HookContext::PrePush do
   let(:config) { double('config') }
   let(:args) { [remote_name, remote_url] }
+  let(:input) { double('input') }
   let(:remote_name) { 'origin' }
   let(:remote_url) { 'git@github.com:brigade/overcommit.git' }
-  let(:context) { described_class.new(config, args) }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#remote_name' do
     subject { context.remote_name }

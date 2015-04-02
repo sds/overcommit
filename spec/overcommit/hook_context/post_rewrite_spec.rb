@@ -3,7 +3,8 @@ require 'overcommit/hook_context/post_rewrite'
 
 describe Overcommit::HookContext::PostRewrite do
   let(:config) { double('config') }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#amend?' do
     subject { context.amend? }

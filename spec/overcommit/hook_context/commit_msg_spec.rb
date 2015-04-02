@@ -4,7 +4,8 @@ require 'overcommit/hook_context/commit_msg'
 describe Overcommit::HookContext::CommitMsg do
   let(:config) { double('config') }
   let(:args) { [commit_message_file] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
   let(:commit_msg) do
     [
       '# Please enter the commit message for your changes.',

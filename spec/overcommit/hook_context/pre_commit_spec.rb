@@ -4,7 +4,8 @@ require 'overcommit/hook_context/pre_commit'
 describe Overcommit::HookContext::PreCommit do
   let(:config) { double('config') }
   let(:args) { [] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#setup_environment' do
     subject { context.setup_environment }

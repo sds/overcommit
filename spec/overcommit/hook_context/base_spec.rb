@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Overcommit::HookContext::Base do
   let(:config) { double('config') }
   let(:args) { [] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#hook_class_name' do
     subject { context.hook_class_name }

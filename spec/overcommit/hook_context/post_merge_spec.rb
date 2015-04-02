@@ -4,7 +4,8 @@ require 'overcommit/hook_context/post_merge'
 describe Overcommit::HookContext::PostMerge do
   let(:config) { double('config') }
   let(:args) { [] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#squash?' do
     subject { context.squash? }

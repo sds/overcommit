@@ -4,7 +4,8 @@ require 'overcommit/hook_context/post_commit'
 describe Overcommit::HookContext::PostCommit do
   let(:config) { double('config') }
   let(:args) { [] }
-  let(:context) { described_class.new(config, args) }
+  let(:input) { double('input') }
+  let(:context) { described_class.new(config, args, input) }
 
   describe '#modified_files' do
     subject { context.modified_files }
