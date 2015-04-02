@@ -13,4 +13,14 @@ describe Overcommit::HookContext::Base do
       subject.should == 'Base'
     end
   end
+
+  describe '#input_lines' do
+    subject { context.input_lines }
+
+    before do
+      input.stub(:read).and_return("line 1\nline 2\n")
+    end
+
+    it { should == ['line 1', 'line 2'] }
+  end
 end
