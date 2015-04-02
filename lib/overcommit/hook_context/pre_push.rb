@@ -17,12 +17,6 @@ module Overcommit::HookContext
       end
     end
 
-    private
-
-    def input_lines
-      @input_lines ||= ARGF.read.split("\n")
-    end
-
     PushedCommit = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
       def to_s
         "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
