@@ -465,3 +465,16 @@ PostRewrite:
     enabled: false
     description: 'Generating tags file from source'
     required_executable: 'ctags'
+
+# Hooks that run during `git push`, after remote refs have been updated but
+# before any objects have been transferred.
+PrePush:
+  ALL:
+    requires_files: false
+    required: false
+    quiet: false
+
+  Rspec:
+    enabled: false
+    description: 'Running rspec test suite'
+    required_executable: 'rspec'
