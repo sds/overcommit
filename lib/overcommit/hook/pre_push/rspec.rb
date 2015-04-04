@@ -6,7 +6,7 @@ module Overcommit::Hook::PrePush
       return :pass if result.success?
 
       output = result.stdout + result.stderr
-      [Overcommit::Hook::Message.new(:error, nil, nil, output)]
+      [:fail, output]
     end
   end
 end
