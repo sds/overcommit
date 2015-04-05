@@ -11,13 +11,13 @@ module Overcommit::HookContext
       @args[1]
     end
 
-    def pushed_commits
+    def pushed_refs
       input_lines.map do |line|
-        PushedCommit.new(*line.split(' '))
+        PushedRef.new(*line.split(' '))
       end
     end
 
-    PushedCommit = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
+    PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
       def to_s
         "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
       end

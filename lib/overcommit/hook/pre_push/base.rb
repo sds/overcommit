@@ -5,6 +5,6 @@ module Overcommit::Hook::PrePush
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegators :@context, :remote_name, :remote_url, :pushed_commits
+    def_delegators :@context, :remote_name, :remote_url, :pushed_refs
   end
 end

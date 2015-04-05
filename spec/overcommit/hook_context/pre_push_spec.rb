@@ -21,8 +21,8 @@ describe Overcommit::HookContext::PrePush do
     it { should == remote_url }
   end
 
-  describe '#pushed_commits' do
-    subject(:pushed_commits) { context.pushed_commits }
+  describe '#pushed_refs' do
+    subject(:pushed_refs) { context.pushed_refs }
 
     let(:local_ref) { 'refs/heads/master' }
     let(:local_sha1) { random_hash }
@@ -34,12 +34,12 @@ describe Overcommit::HookContext::PrePush do
     end
 
     it 'should parse commit info from the input' do
-      pushed_commits.length.should == 1
-      pushed_commits.each do |pushed_commit|
-        pushed_commit.local_ref.should == local_ref
-        pushed_commit.local_sha1.should == local_sha1
-        pushed_commit.remote_ref.should == remote_ref
-        pushed_commit.remote_sha1.should == remote_sha1
+      pushed_refs.length.should == 1
+      pushed_refs.each do |pushed_ref|
+        pushed_ref.local_ref.should == local_ref
+        pushed_ref.local_sha1.should == local_sha1
+        pushed_ref.remote_ref.should == remote_ref
+        pushed_ref.remote_sha1.should == remote_sha1
       end
     end
   end
