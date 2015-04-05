@@ -18,6 +18,18 @@ module Overcommit::HookContext
     end
 
     PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
+      def forced?
+        `git rev-list #{remote_sha1} ^#{local_sha1}`.chomp.any?
+      end
+
+      def created?
+        remote_sha1 == '0' * 40
+      end
+
+      def deleted?
+        local_sha1 == '0' * 40
+      end
+
       def to_s
         "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
       end
