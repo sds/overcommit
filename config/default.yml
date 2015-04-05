@@ -474,6 +474,11 @@ PrePush:
     required: false
     quiet: false
 
+  ProtectedBranches:
+    enabled: false
+    description: 'Checking for illegal pushes to protected branches'
+    branches: ['master']
+
   Rspec:
     enabled: false
     description: 'Running rspec test suite'
