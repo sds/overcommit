@@ -473,6 +473,12 @@ PostMerge:
     description: 'Generating tags file from source'
     required_executable: 'ctags'
 
+  SubmoduleStatus:
+    enabled: false
+    description: 'Checking submodule status'
+    required_executable: 'git'
+    flags: ['submodule', 'status']
+
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
   ALL:
