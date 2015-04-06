@@ -18,9 +18,9 @@ module Overcommit::HookContext
       if !initial_commit? && any_changes?
         @stash_attempted = true
 
+        stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
         result = Overcommit::Utils.execute(
-          %w[git stash save --keep-index --quiet] +
-          ["Overcommit: Stash of repo state before hook run at #{Time.now}"]
+          %w[git stash save --keep-index --quiet] + [stash_message]
         )
 
         unless result.success?
@@ -31,8 +31,7 @@ module Overcommit::HookContext
                 "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
         end
 
-        # False if only submodule references were changed
-        @changes_stashed = modified_files.any?
+        @changes_stashed = `git stash list -1`.include?(stash_message)
       end
 
       # While running the hooks make it appear as if nothing changed
