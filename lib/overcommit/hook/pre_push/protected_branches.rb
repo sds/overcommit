@@ -20,7 +20,7 @@ module Overcommit::Hook::PrePush
     def illegal_pushes
       @illegal_pushes ||= pushed_refs.select do |pushed_ref|
         (pushed_ref.deleted? || pushed_ref.forced?) &&
-          branches.any? { |branch| pushed_ref.remote_ref =~ /#{branch}/ }
+          branches.any? { |branch| pushed_ref.remote_ref == "refs/heads/#{branch}" }
       end
     end
   end
