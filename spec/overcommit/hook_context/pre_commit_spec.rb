@@ -226,6 +226,36 @@ describe Overcommit::HookContext::PreCommit do
         }.from(false)
       end
     end
+
+    context 'when submodule changes were staged along with other changes' do
+      around do |example|
+        submodule = repo do
+          `git commit --allow-empty -m "Initial commit"`
+        end
+
+        repo do
+          `git submodule add #{submodule} sub &>/dev/null`
+          `git commit -m "Add submodule"`
+          `echo "Hello World" > sub/submodule-file`
+          `git submodule foreach 'git add submodule-file'`
+          `git submodule foreach 'git commit -m "Another commit"'`
+          `echo "Hello Again" > tracked-file`
+          `git add sub tracked-file`
+          example.run
+        end
+      end
+
+      it 'keeps staged submodule change' do
+        expect { subject }.to_not change {
+          (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
+        }.from(false)
+      end
+
+      it 'keeps staged file change' do
+        subject
+        `git show :tracked-file`.should == "Hello Again\n"
+      end
+    end
   end
 
   describe '#modified_files' do
