@@ -7,9 +7,7 @@ describe Overcommit::Hook::CommitMsg::Spellcheck do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:update_commit_message)
-    subject.stub(:commit_message)
-    subject.stub(:commit_message_file)
+    subject.stub(:uncommented_commit_msg_file)
     subject.stub(:execute).and_return(result)
   end
 
