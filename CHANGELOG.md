@@ -36,6 +36,7 @@
 * Don't clear working tree after pre-commit hook when only submodule changes
   are present
 * Change hook summary message to mention warnings if there were any
+* Add `Rspec` pre-push hook that runs Rspec tests before pushing to remote
 
 ## 0.23.0
 
