@@ -53,7 +53,7 @@ describe Overcommit::HookContext::PreCommit do
 
       it 'keeps staged changes' do
         subject
-        File.open('tracked-file', 'r').read.should == "Hello World\nSome more text\n"
+        `git show :tracked-file`.should == "Hello World\nSome more text\n"
       end
 
       it 'keeps untracked files' do
@@ -168,6 +168,11 @@ describe Overcommit::HookContext::PreCommit do
         subject
         File.open('tracked-file', 'r').read.
           should == "Hello World\nSome more text\nYet some more text\n"
+      end
+
+      it 'keeps staged changes' do
+        subject
+        `git show :tracked-file`.should == "Hello World\nSome more text\n"
       end
 
       it 'keeps untracked files' do
