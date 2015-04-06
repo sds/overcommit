@@ -43,4 +43,92 @@ describe Overcommit::HookContext::PrePush do
       end
     end
   end
+
+  describe Overcommit::HookContext::PrePush::PushedRef do
+    let(:local_ref) { 'refs/heads/master' }
+    let(:remote_ref) { 'refs/heads/master' }
+    let(:local_sha1) { random_hash }
+    let(:remote_sha1) { random_hash }
+    let(:pushed_ref) { described_class.new(local_ref, local_sha1, remote_ref, remote_sha1) }
+
+    describe '#forced?' do
+      subject { pushed_ref.forced? }
+
+      context 'when creating a ref' do
+        before do
+          pushed_ref.stub(created?: true, deleted?: false)
+        end
+
+        it { should == false }
+      end
+
+      context 'when deleting a ref' do
+        before do
+          pushed_ref.stub(created?: false, deleted?: true)
+        end
+
+        it { should == false }
+      end
+
+      context 'when remote commits are not overwritten' do
+        before do
+          pushed_ref.stub(created?: false,
+                          deleted?: false,
+                          overwritten_commits: [])
+        end
+
+        it { should == false }
+      end
+
+      context 'when remote commits are overwritten' do
+        before do
+          pushed_ref.stub(created?: false,
+                          deleted?: false,
+                          overwritten_commits: [random_hash])
+        end
+
+        it { should == true }
+      end
+    end
+
+    describe '#created?' do
+      subject { pushed_ref.created? }
+
+      context 'when creating a ref' do
+        before do
+          pushed_ref.stub(:remote_sha1).and_return('0' * 40)
+        end
+
+        it { should == true }
+      end
+
+      context 'when not creating a ref' do
+        before do
+          pushed_ref.stub(:remote_sha1).and_return(random_hash)
+        end
+
+        it { should == false }
+      end
+    end
+
+    describe '#deleted?' do
+      subject { pushed_ref.deleted? }
+
+      context 'when deleting a ref' do
+        before do
+          pushed_ref.stub(:local_sha1).and_return('0' * 40)
+        end
+
+        it { should == true }
+      end
+
+      context 'when not deleting a ref' do
+        before do
+          pushed_ref.stub(:local_sha1).and_return(random_hash)
+        end
+
+        it { should == false }
+      end
+    end
+  end
 end
