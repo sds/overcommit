@@ -490,6 +490,12 @@ PostRewrite:
     description: 'Generating tags file from source'
     required_executable: 'ctags'
 
+  SubmoduleStatus:
+    enabled: false
+    description: 'Checking submodule status'
+    required_executable: 'git'
+    flags: ['submodule', 'status']
+
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
 PrePush:
