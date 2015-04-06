@@ -40,6 +40,12 @@ CommitMsg:
   SingleLineSubject:
     description: 'Checking subject line'
 
+  Spellcheck:
+    enabled: false
+    description: 'Checking for misspelled words'
+    required_executable: 'hunspell'
+    flags: ['-a']
+
   TextWidth:
     description: 'Checking text width'
     max_subject_width: 60
