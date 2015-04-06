@@ -119,11 +119,19 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `echo "Hello World" > tracked-file`
-          `git add tracked-file`
-          `git commit -m "Add tracked-file"`
+          `echo "Hello Other World" > other-tracked-file`
+          `git add tracked-file other-tracked-file`
+          `git commit -m "Add tracked-file and other-tracked-file"`
           `echo "Hello Again" > untracked-file`
+          `echo "Some more text" >> other-tracked-file`
           example.run
         end
+      end
+
+      it 'restores the unstaged changes' do
+        subject
+        File.open('other-tracked-file', 'r').read.
+          should == "Hello Other World\nSome more text\n"
       end
 
       it 'keeps already-committed files' do
