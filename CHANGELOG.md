@@ -37,7 +37,8 @@
   are present
 * Change hook summary message to mention warnings if there were any
 * Add `Rspec` pre-push hook that runs Rspec tests before pushing to remote
-* Add `ProtectedBranches` pre-push hook that prevents pushes to specified branches
+* Add `ProtectedBranches` pre-push hook that prevents destructive pushes
+  (deletions or force pushes) to specified branches
 
 ## 0.23.0
 
