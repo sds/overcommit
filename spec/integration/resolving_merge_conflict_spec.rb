@@ -3,17 +3,8 @@ require 'spec_helper'
 describe 'resolving merge conflicts' do
   subject { shell(%w[git commit -m "Resolve conflicts" -i some-file]) }
 
-  let(:config) { <<-YML }
-    PostCheckout:
-      ALL:
-        enabled: false
-  YML
-
   around do |example|
     repo do
-      File.open('.overcommit.yml', 'w') { |f| f.write(config) }
-      `git add .overcommit.yml`
-      `git commit -m "Add Overcommit config"`
       `echo "Master" > some-file`
       `git add some-file`
       `git commit -m "Add some-file"`
