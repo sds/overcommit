@@ -489,3 +489,11 @@ PrePush:
     enabled: false
     description: 'Running rspec test suite'
     required_executable: 'rspec'
+
+# Hooks that run during `git rebase`, before any commits are rebased.
+# If a hook fails, the rebase is aborted.
+PreRebase:
+  ALL:
+    requires_files: false
+    required: false
+    quiet: false
