@@ -27,8 +27,9 @@ module Overcommit::HookContext
     # Returns the SHA1-sums of the series of commits to be rebased
     # in reverse topological order.
     def rebased_commits
+      rebased_ref = detached_head? ? 'HEAD' : rebased_branch
       @rebased_commits ||=
-        `git rev-list --topo-order --reverse #{upstream_branch}..#{rebased_branch}`.
+        `git rev-list --topo-order --reverse #{upstream_branch}..#{rebased_ref}`.
           split("\n")
     end
   end
