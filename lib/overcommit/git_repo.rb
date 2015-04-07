@@ -11,6 +11,50 @@ module Overcommit
       \s@@.*$
     /x
 
+    # Regular expression used to extract information from lines of
+    # `git submodule status` output
+    SUBMODULE_STATUS_REGEX = /
+      ^\s*(?<prefix>[-+U]?)(?<sha1>\w+)
+      \s(?<path>[^\s]+?)
+      (?:\s\((?<describe>.+)\))?$
+    /x
+
+    # Struct encapsulating submodule information extracted from the
+    # output of `git submodule status`
+    SubmoduleStatus = Struct.new(:prefix, :sha1, :path, :describe) do
+      # Returns whether the submodule has not been initialized
+      def uninitialized?
+        prefix == '-'
+      end
+
+      # Returns whether the submodule is out of date with the current
+      # index, i.e. its checked-out commit differs from that stored in
+      # the index of the parent repo
+      def outdated?
+        prefix == '+'
+      end
+
+      # Returns whether the submodule reference has a merge conflict
+      def merge_conflict?
+        prefix == 'U'
+      end
+    end
+
+    # Returns a list of SubmoduleStatus objects, one for each submodule in the
+    # parent repository.
+    #
+    # @option options [Boolean] recursive check submodules recursively
+    # @return [Array<SubmoduleStatus>]
+    def submodule_statuses(options = {})
+      flags = '--recursive' if options[:recursive]
+
+      `git submodule status #{flags}`.
+        scan(SUBMODULE_STATUS_REGEX).
+        map do |prefix, sha1, path, describe|
+          SubmoduleStatus.new(prefix, sha1, path, describe)
+        end
+    end
+
     # Extract the set of modified lines from a given file.
     #
     # @param file_path [String]
