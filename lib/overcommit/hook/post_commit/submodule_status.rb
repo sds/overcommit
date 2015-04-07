@@ -3,30 +3,7 @@ module Overcommit::Hook::PostCommit
   # notifies the user if any are uninitialized, out of date with
   # the current index, or contain merge conflicts.
   class SubmoduleStatus < Base
-    SUBMODULE_STATUS_REGEX = /
-      ^\s*(?<prefix>[-+U]?)(?<sha1>\w+)
-      \s(?<path>[^\s]+?)
-      (?:\s\((?<describe>.+)\))?$
-    /x
-
-    SubmoduleStatus = Struct.new(:prefix, :sha1, :path, :describe) do
-      def uninitialized?
-        prefix == '-'
-      end
-
-      def outdated?
-        prefix == '+'
-      end
-
-      def merge_conflict?
-        prefix == 'U'
-      end
-    end
-
     def run
-      result = execute(command)
-      submodule_statuses = parse_submodule_statuses(result.stdout)
-
       messages = []
       submodule_statuses.each do |submodule_status|
         path = submodule_status.path
@@ -46,10 +23,8 @@ module Overcommit::Hook::PostCommit
 
     private
 
-    def parse_submodule_statuses(output)
-      output.scan(SUBMODULE_STATUS_REGEX).map do |prefix, sha1, path, describe|
-        SubmoduleStatus.new(prefix, sha1, path, describe)
-      end
+    def submodule_statuses
+      Overcommit::GitRepo.submodule_statuses(recursive: config['recursive'])
     end
   end
 end
