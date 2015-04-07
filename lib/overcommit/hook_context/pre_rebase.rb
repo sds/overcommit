@@ -12,6 +12,11 @@ module Overcommit::HookContext
       @args[1] || `git symbolic-ref --short --quiet HEAD`.chomp
     end
 
+    # Returns whether we are rebasing a detached HEAD rather than a branch
+    def detached_head?
+      rebased_branch.empty?
+    end
+
     # Returns whether this rebase is a fast-forward
     def fast_forward?
       rebased_commits.empty?

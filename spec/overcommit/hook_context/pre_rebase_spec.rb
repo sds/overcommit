@@ -55,6 +55,22 @@ describe Overcommit::HookContext::PreRebase do
     end
   end
 
+  describe '#detached_head?' do
+    subject { context.detached_head? }
+
+    context 'when rebasing a detached HEAD' do
+      let(:rebased_branch) { '' }
+
+      it { should == true }
+    end
+
+    context 'when rebasing a branch' do
+      let(:rebased_branch) { 'topic' }
+
+      it { should == false }
+    end
+  end
+
   describe '#rebased_commits' do
     subject { context.rebased_commits }
 
