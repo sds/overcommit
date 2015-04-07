@@ -433,6 +433,7 @@ PostCheckout:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
+    quiet: true
     recursive: false
 
 # Hooks that run after a commit is created.
@@ -458,6 +459,7 @@ PostCommit:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
+    quiet: true
     recursive: false
 
 # Hooks that run after `git merge` executes successfully (no merge conflicts).
@@ -474,6 +476,7 @@ PostMerge:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
+    quiet: true
     recursive: false
 
 # Hooks that run after a commit is modified by an amend or rebase.
@@ -490,6 +493,7 @@ PostRewrite:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
+    quiet: true
     recursive: false
 
 # Hooks that run during `git push`, after remote refs have been updated but
