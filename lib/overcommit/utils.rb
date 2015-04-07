@@ -124,15 +124,14 @@ module Overcommit
       # which we do not need to know the result.
       #
       # @param args [Array<String>]
-      # @return [Thread] thread watching the resulting child process
+      # @return [ChildProcess] thread watching the resulting child process
       def execute_in_background(args)
         if args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Cannot pipe commands with the `execute_in_background` helper'
         end
 
-        # Dissociate process from parent's input/output streams
-        Process.detach(Process.spawn({}, *args, [:in, :out, :err] => '/dev/null'))
+        Subprocess.spawn_in_background(args)
       end
 
       # Calls a block of code with a modified set of environment variables,
