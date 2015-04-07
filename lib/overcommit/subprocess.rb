@@ -29,6 +29,18 @@ module Overcommit
         Result.new(process.exit_code, out.read, err.read)
       end
 
+      # Spawns a new process in the background using the given array of
+      # arguments (the first element is the command).
+      #
+      # @return [ChildProcess]
+      def spawn_in_background(args)
+        process = ChildProcess.build(*args)
+
+        assign_output_streams(process)
+
+        process.start
+      end
+
       private
 
       # @param process [ChildProcess]
