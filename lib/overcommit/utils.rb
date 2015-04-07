@@ -131,8 +131,7 @@ module Overcommit
                 'Cannot pipe commands with the `execute_in_background` helper'
         end
 
-        # Dissociate process from parent's input/output streams
-        Process.detach(Process.spawn({}, *args, [:in, :out, :err] => '/dev/null'))
+        Subprocess.spawn_detached(args)
       end
 
       # Calls a block of code with a modified set of environment variables,
