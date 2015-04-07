@@ -4,9 +4,9 @@ describe 'resolving cherry-pick conflicts' do
   subject { shell(%w[git commit -m "Resolve conflicts" -i some-file]) }
 
   let(:config) { <<-YML }
-    PostCheckout:
-      ALL:
-        enabled: false
+    PreCommit:
+      TrailingWhitespace:
+        enabled: true
   YML
 
   around do |example|

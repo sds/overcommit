@@ -43,6 +43,10 @@
 * Add `SubmoduleStatus` `post-checkout`, `post-commit`, `post-merge`, and
   `post-rewrite` hooks that warn when submodules are uninitialized, out of date
   with the current index, or contain merge conflicts
+* Disable almost all hooks by default. You will now need to explicitly enable
+  almost all hooks yourself in your `.overcommit.yml`. If you are migrating from
+  `overcommit` 0.23.0 and want to use the default configuration that shipped
+  with that version, copy the [default configuration from 0.23.0](https://github.com/brigade/overcommit/blob/9f03e9c82b385d375a836ca7146b117dbde5c822/config/default.yml)
 
 ## 0.23.0
 

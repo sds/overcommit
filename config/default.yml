@@ -23,6 +23,7 @@ CommitMsg:
     quiet: false
 
   CapitalizedSubject:
+    enabled: true
     description: 'Checking subject capitalization'
 
   GerritChangeId:
@@ -31,13 +32,16 @@ CommitMsg:
     required: true
 
   HardTabs:
+    enabled: false
     description: 'Checking for hard tabs'
 
   RussianNovel:
+    enabled: false
     description: 'Checking length of commit message'
     quiet: true
 
   SingleLineSubject:
+    enabled: true
     description: 'Checking subject line'
 
   Spellcheck:
@@ -47,11 +51,13 @@ CommitMsg:
     flags: ['-a']
 
   TextWidth:
+    enabled: true
     description: 'Checking text width'
     max_subject_width: 60
     max_body_width: 72
 
   TrailingPeriod:
+    enabled: true
     description: 'Checking for trailing periods in subject'
 
 # Hooks that are run after `git commit` is executed, before the commit message
@@ -66,6 +72,7 @@ PreCommit:
     quiet: false
 
   AuthorEmail:
+    enabled: true
     description: 'Checking author email'
     requires_files: false
     required: true
@@ -73,12 +80,14 @@ PreCommit:
     pattern: '^[^@]+@.*$'
 
   AuthorName:
+    enabled: true
     description: 'Checking for author name'
     requires_files: false
     required: true
     quiet: true
 
   BerksfileCheck:
+    enabled: false
     description: 'Checking Berksfile lock'
     required_executable: 'berks'
     flags: ['list', '--quiet']
@@ -97,10 +106,12 @@ PreCommit:
       - '**/*.rb'
 
   BrokenSymlinks:
+    enabled: true
     description: 'Checking for broken symlinks'
     quiet: true
 
   BundleCheck:
+    enabled: false
     description: 'Checking Gemfile dependencies'
     required_executable: 'bundle'
     flags: ['check']
@@ -111,6 +122,7 @@ PreCommit:
       - '*.gemspec'
 
   CaseConflicts:
+    enabled: true
     description: 'Checking for case-insensitivity conflicts'
     quiet: true
 
@@ -125,6 +137,7 @@ PreCommit:
       - 'config/settings/**/*.yml'
 
   CoffeeLint:
+    enabled: false
     description: 'Analyzing with coffeelint'
     required_executable: 'coffeelint'
     required_library: 'json'
@@ -133,6 +146,7 @@ PreCommit:
     include: '**/*.coffee'
 
   CssLint:
+    enabled: false
     description: 'Analyzing with csslint'
     required_executable: 'csslint'
     flags: ['--quiet', '--format=compact']
@@ -140,6 +154,7 @@ PreCommit:
     include: '**/*.css'
 
   EsLint:
+    enabled: false
     description: 'Analyzing with ESLint'
     required_executable: 'eslint'
     flags: ['--format=compact']
@@ -147,12 +162,14 @@ PreCommit:
     include: '**/*.js'
 
   GoLint:
+    enabled: false
     description: 'Analyzing with golint'
     required_executable: 'golint'
     install_command: 'go get github.com/golang/lint/golint'
     include: '**/*.go'
 
   GoVet:
+    enabled: false
     description: 'Analyzing with go vet'
     required_executable: 'go'
     flags: ['tool', 'vet']
@@ -160,12 +177,14 @@ PreCommit:
     include: '**/*.go'
 
   HamlLint:
+    enabled: false
     description: 'Analyzing with haml-lint'
     required_executable: 'haml-lint'
     install_command: 'gem install haml-lint'
     include: '**/*.haml'
 
   HardTabs:
+    enabled: false
     description: 'Checking for hard tabs'
     quiet: true
     required_executable: 'grep'
@@ -184,6 +203,7 @@ PreCommit:
     include: '**/*.html'
 
   ImageOptim:
+    enabled: false
     description: 'Checking for optimizable images'
     required_executable: 'image_optim'
     install_command: 'gem install image_optim'
@@ -194,12 +214,14 @@ PreCommit:
       - '**/*.png'
 
   JavaCheckstyle:
+    enabled: false
     description: 'Analyzing with checkstyle'
     required_executable: 'checkstyle'
     flags: ['-c', '/sun_checks.xml']
     include: '**/*.java'
 
   Jscs:
+    enabled: false
     description: 'Analyzing with JSCS'
     required_executable: 'jscs'
     flags: ['--reporter=inline', '--verbose']
@@ -207,6 +229,7 @@ PreCommit:
     include: '**/*.js'
 
   JsHint:
+    enabled: false
     description: 'Analyzing with JSHint'
     required_executable: 'jshint'
     flags: ['--verbose']
@@ -214,6 +237,7 @@ PreCommit:
     include: '**/*.js'
 
   JsLint:
+    enabled: false
     description: 'Analyzing with JSLint'
     required_executable: 'jslint'
     flags: ['--terse']
@@ -228,24 +252,28 @@ PreCommit:
     include: '**/*.js'
 
   JsonSyntax:
+    enabled: false
     description: 'Validating JSON syntax'
     required_library: 'json'
     install_command: 'gem install json'
     include: '**/*.json'
 
   LocalPathsInGemfile:
+    enabled: false
     description: 'Checking for local paths in Gemfile'
     required_executable: 'grep'
     flags: ['-IHnE', '^[^#]*((\bpath:)|(:path\s*=>))']
     include: '**/Gemfile'
 
   MergeConflicts:
+    enabled: true
     description: 'Checking for merge conflicts'
     quiet: true
     required_executable: 'grep'
     flags: ['-IHn', '^<<<<<<<\s']
 
   Pep257:
+    enabled: false
     description: 'Analyzing docstrings with pep257'
     required_executable: 'pep257'
     install_command: 'pip install pep257'
@@ -259,6 +287,7 @@ PreCommit:
     include: '**/*.py'
 
   PryBinding:
+    enabled: false
     description: 'Checking for instances of binding.pry'
     quiet: true
     include:
@@ -273,6 +302,7 @@ PreCommit:
     include: '**/*.py'
 
   Pylint:
+    enabled: false
     description: 'Analyzing with Pylint'
     required_executable: 'pylint'
     install_command: 'pip install pylint'
@@ -283,12 +313,14 @@ PreCommit:
     include: '**/*.py'
 
   PythonFlake8:
+    enabled: false
     description: 'Analyzing with flake8'
     required_executable: 'flake8'
     install_command: 'pip install flake8'
     include: '**/*.py'
 
   RailsSchemaUpToDate:
+    enabled: false
     description: 'Checking if database schema is up to date'
     include:
       - 'db/migrate/*.rb'
@@ -309,6 +341,7 @@ PreCommit:
       - '**/Rakefile'
 
   Rubocop:
+    enabled: false
     description: 'Analyzing with Rubocop'
     required_executable: 'rubocop'
     flags: ['--format=emacs', '--force-exclusion']
@@ -331,11 +364,13 @@ PreCommit:
       - '**/*.rb'
 
   Scalastyle:
+    enabled: false
     description: 'Analyzing with Scalastyle'
     required_executable: 'scalastyle'
     include: '**/*.scala'
 
   ScssLint:
+    enabled: false
     description: 'Analyzing with scss-lint'
     required_executable: 'scss-lint'
     install_command: 'gem install scss-lint'
@@ -365,6 +400,7 @@ PreCommit:
     include: '**/*.js'
 
   TrailingWhitespace:
+    enabled: false
     description: 'Checking for trailing whitespace'
     required_executable: 'grep'
     flags: ['-IHn', '\s$']
@@ -372,6 +408,7 @@ PreCommit:
       - '**/*.md'
 
   TravisLint:
+    enabled: false
     description: 'Checking Travis CI configuration'
     required_executable: 'travis'
     flags: ['lint']
@@ -402,17 +439,20 @@ PreCommit:
       - '**/*.html'
 
   XmlLint:
+    enabled: false
     description: 'Analyzing with xmllint'
     required_executable: 'xmllint'
     flags: ['--noout']
     include: '**/*.xml'
 
   XmlSyntax:
+    enabled: false
     description: 'Checking XML syntax'
     required_library: 'rexml/document'
     include: '**/*.xml'
 
   YamlSyntax:
+    enabled: false
     description: 'Checking YAML syntax'
     required_library: 'yaml'
     include:
