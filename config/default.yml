@@ -433,8 +433,7 @@ PostCheckout:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
-    required_executable: 'git'
-    flags: ['submodule', 'status']
+    recursive: false
 
 # Hooks that run after a commit is created.
 PostCommit:
@@ -459,8 +458,7 @@ PostCommit:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
-    required_executable: 'git'
-    flags: ['submodule', 'status']
+    recursive: false
 
 # Hooks that run after `git merge` executes successfully (no merge conflicts).
 PostMerge:
@@ -476,8 +474,7 @@ PostMerge:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
-    required_executable: 'git'
-    flags: ['submodule', 'status']
+    recursive: false
 
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
@@ -493,8 +490,7 @@ PostRewrite:
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
-    required_executable: 'git'
-    flags: ['submodule', 'status']
+    recursive: false
 
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
