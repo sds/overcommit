@@ -40,6 +40,9 @@
 * Add `ProtectedBranches` pre-push hook that prevents destructive pushes
   (deletions or force pushes) to specified branches
 * Add support for `pre-rebase` hooks
+* Add `SubmoduleStatus` `post-checkout`, `post-commit`, `post-merge`, and
+  `post-rewrite` hooks that warn when submodules are uninitialized, out of date
+  with the current index, or contain merge conflicts
 
 ## 0.23.0
 
