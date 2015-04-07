@@ -39,6 +39,7 @@
 * Add `Rspec` pre-push hook that runs Rspec tests before pushing to remote
 * Add `ProtectedBranches` pre-push hook that prevents destructive pushes
   (deletions or force pushes) to specified branches
+* Add support for `pre-rebase` hooks
 
 ## 0.23.0
 
