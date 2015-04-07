@@ -189,11 +189,6 @@ PreCommit:
     quiet: true
     required_executable: 'grep'
     flags: ['-IHn', "\t"]
-    exclude:
-      - '**/*.go'
-      - 'Godeps/Godeps.json'
-      - '**/Makefile'
-      - '.gitmodules'
 
   HtmlTidy:
     enabled: false
@@ -404,8 +399,6 @@ PreCommit:
     description: 'Checking for trailing whitespace'
     required_executable: 'grep'
     flags: ['-IHn', '\s$']
-    exclude:
-      - '**/*.md'
 
   TravisLint:
     enabled: false
