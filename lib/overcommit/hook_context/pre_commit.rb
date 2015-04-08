@@ -8,6 +8,15 @@ module Overcommit::HookContext
   # etc. It is also responsible for saving/restoring the state of the repo so
   # hooks only inspect staged changes.
   class PreCommit < Base # rubocop:disable ClassLength
+    # Returns whether this hook run was triggered by `git commit --amend`
+    def amend?
+      cmd = Overcommit::Utils.parent_command
+      amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
+        slice(/(?<=alias\.)\w+/)
+
+      (/--amend|git #{amend_alias}/ =~ cmd) != nil
+    end
+
     # Stash unstaged contents of files so hooks don't see changes that aren't
     # about to be committed.
     def setup_environment
@@ -80,15 +89,6 @@ module Overcommit::HookContext
       @modified_lines ||= {}
       @modified_lines[file] ||=
         Overcommit::GitRepo.extract_modified_lines(file, staged: true)
-    end
-
-    # Returns whether this hook run was triggered by `git commit --amend`
-    def amend?
-      cmd = Overcommit::Utils.parent_command
-      amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
-        slice(/(?<=alias\.)\w+/)
-
-      (/--amend|git #{amend_alias}/ =~ cmd) != nil
     end
 
     private
