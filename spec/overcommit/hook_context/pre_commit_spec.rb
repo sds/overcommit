@@ -7,6 +7,41 @@ describe Overcommit::HookContext::PreCommit do
   let(:input) { double('input') }
   let(:context) { described_class.new(config, args, input) }
 
+  describe '#amend?' do
+    subject { context.amend? }
+
+    context 'when amending a commit using `git commit --amend`' do
+      before do
+        Overcommit::Utils.stub(:parent_command).and_return('git commit --amend')
+      end
+
+      it { should == true }
+    end
+
+    context 'when amending a commit using a git alias' do
+      around do |example|
+        repo do
+          `git config alias.amend 'commit --amend'`
+          example.run
+        end
+      end
+
+      before do
+        Overcommit::Utils.stub(:parent_command).and_return('git amend')
+      end
+
+      it { should == true }
+    end
+
+    context 'when not amending a commit' do
+      before do
+        Overcommit::Utils.stub(:parent_command).and_return('git commit')
+      end
+
+      it { should == false }
+    end
+  end
+
   describe '#setup_environment' do
     subject { context.setup_environment }
 
