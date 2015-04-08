@@ -121,6 +121,16 @@ describe Overcommit::Utils do
     # rubocop:enable Metrics/LineLength
   end
 
+  describe '.parent_command' do
+    subject { described_class.parent_command }
+
+    before do
+      Process.stub(:ppid) { Process.pid }
+    end
+
+    it { should =~ /rspec/ }
+  end
+
   describe '.execute' do
     let(:arguments) { %w[echo -n Hello World] }
     subject { described_class.execute(arguments) }
