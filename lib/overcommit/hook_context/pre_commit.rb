@@ -9,17 +9,26 @@ module Overcommit::HookContext
   # hooks only inspect staged changes.
   class PreCommit < Base # rubocop:disable ClassLength
     # Returns whether this hook run was triggered by `git commit --amend`
-    def amend?
-      if @amended.nil?
-        cmd = Overcommit::Utils.parent_command
-        @amended = !(/--amend/ =~ cmd).nil?
+    def amendment?
+      return @amendment unless @amendment.nil?
 
-        amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
-          slice(/(?<=alias\.)\w+/)
+      cmd = Overcommit::Utils.parent_command
+      amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
 
-        @amended ||= !(/git #{amend_alias}/ =~ cmd).nil? unless amend_alias.nil?
-      end
-      @amended
+      return @amendment if
+        # True if the command is a commit with the --amend flag
+        @amendment = !(/\s#{amend_pattern}/ =~ cmd).nil?
+
+      # Check for git aliases that call `commit --amend`
+      `git config --get-regexp '^alias\\.' '#{amend_pattern}'`.
+        scan(/alias\.([-\w]+)/). # Extract the alias
+        each do |match|
+          return @amendment if
+            # True if the command uses a git alias for `commit --amend`
+            @amendment = !(/git\s+#{match[0]}/ =~ cmd).nil?
+        end
+
+      @amendment
     end
 
     # Stash unstaged contents of files so hooks don't see changes that aren't
@@ -78,7 +87,16 @@ module Overcommit::HookContext
     # Get a list of added, copied, or modified files that have been staged.
     # Renames and deletions are ignored, since there should be nothing to check.
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.modified_files(staged: true)
+      unless @modified_files
+        @modified_files = Overcommit::GitRepo.modified_files(staged: true)
+
+        # Include files modified in last commit if amending
+        if amendment?
+          subcmd = 'show --format=%n'
+          @modified_files += Overcommit::GitRepo.modified_files(subcmd: subcmd)
+        end
+      end
+      @modified_files
     end
 
     # @deprecated
@@ -92,8 +110,18 @@ module Overcommit::HookContext
     # changed in a specified file.
     def modified_lines_in_file(file)
       @modified_lines ||= {}
-      @modified_lines[file] ||=
-        Overcommit::GitRepo.extract_modified_lines(file, staged: true)
+      unless @modified_lines[file]
+        @modified_lines[file] =
+          Overcommit::GitRepo.extract_modified_lines(file, staged: true)
+
+        # Include lines modified in last commit if amending
+        if amendment?
+          subcmd = 'show --format=%n'
+          @modified_lines[file] +=
+            Overcommit::GitRepo.extract_modified_lines(file, subcmd: subcmd)
+        end
+      end
+      @modified_lines[file]
     end
 
     private

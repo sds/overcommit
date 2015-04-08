@@ -7,13 +7,15 @@ describe Overcommit::HookContext::PreCommit do
   let(:input) { double('input') }
   let(:context) { described_class.new(config, args, input) }
 
-  describe '#amend?' do
-    subject { context.amend? }
+  describe '#amendment?' do
+    subject { context.amendment? }
+
+    before do
+      Overcommit::Utils.stub(:parent_command).and_return(command)
+    end
 
     context 'when amending a commit using `git commit --amend`' do
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git commit --amend')
-      end
+      let(:command) { 'git commit --amend' }
 
       it { should == true }
     end
@@ -22,23 +24,43 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `git config alias.amend 'commit --amend'`
+          `git config alias.other-amend 'commit --amend'`
           example.run
         end
       end
 
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git amend')
+      context 'when using one of multiple aliases' do
+        let(:command) { 'git amend' }
+
+        it { should == true }
       end
 
-      it { should == true }
+      context 'when using another of multiple aliases' do
+        let(:command) { 'git other-amend' }
+
+        it { should == true }
+      end
     end
 
     context 'when not amending a commit' do
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git commit')
+      context 'using `git commit`' do
+        let(:command) { 'git commit' }
+
+        it { should == false }
       end
 
-      it { should == false }
+      context 'using a git alias containing "--amend"' do
+        let(:command) { 'git no--amend' }
+
+        around do |example|
+          repo do
+            `git config alias.no--amend commit`
+            example.run
+          end
+        end
+
+        it { should == false }
+      end
     end
   end
 
@@ -296,6 +318,10 @@ describe Overcommit::HookContext::PreCommit do
   describe '#modified_files' do
     subject { context.modified_files }
 
+    before do
+      context.stub(:amendment?).and_return(false)
+    end
+
     it 'does not include submodules' do
       submodule = repo do
         `touch foo`
@@ -358,6 +384,81 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it { should be_empty }
+    end
+
+    context 'when amending last commit' do
+      around do |example|
+        repo do
+          FileUtils.touch('some-file')
+          `git add some-file`
+          `git commit -m 'Initial commit'`
+          FileUtils.touch('other-file')
+          `git add other-file`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it { should =~ [File.expand_path('some-file'), File.expand_path('other-file')] }
+    end
+  end
+
+  describe '#modified_lines_in_file' do
+    let(:modified_file) { 'some-file' }
+    subject { context.modified_lines_in_file(modified_file) }
+
+    before do
+      context.stub(:amendment?).and_return(false)
+    end
+
+    context 'when file contains a trailing newline' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
+          `git add #{modified_file}`
+          example.run
+        end
+      end
+
+      it { should == Set.new(1..3) }
+    end
+
+    context 'when file does not contain a trailing newline' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') do |f|
+            (1..2).each { |i| f.write("#{i}\n") }
+            f.write(3)
+          end
+
+          `git add #{modified_file}`
+          example.run
+        end
+      end
+
+      it { should == Set.new(1..3) }
+    end
+
+    context 'when amending last commit' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
+          `git add #{modified_file}`
+          `git commit -m "Add files"`
+          File.open(modified_file, 'a') { |f| f.puts 4 }
+          `git add #{modified_file}`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it { should == Set.new(1..4) }
     end
   end
 end
