@@ -34,9 +34,24 @@ describe Overcommit::HookContext::PreCommit do
     end
 
     context 'when not amending a commit' do
-      let(:command) { 'git commit' }
+      context 'using `git commit`' do
+        let(:command) { 'git commit' }
 
-      it { should == false }
+        it { should == false }
+      end
+
+      context 'using a git alias containing "--amend"' do
+        let(:command) { 'git no--amend' }
+
+        around do |example|
+          repo do
+            `git config alias.no--amend commit`
+            example.run
+          end
+        end
+
+        it { should == false }
+      end
     end
   end
 
