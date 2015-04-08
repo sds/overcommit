@@ -10,16 +10,25 @@ module Overcommit::HookContext
   class PreCommit < Base # rubocop:disable ClassLength
     # Returns whether this hook run was triggered by `git commit --amend`
     def amendment?
-      if @amended.nil?
-        cmd = Overcommit::Utils.parent_command
-        @amended = !(/--amend/ =~ cmd).nil?
+      return @amendment unless @amendment.nil?
 
-        amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
-          slice(/(?<=alias\.)\w+/)
+      cmd = Overcommit::Utils.parent_command
+      amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
 
-        @amended ||= !(/git #{amend_alias}/ =~ cmd).nil? unless amend_alias.nil?
-      end
-      @amended
+      return @amendment if
+        # True if the command is a commit with the --amend flag
+        @amendment = !(/\s#{amend_pattern}/ =~ cmd).nil?
+
+      # Check for git aliases that call `commit --amend`
+      `git config --get-regexp '^alias\\.' '#{amend_pattern}'`.
+        scan(/alias\.([-\w]+)/). # Extract the alias
+        each do |amend_alias|
+          return @amendment if
+            # True if the command uses a git alias for `commit --amend`
+            @amendment = !(/git\s+#{amend_alias}/ =~ cmd).nil?
+        end
+
+      @amendment
     end
 
     # Stash unstaged contents of files so hooks don't see changes that aren't
