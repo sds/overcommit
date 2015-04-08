@@ -84,7 +84,7 @@ module Overcommit::HookContext
 
     # Returns whether this hook run was triggered by `git commit --amend`
     def amend?
-      cmd = Overcommit::Utils.last_command
+      cmd = Overcommit::Utils.parent_command
       amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
         slice(/(?<=alias\.)\w+/)
 

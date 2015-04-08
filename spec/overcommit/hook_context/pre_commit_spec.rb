@@ -12,7 +12,7 @@ describe Overcommit::HookContext::PreCommit do
 
     context 'when amending a commit using `git commit --amend`' do
       before do
-        Overcommit::Utils.stub(:last_command).and_return('git commit --amend')
+        Overcommit::Utils.stub(:parent_command).and_return('git commit --amend')
       end
 
       it { should == true }
@@ -27,7 +27,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       before do
-        Overcommit::Utils.stub(:last_command).and_return('git amend')
+        Overcommit::Utils.stub(:parent_command).and_return('git amend')
       end
 
       it { should == true }
@@ -35,7 +35,7 @@ describe Overcommit::HookContext::PreCommit do
 
     context 'when not amending a commit' do
       before do
-        Overcommit::Utils.stub(:last_command).and_return('git commit')
+        Overcommit::Utils.stub(:parent_command).and_return('git commit')
       end
 
       it { should == false }
