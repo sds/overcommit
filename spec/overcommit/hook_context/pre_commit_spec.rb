@@ -296,6 +296,10 @@ describe Overcommit::HookContext::PreCommit do
   describe '#modified_files' do
     subject { context.modified_files }
 
+    before do
+      context.stub(:amend?).and_return(false)
+    end
+
     it 'does not include submodules' do
       submodule = repo do
         `touch foo`
@@ -358,6 +362,23 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it { should be_empty }
+    end
+
+    context 'when amending last commit' do
+      around do |example|
+        repo do
+          FileUtils.touch('some-file')
+          `git add some-file`
+          `git commit -m 'Initial commit'`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amend?).and_return(true)
+      end
+
+      it { should == [File.expand_path('some-file')] }
     end
   end
 end
