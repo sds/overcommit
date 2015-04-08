@@ -163,7 +163,7 @@ describe Overcommit::Utils do
     end
 
     it 'executes the command' do
-      wait_until { subject.stop? } # Make sure process terminated before checking
+      wait_until { subject.exited? } # Make sure process terminated before checking
       File.exist?('some-file').should == true
     end
   end

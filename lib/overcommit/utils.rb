@@ -129,7 +129,7 @@ module Overcommit
       # which we do not need to know the result.
       #
       # @param args [Array<String>]
-      # @return [Thread] thread watching the resulting child process
+      # @return [ChildProcess] detached process spawned in the background
       def execute_in_background(args)
         if args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
