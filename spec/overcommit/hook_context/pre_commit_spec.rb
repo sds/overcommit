@@ -392,6 +392,8 @@ describe Overcommit::HookContext::PreCommit do
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m 'Initial commit'`
+          FileUtils.touch('other-file')
+          `git add other-file`
           example.run
         end
       end
@@ -400,7 +402,7 @@ describe Overcommit::HookContext::PreCommit do
         context.stub(:amendment?).and_return(true)
       end
 
-      it { should == [File.expand_path('some-file')] }
+      it { should =~ [File.expand_path('some-file'), File.expand_path('other-file')] }
     end
   end
 
@@ -446,6 +448,8 @@ describe Overcommit::HookContext::PreCommit do
           File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
           `git add #{modified_file}`
           `git commit -m "Add files"`
+          File.open(modified_file, 'a') { |f| f.puts 4 }
+          `git add #{modified_file}`
           example.run
         end
       end
@@ -454,7 +458,7 @@ describe Overcommit::HookContext::PreCommit do
         context.stub(:amendment?).and_return(true)
       end
 
-      it { should == Set.new(1..3) }
+      it { should == Set.new(1..4) }
     end
   end
 end
