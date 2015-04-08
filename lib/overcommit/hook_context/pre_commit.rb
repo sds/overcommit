@@ -78,7 +78,16 @@ module Overcommit::HookContext
     # Get a list of added, copied, or modified files that have been staged.
     # Renames and deletions are ignored, since there should be nothing to check.
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.modified_files(staged: true)
+      unless @modified_files
+        @modified_files = Overcommit::GitRepo.modified_files(staged: true)
+
+        # Include files modified in last commit if amending
+        if amend?
+          subcmd = 'show --format=%n'
+          @modified_files += Overcommit::GitRepo.modified_files(subcmd: subcmd)
+        end
+      end
+      @modified_files
     end
 
     # @deprecated
@@ -92,8 +101,18 @@ module Overcommit::HookContext
     # changed in a specified file.
     def modified_lines_in_file(file)
       @modified_lines ||= {}
-      @modified_lines[file] ||=
-        Overcommit::GitRepo.extract_modified_lines(file, staged: true)
+      unless @modified_lines[file]
+        @modified_lines[file] =
+          Overcommit::GitRepo.extract_modified_lines(file, staged: true)
+
+        # Include lines modified in last commit if amending
+        if amend?
+          subcmd = 'show --format=%n'
+          @modified_lines[file] +=
+            Overcommit::GitRepo.extract_modified_lines(file, subcmd: subcmd)
+        end
+      end
+      @modified_lines[file]
     end
 
     private
