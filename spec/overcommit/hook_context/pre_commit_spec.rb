@@ -21,16 +21,25 @@ describe Overcommit::HookContext::PreCommit do
     end
 
     context 'when amending a commit using a git alias' do
-      let(:command) { 'git amend' }
-
       around do |example|
         repo do
           `git config alias.amend 'commit --amend'`
+          `git config alias.other-amend 'commit --amend'`
           example.run
         end
       end
 
-      it { should == true }
+      context 'when using one of multiple aliases' do
+        let(:command) { 'git amend' }
+
+        it { should == true }
+      end
+
+      context 'when using another of multiple aliases' do
+        let(:command) { 'git other-amend' }
+
+        it { should == true }
+      end
     end
 
     context 'when not amending a commit' do
