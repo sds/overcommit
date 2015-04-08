@@ -101,6 +101,11 @@ module Overcommit
         false
       end
 
+      # Return the parent command that triggered this hook run
+      def parent_command
+        `ps -ocommand= -p #{Process.ppid}`.chomp
+      end
+
       # Execute a command in a subprocess, capturing exit status and output from
       # both standard and error streams.
       #
