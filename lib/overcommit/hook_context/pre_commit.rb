@@ -9,7 +9,7 @@ module Overcommit::HookContext
   # hooks only inspect staged changes.
   class PreCommit < Base # rubocop:disable ClassLength
     # Returns whether this hook run was triggered by `git commit --amend`
-    def amend?
+    def amendment?
       if @amended.nil?
         cmd = Overcommit::Utils.parent_command
         @amended = !(/--amend/ =~ cmd).nil?
@@ -82,7 +82,7 @@ module Overcommit::HookContext
         @modified_files = Overcommit::GitRepo.modified_files(staged: true)
 
         # Include files modified in last commit if amending
-        if amend?
+        if amendment?
           subcmd = 'show --format=%n'
           @modified_files += Overcommit::GitRepo.modified_files(subcmd: subcmd)
         end
@@ -106,7 +106,7 @@ module Overcommit::HookContext
           Overcommit::GitRepo.extract_modified_lines(file, staged: true)
 
         # Include lines modified in last commit if amending
-        if amend?
+        if amendment?
           subcmd = 'show --format=%n'
           @modified_lines[file] +=
             Overcommit::GitRepo.extract_modified_lines(file, subcmd: subcmd)

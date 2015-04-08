@@ -7,8 +7,8 @@ describe Overcommit::HookContext::PreCommit do
   let(:input) { double('input') }
   let(:context) { described_class.new(config, args, input) }
 
-  describe '#amend?' do
-    subject { context.amend? }
+  describe '#amendment?' do
+    subject { context.amendment? }
 
     before do
       Overcommit::Utils.stub(:parent_command).and_return(command)
@@ -310,7 +310,7 @@ describe Overcommit::HookContext::PreCommit do
     subject { context.modified_files }
 
     before do
-      context.stub(:amend?).and_return(false)
+      context.stub(:amendment?).and_return(false)
     end
 
     it 'does not include submodules' do
@@ -388,7 +388,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       before do
-        context.stub(:amend?).and_return(true)
+        context.stub(:amendment?).and_return(true)
       end
 
       it { should == [File.expand_path('some-file')] }
@@ -400,7 +400,7 @@ describe Overcommit::HookContext::PreCommit do
     subject { context.modified_lines_in_file(modified_file) }
 
     before do
-      context.stub(:amend?).and_return(false)
+      context.stub(:amendment?).and_return(false)
     end
 
     context 'when file contains a trailing newline' do
@@ -442,7 +442,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       before do
-        context.stub(:amend?).and_return(true)
+        context.stub(:amendment?).and_return(true)
       end
 
       it { should == Set.new(1..3) }
