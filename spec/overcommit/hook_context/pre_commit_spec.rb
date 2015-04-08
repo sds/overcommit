@@ -381,4 +381,58 @@ describe Overcommit::HookContext::PreCommit do
       it { should == [File.expand_path('some-file')] }
     end
   end
+
+  describe '#modified_lines_in_file' do
+    let(:modified_file) { 'some-file' }
+    subject { context.modified_lines_in_file(modified_file) }
+
+    before do
+      context.stub(:amend?).and_return(false)
+    end
+
+    context 'when file contains a trailing newline' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
+          `git add #{modified_file}`
+          example.run
+        end
+      end
+
+      it { should == Set.new(1..3) }
+    end
+
+    context 'when file does not contain a trailing newline' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') do |f|
+            (1..2).each { |i| f.write("#{i}\n") }
+            f.write(3)
+          end
+
+          `git add #{modified_file}`
+          example.run
+        end
+      end
+
+      it { should == Set.new(1..3) }
+    end
+
+    context 'when amending last commit' do
+      around do |example|
+        repo do
+          File.open(modified_file, 'w') { |f| (1..3).each { |i| f.write("#{i}\n") } }
+          `git add #{modified_file}`
+          `git commit -m "Add files"`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amend?).and_return(true)
+      end
+
+      it { should == Set.new(1..3) }
+    end
+  end
 end
