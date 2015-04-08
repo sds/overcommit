@@ -31,14 +31,9 @@ module Overcommit
 
       # Spawns a new process in the background using the given array of
       # arguments (the first element is the command).
-      #
-      # @return [ChildProcess]
-      def spawn_in_background(args)
-        process = ChildProcess.build(*args)
-
-        assign_output_streams(process)
-
-        process.start
+      def spawn_detached(args)
+        # Dissociate process from parent's input/output streams
+        Process.detach(Process.spawn({}, *args, [:in, :out, :err] => '/dev/null'))
       end
 
       private

@@ -124,14 +124,14 @@ module Overcommit
       # which we do not need to know the result.
       #
       # @param args [Array<String>]
-      # @return [ChildProcess] thread watching the resulting child process
+      # @return [Thread] thread watching the resulting child process
       def execute_in_background(args)
         if args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Cannot pipe commands with the `execute_in_background` helper'
         end
 
-        Subprocess.spawn_in_background(args)
+        Subprocess.spawn_detached(args)
       end
 
       # Calls a block of code with a modified set of environment variables,
