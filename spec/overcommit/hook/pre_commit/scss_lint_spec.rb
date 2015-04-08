@@ -12,7 +12,8 @@ describe Overcommit::Hook::PreCommit::ScssLint do
   context 'when scss-lint exits successfully' do
     before do
       result = double('result')
-      result.stub(:success?).and_return(true)
+      result.stub(:status).and_return(0)
+      result.stub(:stdout).and_return('')
       subject.stub(:execute).and_return(result)
     end
 
@@ -23,12 +24,12 @@ describe Overcommit::Hook::PreCommit::ScssLint do
     let(:result) { double('result') }
 
     before do
-      result.stub(:success?).and_return(false)
       subject.stub(:execute).and_return(result)
     end
 
     context 'and it reports a warning' do
       before do
+        result.stub(:status).and_return(1)
         result.stub(:stdout).and_return([
           'file1.scss:1 [W] Prefer single quoted strings',
         ].join("\n"))
@@ -39,12 +40,22 @@ describe Overcommit::Hook::PreCommit::ScssLint do
 
     context 'and it reports an error' do
       before do
+        result.stub(:status).and_return(2)
         result.stub(:stdout).and_return([
           'file1.scss:1 [E] Syntax Error: Invalid CSS',
         ].join("\n"))
       end
 
       it { should fail_hook }
+    end
+
+    context 'and it returns status code indicating all files were filtered' do
+      before do
+        result.stub(:status).and_return(81)
+        result.stub(:stdout).and_return('')
+      end
+
+      it { should pass }
     end
   end
 end

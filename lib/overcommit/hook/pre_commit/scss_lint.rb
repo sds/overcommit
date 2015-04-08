@@ -7,7 +7,14 @@ module Overcommit::Hook::PreCommit
 
     def run
       result = execute(command + applicable_files)
-      return :pass if result.success?
+
+      # Status code 81 indicates the applicable files were all filtered by
+      # exclusions defined by the configuration. In this case, we're happy to
+      # return success since there were technically no lints.
+      return :pass if [0, 81].include?(result.status)
+
+      # Any status that isn't indicating lint warnings or errors indicates failure
+      return :fail, result.stdout unless [1, 2].include?(result.status)
 
       extract_messages(
         result.stdout.split("\n"),
