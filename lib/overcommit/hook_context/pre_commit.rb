@@ -82,6 +82,15 @@ module Overcommit::HookContext
         Overcommit::GitRepo.extract_modified_lines(file, staged: true)
     end
 
+    # Returns whether this hook run was triggered by `git commit --amend`
+    def amend?
+      cmd = Overcommit::Utils.last_command
+      amend_alias = `git config --get-regexp '^alias\\.' '--amend'`.
+        slice(/(?<=alias\.)\w+/)
+
+      (/--amend|git #{amend_alias}/ =~ cmd) != nil
+    end
+
     private
 
     # Clears the working tree so that the stash can be applied.
