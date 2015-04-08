@@ -10,15 +10,19 @@ describe Overcommit::HookContext::PreCommit do
   describe '#amend?' do
     subject { context.amend? }
 
+    before do
+      Overcommit::Utils.stub(:parent_command).and_return(command)
+    end
+
     context 'when amending a commit using `git commit --amend`' do
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git commit --amend')
-      end
+      let(:command) { 'git commit --amend' }
 
       it { should == true }
     end
 
     context 'when amending a commit using a git alias' do
+      let(:command) { 'git amend' }
+
       around do |example|
         repo do
           `git config alias.amend 'commit --amend'`
@@ -26,17 +30,11 @@ describe Overcommit::HookContext::PreCommit do
         end
       end
 
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git amend')
-      end
-
       it { should == true }
     end
 
     context 'when not amending a commit' do
-      before do
-        Overcommit::Utils.stub(:parent_command).and_return('git commit')
-      end
+      let(:command) { 'git commit' }
 
       it { should == false }
     end
