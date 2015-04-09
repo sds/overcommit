@@ -228,7 +228,7 @@ detailed examples of how the `ALL` hook can be used.
 ### Plugin Directory
 
 You can change the directory that project-specific hooks are loaded from via
-the `plugin_directory' option. The default directory is `.git-hooks`.
+the `plugin_directory` option. The default directory is `.git-hooks`.
 
 ### Signature Verification
 
