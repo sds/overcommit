@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::Standard do
   context 'when standard exits successfully' do
     before do
       result = double('result')
-      result.stub(:success? => true, :stderr => '')
+      result.stub(success?: true, stderr: '')
       subject.stub(:execute).and_return(result)
     end
 

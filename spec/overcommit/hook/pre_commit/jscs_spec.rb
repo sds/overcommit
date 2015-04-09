@@ -12,9 +12,9 @@ describe Overcommit::Hook::PreCommit::Jscs do
   context 'when no configuration is found' do
     before do
       result = double('result')
-      result.stub(:success? => false,
-                  :status => 1,
-                  :stderr => 'Configuration file some-path/.jscs.json was not found.')
+      result.stub(success?: false,
+                  status: 1,
+                  stderr: 'Configuration file some-path/.jscs.json was not found.')
       subject.stub(:execute).and_return(result)
     end
 
@@ -25,7 +25,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
     let(:result) { double('result') }
 
     before do
-      result.stub(:success? => false, :stderr => '', :status => 2)
+      result.stub(success?: false, stderr: '', status: 2)
       subject.stub(:execute).and_return(result)
     end
 

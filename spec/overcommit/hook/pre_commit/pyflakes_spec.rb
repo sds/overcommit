@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::Pyflakes do
   context 'when pyflakes exits successfully' do
     before do
       result = double('result')
-      result.stub(:success? => true)
+      result.stub(success?: true)
       subject.stub(:execute).and_return(result)
     end
 

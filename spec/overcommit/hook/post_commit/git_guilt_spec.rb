@@ -10,7 +10,7 @@ describe Overcommit::Hook::PostCommit::GitGuilt do
 
     before do
       result.stub(:success?).and_return(true)
-      subject.stub(:initial_commit? => false, :execute => result)
+      subject.stub(initial_commit?: false, execute: result)
     end
 
     context 'with no output' do
@@ -33,8 +33,8 @@ describe Overcommit::Hook::PostCommit::GitGuilt do
   context 'when git-guilt exits unsuccessfully' do
     before do
       result = double('result')
-      result.stub(:success? => false, :stderr => '')
-      subject.stub(:initial_commit? => false, :execute => result)
+      result.stub(success?: false, stderr: '')
+      subject.stub(initial_commit?: false, execute: result)
     end
 
     it { should fail_hook }

@@ -37,7 +37,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def schema_files
-      @schema_files    ||= applicable_files.select do |file|
+      @schema_files ||= applicable_files.select do |file|
         file.match %r{db/schema\.rb|db/structure.*\.sql}
       end
     end

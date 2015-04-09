@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::Pep8 do
   context 'when pep8 exits successfully' do
     before do
       result = double('result')
-      result.stub(:success? => true, :stdout => '')
+      result.stub(success?: true, stdout: '')
       subject.stub(:execute).and_return(result)
     end
 

@@ -20,6 +20,9 @@ Metrics/AbcSize:
 Style/ClassAndModuleChildren:
   Enabled: false
 
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
 Style/Documentation:
   Exclude:
     - 'spec/overcommit/**/*'

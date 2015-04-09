@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::BerksfileCheck do
     end
 
     before do
-      result.stub(:success? => success, :stderr => 'Berkshelf error message')
+      result.stub(success?: success, stderr: 'Berkshelf error message')
       subject.stub(:execute).and_call_original
       subject.stub(:execute).with(%w[berks list --quiet]).and_return(result)
     end
