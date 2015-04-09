@@ -71,9 +71,11 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `echo "Hello World" > tracked-file`
-          `git add tracked-file`
-          `git commit -m "Add tracked-file"`
+          `echo "Hello Other World" > other-tracked-file`
+          `git add tracked-file other-tracked-file`
+          `git commit -m "Add tracked-file and other-tracked-file"`
           `echo "Hello Again" > untracked-file`
+          `echo "Some more text" >> other-tracked-file`
           example.run
         end
       end
@@ -81,6 +83,11 @@ describe Overcommit::HookContext::PreCommit do
       it 'keeps already-committed files' do
         subject
         File.open('tracked-file', 'r').read.should == "Hello World\n"
+      end
+
+      it 'does not keep unstaged changes' do
+        subject
+        File.open('other-tracked-file', 'r').read.should == "Hello Other World\n"
       end
 
       it 'keeps untracked files' do
@@ -98,10 +105,12 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `echo "Hello World" > tracked-file`
-          `git add tracked-file`
-          `git commit -m "Add tracked-file"`
+          `echo "Hello Other World" > other-tracked-file`
+          `git add tracked-file other-tracked-file`
+          `git commit -m "Add tracked-file and other-tracked-file"`
           `echo "Hello Again" > untracked-file`
           `echo "Some more text" >> tracked-file`
+          `echo "Some more text" >> other-tracked-file`
           `git add tracked-file`
           `echo "Yet some more text" >> tracked-file`
           example.run
@@ -110,7 +119,12 @@ describe Overcommit::HookContext::PreCommit do
 
       it 'keeps staged changes' do
         subject
-        `git show :tracked-file`.should == "Hello World\nSome more text\n"
+        File.open('tracked-file', 'r').read.should == "Hello World\nSome more text\n"
+      end
+
+      it 'does not keep unstaged changes' do
+        subject
+        File.open('other-tracked-file', 'r').read.should == "Hello Other World\n"
       end
 
       it 'keeps untracked files' do
