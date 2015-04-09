@@ -50,6 +50,8 @@
 * Update `ScssLint` pre-commit hook to properly handle special exit code that
   signals all files were filtered by exclusions (new as of `scss-lint` 0.36.0)
 * Update `childprocess` dependency to minimum 0.5.6
+* Restore file modification times of unstaged files in addition to staged files
+  in pre-commit hook runs
 
 ## 0.23.0
 
