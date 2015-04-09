@@ -36,7 +36,8 @@
 * Don't clear working tree after pre-commit hook when only submodule changes
   are present
 * Change hook summary message to mention warnings if there were any
-* Add `RSpec` pre-push hook that runs RSpec tests before pushing to remote
+* Add `RSpec` pre-push hook that runs [RSpec](http://rspec.info/) tests before
+  pushing to remote
 * Add `ProtectedBranches` pre-push hook that prevents destructive pushes
   (deletions or force pushes) to specified branches
 * Add `SpellCheck` commit-msg hook to check commit messages for misspelled words
