@@ -168,7 +168,7 @@ Option                                  | Description
 ----------------------------------------|--------------------------------------
 `enabled`                               | If `false`, this hook will never be run
 `required`                              | If `true`, this hook cannot be skipped via the `SKIP` environment variable
-`quiet`                                 | If `true`, this hook does not display any output unless it fails
+`quiet`                                 | If `true`, this hook does not display any output unless it warns/fails
 `description`                           | Message displayed while hook is running.
 `requires_files`                        | If `true`, this hook runs only if files that are applicable to it have been modified. See `include` and `exclude` for how to specify applicable files.
 `include`                               | File paths or glob patterns of files that apply to this hook. The hook will only run on the applicable files when they have been modified. Note that the concept of modified varies for different types of hooks. By default, `include` matches every file until you specify a list of patterns.
