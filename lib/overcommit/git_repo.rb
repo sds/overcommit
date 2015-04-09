@@ -1,3 +1,5 @@
+require 'iniparse'
+
 module Overcommit
   # Provide a set of utilities for certain interactions with `git`.
   module GitRepo
@@ -188,6 +190,52 @@ module Overcommit
         end
         @cherry_head = nil
       end
+    end
+
+    # Contains information on a submodule.
+    Submodule = Struct.new(:path, :url)
+
+    # Returns the submodules that have been staged for removal.
+    #
+    # `git` has an unexpected behavior where removing a submodule without
+    # committing (i.e. such that the submodule directory is removed and the
+    # changes to the index are staged) and then doing a hard reset results in
+    # the index being wiped but the empty directory of the once existent
+    # submodule being restored (but with no content).
+    #
+    # This prevents restoration of the stash of the submodule index changes,
+    # which breaks pre-commit hook restorations of the working index.
+    #
+    # Thus we expose this helper so the restoration code can manually delete the
+    # directory.
+    #
+    # @raise [Overcommit::Exceptions::GitConfigError] when
+    def staged_submodule_removals
+      # There were no submodules before, so none could have been removed
+      return [] if `git ls-files .gitmodules`.empty?
+
+      previous = submodules(ref: 'HEAD')
+      current = submodules
+
+      previous - current
+    end
+
+    # Returns the current set of submodules.
+    #
+    # @param options [Hash]
+    # @return [Array<Overcommit::GitRepo::Submodule>]
+    def submodules(options = {})
+      ref = options[:ref]
+
+      modules = []
+      IniParse.parse(`git show #{ref}:.gitmodules`).each do |section|
+        modules << Submodule.new(section['path'], section['url'])
+      end
+
+      modules
+    rescue IniParse::IniParseError => ex
+      raise Overcommit::Exceptions::GitSubmoduleError,
+            "Unable to read submodule information from #{ref}:.gitmodules file: #{ex.message}"
     end
   end
 end
