@@ -353,6 +353,26 @@ describe Overcommit::HookContext::PreCommit do
         `git show :tracked-file`.should == "Hello Again\n"
       end
     end
+
+    context 'when a submodule removal was staged' do
+      around do |example|
+        submodule = repo do
+          `git commit --allow-empty -m "Initial commit"`
+        end
+
+        repo do
+          `git submodule add #{submodule} sub &>/dev/null`
+          `git commit -m "Add submodule"`
+          `git rm sub`
+          example.run
+        end
+      end
+
+      it 'does not leave behind an empty submodule directory' do
+        subject
+        File.exist?('sub').should == false
+      end
+    end
   end
 
   describe '#modified_files' do
