@@ -185,7 +185,7 @@ Option                                  | Description
 In addition to the built-in configuration options, each hook can expose its
 own unique configuration options. The `AuthorEmail` hook, for example, allows
 you to customize the regex used to check commit author emails via the `pattern`
-option---useful if you want to enforce that developers use a company
+option&mdash;useful if you want to enforce that developers use a company
 email address for their commits. This provides incredible flexibility for hook
 authors as you can make your hooks sufficiently generic and then customize them
 on a per-project basis.
