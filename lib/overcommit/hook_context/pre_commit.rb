@@ -137,7 +137,7 @@ module Overcommit::HookContext
       # Work around this by removing these empty submodule directories as there
       # doesn't appear any reason to keep them around.
       removed_submodules.each do |submodule|
-        `rm -rf #{submodule.path}`
+        FileUtils.rmdir(submodule.path)
       end
     end
 
