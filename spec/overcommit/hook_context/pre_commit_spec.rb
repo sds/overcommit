@@ -96,6 +96,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
+        sleep 1
         expect { subject }.to_not change {
           [
             File.mtime('tracked-file'),
@@ -138,6 +139,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
+        sleep 1
         expect { subject }.to_not change {
           [
             File.mtime('tracked-file'),
@@ -226,6 +228,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
+        sleep 1
         expect { subject }.to_not change {
           [
             File.mtime('tracked-file'),
@@ -269,6 +272,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
+        sleep 1
         expect { subject }.to_not change {
           [
             File.mtime('tracked-file'),
