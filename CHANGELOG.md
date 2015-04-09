@@ -54,6 +54,7 @@
 * Update `childprocess` dependency to minimum 0.5.6
 * Restore file modification times of unstaged files in addition to staged files
   in pre-commit hook runs
+* Change default value for `problem_on_unmodified_line` from `warn` to `report`
 
 ## 0.23.0
 
