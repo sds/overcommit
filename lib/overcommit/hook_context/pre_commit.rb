@@ -170,7 +170,10 @@ module Overcommit::HookContext
     def store_modified_times
       @modified_times = {}
 
-      modified_files.each do |file|
+      staged_files = modified_files
+      unstaged_files = Overcommit::GitRepo.modified_files(staged: false)
+
+      (staged_files + unstaged_files).each do |file|
         next if Overcommit::Utils.broken_symlink?(file)
         @modified_times[file] = File.mtime(file)
       end
@@ -179,10 +182,9 @@ module Overcommit::HookContext
     # Restores the file modification times for all modified files to make it
     # appear like they never changed.
     def restore_modified_times
-      modified_files.each do |file|
+      @modified_times.each do |file, time|
         next if Overcommit::Utils.broken_symlink?(file)
         next unless File.exist?(file)
-        time = @modified_times[file]
         File.utime(time, time, file)
       end
     end
