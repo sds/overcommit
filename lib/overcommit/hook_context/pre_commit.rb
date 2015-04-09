@@ -121,11 +121,23 @@ module Overcommit::HookContext
 
     # Clears the working tree so that the stash can be applied.
     def clear_working_tree
+      removed_submodules = Overcommit::GitRepo.staged_submodule_removals
+
       result = Overcommit::Utils.execute(%w[git reset --hard])
       unless result.success?
         raise Overcommit::Exceptions::HookCleanupFailed,
               "Unable to cleanup working tree after #{hook_script_name} hooks run:" \
               "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+      end
+
+      # Hard-resetting a staged submodule removal results in the index being
+      # reset but the submodule being restored as an empty directory. This empty
+      # directory prevents us from stashing on a subsequent run if a hook fails.
+      #
+      # Work around this by removing these empty submodule directories as there
+      # doesn't appear any reason to keep them around.
+      removed_submodules.each do |submodule|
+        `rm -rf #{submodule.path}`
       end
     end
 
