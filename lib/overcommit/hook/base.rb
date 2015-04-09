@@ -235,7 +235,7 @@ module Overcommit::Hook
     # This allows users to change failures into warnings, or vice versa.
     def transform_status(status)
       case status
-      when :fail, :bad
+      when :fail
         @config.fetch('on_fail', :fail).to_sym
       when :warn
         @config.fetch('on_warn', :warn).to_sym

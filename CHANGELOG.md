@@ -57,6 +57,8 @@
 * Change default value for `problem_on_unmodified_line` from `warn` to `report`
 * Update `Rubocop` pre-commit hook to pass `--display-cop-names` flag so
   cop names appear in output
+* Drop support for returning `:good`/`:bad` results from hooks (was deprecated in
+  0.15.0)
 
 ## 0.23.0
 

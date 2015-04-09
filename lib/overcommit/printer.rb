@@ -39,7 +39,7 @@ module Overcommit
     def end_hook(hook, status, output)
       # Want to print the header for quiet hooks only if the result wasn't good
       # so that the user knows what failed
-      print_header(hook) if hook.quiet? && ![:good, :pass].include?(status)
+      print_header(hook) if hook.quiet? && status != :pass
 
       print_result(hook, status, output)
     end
@@ -85,20 +85,9 @@ module Overcommit
       case status
       when :pass
         log.success 'OK' unless hook.quiet?
-      when :good
-        log.success 'OK'
-        log.bold_error 'Hook returned a status of `:good`. This is deprecated ' \
-                       'in favor of `:pass` and will be removed in a future ' \
-                       'version of Overcommit'
       when :warn
         log.warning 'WARNING'
         print_report(output, :bold_warning)
-      when :bad
-        log.error 'FAILED'
-        log.bold_error 'Hook returned a status of `:bad`. This is deprecated ' \
-                       'in favor of `:fail` and will be removed in a future ' \
-                       'version of Overcommit'
-        print_report(output, :bold_error)
       when :fail
         log.error 'FAILED'
         print_report(output, :bold_error)

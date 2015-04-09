@@ -47,7 +47,7 @@ module Overcommit
         @hooks.each do |hook|
           hook_status = run_hook(hook)
 
-          run_failed = true if [:bad, :fail].include?(hook_status)
+          run_failed = true if hook_status == :fail
           run_warned = true if hook_status == :warn
 
           if hook_status == :interrupt
