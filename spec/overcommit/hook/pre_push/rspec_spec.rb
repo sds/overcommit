@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PrePush::Rspec do
+describe Overcommit::Hook::PrePush::RSpec do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -55,12 +55,12 @@ describe Overcommit::Hook::PrePush::Rspec do
 
           Failures:
 
-            1) Overcommit::Hook::PrePush::Rspec when rspec exits unsuccessfully with a runtime error should fail
+            1) Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a runtime error should fail
                Failure/Error: it { should fail_hook }
                  expected that the hook would fail
                # ./spec/overcommit/hook/pre_push/rspec_spec.rb:45:in `block (4 levels) in <top (required)>'
 
-            2) Overcommit::Hook::PrePush::Rspec when rspec exits unsuccessfully with a test failure should fail
+            2) Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a test failure should fail
                Failure/Error: it { should fail_hook }
                  expected that the hook would fail
                # ./spec/overcommit/hook/pre_push/rspec_spec.rb:57:in `block (4 levels) in <top (required)>'
@@ -70,8 +70,8 @@ describe Overcommit::Hook::PrePush::Rspec do
 
           Failed examples:
 
-          rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:45 # Overcommit::Hook::PrePush::Rspec when rspec exits unsuccessfully with a runtime error should fail
-          rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:57 # Overcommit::Hook::PrePush::Rspec when rspec exits unsuccessfully with a test failure should fail
+          rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:45 # Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a runtime error should fail
+          rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:57 # Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a test failure should fail
         EOS
         # rubocop:enable Metrics/LineLength
       end

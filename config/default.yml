@@ -542,9 +542,9 @@ PrePush:
     description: 'Checking for illegal pushes to protected branches'
     branches: ['master']
 
-  Rspec:
+  RSpec:
     enabled: false
-    description: 'Running rspec test suite'
+    description: 'Running RSpec test suite'
     required_executable: 'rspec'
 
 # Hooks that run during `git rebase`, before any commits are rebased.
