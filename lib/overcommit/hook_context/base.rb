@@ -59,14 +59,6 @@ module Overcommit::HookContext
       []
     end
 
-    # Returns a set of lines that have been modified for a file.
-    #
-    # By default, this returns an empty set. Subclasses should implement if
-    # there is a concept of files changing for the type of hook being run.
-    def modified_lines(_file)
-      Set.new
-    end
-
     # Returns an array of lines passed to the hook via STDIN.
     def input_lines
       @input_lines ||= @input.read.split("\n")

@@ -99,13 +99,6 @@ module Overcommit::HookContext
       @modified_files
     end
 
-    # @deprecated
-    # TODO: Remove this once we've moved all existing hooks to stop using this
-    # endpoint
-    def modified_lines(file)
-      modified_lines_in_file(file)
-    end
-
     # Returns the set of line numbers corresponding to the lines that were
     # changed in a specified file.
     def modified_lines_in_file(file)
