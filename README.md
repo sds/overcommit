@@ -51,7 +51,7 @@ Most hooks will display a warning if a required executable isn't available.
 
 ## Installation
 
-`overcommit` is installed as a binary via [RubyGems](https://rubygems.org/):
+`overcommit` is installed via [RubyGems](https://rubygems.org/):
 
 ```bash
 gem install overcommit
