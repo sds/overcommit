@@ -44,7 +44,7 @@ CommitMsg:
     enabled: true
     description: 'Checking subject line'
 
-  Spellcheck:
+  SpellCheck:
     enabled: false
     description: 'Checking for misspelled words'
     required_executable: 'hunspell'

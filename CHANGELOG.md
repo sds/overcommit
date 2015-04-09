@@ -39,6 +39,7 @@
 * Add `Rspec` pre-push hook that runs Rspec tests before pushing to remote
 * Add `ProtectedBranches` pre-push hook that prevents destructive pushes
   (deletions or force pushes) to specified branches
+* Add `SpellCheck` commit-msg hook to check commit messages for misspelled words
 * Add support for `pre-rebase` hooks
 * Add `SubmoduleStatus` `post-checkout`, `post-commit`, `post-merge`, and
   `post-rewrite` hooks that warn when submodules are uninitialized, out of date

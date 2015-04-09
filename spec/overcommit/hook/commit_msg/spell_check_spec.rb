@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Overcommit::Hook::CommitMsg::Spellcheck do
+describe Overcommit::Hook::CommitMsg::SpellCheck do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
