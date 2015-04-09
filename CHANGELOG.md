@@ -55,6 +55,8 @@
 * Restore file modification times of unstaged files in addition to staged files
   in pre-commit hook runs
 * Change default value for `problem_on_unmodified_line` from `warn` to `report`
+* Update `Rubocop` pre-commit hook to pass `--display-cop-names` flag so
+  cop names appear in output
 
 ## 0.23.0
 
