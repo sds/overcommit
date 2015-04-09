@@ -96,8 +96,13 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
-        expect { subject }.
-          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+        expect { subject }.to_not change {
+          [
+            File.mtime('tracked-file'),
+            File.mtime('other-tracked-file'),
+            File.mtime('untracked-file')
+          ]
+        }
       end
     end
 
@@ -133,8 +138,13 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
-        expect { subject }.
-          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+        expect { subject }.to_not change {
+          [
+            File.mtime('tracked-file'),
+            File.mtime('other-tracked-file'),
+            File.mtime('untracked-file')
+          ]
+        }
       end
     end
 
@@ -216,8 +226,13 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
-        expect { subject }.
-          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+        expect { subject }.to_not change {
+          [
+            File.mtime('tracked-file'),
+            File.mtime('other-tracked-file'),
+            File.mtime('untracked-file')
+          ]
+        }
       end
     end
 
@@ -225,10 +240,12 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `echo "Hello World" > tracked-file`
-          `git add tracked-file`
-          `git commit -m "Add tracked-file"`
+          `echo "Hello Other World" > other-tracked-file`
+          `git add tracked-file other-tracked-file`
+          `git commit -m "Add tracked-file and other-tracked-file"`
           `echo "Hello Again" > untracked-file`
           `echo "Some more text" >> tracked-file`
+          `echo "Some more text" >> other-tracked-file`
           `git add tracked-file`
           `echo "Yet some more text" >> tracked-file`
           example.run
@@ -252,8 +269,13 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps modification times the same' do
-        expect { subject }.
-          to_not change { [File.mtime('tracked-file'), File.mtime('untracked-file')] }
+        expect { subject }.to_not change {
+          [
+            File.mtime('tracked-file'),
+            File.mtime('other-tracked-file'),
+            File.mtime('untracked-file')
+          ]
+        }
       end
     end
 
