@@ -192,7 +192,7 @@ module Overcommit
       end
     end
 
-    # Contains information on a submodule.
+    # Contains information about a registered submodule.
     Submodule = Struct.new(:path, :url)
 
     # Returns the submodules that have been staged for removal.
@@ -209,7 +209,7 @@ module Overcommit
     # Thus we expose this helper so the restoration code can manually delete the
     # directory.
     #
-    # @raise [Overcommit::Exceptions::GitConfigError] when
+    # @raise [Overcommit::Exceptions::GitSubmoduleError] when
     def staged_submodule_removals
       # There were no submodules before, so none could have been removed
       return [] if `git ls-files .gitmodules`.empty?
@@ -220,7 +220,7 @@ module Overcommit
       previous - current
     end
 
-    # Returns the current set of submodules.
+    # Returns the current set of registered submodules.
     #
     # @param options [Hash]
     # @return [Array<Overcommit::GitRepo::Submodule>]
