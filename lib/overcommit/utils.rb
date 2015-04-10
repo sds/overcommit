@@ -4,6 +4,24 @@ require 'overcommit/subprocess'
 module Overcommit
   # Utility functions for general use.
   module Utils
+    # Helper class for doing quick constraint validations on version numbers.
+    #
+    # This allows us to execute code based on the git version.
+    class Version < Gem::Version
+      # Overload comparison operators so we can conveniently compare this
+      # version directly to a string in code.
+      %w[< <= > >= == !=].each do |operator|
+        define_method operator do |version|
+          case version
+          when String
+            super(Gem::Version.new(version))
+          else
+            super(version)
+          end
+        end
+      end
+    end
+
     class << self
       def script_path(script)
         File.join(OVERCOMMIT_HOME, 'libexec', script)
