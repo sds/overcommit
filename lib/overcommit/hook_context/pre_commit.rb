@@ -180,6 +180,7 @@ module Overcommit::HookContext
 
       (staged_files + unstaged_files).each do |file|
         next if Overcommit::Utils.broken_symlink?(file)
+        next unless File.exist?(file) # Ignore renamed files (old file no longer exists)
         @modified_times[file] = File.mtime(file)
       end
     end

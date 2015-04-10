@@ -150,6 +150,29 @@ describe Overcommit::HookContext::PreCommit do
       end
     end
 
+    context 'when renaming a file during an amendment' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          `touch some-file`
+          `git add some-file`
+          `git commit -m "Add file"`
+          `git mv some-file renamed-file`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it 'does not try to update modification time of the old non-existent file' do
+        File.should_receive(:mtime).with(/renamed-file/)
+        File.should_not_receive(:mtime).with(/some-file/)
+        subject
+      end
+    end
+
     context 'when only a submodule change is staged' do
       around do |example|
         submodule = repo do
