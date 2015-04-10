@@ -233,7 +233,7 @@ module Overcommit
         # changes, so when we are looking at the current state of the work tree,
         # we need to check if the submodule actually exists via another method,
         # since the .gitmodules file we parsed does not represent reality.
-        unless ref
+        if ref.nil? && GIT_VERSION < '1.8.5'
           result = Overcommit::Utils.execute(%W[
             git submodule status #{section['path']}
           ])
