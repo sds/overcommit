@@ -229,6 +229,17 @@ module Overcommit
 
       modules = []
       IniParse.parse(`git show #{ref}:.gitmodules`).each do |section|
+        # git < 1.8.5 does not update the .gitmodules file with submodule
+        # changes, so when we are looking at the current state of the work tree,
+        # we need to check if the submodule actually exists via another method,
+        # since the .gitmodules file we parsed does not represent reality.
+        unless ref
+          result = Overcommit::Utils.execute(%W[
+            git submodule status #{section['path']}
+          ])
+          next unless result.success?
+        end
+
         modules << Submodule.new(section['path'], section['url'])
       end
 
