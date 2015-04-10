@@ -22,9 +22,20 @@ module Overcommit
       # these calls to allow some sort of "are you sure?" double-interrupt
       # functionality, but until that's deemed necessary let's keep it simple.
       InterruptHandler.isolate_from_interrupts do
+        # Load hooks before setting up the environment so that the repository
+        # has not been touched yet. This way any load errors at this point don't
+        # result in Overcommit leaving the repository in a bad state.
+        load_hooks
+
+        # Setup the environment without automatically calling
+        # `cleanup_environment` on an error. This is because it's possible that
+        # the `setup_environment` code did not fully complete, so there's no
+        # guarantee that `cleanup_environment` will be able to accomplish
+        # anything of value. The safest thing to do is therefore nothing in the
+        # unlikely case of failure.
+        @context.setup_environment
+
         begin
-          @context.setup_environment
-          load_hooks
           run_hooks
         ensure
           @context.cleanup_environment
