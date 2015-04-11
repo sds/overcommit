@@ -6,6 +6,9 @@ module Overcommit
     DEFAULT_CONFIG_PATH = File.join(OVERCOMMIT_HOME, 'config', 'default.yml')
 
     class << self
+      # Loads and returns the configuration for the repository we're running in.
+      #
+      # @return [Overcommit::Configuration]
       def load_repo_config
         overcommit_yml = File.join(Overcommit::Utils.repo_root,
                                    OVERCOMMIT_CONFIG_FILE_NAME)
@@ -17,6 +20,9 @@ module Overcommit
         end
       end
 
+      # Loads and returns the default configuration.
+      #
+      # @return [Overcommit::Configuration]
       def default_configuration
         @default_config ||= load_from_file(DEFAULT_CONFIG_PATH)
       end

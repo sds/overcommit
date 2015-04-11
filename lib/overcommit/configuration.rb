@@ -2,6 +2,8 @@ module Overcommit
   # Stores configuration for Overcommit and the hooks it runs.
   class Configuration # rubocop:disable ClassLength
     # Creates a configuration from the given hash.
+    #
+    # @param hash [Hash] loaded YAML config file as a hash
     def initialize(hash)
       @hash = ConfigurationValidator.new.validate(hash)
     end

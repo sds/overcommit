@@ -2,6 +2,9 @@ module Overcommit
   # Validates and normalizes a configuration.
   class ConfigurationValidator
     # Validates hash for any invalid options, normalizing where possible.
+    #
+    # @param hash [Hash] hash representation of YAML config
+    # @return [Hash] validated hash (potentially modified)
     def validate(hash)
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
