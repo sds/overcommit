@@ -147,7 +147,7 @@ module Overcommit
     def built_in_hook?(hook_context, hook_name)
       hook_name = Overcommit::Utils.snake_case(hook_name)
 
-      File.exist?(File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook',
+      File.exist?(File.join(Overcommit::HOME, 'lib', 'overcommit', 'hook',
                             hook_context.hook_type_name, "#{hook_name}.rb"))
     end
 

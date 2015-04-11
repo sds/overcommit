@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'template directory' do
-  let(:template_dir) { File.join(Overcommit::OVERCOMMIT_HOME, 'template-dir') }
+  let(:template_dir) { File.join(Overcommit::HOME, 'template-dir') }
   let(:hooks_dir) { File.join(template_dir, 'hooks') }
 
   it 'contains a hooks directory' do

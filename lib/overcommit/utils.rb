@@ -24,7 +24,7 @@ module Overcommit
 
     class << self
       def script_path(script)
-        File.join(OVERCOMMIT_HOME, 'libexec', script)
+        File.join(Overcommit::HOME, 'libexec', script)
       end
 
       # Returns an absolute path to the root of the repository.

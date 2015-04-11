@@ -3,7 +3,7 @@ require 'yaml'
 module Overcommit
   # Manages configuration file loading.
   class ConfigurationLoader
-    DEFAULT_CONFIG_PATH = File.join(OVERCOMMIT_HOME, 'config', 'default.yml')
+    DEFAULT_CONFIG_PATH = File.join(Overcommit::HOME, 'config', 'default.yml')
 
     class << self
       # Loads and returns the configuration for the repository we're running in.

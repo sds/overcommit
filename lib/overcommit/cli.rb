@@ -128,7 +128,7 @@ module Overcommit
     end
 
     def print_template_directory_path
-      puts File.join(OVERCOMMIT_HOME, 'template-dir')
+      puts File.join(Overcommit::HOME, 'template-dir')
       halt
     end
 

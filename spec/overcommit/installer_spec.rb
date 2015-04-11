@@ -136,7 +136,7 @@ describe Overcommit::Installer do
             expect { subject }.to change {
               File.exist?('.overcommit.yml') && FileUtils.compare_file(
                 '.overcommit.yml',
-                File.join(Overcommit::OVERCOMMIT_HOME, 'config', 'starter.yml')
+                File.join(Overcommit::HOME, 'config', 'starter.yml')
               )
             }.from(false).to(true)
           end
