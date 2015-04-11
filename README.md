@@ -149,16 +149,17 @@ repository.
 When writing your own configuration, it will automatically extend the
 [default configuration](config/default.yml), so you only need to specify
 your configuration with respect to the default. In order to
-enable/disable the default hooks, you can add the following to your repo-specific
+enable/disable hooks, you can add the following to your repo-specific
 configuration file:
 
 ```yaml
 PreCommit:
   Rubocop:
-    enabled: false
+    enabled: true
+    command: ['bundle', 'exec', 'rubocop'] # Invoke within Bundler context
 ```
 
-### Hooks
+### Hook Options
 
 Individual hooks expose both built-in configuration options as well as their
 own custom options unique to each hook. The following table lists all built-in
@@ -212,7 +213,7 @@ PreCommit:
     quiet: false
 
   SomeHook:
-    enabled: false
+    enabled: true
 
   ...
 ```
@@ -286,6 +287,7 @@ The corresponding configuration for this hook would look like:
 ```yaml
 PreCommit:
   EnsureSpecHelper:
+    enabled: true
     description: 'Checking for missing inclusion of spec_helper'
     include: '**/*_spec.rb'
 ```
