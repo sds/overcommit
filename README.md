@@ -268,7 +268,7 @@ module Overcommit::Hook::PreCommit
       errors = []
 
       applicable_files.each do |file|
-        if File.open(file, 'r').read !~ /^require 'spec_helper'/
+        if File.read(file) !~ /^require 'spec_helper'/
           errors << "#{file}: missing `require 'spec_helper'`"
         end
       end
