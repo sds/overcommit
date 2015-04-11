@@ -11,7 +11,7 @@ module Overcommit
       # @return [Overcommit::Configuration]
       def load_repo_config
         overcommit_yml = File.join(Overcommit::Utils.repo_root,
-                                   OVERCOMMIT_CONFIG_FILE_NAME)
+                                   Overcommit::CONFIG_FILE_NAME)
 
         if File.exist?(overcommit_yml)
           load_file(overcommit_yml)

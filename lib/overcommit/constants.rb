@@ -1,7 +1,7 @@
 # Global application constants.
 module Overcommit
   OVERCOMMIT_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
-  OVERCOMMIT_CONFIG_FILE_NAME = '.overcommit.yml'
+  CONFIG_FILE_NAME = '.overcommit.yml'
 
   HOOK_DIRECTORY = File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook')
 

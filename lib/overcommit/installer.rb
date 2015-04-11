@@ -168,7 +168,7 @@ module Overcommit
     end
 
     def install_starter_config
-      repo_config_file = File.join(@target, OVERCOMMIT_CONFIG_FILE_NAME)
+      repo_config_file = File.join(@target, Overcommit::CONFIG_FILE_NAME)
 
       return if File.exist?(repo_config_file)
       FileUtils.cp(File.join(OVERCOMMIT_HOME, 'config', 'starter.yml'), repo_config_file)
