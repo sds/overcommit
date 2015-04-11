@@ -91,7 +91,7 @@ module Overcommit
       def supported_hook_types
         Dir[File.join(HOOK_DIRECTORY, '*')].
           select { |file| File.directory?(file) }.
-          map { |file| File.basename(file, '.rb').gsub('_', '-') }
+          map { |file| File.basename(file).gsub('_', '-') }
       end
 
       # Returns a list of supported hook classes (PreCommit, CommitMsg, etc.)
