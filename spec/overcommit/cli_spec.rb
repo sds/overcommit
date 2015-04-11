@@ -28,13 +28,13 @@ describe Overcommit::CLI do
     context 'with the --list-hooks option specified' do
       let(:arguments) { ['--list-hooks'] }
       let(:contexts) do
-        Overcommit::ConfigurationLoader.load_repo_config.all_hooks.keys
+        Overcommit::ConfigurationLoader.load_repo_config.all_hook_configs.keys
       end
 
       before { cli.stub(:halt) }
 
       it 'prints the installed hooks' do
-        logger.should_receive(:log).at_least(:once)
+        logger.should_receive(:log).at_least(contexts.count)
         subject
       end
     end
