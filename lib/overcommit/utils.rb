@@ -89,7 +89,7 @@ module Overcommit
 
       # Returns a list of supported hook types (pre-commit, commit-msg, etc.)
       def supported_hook_types
-        Dir[File.join(OVERCOMMIT_HOME, 'lib', 'overcommit', 'hook', '*')].
+        Dir[File.join(HOOK_DIRECTORY, '*')].
           select { |file| File.directory?(file) }.
           map { |file| File.basename(file, '.rb').gsub('_', '-') }
       end

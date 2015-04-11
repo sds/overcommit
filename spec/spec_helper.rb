@@ -5,7 +5,7 @@ Coveralls.wear!
 require 'overcommit'
 require 'tempfile'
 
-hook_types = Dir[File.join(Overcommit::OVERCOMMIT_HOME, 'lib/overcommit/hook/*')].
+hook_types = Dir[File.join(Overcommit::HOOK_DIRECTORY, '*')].
   select { |f| File.directory?(f) }.
   sort
 
