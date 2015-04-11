@@ -4,17 +4,29 @@ describe 'default configuration' do
   default_config =
     YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH).to_hash
 
-  Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-    context "within the #{hook_type} configuration section" do
-      default_config[hook_type].each do |hook_name, hook_config|
-        next if hook_name == 'ALL'
+  Overcommit::Utils.supported_hook_types.each do |hook_type|
+    hook_class = Overcommit::Utils.camel_case(hook_type)
 
-        it "explicitly sets the `enabled` option for #{hook_name}" do
+    Dir[File.join(Overcommit::HOOK_DIRECTORY, hook_type.gsub('-', '_'), '*')].
+      map { |hook_file| Overcommit::Utils.camel_case(File.basename(hook_file, '.rb')) }.
+      each do |hook|
+      next if hook == 'Base'
+
+      context "for the #{hook} #{hook_type} hook" do
+        it 'exists in config/default.yml' do
+          default_config[hook_class][hook].should_not be_nil
+        end
+
+        it 'explicitly sets the enabled option' do
           # Use variable names so it reads nicer in the RSpec output
-          hook_enabled_option_set = !hook_config['enabled'].nil?
-          all_hook_enabled_option_set = !default_config[hook_type]['ALL']['enabled'].nil?
+          hook_enabled_option_set = !default_config[hook_class][hook]['enabled'].nil?
+          all_hook_enabled_option_set = !default_config[hook_class]['ALL']['enabled'].nil?
 
           (hook_enabled_option_set || all_hook_enabled_option_set).should == true
+        end
+
+        it 'defines a description' do
+          default_config[hook_class][hook]['description'].should_not be_nil
         end
       end
     end
