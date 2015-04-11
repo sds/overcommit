@@ -66,8 +66,8 @@ describe Overcommit::Configuration do
                    hook_type_name: 'pre_commit')
     end
 
-    it 'includes hooks that are not disabled' do
-      subject.should == ['AuthorName']
+    it 'excludes hooks that are not explicitly enabled' do
+      subject.should_not include 'AuthorName'
     end
   end
 

@@ -164,7 +164,7 @@ module Overcommit
       all_enabled = @hash[hook_type]['ALL']['enabled']
       return all_enabled unless all_enabled.nil?
 
-      true
+      false
     end
 
     def smart_merge(parent, child)
