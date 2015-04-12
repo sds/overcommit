@@ -59,6 +59,8 @@
   cop names appear in output
 * Drop support for returning `:good`/`:bad` results from hooks (was deprecated in
   0.15.0)
+* Remove `PryBinding` pre-commit hook since its functionality is provided by the
+  `Rubocop` pre-commit hook
 
 ## 0.23.0
 

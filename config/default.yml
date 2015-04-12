@@ -281,14 +281,6 @@ PreCommit:
     install_command: 'pip install pep8'
     include: '**/*.py'
 
-  PryBinding:
-    enabled: false
-    description: 'Checking for instances of binding.pry'
-    quiet: true
-    include:
-      - '**/*.rb'
-      - '**/*.rake'
-
   Pyflakes:
     enabled: false
     description: 'Analyzing with pyflakes'
