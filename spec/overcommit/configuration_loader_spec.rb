@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe Overcommit::ConfigurationLoader do
+  let(:logger) { Overcommit::Logger.silent }
+
   describe '.load_repo_config' do
-    subject { described_class.load_repo_config }
+    subject { described_class.new(logger).load_repo_config }
 
     context 'when repo does not contain a configuration file' do
       around do |example|

@@ -43,7 +43,7 @@ begin
     exec($0, *ARGV) # Execute the updated hook with all original arguments
   end
 
-  config = Overcommit::ConfigurationLoader.load_repo_config
+  config = Overcommit::ConfigurationLoader.new(logger).load_repo_config
 
   context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
   config.apply_environment!(context, ENV)
