@@ -1,6 +1,21 @@
 PreCommit:
+  BundleCheck:
+    enabled: true
+
+  HardTabs:
+    enabled: true
+
   Rubocop:
+    enabled: true
     command: ['bundle', 'exec', 'rubocop']
 
-  Travis:
+  TravisLint:
+    enabled: true
     command: ['bundle', 'exec', 'travis']
+    flags: ['lint', '--skip-version-check']
+
+  TrailingWhitespace:
+    enabled: true
+
+  YamlSyntax:
+    enabled: true
