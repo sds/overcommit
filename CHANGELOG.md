@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `**/*.svg` to `ImageOptim` default includes configuration
+
 ## 0.24.0
 
 ### New Features
