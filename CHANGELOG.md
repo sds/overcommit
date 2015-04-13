@@ -2,21 +2,10 @@
 
 ## master (unreleased)
 
-* Fix `LocalPathsInGemfile` to not report lints for commented paths
+### New Features
+
 * Add `required_library`/`required_libraries` hook option which specifies
   a list of paths a hook should load with `Kernel.require` before running
-* Disable `ShellCheck` pre-commit hook by default
-* Fix `CssLint` pre-commit hook to ignore blank lines in `csslint` output
-* Switch `ImageOptim` hook to use executable instead of Ruby API
-* Fix error instructions typo in `BundleCheck` pre-commit hook
-* Ignore hard tabs in `Godeps/Godeps.json` by default
-* Exclude `*.md` files from `TrailingWhitespace`
-* Improve `CoffeeLint` pre-commit hook to differentiate between errors and
-  warnings
-* Improve `GoLint` pre-commit hook to extract file and line information
-* Change configuration loading behavior to prefer user-defined `ALL` hook
-  configuration over default `ALL` configuration, and user-defined hook
-  configuration over default `ALL` configuration
 * Add `JsLint` pre-commit hook that checks the style of JavaScript files with
   [JSLint](http://www.jslint.com/)
 * Add `RubyLint` pre-commit hook that statically analyzes Ruby files with
@@ -27,15 +16,10 @@
 * Add `GoVet` pre-commit hook that examines Go source files with
   [vet](https://godoc.org/golang.org/x/tools/cmd/vet)
 * Add `XmlSyntax` pre-commit hook to check that XML files are valid
-* Fix bug where stashed changes were not restored when plugin signature
-  validation failed
 * Add `CaseConflicts` pre-commit hook which checks for file names in the same
   directory which differ by letter casing
 * Preserve existing git hooks in a repository when installing Overcommit hooks,
   and restore them on uninstall
-* Don't clear working tree after pre-commit hook when only submodule changes
-  are present
-* Change hook summary message to mention warnings if there were any
 * Add `RSpec` pre-push hook that runs [RSpec](http://rspec.info/) tests before
   pushing to remote
 * Add `ProtectedBranches` pre-push hook that prevents destructive pushes
@@ -45,6 +29,18 @@
 * Add `SubmoduleStatus` `post-checkout`, `post-commit`, `post-merge`, and
   `post-rewrite` hooks that warn when submodules are uninitialized, out of date
   with the current index, or contain merge conflicts
+
+### Changes
+
+* Disable `ShellCheck` pre-commit hook by default
+* Switch `ImageOptim` hook to use executable instead of Ruby API
+* Improve `CoffeeLint` pre-commit hook to differentiate between errors and
+  warnings
+* Improve `GoLint` pre-commit hook to extract file and line information
+* Change configuration loading behavior to prefer user-defined `ALL` hook
+  configuration over default `ALL` configuration, and user-defined hook
+  configuration over default `ALL` configuration
+* Change hook summary message to mention warnings if there were any
 * Disable almost all hooks by default. You will now need to explicitly enable
   almost all hooks yourself in your `.overcommit.yml`. If you are migrating from
   `overcommit` 0.23.0 and want to use the default configuration that shipped
@@ -52,8 +48,6 @@
 * Update `ScssLint` pre-commit hook to properly handle special exit code that
   signals all files were filtered by exclusions (new as of `scss-lint` 0.36.0)
 * Update `childprocess` dependency to minimum 0.5.6
-* Restore file modification times of unstaged files in addition to staged files
-  in pre-commit hook runs
 * Change default value for `problem_on_unmodified_line` from `warn` to `report`
 * Update `Rubocop` pre-commit hook to pass `--display-cop-names` flag so
   cop names appear in output
@@ -61,6 +55,18 @@
   0.15.0)
 * Remove `PryBinding` pre-commit hook since its functionality is provided by the
   `Rubocop` pre-commit hook
+
+### Bug Fixes
+
+* Fix `LocalPathsInGemfile` to not report lints for commented paths
+* Fix `CssLint` pre-commit hook to ignore blank lines in `csslint` output
+* Fix error instructions typo in `BundleCheck` pre-commit hook
+* Fix bug where stashed changes were not restored when plugin signature
+  validation failed
+* Don't clear working tree after pre-commit hook when only submodule changes
+  are present
+* Restore file modification times of unstaged files in addition to staged files
+  in pre-commit hook runs
 
 ## 0.23.0
 
