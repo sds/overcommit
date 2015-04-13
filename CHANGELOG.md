@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Make `IndexTags` quiet by default
+
 ## 0.24.0
 
 ### New Features
