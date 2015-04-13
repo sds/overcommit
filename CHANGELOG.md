@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Add `**/*.svg` to `ImageOptim` default includes configuration
+* Make `IndexTags` hooks quiet by default
 
 ## 0.24.0
 
