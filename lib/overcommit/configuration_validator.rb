@@ -4,10 +4,17 @@ module Overcommit
     # Validates hash for any invalid options, normalizing where possible.
     #
     # @param hash [Hash] hash representation of YAML config
+    # @param options[Hash]
+    # @option default [Boolean] whether hash represents the default built-in config
+    # @option logger [Overcommit::Logger] logger to output warnings to
     # @return [Hash] validated hash (potentially modified)
-    def validate(hash)
+    def validate(hash, options)
+      @options = options.dup
+      @log = options[:logger]
+
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
+      check_for_missing_enabled_option(hash)
 
       hash
     end
@@ -38,6 +45,28 @@ module Overcommit
             value
           end
       end
+    end
+
+    # Prints a warning if there are any hooks listed in the configuration
+    # without `enabled` explicitly set.
+    def check_for_missing_enabled_option(hash)
+      return unless @log
+
+      any_warnings = false
+
+      Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
+        hash.fetch(hook_type, {}).each do |hook_name, hook_config|
+          next if hook_name == 'ALL'
+
+          if hook_config['enabled'].nil?
+            @log.warning "#{hook_type}::#{hook_name} hook does not explicitly " \
+                         'set `enabled` option in .overcommit.yml'
+            any_warnings = true
+          end
+        end
+      end
+
+      @log.newline if any_warnings
     end
   end
 end

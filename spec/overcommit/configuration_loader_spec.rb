@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Overcommit::ConfigurationLoader do
-  let(:logger) { Overcommit::Logger.silent }
+  let(:output) { StringIO.new }
+  let(:logger) { Overcommit::Logger.new(output) }
 
-  describe '.load_repo_config' do
+  describe '#load_repo_config' do
     subject { described_class.new(logger).load_repo_config }
 
     context 'when repo does not contain a configuration file' do
@@ -31,13 +32,27 @@ describe Overcommit::ConfigurationLoader do
       end
 
       it 'loads the file' do
-        described_class.should_receive(:load_file).
-                        with(File.expand_path('.overcommit.yml'))
+        Overcommit::ConfigurationLoader.any_instance.
+          should_receive(:load_file).
+          with(File.expand_path('.overcommit.yml'))
         subject
       end
 
       it 'merges the loaded file with the default configuration' do
         subject.plugin_directory.should == File.expand_path('some-directory')
+      end
+
+      context 'and the configuration file contains a hook with no `enabled` option' do
+        let(:config_contents) { <<-CFG }
+          PreCommit:
+            ScssLint:
+              command: ['bundle', 'exec', 'scss-lint']
+        CFG
+
+        it 'displays a warning' do
+          subject
+          output.string.should =~ /PreCommit::ScssLint.*not.*enabled/i
+        end
       end
     end
   end

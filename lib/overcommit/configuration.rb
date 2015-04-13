@@ -4,8 +4,13 @@ module Overcommit
     # Creates a configuration from the given hash.
     #
     # @param hash [Hash] loaded YAML config file as a hash
-    def initialize(hash)
-      @hash = ConfigurationValidator.new.validate(hash)
+    # @param options [Hash]
+    # @option default [Boolean] whether this is the default built-in configuration
+    # @option logger [Overcommit::Logger]
+    def initialize(hash, options = {})
+      @options = options.dup
+      @options[:logger] ||= Overcommit::Logger.silent
+      @hash = Overcommit::ConfigurationValidator.new.validate(hash, options)
     end
 
     def ==(other)

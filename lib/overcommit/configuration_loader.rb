@@ -10,23 +10,17 @@ module Overcommit
       #
       # @return [Overcommit::Configuration]
       def default_configuration
-        @default_config ||= load_from_file(DEFAULT_CONFIG_PATH)
+        @default_config ||= load_from_file(DEFAULT_CONFIG_PATH, default: true)
       end
 
-      # Loads a configuration, ensuring it extends the default configuration.
-      def load_file(file)
-        config = load_from_file(file)
-
-        default_configuration.merge(config)
-      rescue => error
-        raise Overcommit::Exceptions::ConfigurationError,
-              "Unable to load configuration from '#{file}': #{error}",
-              error.backtrace
-      end
-
-      private
-
-      def load_from_file(file)
+      # Loads configuration from file.
+      #
+      # @param file [String] path to file
+      # @param options [Hash]
+      # @option default [Boolean] whether this is the default built-in configuration
+      # @option logger [Overcommit::Logger]
+      # @return [Overcommit::Configuration]
+      def load_from_file(file, options = {})
         hash =
           if yaml = YAML.load_file(file)
             yaml.to_hash
@@ -34,7 +28,7 @@ module Overcommit
             {}
           end
 
-        Overcommit::Configuration.new(hash)
+        Overcommit::Configuration.new(hash, options)
       end
     end
 
@@ -52,10 +46,21 @@ module Overcommit
                                  Overcommit::CONFIG_FILE_NAME)
 
       if File.exist?(overcommit_yml)
-        self.class.load_file(overcommit_yml)
+        load_file(overcommit_yml)
       else
         self.class.default_configuration
       end
+    end
+
+    # Loads a configuration, ensuring it extends the default configuration.
+    def load_file(file)
+      config = self.class.load_from_file(file, default: false, logger: @log)
+
+      self.class.default_configuration.merge(config)
+    rescue => error
+      raise Overcommit::Exceptions::ConfigurationError,
+            "Unable to load configuration from '#{file}': #{error}",
+            error.backtrace
     end
   end
 end
