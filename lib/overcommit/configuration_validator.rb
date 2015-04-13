@@ -14,7 +14,7 @@ module Overcommit
 
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
-      check_for_missing_enabled_option(hash)
+      check_for_missing_enabled_option(hash) unless @options[:default]
 
       hash
     end
