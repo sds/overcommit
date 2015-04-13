@@ -453,6 +453,7 @@ PostCheckout:
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
+    quiet: true
     required_executable: 'ctags'
 
   SubmoduleStatus:
@@ -479,6 +480,7 @@ PostCommit:
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
+    quiet: true
     required_executable: 'ctags'
 
   SubmoduleStatus:
@@ -496,6 +498,7 @@ PostMerge:
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
+    quiet: true
     required_executable: 'ctags'
 
   SubmoduleStatus:
@@ -513,6 +516,7 @@ PostRewrite:
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
+    quiet: true
     required_executable: 'ctags'
 
   SubmoduleStatus:
