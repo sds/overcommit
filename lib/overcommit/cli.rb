@@ -146,8 +146,6 @@ module Overcommit
     # Prints the hooks available in the current repo and whether they're
     # enabled/disabled.
     def print_installed_hooks
-      config = Overcommit::ConfigurationLoader.new(log).load_repo_config
-
       config.all_hook_configs.each do |hook_type, hook_configs|
         print_hooks_for_hook_type(config, hook_configs, hook_type)
       end
@@ -175,7 +173,6 @@ module Overcommit
     end
 
     def sign_plugins
-      config = Overcommit::ConfigurationLoader.new(log).load_repo_config
       context = Overcommit::HookContext.create(@options[:hook_to_sign],
                                                config,
                                                @arguments,
@@ -187,7 +184,6 @@ module Overcommit
     end
 
     def run_all
-      config  = Overcommit::ConfigurationLoader.new(log).load_repo_config
       context = Overcommit::HookContext.create('run-all', config, @arguments, @input)
       config.apply_environment!(context, ENV)
 
@@ -202,6 +198,11 @@ module Overcommit
     # Used for ease of stubbing in tests
     def halt(status = 0)
       exit status
+    end
+
+    # Returns the configuration for this repository.
+    def config
+      @config ||= Overcommit::ConfigurationLoader.new(log).load_repo_config
     end
   end
 end
