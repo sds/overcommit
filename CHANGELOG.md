@@ -4,6 +4,8 @@
 
 * Add `**/*.svg` to `ImageOptim` default includes configuration
 * Make `IndexTags` hooks quiet by default
+* Add `Vint` pre-commit hook that checks Vim script with
+  [Vint](https://github.com/Kuniwak/vint)
 
 ## 0.24.0
 
