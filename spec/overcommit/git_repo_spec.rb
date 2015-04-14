@@ -64,4 +64,47 @@ describe Overcommit::GitRepo do
       end
     end
   end
+
+  describe '.branches_containing_commit' do
+    subject { described_class.branches_containing_commit(commit_ref) }
+
+    around do |example|
+      repo do
+        `git checkout -b master &>/dev/null`
+        `git commit --allow-empty -m "Initial commit"`
+        `git checkout -b topic &>/dev/null`
+        `git commit --allow-empty -m "Another commit"`
+        example.run
+      end
+    end
+
+    context 'when only one branch contains the commit' do
+      let(:commit_ref) { 'topic' }
+
+      it 'should return only that branch' do
+        subject.size.should == 1
+        subject[0].should == 'topic'
+      end
+    end
+
+    context 'when more than one branch contains the commit' do
+      let(:commit_ref) { 'master' }
+
+      it 'should return all branches containing the commit' do
+        subject.size.should == 2
+        subject.sort.should == %w[master topic]
+      end
+    end
+
+    context 'when no branches contain the commit' do
+      let(:commit_ref) { 'HEAD' }
+
+      before do
+        `git checkout --detach &>/dev/null`
+        `git commit --allow-empty -m "Detached HEAD"`
+      end
+
+      it { should be_empty }
+    end
+  end
 end
