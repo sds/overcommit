@@ -1,5 +1,6 @@
 module Overcommit::Hook::PreRebase
-  # Prevents destructive updates to specified branches.
+  # Prevents rebasing commits that have already been merged into one of
+  # a specified set of destination branches.
   class MergedCommits < Base
     def run
       # Allow rebasing a detached HEAD since no refs are changed.
