@@ -560,3 +560,8 @@ PreRebase:
     requires_files: false
     required: false
     quiet: false
+
+  MergedCommits:
+    enabled: false
+    description: 'Checking for commits that have already been merged'
+    branches: ['master']

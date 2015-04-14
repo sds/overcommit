@@ -254,10 +254,10 @@ module Overcommit
     # @param commit_ref [String] git tree ref that resolves to a commit
     # @return [Array<String>] list of branches containing the given commit
     def branches_containing_commit(commit_ref)
-      `git branch --contains #{commit_ref}`.
-        split("\n").
-        reject { |s| s[/detached from/] }.  # ignore detached HEAD
-        map { |s| s[2..-1] }                # trim leading 2 characters
+      `git branch --column=dense --contains #{commit_ref}`.
+        sub(/\(detached from .*?\)/, ''). # ignore detached HEAD
+        split(/\s+/).
+        reject { |s| s.empty? || s == '*' }
     end
   end
 end
