@@ -7,7 +7,7 @@ module Overcommit::Hook::PreRebase
       return :pass if detached_head? || illegal_commits.empty?
 
       message = 'Cannot rebase commits that have already been merged into ' \
-                "one of #{dest_branches.join(',')}"
+                "one of #{dest_branches.join(', ')}"
 
       [:fail, message]
     end
