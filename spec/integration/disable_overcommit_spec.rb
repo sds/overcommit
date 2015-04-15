@@ -8,7 +8,7 @@ describe 'disabling Overcommit' do
       Overcommit::Installer.new(Overcommit::Logger.silent).
                             run('.', action: :install)
       Overcommit::Utils.with_environment('OVERCOMMIT_DISABLE' => overcommit_disable) do
-        `touch blah`
+        FileUtils.touch 'blah'
         `git add blah`
         example.run
       end

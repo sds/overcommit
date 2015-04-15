@@ -38,7 +38,7 @@ describe Overcommit::HookContext::RunAll do
     context 'when repo contains submodules' do
       around do |example|
         submodule = repo do
-          `touch foo`
+          FileUtils.touch 'foo'
           `git add foo`
           `git commit -m "Initial commit"`
         end

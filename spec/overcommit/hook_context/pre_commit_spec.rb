@@ -154,7 +154,7 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          `touch some-file`
+          FileUtils.touch 'some-file'
           `git add some-file`
           `git commit -m "Add file"`
           `git mv some-file renamed-file`
@@ -407,7 +407,7 @@ describe Overcommit::HookContext::PreCommit do
 
     it 'does not include submodules' do
       submodule = repo do
-        `touch foo`
+        FileUtils.touch 'foo'
         `git add foo`
         `git commit -m "Initial commit"`
       end

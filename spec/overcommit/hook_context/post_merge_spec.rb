@@ -84,7 +84,7 @@ describe Overcommit::HookContext::PostMerge do
 
     it 'does not include submodules' do
       submodule = repo do
-        `touch foo`
+        FileUtils.touch 'foo'
         `git add foo`
         `git commit -m "Initial commit"`
       end

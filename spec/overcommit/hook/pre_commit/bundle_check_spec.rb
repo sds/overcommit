@@ -8,7 +8,7 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
   context 'when Gemfile.lock is ignored' do
     around do |example|
       repo do
-        `touch Gemfile.lock`
+        FileUtils.touch 'Gemfile.lock'
         `echo Gemfile.lock > .gitignore`
         `git add .gitignore`
         `git commit -m "Ignore Gemfile.lock"`
