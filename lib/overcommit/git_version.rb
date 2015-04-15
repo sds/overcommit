@@ -9,7 +9,7 @@
 #   end
 module Overcommit
   GIT_VERSION = begin
-    version = `git --version`.chomp[/[\d\.]+/, 0]
+    version = `git --version`.chomp[/\d+(\.\d+)+/, 0]
     Overcommit::Utils::Version.new(version)
   end
 end
