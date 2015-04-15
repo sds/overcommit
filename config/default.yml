@@ -550,4 +550,4 @@ PreRebase:
   MergedCommits:
     enabled: false
     description: 'Checking for commits that have already been merged'
-    dest_branches: ['master']
+    branches: ['master']

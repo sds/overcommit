@@ -5,10 +5,10 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
-  let(:dest_branch) { 'master' }
+  let(:master_branch) { 'master' }
 
   before do
-    subject.stub(:dest_branches) { [dest_branch] }
+    subject.stub(:branches) { [master_branch] }
   end
 
   context 'when rebasing a detached HEAD' do
@@ -49,7 +49,7 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
     context 'when commits have already been merged' do
       before do
         Overcommit::GitRepo.stub(:branches_containing_commit).
-          with(commit_sha1) { [rebased_branch, dest_branch] }
+          with(commit_sha1) { [rebased_branch, master_branch] }
       end
 
       it { should fail_hook }
