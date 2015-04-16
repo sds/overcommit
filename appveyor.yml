@@ -1,0 +1,69 @@
+version: "{build}"
+
+clone_depth: 1
+
+environment:
+  matrix:
+    - RUBY_FOLDER_VERSION: "200"
+      RUBY_GEMS_FOLDER: "2.0.0"
+    - RUBY_FOLDER_VERSION: "200-x64"
+      RUBY_GEMS_FOLDER: "2.0.0"
+    - RUBY_FOLDER_VERSION: "21"
+      RUBY_GEMS_FOLDER: "2.1.0"
+    - RUBY_FOLDER_VERSION: "21-x64"
+      RUBY_GEMS_FOLDER: "2.1.0"
+    - RUBY_FOLDER_VERSION: "22"
+      RUBY_GEMS_FOLDER: "2.2.0"
+    - RUBY_FOLDER_VERSION: "22-x64"
+      RUBY_GEMS_FOLDER: "2.2.0"
+
+matrix:
+  fast_finish: true
+
+cache:
+  # Cache installed gems unless dependencies change
+  - C:\Ruby%RUBY_FOLDER_VERSION%\bin -> Gemfile,overcommit.gemspec
+  - C:\Ruby%RUBY_FOLDER_VERSION%\lib\ruby\gems\%RUBY_GEMS_FOLDER% -> Gemfile,overcommit.gemspec
+
+install:
+  # Add ruby executables to PATH
+  - set PATH=C:\Ruby%RUBY_FOLDER_VERSION%\bin;%PATH%
+  - echo %PATH%
+
+  # Print version and location for pre-installed grep
+  - grep --version
+  - where grep
+
+  # Print version and location for pre-installed git
+  - git --version
+  - where git
+
+  # Print version and location for pre-installed ruby
+  - ruby --version
+  - where ruby
+
+  # Install latest version of RubyGems
+  - gem update --system --no-ri --no-rdoc
+  - gem --version
+  - where gem
+
+  # Print version and location for pre-installed bundler
+  - bundler --version
+  - where bundler
+
+  # Install ruby dependencies
+  - bundle install --retry 3
+
+build: off
+
+before_test:
+  # Necessary for AuthorName and AuthorEmail pre-commit hooks to pass
+  - git config --global user.email "appveyor@appveyor.ci"
+  - git config --global user.name "Appveyor CI"
+
+  # Ignore CRLF conversion warnings
+  - git config --global core.safecrlf false
+
+test_script:
+  - bundle exec rspec --tty --backtrace --color --format documentation
+  - bundle exec overcommit --run
