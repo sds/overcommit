@@ -10,7 +10,7 @@ describe Overcommit::GitRepo do
       end
 
       repo do
-        `git submodule add #{submodule} sub-repo 2>&1 > /dev/null`
+        `git submodule add #{submodule} sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Initial commit"`
         example.run
       end
@@ -26,7 +26,7 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} another-sub-repo 2>&1 > /dev/null`
+        `git submodule add #{another_submodule} another-sub-repo 2>&1 > #{File::NULL}`
       end
 
       it { should be_empty }
@@ -52,7 +52,7 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} yet-another-sub-repo 2>&1 > /dev/null`
+        `git submodule add #{another_submodule} yet-another-sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Add yet another submodule"`
         `git rm sub-repo`
         `git rm yet-another-sub-repo`
@@ -70,9 +70,9 @@ describe Overcommit::GitRepo do
 
     around do |example|
       repo do
-        `git checkout -b master &>/dev/null`
+        `git checkout -b master > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Initial commit"`
-        `git checkout -b topic &>/dev/null`
+        `git checkout -b topic > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Another commit"`
         example.run
       end
@@ -100,7 +100,7 @@ describe Overcommit::GitRepo do
       let(:commit_ref) { 'HEAD' }
 
       before do
-        `git checkout --detach &>/dev/null`
+        `git checkout --detach > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Detached HEAD"`
       end
 

@@ -180,7 +180,7 @@ describe Overcommit::HookContext::PreCommit do
         end
 
         repo do
-          `git submodule add #{submodule} sub &>/dev/null`
+          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `echo "Hello World" > sub/submodule-file`
           `git submodule foreach 'git add submodule-file'`
@@ -330,7 +330,7 @@ describe Overcommit::HookContext::PreCommit do
         end
 
         repo do
-          `git submodule add #{submodule} sub &>/dev/null`
+          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `echo "Hello World" > sub/submodule-file`
           `git submodule foreach 'git add submodule-file'`
@@ -354,7 +354,7 @@ describe Overcommit::HookContext::PreCommit do
         end
 
         repo do
-          `git submodule add #{submodule} sub &>/dev/null`
+          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `echo "Hello World" > sub/submodule-file`
           `git submodule foreach 'git add submodule-file'`
@@ -384,7 +384,7 @@ describe Overcommit::HookContext::PreCommit do
         end
 
         repo do
-          `git submodule add #{submodule} sub &>/dev/null`
+          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `git rm sub`
           example.run
@@ -413,7 +413,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       repo do
-        `git submodule add #{submodule} test-sub 2>&1 > /dev/null`
+        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         expect(subject).to_not include File.expand_path('test-sub')
       end
     end

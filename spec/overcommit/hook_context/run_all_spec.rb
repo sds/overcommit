@@ -44,7 +44,7 @@ describe Overcommit::HookContext::RunAll do
         end
 
         repo do
-          `git submodule add #{submodule} test-sub 2>&1 > /dev/null`
+          `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
           example.run
         end
       end

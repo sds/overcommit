@@ -134,7 +134,7 @@ module Overcommit
     #
     # Restored via [#restore_merge_state].
     def store_merge_state
-      merge_head = `git rev-parse MERGE_HEAD 2> /dev/null`.chomp
+      merge_head = `git rev-parse MERGE_HEAD 2> #{File::NULL}`.chomp
 
       # Store the merge state if we're in the middle of resolving a merge
       # conflict. This is necessary since stashing removes the merge state.
@@ -151,7 +151,7 @@ module Overcommit
     #
     # Restored via [#restore_cherry_pick_state].
     def store_cherry_pick_state
-      cherry_head = `git rev-parse CHERRY_PICK_HEAD 2> /dev/null`.chomp
+      cherry_head = `git rev-parse CHERRY_PICK_HEAD 2> #{File::NULL}`.chomp
 
       # Store the merge state if we're in the middle of resolving a merge
       # conflict. This is necessary since stashing removes the merge state.

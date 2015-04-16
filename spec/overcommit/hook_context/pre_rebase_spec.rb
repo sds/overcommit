@@ -26,7 +26,7 @@ describe Overcommit::HookContext::PreRebase do
 
       around do |example|
         repo do
-          `git checkout -b #{current_branch} &> /dev/null`
+          `git checkout -b #{current_branch} > #{File::NULL} 2>&1`
           example.run
         end
       end
@@ -80,11 +80,11 @@ describe Overcommit::HookContext::PreRebase do
 
     around do |example|
       repo do
-        `git checkout -b #{base_branch} &> /dev/null`
+        `git checkout -b #{base_branch} > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Initial Commit"`
-        `git checkout -b #{topic_branch_1} &> /dev/null`
+        `git checkout -b #{topic_branch_1} > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Hello World"`
-        `git checkout -b #{topic_branch_2} #{base_branch} &> /dev/null`
+        `git checkout -b #{topic_branch_2} #{base_branch} > #{File::NULL} 2>&1`
         `git commit --allow-empty -m "Hello Again"`
         example.run
       end

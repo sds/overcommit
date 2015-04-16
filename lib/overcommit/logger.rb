@@ -3,7 +3,7 @@ module Overcommit
   class Logger
     # Helper for creating a logger which outputs nothing.
     def self.silent
-      new(File.open('/dev/null', 'w'))
+      new(File.open(File::NULL, 'w'))
     end
 
     # Creates a logger that will write to the given output stream.
