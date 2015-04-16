@@ -37,6 +37,7 @@ build: off
 before_test:
   - git config --global user.email "appveyor@appveyor.ci"
   - git config --global user.name "Appveyor CI"
+  - git config --global core.safecrlf false
 
 test_script:
   - bundle exec rspec
