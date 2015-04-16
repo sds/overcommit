@@ -20,7 +20,7 @@ module Overcommit::HookContext
         @amendment = !(/\s#{amend_pattern}/ =~ cmd).nil?
 
       # Check for git aliases that call `commit --amend`
-      `git config --get-regexp '^alias\\.' '#{amend_pattern}'`.
+      `git config --get-regexp "^alias\\." "#{amend_pattern}"`.
         scan(/alias\.([-\w]+)/). # Extract the alias
         each do |match|
           return @amendment if

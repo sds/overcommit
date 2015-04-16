@@ -137,7 +137,7 @@ describe Overcommit::HookContext::PostMerge do
         repo do
           FileUtils.touch('some-file')
           `git add some-file`
-          `git commit -m 'Initial commit'`
+          `git commit -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
           `echo Hello > some-file`
           `git add some-file`
@@ -156,7 +156,7 @@ describe Overcommit::HookContext::PostMerge do
         repo do
           FileUtils.touch('some-file')
           `git add some-file`
-          `git commit -m 'Initial commit'`
+          `git commit -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
           `git rm some-file`
           `git commit -m "Branch commit"`

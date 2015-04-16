@@ -25,7 +25,7 @@ describe 'commiting' do
 
   context 'when a hook fails' do
     before do
-      `git config --local user.name ''`
+      `git config --local user.name ""`
     end
 
     it 'exits with a non-zero status' do
@@ -35,7 +35,7 @@ describe 'commiting' do
 
   context 'when no hooks fail' do
     before do
-      `git config --local user.name 'John Doe'`
+      `git config --local user.name "John Doe"`
     end
 
     it 'exits successfully' do
