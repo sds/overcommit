@@ -40,5 +40,5 @@ before_test:
   - git config --global core.safecrlf false
 
 test_script:
-  - bundle exec rspec
+  - bundle exec rspec --backtrace --color --format documentation
   - bundle exec bin/overcommit --run
