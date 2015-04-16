@@ -1,0 +1,43 @@
+version: "{build}"
+
+clone_depth: 1
+
+environment:
+  matrix:
+    - ruby_folder_version: "193"
+      ruby_gems_folder: "1.9.3"
+    - ruby_folder_version: "193-x64"
+      ruby_gems_folder: "1.9.3"
+    - ruby_folder_version: "200"
+      ruby_gems_folder: "2.0.0"
+    - ruby_folder_version: "200-x64"
+      ruby_gems_folder: "2.0.0"
+    - ruby_folder_version: "21"
+      ruby_gems_folder: "2.1.0"
+    - ruby_folder_version: "21-x64"
+      ruby_gems_folder: "2.1.0"
+    - ruby_folder_version: "22"
+      ruby_gems_folder: "2.2.0"
+    - ruby_folder_version: "22-x64"
+      ruby_gems_folder: "2.2.0"
+
+matrix:
+  fast_finish: true
+
+install:
+  - SET PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
+  - ruby --version
+  - gem --version
+  - gem update --system 2.3.0 --no-ri --no-rdoc
+  - bundler --version
+  - bundle install --retry 3
+
+build: off
+
+before_test:
+  - git config --global user.email "appveyor@appveyor.ci"
+  - git config --global user.name "Appveyor CI"
+
+test_script:
+  - bundle exec rspec
+  - bundle exec bin/overcommit --run
