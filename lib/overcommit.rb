@@ -1,3 +1,4 @@
+require 'overcommit/os'
 require 'overcommit/constants'
 require 'overcommit/exceptions'
 require 'overcommit/utils'
