@@ -9,7 +9,9 @@ class << File
 
   def symlink(old_name, new_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(['cmd.exe', "/c mklink #{new_name} #{old_name}"])
+      result = Overcommit::Subprocess.spawn(
+        ['cmd.exe', "/c mklink /J #{new_name} #{old_name}"]
+      )
       result.status
     else
       old_symlink(old_name, new_name)
@@ -18,7 +20,9 @@ class << File
 
   def symlink?(file_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(['cmd.exe', "/c dir #{file_name} | find \"SYMLINK\""])
+      result = Overcommit::Subprocess.spawn(
+        ['cmd.exe', "/c dir #{file_name} | find \"<JUNCTION>\""]
+      )
       result.success?
     else
       old_symlink?(file_name)
@@ -27,7 +31,9 @@ class << File
 
   def readlink(link_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(['cmd.exe', "/c dir #{link_name} | find \"SYMLINK\""])
+      result = Overcommit::Subprocess.spawn(
+        ['cmd.exe', "/c dir #{link_name} | find \"<JUNCTION>\""]
+      )
       raise ArgumentError, "#{link_name} is not a symlink" unless result.success?
 
       # Extract symlink target from output, which looks like:
