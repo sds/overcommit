@@ -25,6 +25,7 @@ matrix:
   fast_finish: true
 
 install:
+  - git --version
   - SET PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
   - ruby --version
   - gem --version
