@@ -30,10 +30,15 @@ cache:
 
 install:
   - git --version
-  - SET PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
+  - set PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
+  - echo %PATH%
+  - where ruby
   - ruby --version
   - gem --version
   - gem update --system 2.3.0 --no-ri --no-rdoc
+  - where gem
+  - gem --version
+  - where bundler
   - bundler --version
   - bundle install --retry 3
 
