@@ -25,7 +25,7 @@ module Overcommit::HookContext
         each do |match|
           return @amendment if
             # True if the command uses a git alias for `commit --amend`
-            @amendment = !(/git\s+#{match[0]}/ =~ cmd).nil?
+            @amendment = !(/git(\.exe)?\s+#{match[0]}/ =~ cmd).nil?
         end
 
       @amendment
