@@ -47,6 +47,6 @@ describe 'resolving cherry-pick conflicts' do
 
   it 'keeps the commit message from the cherry-picked commit' do
     subject
-    `cat .git/MERGE_MSG`.should include 'Add Branch 2 addition'
+    File.read(File.join('.git', 'MERGE_MSG')).should include 'Add Branch 2 addition'
   end
 end
