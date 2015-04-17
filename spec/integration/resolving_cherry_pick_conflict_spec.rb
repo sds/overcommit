@@ -42,7 +42,7 @@ describe 'resolving cherry-pick conflicts' do
 
   it 'does not remove the CHERRY_PICK_HEAD file' do
     subject
-    `ls -al .git`.should include 'CHERRY_PICK_HEAD'
+    Dir['.git/*'].should include '.git/CHERRY_PICK_HEAD'
   end
 
   it 'keeps the commit message from the cherry-picked commit' do
