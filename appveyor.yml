@@ -21,8 +21,8 @@ environment:
     - ruby_folder_version: "22-x64"
       ruby_gems_folder: "2.2.0"
 
-# matrix:
-#   fast_finish: true
+matrix:
+  fast_finish: true
 
 install:
   - git --version
