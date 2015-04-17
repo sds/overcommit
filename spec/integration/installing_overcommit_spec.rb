@@ -12,7 +12,7 @@ describe 'installing Overcommit' do
       if Overcommit::OS.windows?
         # Symlinks in template-dir are not compatible with Windows.
         # Windows users will need to manually install Overcommit for now.
-        skip
+        skip 'Unix symlinks not compatible with Windows'
       end
 
       Overcommit::Utils.supported_hook_types.each do |hook_type|
