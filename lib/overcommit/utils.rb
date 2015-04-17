@@ -1,4 +1,5 @@
 require 'pathname'
+require 'overcommit/os'
 require 'overcommit/subprocess'
 require 'overcommit/command_splitter'
 require 'tempfile'
@@ -137,7 +138,13 @@ module Overcommit
 
       # Return the parent command that triggered this hook run
       def parent_command
-        `ps -ocommand= -p #{Process.ppid}`.chomp
+        if OS.windows?
+          `wmic process where processid=#{Process.ppid} get commandline /FORMAT:VALUE`.
+            strip.
+            slice(/(?<=CommandLine=).+/)
+        else
+          `ps -ocommand= -p #{Process.ppid}`.chomp
+        end
       end
 
       # Execute a command in a subprocess, capturing exit status and output from
