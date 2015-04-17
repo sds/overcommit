@@ -54,7 +54,7 @@ describe Overcommit::HookContext::PostCommit do
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
-          `echo Hello > some-file`
+          echo('Hello', 'some-file')
           `git add some-file`
           `git commit -m "Modify some-file"`
           example.run

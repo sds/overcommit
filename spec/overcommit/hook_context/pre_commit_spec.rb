@@ -182,7 +182,7 @@ describe Overcommit::HookContext::PreCommit do
         repo do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
-          `echo "Hello World" > sub/submodule-file`
+          echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file"`
           `git submodule foreach "git commit -m \\"Another commit\\""`
           `git add sub`
@@ -332,7 +332,7 @@ describe Overcommit::HookContext::PreCommit do
         repo do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
-          `echo "Hello World" > sub/submodule-file`
+          echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file"`
           `git submodule foreach "git commit -m \\"Another commit\\""`
           `git add sub`
@@ -356,7 +356,7 @@ describe Overcommit::HookContext::PreCommit do
         repo do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
-          `echo "Hello World" > sub/submodule-file`
+          echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file"`
           `git submodule foreach "git commit -m \\"Another commit\\""`
           echo('Hello Again', 'tracked-file')
@@ -446,7 +446,7 @@ describe Overcommit::HookContext::PreCommit do
           FileUtils.touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
-          `echo Hello > some-file`
+          echo('Hello', 'some-file')
           `git add some-file`
           example.run
         end

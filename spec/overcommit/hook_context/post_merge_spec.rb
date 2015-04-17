@@ -139,7 +139,7 @@ describe Overcommit::HookContext::PostMerge do
           `git add some-file`
           `git commit -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
-          `echo Hello > some-file`
+          echo('Hello', 'some-file')
           `git add some-file`
           `git commit -m "Branch commit"`
           `git checkout master > #{File::NULL} 2>&1`
