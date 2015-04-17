@@ -70,12 +70,12 @@ describe Overcommit::HookContext::PreCommit do
     context 'when there are no staged changes' do
       around do |example|
         repo do
-          `echo "Hello World" > tracked-file`
-          `echo "Hello Other World" > other-tracked-file`
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
           `git add tracked-file other-tracked-file`
           `git commit -m "Add tracked-file and other-tracked-file"`
-          `echo "Hello Again" > untracked-file`
-          `echo "Some more text" >> other-tracked-file`
+          echo('Hello Again', 'untracked-file')
+          echo('Some more text', 'other-tracked-file', append: true)
           example.run
         end
       end
@@ -110,15 +110,15 @@ describe Overcommit::HookContext::PreCommit do
     context 'when there are staged changes' do
       around do |example|
         repo do
-          `echo "Hello World" > tracked-file`
-          `echo "Hello Other World" > other-tracked-file`
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
           `git add tracked-file other-tracked-file`
           `git commit -m "Add tracked-file and other-tracked-file"`
-          `echo "Hello Again" > untracked-file`
-          `echo "Some more text" >> tracked-file`
-          `echo "Some more text" >> other-tracked-file`
+          echo('Hello Again', 'untracked-file')
+          echo('Some more text', 'tracked-file', append: true)
+          echo('Some more text', 'other-tracked-file', append: true)
           `git add tracked-file`
-          `echo "Yet some more text" >> tracked-file`
+          echo('Yet some more text', 'tracked-file', append: true)
           example.run
         end
       end
@@ -224,12 +224,12 @@ describe Overcommit::HookContext::PreCommit do
     context 'when there were no staged changes' do
       around do |example|
         repo do
-          `echo "Hello World" > tracked-file`
-          `echo "Hello Other World" > other-tracked-file`
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
           `git add tracked-file other-tracked-file`
           `git commit -m "Add tracked-file and other-tracked-file"`
-          `echo "Hello Again" > untracked-file`
-          `echo "Some more text" >> other-tracked-file`
+          echo('Hello Again', 'untracked-file')
+          echo('Some more text', 'other-tracked-file', append: true)
           example.run
         end
       end
@@ -265,15 +265,15 @@ describe Overcommit::HookContext::PreCommit do
     context 'when there were staged changes' do
       around do |example|
         repo do
-          `echo "Hello World" > tracked-file`
-          `echo "Hello Other World" > other-tracked-file`
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
           `git add tracked-file other-tracked-file`
           `git commit -m "Add tracked-file and other-tracked-file"`
-          `echo "Hello Again" > untracked-file`
-          `echo "Some more text" >> tracked-file`
-          `echo "Some more text" >> other-tracked-file`
+          echo('Hello Again', 'untracked-file')
+          echo('Some more text', 'tracked-file', append: true)
+          echo('Some more text', 'other-tracked-file', append: true)
           `git add tracked-file`
-          `echo "Yet some more text" >> tracked-file`
+          echo('Yet some more text', 'tracked-file', append: true)
           example.run
         end
       end
@@ -309,7 +309,7 @@ describe Overcommit::HookContext::PreCommit do
     context 'when there were deleted files' do
       around do |example|
         repo do
-          `echo "Hello World" > tracked-file`
+          echo('Hello World', 'tracked-file')
           `git add tracked-file`
           `git commit -m "Add tracked-file"`
           `git rm tracked-file`
@@ -359,7 +359,7 @@ describe Overcommit::HookContext::PreCommit do
           `echo "Hello World" > sub/submodule-file`
           `git submodule foreach "git add submodule-file"`
           `git submodule foreach "git commit -m \\"Another commit\\""`
-          `echo "Hello Again" > tracked-file`
+          echo('Hello Again', 'tracked-file')
           `git add sub tracked-file`
           example.run
         end

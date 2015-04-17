@@ -14,23 +14,23 @@ describe 'resolving cherry-pick conflicts' do
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
       `git add .overcommit.yml`
       `git commit -m "Add Overcommit config"`
-      `echo "Master" > some-file`
+      echo('Master', 'some-file')
       `git add some-file`
       `git commit -m "Add some-file"`
       `git checkout -q -b branch1`
-      `echo "Branch 1 Addition" > some-file`
+      echo('Branch 1 Addition', 'some-file')
       `git add some-file`
       `git commit -m "Add Branch 1 addition"`
       `git checkout -q master`
       `git checkout -q -b branch2`
-      `echo "Branch 2 Addition" > some-file`
+      echo('Branch 2 Addition', 'some-file')
       `git add some-file`
       `git commit -m "Add Branch 2 addition"`
       `git checkout -q master`
       `git cherry-pick branch1 > #{File::NULL} 2>&1`
       `overcommit --install > #{File::NULL}`
       `git cherry-pick branch2 > #{File::NULL} 2>&1` # Results in cherry-pick conflict
-      `echo "Conflicts Resolved " > some-file` # Fail trailing whitespace hook
+      echo('Conflicts Resolved ', 'some-file') # Fail trailing whitespace hook
       `git add some-file`
       example.run
     end

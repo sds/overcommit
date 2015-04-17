@@ -5,16 +5,16 @@ describe 'resolving merge conflicts' do
 
   around do |example|
     repo do
-      `echo "Master" > some-file`
+      echo('Master', 'some-file')
       `git add some-file`
       `git commit -m "Add some-file"`
       `git checkout -q -b branch1`
-      `echo "Branch 1 Addition" > some-file`
+      echo('Branch 1 Addition', 'some-file')
       `git add some-file`
       `git commit -m "Add Branch 1 addition"`
       `git checkout -q master`
       `git checkout -q -b branch2`
-      `echo "Branch 2 Addition" > some-file`
+      echo('Branch 2 Addition', 'some-file')
       `git add some-file`
       `git commit -m "Add Branch 2 addition"`
       `git checkout -q master`
@@ -22,7 +22,7 @@ describe 'resolving merge conflicts' do
       `git merge branch2` # Results in merge conflict
       Overcommit::Installer.new(Overcommit::Logger.silent).
                             run('.', action: :install)
-      `echo "Conflicts Resolved" > some-file`
+      echo('Conflicts Resolved', 'some-file')
       `git add some-file`
       example.run
     end
