@@ -207,7 +207,7 @@ describe Overcommit::Utils do
   end
 
   describe '.execute_in_background' do
-    let(:arguments) { %w[touch some-file] }
+    let(:arguments) { %w[(echo Hello World) > some-file] }
     subject { described_class.execute_in_background(arguments) }
 
     around do |example|
@@ -218,7 +218,7 @@ describe Overcommit::Utils do
 
     it 'executes the command' do
       wait_until { subject.exited? } # Make sure process terminated before checking
-      File.exist?('some-file').should == true
+      File.read('some-file').should == "Hello World\n"
     end
   end
 
