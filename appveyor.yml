@@ -41,6 +41,8 @@ install:
   - where bundler
   - bundler --version
   - bundle install --retry 3
+  - choco --version
+  - choco install unxutils
 
 build: off
 
