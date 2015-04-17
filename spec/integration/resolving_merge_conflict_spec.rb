@@ -20,8 +20,7 @@ describe 'resolving merge conflicts' do
       `git checkout -q master`
       `git merge branch1`
       `git merge branch2` # Results in merge conflict
-      Overcommit::Installer.new(Overcommit::Logger.silent).
-                            run('.', action: :install)
+      `overcommit --install > #{File::NULL}`
       echo('Conflicts Resolved', 'some-file')
       `git add some-file`
       example.run
