@@ -24,6 +24,10 @@ environment:
 matrix:
   fast_finish: true
 
+cache:
+  - C:\Ruby%ruby_folder_version%\bin -> Gemfile,overcommit.gemspec
+  - C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder% -> Gemfile,overcommit.gemspec
+
 install:
   - git --version
   - SET PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
