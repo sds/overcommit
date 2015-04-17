@@ -25,6 +25,10 @@ module Overcommit
       # @option options [String] input string to pass via standard input stream
       # @return [Result]
       def spawn(args, options = {})
+        if OS.windows?
+          args.unshift('cmd.exe', '/c')
+        end
+
         process = ChildProcess.build(*args)
 
         out, err = assign_output_streams(process)
@@ -53,6 +57,10 @@ module Overcommit
       # Spawns a new process in the background using the given array of
       # arguments (the first element is the command).
       def spawn_detached(args)
+        if OS.windows?
+          args.unshift('cmd.exe', '/c')
+        end
+
         process = ChildProcess.build(*args)
         process.detach = true
 
