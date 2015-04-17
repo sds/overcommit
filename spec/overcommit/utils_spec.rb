@@ -155,11 +155,11 @@ describe Overcommit::Utils do
   end
 
   describe '.execute' do
-    let(:arguments) { %w[echo -n Hello World] }
+    let(:arguments) { %w[echo Hello World] }
     subject { described_class.execute(arguments) }
 
     it 'returns result with the output' do
-      subject.stdout.should == 'Hello World'
+      subject.stdout.should == "Hello World\n"
     end
 
     it 'returns result with the exit status' do
