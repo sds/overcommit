@@ -17,6 +17,12 @@ describe 'template directory' do
     end
 
     it 'contains all other hooks as symlinks to the master hook' do
+      if Overcommit::OS.windows?
+        # Symlinks in template-dir are not compatible with Windows.
+        # Windows users will need to manually install Overcommit for now.
+        skip 'Unix symlinks not compatible with Windows'
+      end
+
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         File.symlink?(File.join(hooks_dir, hook_type)).should == true
       end
