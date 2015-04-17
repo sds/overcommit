@@ -54,7 +54,7 @@ describe Overcommit::Utils do
     context 'when .git is a file' do
       before do
         FileUtils.rm_rf('.git')
-        `echo "gitdir: #{git_dir_path}" > .git`
+        echo("gitdir: #{git_dir_path}", '.git')
       end
 
       context 'and is a relative path' do
