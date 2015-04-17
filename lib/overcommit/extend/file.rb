@@ -39,13 +39,13 @@ class << File
 
   def win32_dir_cmd(file_name)
     Overcommit::Subprocess.spawn(
-      %W[cmd.exe /c dir #{win32_fix_pathsep(file_name)}]
+      %W[dir #{win32_fix_pathsep(file_name)}]
     )
   end
 
   def win32_mklink_cmd(old_name, new_name)
     Overcommit::Subprocess.spawn(
-      %W[cmd.exe /c mklink #{win32_fix_pathsep(new_name)} #{win32_fix_pathsep(old_name)}]
+      %W[mklink #{win32_fix_pathsep(new_name)} #{win32_fix_pathsep(old_name)}]
     )
   end
 
