@@ -20,4 +20,16 @@ module ShellHelpers
       end
     end
   end
+
+  # Output text to file using `File#puts`, which mimics the behavior of the
+  # `echo` shell command.
+  #
+  # @param text [String] text to write
+  # @param file [String] path to target file
+  # @param options [Hash]
+  # @option options [Boolean] :append whether to append to existing file
+  def echo(text, file, options = {})
+    mode = options[:append] ? 'a' : 'w'
+    File.open(file, mode) { |f| f.puts(text) }
+  end
 end
