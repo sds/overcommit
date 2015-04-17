@@ -200,7 +200,7 @@ describe Overcommit::HookContext::PreCommit do
     context 'when a broken symlink is staged' do
       around do |example|
         repo do
-          `ln -s non-existent-file symlink`
+          File.symlink('non-existent-file', 'symlink')
           `git add symlink`
           example.run
         end
