@@ -67,7 +67,7 @@ describe Overcommit::HookContext::RunAll do
         end
       end
 
-      it { should == Set.new(1..4) }
+      it { should == Set.new(1..3) }
     end
 
     context 'when file does not contain a trailing newline' do

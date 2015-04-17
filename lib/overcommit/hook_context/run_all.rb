@@ -17,7 +17,7 @@ module Overcommit::HookContext
     # @return [Set]
     def modified_lines_in_file(file)
       @modified_lines_in_file ||= {}
-      @modified_lines_in_file[file] ||= Set.new(1..(count_lines(file) + 1))
+      @modified_lines_in_file[file] ||= Set.new(1..count_lines(file))
     end
 
     def hook_class_name
@@ -35,8 +35,9 @@ module Overcommit::HookContext
     private
 
     def count_lines(file)
-      result = Overcommit::Utils.execute(%w[wc -l] + [file])
-      result.success? ? result.stdout.to_i : 0
+      num_lines = 0
+      File.new(file).each_line { num_lines += 1 }
+      num_lines
     end
   end
 end
