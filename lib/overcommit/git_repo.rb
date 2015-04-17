@@ -167,7 +167,7 @@ module Overcommit
         FileUtils.touch(File.expand_path('MERGE_MODE', Overcommit::Utils.git_dir))
 
         File.open(File.expand_path('MERGE_HEAD', Overcommit::Utils.git_dir), 'w') do |f|
-          f.write("#{@merge_head}\n")
+          f.write(@merge_head)
         end
         @merge_head = nil
       end
@@ -186,7 +186,7 @@ module Overcommit
       if @cherry_head
         File.open(File.expand_path('CHERRY_PICK_HEAD',
                                    Overcommit::Utils.git_dir), 'w') do |f|
-          f.write("#{@cherry_head}\n")
+          f.write(@cherry_head)
         end
         @cherry_head = nil
       end
