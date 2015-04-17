@@ -9,9 +9,7 @@ class << File
 
   def symlink(old_name, new_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(
-        ['cmd.exe', "/c mklink #{new_name} #{old_name}"]
-      )
+      result = win32_mklink_cmd(old_name, new_name)
       result.status
     else
       old_symlink(old_name, new_name)
@@ -20,10 +18,8 @@ class << File
 
   def symlink?(file_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(
-        ['cmd.exe', "/c dir #{file_name} | find \"<SYMLINK>\""]
-      )
-      result.success?
+      result = win32_dir_cmd(file_name)
+      !(result.stdout =~ /<SYMLINK>/).nil?
     else
       old_symlink?(file_name)
     end
@@ -31,10 +27,11 @@ class << File
 
   def readlink(link_name)
     if Overcommit::OS.windows?
-      result = Overcommit::Subprocess.spawn(
-        ['cmd.exe', "/c dir #{link_name} | find \"<SYMLINK>\""]
-      )
-      raise ArgumentError, "#{link_name} is not a symlink" unless result.success?
+      result = win32_dir_cmd(link_name)
+
+      unless result.stdout =~ /<SYMLINK>/
+        raise ArgumentError, "#{link_name} is not a symlink"
+      end
 
       # Extract symlink target from output, which looks like:
       #   11/13/2012 12:53 AM <SYMLINK> mysymlink [C:\Windows\Temp\somefile.txt]
@@ -42,5 +39,19 @@ class << File
     else
       old_readlink(link_name)
     end
+  end
+
+  private
+
+  def win32_dir_cmd(file_name)
+    Overcommit::Subprocess.spawn(
+      %W[cmd.exe /c dir #{file_name}]
+    )
+  end
+
+  def win32_mklink_cmd(old_name, new_name)
+    Overcommit::Subprocess.spawn(
+      %W[cmd.exe /c mklink #{new_name} #{old_name}]
+    )
   end
 end
