@@ -26,7 +26,7 @@ describe Overcommit::Utils do
 
     context 'when there is no .git directory' do
       before do
-        FileUtils.rm_rf('.git')
+        FileUtils.rm_rf('.git', secure: true)
       end
 
       it 'raises an exception' do
@@ -53,7 +53,7 @@ describe Overcommit::Utils do
 
     context 'when .git is a file' do
       before do
-        FileUtils.rm_rf('.git')
+        FileUtils.rm_rf('.git', secure: true)
         echo("gitdir: #{git_dir_path}", '.git')
       end
 

@@ -100,7 +100,7 @@ module Overcommit
     end
 
     def uninstall_master_hook
-      FileUtils.rm_rf(master_hook_install_path)
+      FileUtils.rm_rf(master_hook_install_path, secure: true)
     end
 
     def install_hook_symlinks
@@ -162,7 +162,7 @@ module Overcommit
 
       Dir.chdir(hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
-          FileUtils.rm_rf(hook_type) if overcommit_hook?(hook_type)
+          FileUtils.rm_rf(hook_type, secure: true) if overcommit_hook?(hook_type)
         end
       end
     end
