@@ -207,7 +207,14 @@ describe Overcommit::Utils do
   end
 
   describe '.execute_in_background' do
-    let(:arguments) { Overcommit::OS.windows? ? %w[echo null>some-file] : %w[touch some-file] }
+    let(:arguments) do
+      if Overcommit::OS.windows?
+        %w[echo null>some-file]
+      else
+        %w[touch some-file]
+      end
+    end
+
     subject { described_class.execute_in_background(arguments) }
 
     around do |example|
