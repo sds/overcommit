@@ -32,7 +32,7 @@ class << File
 
     # Extract symlink target from output, which looks like:
     #   11/13/2012 12:53 AM <SYMLINK> mysymlink [C:\Windows\Temp\somefile.txt]
-    result.stdout[/\[.+\]/][1..-2]
+    result.stdout[/\[(.+)\]/, 1]
   end
 
   private
