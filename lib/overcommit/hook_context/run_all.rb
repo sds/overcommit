@@ -35,9 +35,7 @@ module Overcommit::HookContext
     private
 
     def count_lines(file)
-      num_lines = 0
-      File.new(file).each_line { num_lines += 1 }
-      num_lines
+      File.foreach(file).count
     end
   end
 end
