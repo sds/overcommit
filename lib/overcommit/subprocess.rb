@@ -70,7 +70,14 @@ module Overcommit
       # Necessary to run commands in the cmd.exe context.
       # Args are joined to properly handle quotes and special characters.
       def win32_prepare_args(args)
-        args = args.map { |a| a =~ /\s/ ? "\"#{a}\"" : a }
+        args = args.map do |arg|
+          # Quote args that contain whitespace
+          arg = "\"#{arg}\"" if arg =~ /\s/
+
+          # Escape cmd.exe metacharacters
+          arg.gsub(/[()%!^"<>&|]/, '^\0')
+        end
+
         %w[cmd.exe /c] + [args.join(' ')]
       end
 
