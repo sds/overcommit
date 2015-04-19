@@ -114,7 +114,8 @@ module Overcommit
                   "Hook '#{File.expand_path(hook_type)}' already exists and " \
                   'was not installed by Overcommit'
           end
-          FileUtils.ln_sf('overcommit-hook', hook_type)
+          FileUtils.rm_f(hook_type)
+          Overcommit::Utils::FileUtils.symlink('overcommit-hook', hook_type)
         end
       end
     end
