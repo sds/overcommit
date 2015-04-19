@@ -258,7 +258,7 @@ PreCommit:
     enabled: false
     description: 'Checking for local paths in Gemfile'
     required_executable: 'grep'
-    flags: ['-IHnE', '^[^#]*((\bpath:)|(:path\s*=>))']
+    flags: ['-IHnE', "^[^#]*((\\bpath:)|(:path[ \t]*=>))"]
     include: '**/Gemfile'
 
   MergeConflicts:
@@ -266,7 +266,7 @@ PreCommit:
     description: 'Checking for merge conflicts'
     quiet: true
     required_executable: 'grep'
-    flags: ['-IHn', '^<<<<<<<\s']
+    flags: ['-IHn', "^<<<<<<<[ \t]"]
 
   Pep257:
     enabled: false
@@ -391,7 +391,7 @@ PreCommit:
     enabled: false
     description: 'Checking for trailing whitespace'
     required_executable: 'grep'
-    flags: ['-IHn', '\s$']
+    flags: ['-IHn', "[ \t]$"]
 
   TravisLint:
     enabled: false
