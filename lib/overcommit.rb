@@ -1,7 +1,7 @@
 require 'overcommit/os'
-require 'overcommit/extend/file'
 require 'overcommit/constants'
 require 'overcommit/exceptions'
+require 'overcommit/utils/file_utils'
 require 'overcommit/utils'
 require 'overcommit/git_version'
 require 'overcommit/configuration_validator'
