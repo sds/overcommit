@@ -29,7 +29,7 @@ describe 'installing Overcommit' do
       it 'replaces the hooks with symlinks' do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           hook_file = File.join('.git', 'hooks', hook_type)
-          File.symlink?(hook_file).should == true
+          Overcommit::Utils::FileUtils.symlink?(hook_file).should == true
         end
       end
     end

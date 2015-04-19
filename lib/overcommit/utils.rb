@@ -230,7 +230,7 @@ module Overcommit
       def broken_symlink?(file)
         # JRuby's implementation of File.exist? returns true for broken
         # symlinks, so we need use File.size?
-        File.symlink?(file) && File.size?(file).nil?
+        Overcommit::Utils::FileUtils.symlink?(file) && File.size?(file).nil?
       end
 
       # Convert a glob pattern to an absolute path glob pattern rooted from the

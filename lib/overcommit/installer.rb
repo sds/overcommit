@@ -177,7 +177,8 @@ module Overcommit
     def overcommit_hook?(file)
       return true if File.read(file) =~ /OVERCOMMIT_DISABLE/
       # TODO: Remove these checks once we hit version 1.0
-      File.symlink?(file) && File.readlink(file) == 'overcommit-hook'
+      Overcommit::Utils::FileUtils.symlink?(file) &&
+        Overcommit::Utils::FileUtils.readlink(file) == 'overcommit-hook'
     rescue Errno::ENOENT
       # Some Ruby implementations (e.g. JRuby) raise an error when the file
       # doesn't exist. Standardize the behavior to return false.

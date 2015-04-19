@@ -41,7 +41,8 @@ describe Overcommit::Installer do
             expect { subject }.to change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
                 hook_file = File.join(hooks_dir, hook_type)
-                File.symlink?(hook_file) && File.readlink(hook_file) == 'overcommit-hook'
+                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
+                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
               end
             }.from(false).to(true)
           end
@@ -62,7 +63,8 @@ describe Overcommit::Installer do
             expect { subject }.to_not change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
                 hook_file = File.join(hooks_dir, hook_type)
-                File.symlink?(hook_file) && File.readlink(hook_file) == 'overcommit-hook'
+                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
+                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
               end
             }.from(true)
           end
@@ -101,7 +103,8 @@ describe Overcommit::Installer do
               expect { subject }.to change {
                 Overcommit::Utils.supported_hook_types.all? do |hook_type|
                   hook_file = File.join(hooks_dir, hook_type)
-                  File.symlink?(hook_file) && File.readlink(hook_file) == 'overcommit-hook'
+                  Overcommit::Utils::FileUtils.symlink?(hook_file) &&
+                    Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
                 end
               }.from(false).to(true)
             end
@@ -161,7 +164,8 @@ describe Overcommit::Installer do
             expect { subject }.to change {
               Overcommit::Utils.supported_hook_types.all? do |hook_type|
                 hook_file = File.join(hooks_dir, hook_type)
-                File.symlink?(hook_file) && File.readlink(hook_file) == 'overcommit-hook'
+                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
+                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
               end
             }.from(true).to(false)
           end
