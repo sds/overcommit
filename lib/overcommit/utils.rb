@@ -91,6 +91,7 @@ module Overcommit
       def supported_hook_types
         Dir[File.join(HOOK_DIRECTORY, '*')].
           select { |file| File.directory?(file) }.
+          reject { |file| File.basename(file) == 'shared' }.
           map { |file| File.basename(file).gsub('_', '-') }
       end
 

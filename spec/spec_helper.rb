@@ -7,6 +7,7 @@ require 'tempfile'
 
 hook_types = Dir[File.join(Overcommit::HOOK_DIRECTORY, '*')].
   select { |f| File.directory?(f) }.
+  reject { |f| File.basename(f) == 'shared' }.
   sort
 
 hook_types.each do |hook_type|
