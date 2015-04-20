@@ -7,6 +7,7 @@ class InterruptHandler
 
   attr_accessor :isolate_signals, :signal_received, :reenable_on_interrupt
 
+  # Initialize safe interrupt signal handling.
   def initialize
     self.isolate_signals = false
     self.signal_received = false
@@ -64,14 +65,19 @@ class InterruptHandler
       instance.isolate_signals = true
     end
 
+    # Disable interrupt isolation.
     def disable!
       instance.isolate_signals = false
     end
 
+    # Enable interrupt isolation.
     def enable!
       instance.isolate_signals = true
     end
 
+    # Enable interrupt isolation while executing the provided block.
+    #
+    # @yield block to execute with interrupt isolation
     def isolate_from_interrupts
       instance.signal_received = false
       instance.isolate_signals = true
