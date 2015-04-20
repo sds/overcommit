@@ -79,9 +79,5 @@ class InterruptHandler
       instance.isolate_signals = false
       result
     end
-
-    def signal_received?
-      instance.signal_received
-    end
   end
 end
