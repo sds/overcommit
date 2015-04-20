@@ -12,6 +12,10 @@ rvm:
   - jruby-19mode
   - rbx-2
 
+matrix:
+  allow_failures:
+    - rvm: rbx-2
+
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
