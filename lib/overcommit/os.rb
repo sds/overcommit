@@ -5,7 +5,11 @@ module Overcommit
   module OS
     class << self
       def windows?
-        (/mswin|msys|mingw|cygwin|bccwin|wince|emc/ =~ host_os) != nil
+        (/mswin|msys|mingw|bccwin|wince|emc/ =~ host_os) != nil
+      end
+
+      def cygwin?
+        (/cygwin/ =~ host_os) != nil
       end
 
       def mac?
@@ -17,7 +21,7 @@ module Overcommit
       end
 
       def linux?
-        unix? && !mac?
+        unix? && !mac? && !cygwin?
       end
 
       private
