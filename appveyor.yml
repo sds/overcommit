@@ -4,33 +4,33 @@ clone_depth: 1
 
 environment:
   matrix:
-    - ruby_folder_version: "193"
-      ruby_gems_folder: "1.9.3"
-    - ruby_folder_version: "193-x64"
-      ruby_gems_folder: "1.9.3"
-    - ruby_folder_version: "200"
-      ruby_gems_folder: "2.0.0"
-    - ruby_folder_version: "200-x64"
-      ruby_gems_folder: "2.0.0"
-    - ruby_folder_version: "21"
-      ruby_gems_folder: "2.1.0"
-    - ruby_folder_version: "21-x64"
-      ruby_gems_folder: "2.1.0"
-    - ruby_folder_version: "22"
-      ruby_gems_folder: "2.2.0"
-    - ruby_folder_version: "22-x64"
-      ruby_gems_folder: "2.2.0"
+    - RUBY_FOLDER_VERSION: "193"
+      RUBY_GEMS_FOLDER: "1.9.3"
+    - RUBY_FOLDER_VERSION: "193-x64"
+      RUBY_GEMS_FOLDER: "1.9.3"
+    - RUBY_FOLDER_VERSION: "200"
+      RUBY_GEMS_FOLDER: "2.0.0"
+    - RUBY_FOLDER_VERSION: "200-x64"
+      RUBY_GEMS_FOLDER: "2.0.0"
+    - RUBY_FOLDER_VERSION: "21"
+      RUBY_GEMS_FOLDER: "2.1.0"
+    - RUBY_FOLDER_VERSION: "21-x64"
+      RUBY_GEMS_FOLDER: "2.1.0"
+    - RUBY_FOLDER_VERSION: "22"
+      RUBY_GEMS_FOLDER: "2.2.0"
+    - RUBY_FOLDER_VERSION: "22-x64"
+      RUBY_GEMS_FOLDER: "2.2.0"
 
 matrix:
   fast_finish: true
 
 cache:
-  - C:\Ruby%ruby_folder_version%\bin -> Gemfile,overcommit.gemspec
-  - C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder% -> Gemfile,overcommit.gemspec
+  - C:\Ruby%RUBY_FOLDER_VERSION%\bin -> Gemfile,overcommit.gemspec
+  - C:\Ruby%RUBY_FOLDER_VERSION%\lib\ruby\gems\%RUBY_GEMS_FOLDER% -> Gemfile,overcommit.gemspec
 
 install:
   - git --version
-  - set PATH=C:\Ruby%ruby_folder_version%\bin;%PATH%
+  - set PATH=C:\Ruby%RUBY_FOLDER_VERSION%\bin;%PATH%
   - echo %PATH%
   - where ruby
   - ruby --version
