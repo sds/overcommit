@@ -34,6 +34,8 @@ install:
   - echo %PATH%
   - where ruby
   - ruby --version
+  - where grep
+  - grep --version
   - gem --version
   - gem update --system 2.3.0 --no-ri --no-rdoc
   - where gem
@@ -41,8 +43,6 @@ install:
   - where bundler
   - bundler --version
   - bundle install --retry 3
-  - choco --version
-  - choco install unxutils
 
 build: off
 
