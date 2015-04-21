@@ -139,7 +139,7 @@ module Overcommit
       # Return the parent command that triggered this hook run
       def parent_command
         if OS.windows?
-          `wmic process where processid=#{Process.ppid} get commandline /FORMAT:VALUE`.
+          `wmic process where ProcessId=#{Process.ppid} get CommandLine /FORMAT:VALUE`.
             strip.
             slice(/(?<=CommandLine=).+/)
         else
