@@ -32,7 +32,7 @@ module Overcommit::Hook::PreCommit
         end
 
         file = extract_file(match, message)
-        line = extract_line(match, message) unless match[:line].nil?
+        line = extract_line(match, message) if match.names.include?('line') && match[:line]
         type = extract_type(match, message, type_categorizer)
 
         Overcommit::Hook::Message.new(type, file, line, message)
