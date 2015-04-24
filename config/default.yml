@@ -351,6 +351,13 @@ PreCommit:
       - '**/*.gemspec'
       - '**/*.rb'
 
+  Scalariform:
+    enabled: false
+    description: 'Checking formatting with Scalariform'
+    required_executable: 'scalariform'
+    flags: ['--test']
+    include: '**/*.scala'
+
   Scalastyle:
     enabled: false
     description: 'Analyzing with Scalastyle'
