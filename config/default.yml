@@ -445,13 +445,17 @@ PreCommit:
     description: 'Analyzing with xmllint'
     required_executable: 'xmllint'
     flags: ['--noout']
-    include: '**/*.xml'
+    include:
+      - '**/*.xml'
+      - '**/*.svg'
 
   XmlSyntax:
     enabled: false
     description: 'Checking XML syntax'
     required_library: 'rexml/document'
-    include: '**/*.xml'
+    include:
+      - '**/*.xml'
+      - '**/*.svg'
 
   YamlSyntax:
     enabled: false
