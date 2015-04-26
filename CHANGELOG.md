@@ -2,8 +2,8 @@
 
 ## master (unreleased)
 
-* Add `**/*.svg` to `ImageOptim`, `XmlLint`, and `XmlSyntax` default includes
-  configuration
+* Include SVG files in `ImageOptim`, `XmlLint`, and `XmlSyntax` pre-commit
+  hooks by default
 * Make `IndexTags` hooks quiet by default
 * Add `Vint` pre-commit hook that checks Vim script with
   [Vint](https://github.com/Kuniwak/vint)
