@@ -6,6 +6,8 @@
 * Make `IndexTags` hooks quiet by default
 * Add `Vint` pre-commit hook that checks Vim script with
   [Vint](https://github.com/Kuniwak/vint)
+* Add `Scalariform` pre-commit hook that checks formatting of Scala code with
+  [Scalariform](https://mdr.github.io/scalariform/)
 
 ## 0.24.0
 
