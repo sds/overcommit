@@ -386,6 +386,13 @@ PreCommit:
     flags: ['--format=gcc']
     include: '**/*.sh'
 
+  SlimLint:
+    enabled: false
+    description: 'Analyzing with slim-lint'
+    required_executable: 'slim-lint'
+    install_command: 'gem install slim_lint'
+    include: '**/*.slim'
+
   Standard:
     enabled: false
     description: 'Analyzing with standard'

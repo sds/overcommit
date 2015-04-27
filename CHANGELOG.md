@@ -9,6 +9,8 @@
   [Vint](https://github.com/Kuniwak/vint)
 * Add `Scalariform` pre-commit hook that checks formatting of Scala code with
   [Scalariform](https://mdr.github.io/scalariform/)
+* Add `SlimLint` pre-commit hook that analyzes Slim templates with
+  [Slim-Lint](https://github.com/sds/slim-lint)
 
 ## 0.24.0
 
