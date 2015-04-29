@@ -3,11 +3,11 @@ module Overcommit::Hook::PreCommit
   class TrailingWhitespace < Base
     def run
       result = execute(command + applicable_files)
-      unless result.stdout.empty?
-        return :fail, "Trailing whitespace detected:\n#{result.stdout}"
-      end
 
-      :pass
+      extract_messages(
+        result.stdout.split("\n"),
+        /^(?<file>[^:]+):(?<line>\d+)/,
+      )
     end
   end
 end
