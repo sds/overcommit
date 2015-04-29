@@ -11,9 +11,9 @@
   [Scalariform](https://mdr.github.io/scalariform/)
 * Add `SlimLint` pre-commit hook that analyzes Slim templates with
   [Slim-Lint](https://github.com/sds/slim-lint)
-* Enhance `TrailingWhitespace` pre-commit hook to including line information in
-  errors, making it work as expected when `problem_on_unmodified_line` is set
-  to something other than `report`
+* Enhance `HardTabs` and `TrailingWhitespace` pre-commit hooks to including
+  line information in errors, making it work as expected when
+  `problem_on_unmodified_line` is set to something other than `report`
 
 ## 0.24.0
 
