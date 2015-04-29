@@ -1,5 +1,5 @@
 module Overcommit::Hook::PreCommit
-  # Runs `slim-lint` against any modified HAML files.
+  # Runs `slim-lint` against any modified Slim templates.
   class SlimLint < Base
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.include?('W') ? :warning : :error
