@@ -19,6 +19,7 @@ repository (but unlike regular Git hooks, are stored in source control).
 * [Installation](#installation)
   * [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
 * [Usage](#usage)
+* [Continuous Integration](#continuous-integration)
 * [Configuration](#configuration)
   * [Hooks](#hooks)
   * [Hook Categories](#hook-categories)
