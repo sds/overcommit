@@ -14,6 +14,8 @@
 * Enhance `HardTabs` and `TrailingWhitespace` pre-commit hooks to including
   line information in errors, making it work as expected when
   `problem_on_unmodified_line` is set to something other than `report`
+* Fix handling of changing a symlink to a directory on commit amendment so it
+  is not included in the list of modified files for pre-commit hooks
 
 ## 0.24.0
 

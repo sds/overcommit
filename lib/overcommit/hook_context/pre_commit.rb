@@ -94,6 +94,13 @@ module Overcommit::HookContext
         if amendment?
           subcmd = 'show --format=%n'
           @modified_files += Overcommit::GitRepo.modified_files(subcmd: subcmd)
+
+          # Filter out directories. This could happen when changing a symlink to
+          # a directory as part of an amendment, since the symlink will still
+          # appear as a file, but the actual working tree will have a directory.
+          @modified_files.reject! do |file|
+            File.directory?(file) && !File.symlink?(file)
+          end
         end
       end
       @modified_files
