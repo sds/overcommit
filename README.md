@@ -240,19 +240,141 @@ for more information on this option and what exactly it controls.
 
 ## Built-In Hooks
 
-Currently, Overcommit supports `commit-msg`, `pre-commit`, `post-checkout`,
-`post-commit`, `post-merge`, and `post-rewrite` hooks, but it can easily be
-expanded to support others.
+Currently, Overcommit supports the following hooks out of the box&mdash;simply
+enable them in your `.overcommit.yml`.
 
-You can see the full list of hooks by checking out the
-[hooks directory](lib/overcommit/hook), and view their
-[default configuration](config/default.yml).
+**Note**: Hooks with a `*` are enabled by default.
+
+### CommitMsg
+
+`commit-msg` hooks are run against every commit message you write before a
+commit is created. A failed hook prevents a commit from being created. These
+hooks are useful for enforcing policies on your commit messages, e.g. ensuring
+a task ID is included for tracking purposes, or ensuring your commit messages
+follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+
+* [`*`CapitalizedSubject](lib/overcommit/hook/commit_msg/capitalized_subject.rb)
+* [GerritChangeId](lib/overcommit/hook/commit_msg/gerrit_change_id.rb)
+* [`*`HardTabs](lib/overcommit/hook/commit_msg/hard_tabs.rb)
+* [RussianNovel](lib/overcommit/hook/commit_msg/russian_novel.rb)
+* [`*`SingleLineSubject](lib/overcommit/hook/commit_msg/single_line_subject.rb)
+* [SpellCheck](lib/overcommit/hook/commit_msg/spell_check.rb)
+* [`*`TextWidth](lib/overcommit/hook/commit_msg/text_width.rb)
+* [`*`TrailingPeriod](lib/overcommit/hook/commit_msg/trailing_period.rb)
+
+### PostCheckout
+
+`post-checkout` hooks run after a successful `git checkout`, or in other words
+any time your `HEAD` changes or a file is explicitly checked out.
+
+* [IndexTags](lib/overcommit/hook/post_checkout/index_tags.rb)
+* [SubmoduleStatus](lib/overcommit/hook/post_checkout/submodule_status.rb)
+
+### PostCommit
+
+`post-commit` hooks run after a commit is successfully created. A hook failing
+in this case does not prevent the merge since it has already occurred; instead,
+it can be used to alert the user to some issue.
+
+* [GitGuilt](lib/overcommit/hook/post_commit/git_guilt.rb)
+* [IndexTags](lib/overcommit/hook/post_commit/index_tags.rb)
+* [SubmoduleStatus](lib/overcommit/hook/post_commit/submodule_status.rb)
+
+### PostMerge
+
+`post-merge` hooks run after a `git merge` executes successfully with no merge
+conflicts. A hook failing in this case does not prevent the merge since it has
+already occurred; instead, it can be used to alert the user to some issue.
+
+* [IndexTags](lib/overcommit/hook/post_merge/index_tags.rb)
+* [SubmoduleStatus](lib/overcommit/hook/post_merge/submodule_status.rb)
+
+### PostRewrite
+
+`post-rewrite` hooks run after a commit is modified by a `git commit --amend`
+or `git rebase`. A hook failing in this case does not prevent the rewrite since
+it has already occurred; instead, it can be used to alert the user to some
+issue.
+
+* [IndexTags](lib/overcommit/hook/post_rewrite/index_tags.rb)
+* [SubmoduleStatus](lib/overcommit/hook/post_rewrite/submodule_status.rb)
+
+### PreCommit
+
+`pre-commit` hooks are run after `git commit` is executed, but before the
+commit message editor is displayed. If a hook fails, the commit will not be
+created. These hooks are ideal for syntax checkers, linters, and other checks
+that you want to run before you allow a commit to even be created.
+
+* [`*`AuthorEmail](lib/overcommit/hook/pre_commit/author_email.rb)
+* [`*`AuthorName](lib/overcommit/hook/pre_commit/author_name.rb)
+* [BerksfileCheck](lib/overcommit/hook/pre_commit/berksfile_check.rb)
+* [Brakeman](lib/overcommit/hook/pre_commit/brakeman.rb)
+* [`*`BrokenSymlinks](lib/overcommit/hook/pre_commit/broken_symlinks.rb)
+* [BundleCheck](lib/overcommit/hook/pre_commit/bundle_check.rb)
+* [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)
+* [ChamberSecurity](lib/overcommit/hook/pre_commit/chamber_security.rb)
+* [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
+* [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
+* [EsLint](lib/overcommit/hook/pre_commit/es_lint.rb)
+* [GoLint](lib/overcommit/hook/pre_commit/go_lint.rb)
+* [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
+* [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
+* [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
+* [HtmlTidy](lib/overcommit/hook/pre_commit/html_tidy.rb)
+* [ImageOptim](lib/overcommit/hook/pre_commit/image_optim.rb)
+* [JavaCheckstyle](lib/overcommit/hook/pre_commit/java_checkstyle.rb)
+* [Jscs](lib/overcommit/hook/pre_commit/jscs.rb)
+* [JsHint](lib/overcommit/hook/pre_commit/js_hint.rb)
+* [JsLint](lib/overcommit/hook/pre_commit/js_lint.rb)
+* [Jsl](lib/overcommit/hook/pre_commit/jsl.rb)
+* [JsonSyntax](lib/overcommit/hook/pre_commit/json_syntax.rb)
+* [LocalPathsInGemfile](lib/overcommit/hook/pre_commit/local_paths_in_gemfile.rb)
+* [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
+* [Pep257](lib/overcommit/hook/pre_commit/pep257.rb)
+* [Pep8](lib/overcommit/hook/pre_commit/pep8.rb)
+* [Pyflakes](lib/overcommit/hook/pre_commit/pyflakes.rb)
+* [RailsSchemaUpToDate](lib/overcommit/hook/pre_commit/rails_schema_up_to_date.rb)
+* [Reek](lib/overcommit/hook/pre_commit/reek.rb)
+* [Rubocop](lib/overcommit/hook/pre_commit/rubocop.rb)
+* [RubyLint](lib/overcommit/hook/pre_commit/ruby_lint.rb)
+* [Scalariform](lib/overcommit/hook/pre_commit/scalariform.rb)
+* [Scalastyle](lib/overcommit/hook/pre_commit/scalastyle.rb)
+* [ScssLint](lib/overcommit/hook/pre_commit/scss_lint.rb)
+* [SemiStandard](lib/overcommit/hook/pre_commit/semi_standard.rb)
+* [ShellCheck](lib/overcommit/hook/pre_commit/shell_check.rb)
+* [SlimLint](lib/overcommit/hook/pre_commit/slim_lint.rb)
+* [Standard](lib/overcommit/hook/pre_commit/standard.rb)
+* [TrailingWhitespace](lib/overcommit/hook/pre_commit/trailing_whitespace.rb)
+* [TravisLint](lib/overcommit/hook/pre_commit/travis_lint.rb)
+* [Vint](lib/overcommit/hook/pre_commit/vint.rb)
+* [W3cCss](lib/overcommit/hook/pre_commit/w3c_css.rb)
+* [W3cHtml](lib/overcommit/hook/pre_commit/w3c_html.rb)
+* [XmlLint](lib/overcommit/hook/pre_commit/xml_lint.rb)
+* [XmlSyntax](lib/overcommit/hook/pre_commit/xml_syntax.rb)
+* [YamlSyntax](lib/overcommit/hook/pre_commit/yaml_syntax.rb)
+
+### PrePush
+
+`pre-push` hooks are run during `git push`, after remote refs have been updated
+but before any objects have been transferred. If a hook fails, the push is
+aborted.
+
+* [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
+* [RSpec](lib/overcommit/hook/pre_push/r_spec.rb)
+
+### PreRebase
+
+`pre-rebase` hooks are run during `git rebase`, before any commits are rebased.
+If a hook fails, the rebase is aborted.
+
+* [MergedCommits](lib/overcommit/hook/pre_rebase/merged_commits.rb)
 
 ## Repo-Specific hooks
 
 Out of the box, `overcommit` comes with a set of hooks that enforce a variety of
-styles and lints. However, some hooks only make sense in the context of a given
-repository.
+styles and lints. However, some hooks only make sense in the context of a
+specific repository.
 
 At Brigade, for example, we have a number of ad hoc Ruby checks that we run
 against our code to catch common errors. For example, since we use
