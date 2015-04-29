@@ -255,7 +255,7 @@ follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-abou
 
 * [`*`CapitalizedSubject](lib/overcommit/hook/commit_msg/capitalized_subject.rb)
 * [GerritChangeId](lib/overcommit/hook/commit_msg/gerrit_change_id.rb)
-* [`*`HardTabs](lib/overcommit/hook/commit_msg/hard_tabs.rb)
+* [HardTabs](lib/overcommit/hook/commit_msg/hard_tabs.rb)
 * [RussianNovel](lib/overcommit/hook/commit_msg/russian_novel.rb)
 * [`*`SingleLineSubject](lib/overcommit/hook/commit_msg/single_line_subject.rb)
 * [SpellCheck](lib/overcommit/hook/commit_msg/spell_check.rb)
