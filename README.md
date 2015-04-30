@@ -456,6 +456,11 @@ already have a minimum security clearance may wish to disable this check.
 While not recommended, you can disable signature verification by setting
 `verify_plugin_signatures` to `false` in your `.overcommit.yml` file.
 
+## Contributing
+
+We love contributions to Overcommit! See our
+[guidelines for contributing](CONTRIBUTING.md).
+
 ## Changelog
 
 If you're interested in seeing the changes and bug fixes between each version
