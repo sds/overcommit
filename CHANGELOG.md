@@ -16,6 +16,8 @@
   `problem_on_unmodified_line` is set to something other than `report`
 * Fix handling of changing a symlink to a directory on commit amendment so it
   is not included in the list of modified files for pre-commit hooks
+* Rename `Rubocop` pre-commit hook to `RuboCop` to match the project's proper
+  name
 
 ## 0.24.0
 

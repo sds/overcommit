@@ -1,6 +1,6 @@
 module Overcommit::Hook::PreCommit
   # Runs `rubocop` against any modified Ruby files.
-  class Rubocop < Base
+  class RuboCop < Base
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.include?('W') ? :warning : :error
     end

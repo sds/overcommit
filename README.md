@@ -110,7 +110,7 @@ to ignore. To prevent these errors from blocking your commit, you can include
 the name of the relevant hook in the `SKIP` environment variable, e.g.
 
 ```bash
-SKIP=rubocop git commit
+SKIP=RuboCop git commit
 ```
 
 Use this feature sparingly, as there is no point to having the hook in the first
@@ -155,7 +155,7 @@ configuration file:
 
 ```yaml
 PreCommit:
-  Rubocop:
+  RuboCop:
     enabled: true
     command: ['bundle', 'exec', 'rubocop'] # Invoke within Bundler context
 ```
@@ -336,7 +336,7 @@ that you want to run before you allow a commit to even be created.
 * [Pyflakes](lib/overcommit/hook/pre_commit/pyflakes.rb)
 * [RailsSchemaUpToDate](lib/overcommit/hook/pre_commit/rails_schema_up_to_date.rb)
 * [Reek](lib/overcommit/hook/pre_commit/reek.rb)
-* [Rubocop](lib/overcommit/hook/pre_commit/rubocop.rb)
+* [RuboCop](lib/overcommit/hook/pre_commit/rubo_cop.rb)
 * [RubyLint](lib/overcommit/hook/pre_commit/ruby_lint.rb)
 * [Scalariform](lib/overcommit/hook/pre_commit/scalariform.rb)
 * [Scalastyle](lib/overcommit/hook/pre_commit/scalastyle.rb)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::Rubocop do
+describe Overcommit::Hook::PreCommit::RuboCop do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
