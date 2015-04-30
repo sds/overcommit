@@ -458,8 +458,9 @@ While not recommended, you can disable signature verification by setting
 
 ## Contributing
 
-We love contributions to Overcommit! See our
-[guidelines for contributing](CONTRIBUTING.md).
+We love contributions to Overcommit, be they bug reports, feature ideas, or
+pull requests. See our [guidelines for contributing](CONTRIBUTING.md) to best
+ensure your thoughts, ideas, or code get merged.
 
 ## Changelog
 
