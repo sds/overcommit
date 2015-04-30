@@ -456,17 +456,6 @@ already have a minimum security clearance may wish to disable this check.
 While not recommended, you can disable signature verification by setting
 `verify_plugin_signatures` to `false` in your `.overcommit.yml` file.
 
-## Contributing
-
-We love getting feedback with or without pull requests. If you do add a new
-feature, please add tests so that we can avoid breaking it in the future.
-
-Speaking of tests, we use `rspec`, which can be run like so:
-
-```bash
-bundle exec rspec
-```
-
 ## Changelog
 
 If you're interested in seeing the changes and bug fixes between each version
