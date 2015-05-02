@@ -191,6 +191,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps staged submodule change' do
+        `git config diff.submodule short`
         expect { subject }.to_not change {
           (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
         }.from(false)
@@ -341,6 +342,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps staged submodule change' do
+        `git config diff.submodule short`
         expect { subject }.to_not change {
           (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
         }.from(false)
@@ -366,6 +368,7 @@ describe Overcommit::HookContext::PreCommit do
       end
 
       it 'keeps staged submodule change' do
+        `git config diff.submodule short`
         expect { subject }.to_not change {
           (`git diff --cached` =~ /-Subproject commit[\s\S]*\+Subproject commit/).nil?
         }.from(false)
