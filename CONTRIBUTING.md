@@ -63,6 +63,10 @@ camel-cased as `ScalaStyle`, so the `Scalastyle` hook follows that convention.
 Exceptions to this rule are tools that begin with a lowercase
 letter&mdash;these should be capitalized.
 
+Lastly, unless a tool has a particularly unique or descriptive name, include
+an additional prefix to help categorize it (e.g. `Java` in `JavaCheckstyle`),
+so it is easier for others to find hooks in the [README](README.md).
+
 The reasoning for this perhaps odd naming scheme is to strike a balance between
 consistency, familiarity for those who already know the tool, and Overcommit's
 ability to deduce the name of a hook from its filename and vice versa.
