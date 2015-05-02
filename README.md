@@ -334,6 +334,7 @@ that you want to run before you allow a commit to even be created.
 * [Pep257](lib/overcommit/hook/pre_commit/pep257.rb)
 * [Pep8](lib/overcommit/hook/pre_commit/pep8.rb)
 * [Pyflakes](lib/overcommit/hook/pre_commit/pyflakes.rb)
+* [PythonFlake8](lib/overcommit/hook/pre_commit/python_flake8.rb)
 * [RailsSchemaUpToDate](lib/overcommit/hook/pre_commit/rails_schema_up_to_date.rb)
 * [Reek](lib/overcommit/hook/pre_commit/reek.rb)
 * [RuboCop](lib/overcommit/hook/pre_commit/rubo_cop.rb)
