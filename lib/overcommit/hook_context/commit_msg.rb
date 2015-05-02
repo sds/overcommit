@@ -1,6 +1,10 @@
 module Overcommit::HookContext
   # Contains helpers related to contextual information used by commit-msg hooks.
   class CommitMsg < Base
+    def empty_message?
+      commit_message.strip.empty?
+    end
+
     # User commit message stripped of comments and diff (from verbose output).
     def commit_message
       commit_message_lines.join
