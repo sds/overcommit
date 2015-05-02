@@ -7,6 +7,13 @@ describe Overcommit::Hook::CommitMsg::HardTabs do
 
   before do
     subject.stub(:commit_message).and_return(commit_msg)
+    subject.stub(:empty_message?).and_return(commit_msg.empty?)
+  end
+
+  context 'when commit message is empty' do
+    let(:commit_msg) { '' }
+
+    it { should pass }
   end
 
   context 'when message contains hard tabs' do
