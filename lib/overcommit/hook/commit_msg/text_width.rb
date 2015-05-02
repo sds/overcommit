@@ -3,6 +3,8 @@ module Overcommit::Hook::CommitMsg
   # under the preferred limits.
   class TextWidth < Base
     def run
+      return :pass if empty_message?
+
       @errors = []
 
       find_errors_in_subject(commit_message_lines.first)
