@@ -255,7 +255,7 @@ module Overcommit
     # @return [Array<String>] list of branches containing the given commit
     def branches_containing_commit(commit_ref)
       `git branch --column=dense --contains #{commit_ref}`.
-        sub(/\(detached from .*?\)/, ''). # ignore detached HEAD
+        sub(/\((HEAD )?detached (from|at) .*?\)/, ''). # ignore detached HEAD
         split(/\s+/).
         reject { |s| s.empty? || s == '*' }
     end
