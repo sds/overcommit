@@ -40,4 +40,26 @@ describe Overcommit::HookContext::CommitMsg do
       subject.should == ["Some commit message\n"]
     end
   end
+
+  describe '#empty_message?' do
+    subject { context.empty_message? }
+
+    context 'when commit message is empty' do
+      let(:commit_msg) { [] }
+
+      it { should == true }
+    end
+
+    context 'when commit message contains only whitespace' do
+      let(:commit_msg) { [' '] }
+
+      it { should == true }
+    end
+
+    context 'when commit message is not empty' do
+      let(:commit_msg) { ['Some commit message'] }
+
+      it { should == false }
+    end
+  end
 end
