@@ -2,22 +2,30 @@
 
 ## 0.25.0
 
-* Include SVG files in `ImageOptim`, `XmlLint`, and `XmlSyntax` pre-commit
-  hooks by default
-* Make `IndexTags` hooks quiet by default
+### New Features
+
 * Add `Vint` pre-commit hook that checks Vim script with
   [Vint](https://github.com/Kuniwak/vint)
 * Add `Scalariform` pre-commit hook that checks formatting of Scala code with
   [Scalariform](https://mdr.github.io/scalariform/)
 * Add `SlimLint` pre-commit hook that analyzes Slim templates with
   [Slim-Lint](https://github.com/sds/slim-lint)
-* Enhance `HardTabs` and `TrailingWhitespace` pre-commit hooks to including
+
+### Changes
+
+* Include SVG files in `ImageOptim`, `XmlLint`, and `XmlSyntax` pre-commit
+  hooks by default
+* Make `IndexTags` hooks quiet by default
+* Rename `Rubocop` pre-commit hook to `RuboCop` to match the project's proper
+  name
+
+### Bug Fixes
+
+* Fix `HardTabs` and `TrailingWhitespace` pre-commit hooks to include
   line information in errors, making it work as expected when
   `problem_on_unmodified_line` is set to something other than `report`
 * Fix handling of changing a symlink to a directory on commit amendment so it
   is not included in the list of modified files for pre-commit hooks
-* Rename `Rubocop` pre-commit hook to `RuboCop` to match the project's proper
-  name
 * Handle empty commit messages in `CapitalizedSubject`, `SingleLineSubject`,
   `HardTabs`, `TextWidth`, and `TrailingPeriod` commit-msg hooks
 
