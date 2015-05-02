@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.25.0
 
 * Include SVG files in `ImageOptim`, `XmlLint`, and `XmlSyntax` pre-commit
   hooks by default
