@@ -18,6 +18,8 @@
   is not included in the list of modified files for pre-commit hooks
 * Rename `Rubocop` pre-commit hook to `RuboCop` to match the project's proper
   name
+* Handle empty commit messages in `CapitalizedSubject`, `SingleLineSubject`,
+  `HardTabs`, `TextWidth`, and `TrailingPeriod` commit-msg hooks
 
 ## 0.24.0
 
