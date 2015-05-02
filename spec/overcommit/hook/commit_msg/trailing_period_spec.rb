@@ -7,6 +7,13 @@ describe Overcommit::Hook::CommitMsg::TrailingPeriod do
 
   before do
     subject.stub(:commit_message_lines).and_return(commit_msg.split("\n"))
+    subject.stub(:empty_message?).and_return(commit_msg.empty?)
+  end
+
+  context 'when commit message is empty' do
+    let(:commit_msg) { '' }
+
+    it { should pass }
   end
 
   context 'when subject contains a trailing period' do
