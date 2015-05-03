@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `EmptyMessage` commit-msg hook that reports commits messages that are
+  empty or contain only whitespace
+
 ## 0.25.0
 
 ### New Features
