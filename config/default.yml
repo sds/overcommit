@@ -29,6 +29,7 @@ CommitMsg:
   EmptyMessage:
     enabled: true
     description: 'Checking for empty commit message'
+    quiet: true
 
   GerritChangeId:
     enabled: false
