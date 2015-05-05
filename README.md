@@ -10,6 +10,8 @@
 `overcommit` is a tool to manage and configure
 [Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
+![Demonstration](https://brigade.github.io/overcommit/overcommit.gif)
+
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a
 repository (but unlike regular Git hooks, are stored in source control).
