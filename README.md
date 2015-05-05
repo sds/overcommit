@@ -276,7 +276,7 @@ any time your `HEAD` changes or a file is explicitly checked out.
 ### PostCommit
 
 `post-commit` hooks run after a commit is successfully created. A hook failing
-in this case does not prevent the merge since it has already occurred; instead,
+in this case does not prevent the merge since it has already occurred; however,
 it can be used to alert the user to some issue.
 
 * [GitGuilt](lib/overcommit/hook/post_commit/git_guilt.rb)
@@ -287,7 +287,7 @@ it can be used to alert the user to some issue.
 
 `post-merge` hooks run after a `git merge` executes successfully with no merge
 conflicts. A hook failing in this case does not prevent the merge since it has
-already occurred; instead, it can be used to alert the user to some issue.
+already occurred; however, it can be used to alert the user to some issue.
 
 * [IndexTags](lib/overcommit/hook/post_merge/index_tags.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_merge/submodule_status.rb)
@@ -296,7 +296,7 @@ already occurred; instead, it can be used to alert the user to some issue.
 
 `post-rewrite` hooks run after a commit is modified by a `git commit --amend`
 or `git rebase`. A hook failing in this case does not prevent the rewrite since
-it has already occurred; instead, it can be used to alert the user to some
+it has already occurred; however, it can be used to alert the user to some
 issue.
 
 * [IndexTags](lib/overcommit/hook/post_rewrite/index_tags.rb)
