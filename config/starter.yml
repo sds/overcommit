@@ -16,7 +16,7 @@
 # Uncomment the following lines to make the configuration take effect.
 
 #PreCommit:
-#  Rubocop:
+#  RuboCop:
 #    on_warn: fail # Treat all warnings as failures
 #
 #  TrailingWhitespace:
