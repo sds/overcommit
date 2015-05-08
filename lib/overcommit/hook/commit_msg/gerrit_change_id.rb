@@ -11,7 +11,7 @@ module Overcommit::Hook::CommitMsg
     SCRIPT_LOCATION = Overcommit::Utils.script_path('gerrit-change-id')
 
     def run
-      result = execute([SCRIPT_LOCATION, commit_message_file])
+      result = execute(['sh', SCRIPT_LOCATION, commit_message_file])
       return :pass if result.success?
 
       [:fail, result.stdout]
