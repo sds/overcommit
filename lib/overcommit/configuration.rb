@@ -162,8 +162,12 @@ module Overcommit
     end
 
     def hook_enabled?(hook_context_or_type, hook_name)
-      hook_type = hook_context_or_type.is_a?(String) ? hook_context_or_type :
-                                                       hook_context_or_type.hook_class_name
+      hook_type =
+        if hook_context_or_type.is_a?(String)
+          hook_context_or_type
+        else
+          hook_context_or_type.hook_class_name
+        end
 
       individual_enabled = @hash[hook_type].fetch(hook_name, {})['enabled']
       return individual_enabled unless individual_enabled.nil?

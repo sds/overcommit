@@ -7,13 +7,19 @@ Lint/AssignmentInCondition:
 Lint/Void:
   Enabled: false
 
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/LineLength:
   Max: 100
 
 Metrics/MethodLength:
   Max: 20
 
-Metrics/AbcSize:
+Metrics/ModuleLength:
+  Enabled: false
+
+Performance/ParallelAssignment:
   Enabled: false
 
 # Enforcing this results in a lot of unnecessary indentation.
