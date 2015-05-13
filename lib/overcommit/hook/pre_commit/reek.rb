@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `reek` against any modified Ruby files.
+  #
+  # @see https://github.com/troessner/reek
   class Reek < Base
     def run
       result = execute(command + applicable_files)

@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `tidy` against any modified HTML files.
+  #
+  # @see http://www.html-tidy.org/
   class HtmlTidy < Base
     MESSAGE_REGEX = /
       ^(?<file>[^:]+):\s

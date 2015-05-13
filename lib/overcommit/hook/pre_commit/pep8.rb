@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `pep8` against any modified Python files.
+  #
+  # @see https://pypi.python.org/pypi/pep8
   class Pep8 < Base
     def run
       result = execute(command + applicable_files)

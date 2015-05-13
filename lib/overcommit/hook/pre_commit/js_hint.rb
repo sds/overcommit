@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `jshint` against any modified JavaScript files.
+  #
+  # @see http://jshint.com/
   class JsHint < Base
     def run
       result = execute(command + applicable_files)

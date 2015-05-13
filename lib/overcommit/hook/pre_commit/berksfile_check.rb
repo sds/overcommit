@@ -1,6 +1,8 @@
 module Overcommit::Hook::PreCommit
   # Check if local Berksfile.lock matches Berksfile when either changes, unless
   # Berksfile.lock is ignored by git.
+  #
+  # @see http://berkshelf.com/
   class BerksfileCheck < Base
     LOCK_FILE = 'Berksfile.lock'
 

@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `coffeelint` against any modified CoffeeScript files.
+  #
+  # @see http://www.coffeelint.org/
   class CoffeeLint < Base
     def run
       result = execute(command + applicable_files)

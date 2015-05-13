@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
-  # Runs `chamber secure` against any modified Chamber settings files
+  # Runs `chamber secure` against any modified Chamber settings files.
+  #
+  # @see https://github.com/thekompanee/chamber
   class ChamberSecurity < Base
     def run
       result = execute(command + applicable_files)

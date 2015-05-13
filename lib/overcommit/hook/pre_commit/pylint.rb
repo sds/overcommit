@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `pylint` against any modified Python files.
+  #
+  # @see http://www.pylint.org/
   class Pylint < Base
     MESSAGE_REGEX = /^(?<file>.+):(?<line>\d+):(?<type>[CEFRW])/
 

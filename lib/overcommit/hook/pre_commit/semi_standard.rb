@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `semistandard` against any modified JavaScript files.
+  #
+  # @see https://github.com/Flet/semistandard
   class SemiStandard < Base
     def run
       result = execute(command + applicable_files)

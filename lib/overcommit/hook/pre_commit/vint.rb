@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `vint` against any modified Vim script files.
+  #
+  # @see https://github.com/Kuniwak/vint
   class Vint < Base
     def run
       result = execute(command + applicable_files)

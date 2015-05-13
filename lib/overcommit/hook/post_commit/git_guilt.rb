@@ -1,5 +1,7 @@
 module Overcommit::Hook::PostCommit
   # Calculates the change in blame since the last revision.
+  #
+  # @see https://www.npmjs.com/package/git-guilt
   class GitGuilt < Base
     PLUS_MINUS_REGEX = /^(.*?)(?:(\++)|(-+))$/
     GREEN = 32

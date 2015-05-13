@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `eslint` against any modified JavaScript files.
+  #
+  # @see http://eslint.org/
   class EsLint < Base
     def run
       result = execute(command + applicable_files)

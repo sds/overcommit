@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `shellcheck` against any modified shell script files.
+  #
+  # @see http://www.shellcheck.net/
   class ShellCheck < Base
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.include?('note') ? :warning : :error

@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `scalariform` against any modified Scala files.
+  #
+  # @see https://github.com/mdr/scalariform
   class Scalariform < Base
     MESSAGE_REGEX = /^\[(?<type>FAILED|ERROR)\]\s+(?<file>.+)/
 

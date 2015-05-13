@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `scalastyle` against any modified Scala files.
+  #
+  # @see http://www.scalastyle.org/
   class Scalastyle < Base
     MESSAGE_REGEX = /
       ^(?<type>error|warning)\s

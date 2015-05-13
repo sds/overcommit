@@ -1,5 +1,7 @@
 module Overcommit::Hook::PrePush
   # Runs `rspec` test suite before push
+  #
+  # @see http://rspec.info/
   class RSpec < Base
     def run
       result = execute(command)

@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `csslint` against any modified CSS files.
+  #
+  # @see https://github.com/CSSLint/csslint
   class CssLint < Base
     MESSAGE_REGEX = /
       ^(?<file>[^:]+):\s

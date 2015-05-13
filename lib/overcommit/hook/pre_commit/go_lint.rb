@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `golint` against any modified Golang files.
+  #
+  # @see https://github.com/golang/lint
   class GoLint < Base
     def run
       result = execute(command + applicable_files)

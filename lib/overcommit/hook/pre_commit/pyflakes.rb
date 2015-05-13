@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `pyflakes` against any modified Python files.
+  #
+  # @see https://pypi.python.org/pypi/pyflakes
   class Pyflakes < Base
     MESSAGE_REGEX = /^(?<file>[^:]+):(?<line>\d+):/
 

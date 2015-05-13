@@ -1,7 +1,9 @@
 require 'tempfile'
 
 module Overcommit::Hook::CommitMsg
-  # Checks the commit message for potential misspellings
+  # Checks the commit message for potential misspellings with `hunspell`.
+  #
+  # @see http://hunspell.sourceforge.net/
   class SpellCheck < Base
     Misspelling = Struct.new(:word, :suggestions)
 

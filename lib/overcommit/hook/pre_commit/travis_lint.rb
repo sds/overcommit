@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `travis-lint` against any modified Travis CI files.
+  #
+  # @see https://github.com/travis-ci/travis.rb
   class TravisLint < Base
     def run
       result = execute(command + applicable_files)

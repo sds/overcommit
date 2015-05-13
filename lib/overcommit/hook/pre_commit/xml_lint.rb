@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `xmllint` against any modified XML files.
+  #
+  # @see http://xmlsoft.org/xmllint.html
   class XmlLint < Base
     MESSAGE_REGEX = /^(?<file>[^:]+):(?<line>\d+):/
 

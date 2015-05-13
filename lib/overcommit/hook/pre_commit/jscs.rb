@@ -1,6 +1,8 @@
 module Overcommit::Hook::PreCommit
   # Runs `jscs` (JavaScript Code Style Checker) against any modified JavaScript
   # files.
+  #
+  # @see http://jscs.info/
   class Jscs < Base
     def run
       result = execute(command + applicable_files)

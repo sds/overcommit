@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `pep257` against any modified Python files.
+  #
+  # @see https://pypi.python.org/pypi/pep257
   class Pep257 < Base
     def run
       result = execute(command + applicable_files)

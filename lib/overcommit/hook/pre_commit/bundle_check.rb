@@ -1,6 +1,8 @@
 module Overcommit::Hook::PreCommit
   # Check if local Gemfile.lock matches Gemfile when either changes, unless
   # Gemfile.lock is ignored by git.
+  #
+  # @see http://bundler.io/
   class BundleCheck < Base
     LOCK_FILE = 'Gemfile.lock'
 

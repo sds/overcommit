@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `jsl` against any modified JavaScript files.
+  #
+  # @see http://www.javascriptlint.com/
   class Jsl < Base
     MESSAGE_REGEX = /(?<file>.+)\((?<line>\d+)\):(?<type>[^:]+)/
 

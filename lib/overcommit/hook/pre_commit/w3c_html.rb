@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `w3c_validators` against any modified HTML files.
+  #
+  # @see https://github.com/alexdunae/w3c_validators
   class W3cHtml < Base
     def run
       collect_messages

@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `flake8` against any modified Python files.
+  #
+  # @see https://pypi.python.org/pypi/flake8
   class PythonFlake8 < Base
     MESSAGE_REGEX = /^(?<file>.+):(?<line>\d+):\d+:\s(?<type>\w\d+)/
 

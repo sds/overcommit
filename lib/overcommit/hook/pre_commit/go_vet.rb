@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `go vet` against any modified Golang files.
+  #
+  # @see https://godoc.org/code.google.com/p/go-zh.tools/cmd/vet
   class GoVet < Base
     def run
       result = execute(command + applicable_files)

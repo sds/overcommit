@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `standard` against any modified JavaScript files.
+  #
+  # @see https://github.com/feross/standard
   class Standard < Base
     def run
       result = execute(command + applicable_files)

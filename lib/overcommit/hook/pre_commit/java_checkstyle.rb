@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `checkstyle` against any modified Java files.
+  #
+  # @see http://checkstyle.sourceforge.net/
   class JavaCheckstyle < Base
     MESSAGE_REGEX = /^(?<file>[^:]+):(?<line>\d+)/
 

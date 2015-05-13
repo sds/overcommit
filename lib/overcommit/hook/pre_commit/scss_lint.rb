@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `scss-lint` against any modified SCSS files.
+  #
+  # @see https://github.com/brigade/scss-lint
   class ScssLint < Base
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.include?('W') ? :warning : :error
