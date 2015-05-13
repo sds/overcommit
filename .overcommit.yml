@@ -5,7 +5,7 @@ PreCommit:
   HardTabs:
     enabled: true
 
-  Rubocop:
+  RuboCop:
     enabled: true
     command: ['bundle', 'exec', 'rubocop']
 
