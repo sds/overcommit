@@ -1,7 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Checks for images that can be optimized with `image_optim`.
   #
-  # @see https://imageoptim.com/
+  # @see https://github.com/toy/image_optim
   class ImageOptim < Base
     def run
       result = execute(command + applicable_files)
