@@ -28,15 +28,37 @@ describe Overcommit::Hook::PreCommit::Reek do
     end
 
     context 'and it reports warnings' do
-      before do
-        result.stub(:stdout).and_return([
-          'file1.rb -- 1 warning:',
-          'file1.rb:1: MyClass#my_method performs a nil-check. (NilCheck)'
-        ].join("\n"))
-        result.stub(:stderr).and_return('')
+      context 'in old format' do
+        before do
+          result.stub(:stdout).and_return([
+            'file1.rb -- 1 warning:',
+            'file1.rb:1: MyClass#my_method performs a nil-check. (NilCheck)'
+          ].join("\n"))
+          result.stub(:stderr).and_return('')
+        end
+
+        it { should fail_hook }
+
+        it 'parses the right file' do
+          subject.run.map(&:file).should == ['file1.rb']
+        end
       end
 
-      it { should fail_hook }
+      context 'in new format' do
+        before do
+          result.stub(:stdout).and_return([
+            'file1.rb -- 1 warning:',
+            '  file1.rb:1: MyClass#my_method performs a nil-check. (NilCheck)'
+          ].join("\n"))
+          result.stub(:stderr).and_return('')
+        end
+
+        it { should fail_hook }
+
+        it 'parses the right file' do
+          subject.run.map(&:file).should == ['file1.rb']
+        end
+      end
     end
   end
 end
