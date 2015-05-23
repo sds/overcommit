@@ -6,7 +6,7 @@ describe Overcommit::Hook::CommitMsg::RussianNovel do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:commit_message_lines).and_return(commit_msg)
+    context.stub(:commit_message_lines).and_return(commit_msg)
   end
 
   context 'when message contains fewer than 30 lines' do

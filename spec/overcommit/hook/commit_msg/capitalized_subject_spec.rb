@@ -7,8 +7,8 @@ describe Overcommit::Hook::CommitMsg::CapitalizedSubject do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:commit_message_lines).and_return(commit_msg.split("\n"))
-    subject.stub(:empty_message?).and_return(commit_msg.empty?)
+    context.stub(:commit_message_lines).and_return(commit_msg.split("\n"))
+    context.stub(:empty_message?).and_return(commit_msg.empty?)
   end
 
   context 'when commit message is empty' do

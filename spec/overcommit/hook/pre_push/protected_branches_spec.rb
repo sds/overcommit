@@ -11,7 +11,7 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
 
   before do
     subject.stub(:branches).and_return([protected_branch])
-    subject.stub(:pushed_refs).and_return([pushed_ref])
+    context.stub(:pushed_refs).and_return([pushed_ref])
   end
 
   context 'when pushing to unprotected branch' do

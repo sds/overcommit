@@ -13,7 +13,7 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
 
   context 'when rebasing a detached HEAD' do
     before do
-      subject.stub(:detached_head?) { true }
+      context.stub(:detached_head?) { true }
     end
 
     it { should pass }
@@ -21,8 +21,8 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
 
   context 'when there are no commits to rebase' do
     before do
-      subject.stub(:detached_head?) { false }
-      subject.stub(:rebased_commits) { [] }
+      context.stub(:detached_head?) { false }
+      context.stub(:rebased_commits) { [] }
     end
 
     it { should pass }
@@ -33,8 +33,8 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
     let(:rebased_branch) { 'topic' }
 
     before do
-      subject.stub(:detached_head?) { false }
-      subject.stub(:rebased_commits) { [commit_sha1] }
+      context.stub(:detached_head?) { false }
+      context.stub(:rebased_commits) { [commit_sha1] }
     end
 
     context 'when commits have not yet been merged' do
