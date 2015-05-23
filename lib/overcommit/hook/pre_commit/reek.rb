@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
 
       extract_messages(
         output,
-        /^(?<file>[^:]+):(?<line>\d+):/,
+        /^\s*(?<file>[^:]+):(?<line>\d+):/,
       )
     end
 
