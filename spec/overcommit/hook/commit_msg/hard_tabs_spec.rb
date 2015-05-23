@@ -6,8 +6,8 @@ describe Overcommit::Hook::CommitMsg::HardTabs do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:commit_message).and_return(commit_msg)
-    subject.stub(:empty_message?).and_return(commit_msg.empty?)
+    context.stub(:commit_message).and_return(commit_msg)
+    context.stub(:empty_message?).and_return(commit_msg.empty?)
   end
 
   context 'when commit message is empty' do

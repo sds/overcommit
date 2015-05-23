@@ -42,7 +42,7 @@ describe Overcommit::Hook::PostCommit::GitGuilt do
 
   context 'when there is no previous commit' do
     before do
-      subject.stub(:initial_commit?).and_return(true)
+      context.stub(:initial_commit?).and_return(true)
     end
 
     it { should pass }

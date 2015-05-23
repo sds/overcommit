@@ -6,7 +6,7 @@ describe Overcommit::Hook::CommitMsg::EmptyMessage do
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:empty_message?).and_return(commit_msg.strip.empty?)
+    context.stub(:empty_message?).and_return(commit_msg.strip.empty?)
   end
 
   context 'when commit message is empty' do

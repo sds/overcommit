@@ -9,7 +9,7 @@ describe Overcommit::Hook::CommitMsg::GerritChangeId do
   before do
     commit_msg_file.write(commit_msg)
     commit_msg_file.close
-    subject.stub(:commit_message_file).and_return(commit_msg_file.path)
+    context.stub(:commit_message_file).and_return(commit_msg_file.path)
   end
 
   context 'when the commit message contains no Change-Id' do
