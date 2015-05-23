@@ -6,6 +6,7 @@ module Overcommit::Hook::PreRebase
     extend Forwardable
 
     def_delegators :@context,
-                   :upstream_branch, :rebased_branch, :fast_forward?, :rebased_commits
+                   :upstream_branch, :rebased_branch, :detached_head?,
+                   :fast_forward?, :rebased_commits
   end
 end
