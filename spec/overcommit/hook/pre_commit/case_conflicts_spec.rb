@@ -6,6 +6,7 @@ describe Overcommit::Hook::PreCommit::CaseConflicts do
   subject { described_class.new(config, context) }
 
   before do
+    Overcommit::GitRepo.stub(:initial_commit?).and_return(false)
     Overcommit::GitRepo.stub(:list_files).and_return(%w[foo])
   end
 
