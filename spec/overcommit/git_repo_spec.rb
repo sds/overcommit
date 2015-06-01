@@ -1,6 +1,67 @@
 require 'spec_helper'
 
 describe Overcommit::GitRepo do
+  describe '.list_files' do
+    let(:paths) { [] }
+    let(:options) { {} }
+    subject { described_class.list_files(paths, options) }
+
+    around do |example|
+      repo do
+        `git commit --allow-empty -m "Initial commit"`
+        example.run
+      end
+    end
+
+    context 'when path includes a submodule directory' do
+      let(:submodule_dir) { 'sub-repo' }
+
+      before do
+        submodule = repo do
+          `git commit --allow-empty -m "Submodule commit"`
+        end
+
+        `git submodule add #{submodule} #{submodule_dir} 2>&1 > #{File::NULL}`
+        `git commit -m "Add submodule"`
+      end
+
+      it { should_not include(File.expand_path(submodule_dir)) }
+    end
+
+    context 'when listing contents of a directory' do
+      let(:dir) { 'some-dir' }
+      let(:paths) { [dir + File::SEPARATOR] }
+
+      before do
+        FileUtils.mkdir(dir)
+      end
+
+      context 'when directory is empty' do
+        it { should be_empty }
+      end
+
+      context 'when directory contains a file' do
+        let(:file) { "#{dir}/file" }
+
+        before do
+          FileUtils.touch(file)
+          `git add "#{file}"`
+          `git commit -m "Add file"`
+        end
+
+        context 'when path contains no spaces' do
+          it { should include(File.expand_path(file)) }
+        end
+
+        context 'when path contains spaces' do
+          let(:dir) { 'some dir' }
+
+          it { should include(File.expand_path(file)) }
+        end
+      end
+    end
+  end
+
   describe '.staged_submodule_removals' do
     subject { described_class.staged_submodule_removals }
 
