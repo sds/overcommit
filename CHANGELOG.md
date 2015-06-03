@@ -6,6 +6,7 @@
   empty or contain only whitespace
 * Fix handling of paths with spaces in the name
 * Fix `CaseConflicts` pre-commit hook to not fail on initial commit
+* Fix handling of files removed or renamed in a commit amendment
 
 ## 0.25.0
 
