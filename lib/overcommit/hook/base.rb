@@ -164,6 +164,8 @@ module Overcommit::Hook
     private
 
     def applicable_file?(file)
+      return false unless File.exist?(file) || File.symlink?(file)
+
       includes = Array(@config['include']).map do |glob|
         Overcommit::Utils.convert_glob_to_absolute(glob)
       end
