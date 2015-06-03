@@ -4,6 +4,7 @@
 
 * Add `EmptyMessage` commit-msg hook that reports commits messages that are
   empty or contain only whitespace
+* Fix handling of paths with spaces in the name
 
 ## 0.25.0
 
