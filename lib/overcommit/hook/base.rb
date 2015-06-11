@@ -48,32 +48,6 @@ module Overcommit::Hook
       [transform_status(status), output]
     end
 
-    # Converts the hook's return value into a canonical form of a tuple
-    # containing status (pass/warn/fail) and output.
-    #
-    # This is intended to support various shortcuts for writing hooks so that
-    # hook authors don't need to work with {Overcommit::Hook::Message} objects
-    # for simple pass/fail hooks. It also saves you from needing to manually
-    # encode logic like "if there are errors, fail; if there are warnings, warn,
-    # otherwise pass." by simply returning an array of
-    # {Overcommit::Hook::Message} objects.
-    #
-    # @param hook_return_value [Symbol, Array<Symbol,String>, Array<Message>]
-    # @return [Array<Symbol,String>] tuple of status and output
-    def process_hook_return_value(hook_return_value)
-      if hook_return_value.is_a?(Array) &&
-         (hook_return_value.first.is_a?(Message) || hook_return_value.empty?)
-        # Process messages into a status and output
-        Overcommit::MessageProcessor.new(
-          self,
-          @config['problem_on_unmodified_line'],
-        ).hook_result(hook_return_value)
-      else
-        # Otherwise return as-is
-        hook_return_value
-      end
-    end
-
     def name
       self.class.name.split('::').last
     end
@@ -228,6 +202,32 @@ module Overcommit::Hook
       return if output.empty?
 
       output.join("\n")
+    end
+
+    # Converts the hook's return value into a canonical form of a tuple
+    # containing status (pass/warn/fail) and output.
+    #
+    # This is intended to support various shortcuts for writing hooks so that
+    # hook authors don't need to work with {Overcommit::Hook::Message} objects
+    # for simple pass/fail hooks. It also saves you from needing to manually
+    # encode logic like "if there are errors, fail; if there are warnings, warn,
+    # otherwise pass." by simply returning an array of
+    # {Overcommit::Hook::Message} objects.
+    #
+    # @param hook_return_value [Symbol, Array<Symbol,String>, Array<Message>]
+    # @return [Array<Symbol,String>] tuple of status and output
+    def process_hook_return_value(hook_return_value)
+      if hook_return_value.is_a?(Array) &&
+         (hook_return_value.first.is_a?(Message) || hook_return_value.empty?)
+        # Process messages into a status and output
+        Overcommit::MessageProcessor.new(
+          self,
+          @config['problem_on_unmodified_line'],
+        ).hook_result(hook_return_value)
+      else
+        # Otherwise return as-is
+        hook_return_value
+      end
     end
 
     # Transforms the hook's status based on custom configuration.
