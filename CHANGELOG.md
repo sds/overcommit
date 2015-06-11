@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix pre-commit hook bug where amending a commit which breaks a symlink would
+  result in that symlink not being included in the list of modified files
+
 ## 0.26.0
 
 ### New Features

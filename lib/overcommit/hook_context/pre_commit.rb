@@ -96,10 +96,13 @@ module Overcommit::HookContext
           subcmd = 'show --format=%n'
           previously_modified = Overcommit::GitRepo.modified_files(subcmd: subcmd)
 
-          # Filter out non-existent files. This could happen if a file was
-          # renamed as part of the amendment, leading to the old file no longer
-          # existing.
-          previously_modified.select! { |file| File.exist?(file) }
+          # Filter out non-existent files (unless it's a broken symlink, in
+          # which case it's a file that points to a non-existent file).
+          # This could happen if a file was renamed as part of the amendment,
+          # leading to the old file no longer existing.
+          previously_modified.select! do |file|
+            File.exist?(file) || Overcommit::Utils.broken_symlink?(file)
+          end
 
           # Filter out directories. This could happen when changing a symlink to
           # a directory as part of an amendment, since the symlink will still

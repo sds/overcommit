@@ -536,6 +536,29 @@ describe Overcommit::HookContext::PreCommit do
         subject.should_not include File.expand_path('some-symlink')
       end
     end
+
+    context 'when breaking a symlink during an amendment' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          FileUtils.mkdir 'some-directory'
+          FileUtils.touch File.join('some-directory', 'some-file')
+          FileUtils.ln_s 'some-directory', 'some-symlink'
+          `git add some-symlink some-directory`
+          `git commit -m "Add file"`
+          `git rm -rf some-directory`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it 'still includes the broken symlink in the list of modified files' do
+        subject.should include File.expand_path('some-symlink')
+      end
+    end
   end
 
   describe '#modified_lines_in_file' do
