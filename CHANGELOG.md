@@ -1,14 +1,19 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.26.0
+
+### New Features
 
 * Add `EmptyMessage` commit-msg hook that reports commits messages that are
   empty or contain only whitespace
+* Add `env` hook configuration option that allows you to set values for
+  environment variables during the course of a particular hook's run
+
+### Bug Fixes
+
 * Fix handling of paths with spaces in the name
 * Fix `CaseConflicts` pre-commit hook to not fail on initial commit
 * Fix handling of files removed or renamed in a commit amendment
-* Add `env` hook configuration option that allows you to set values for
-  environment variables during the course of a particular hook's run
 
 ## 0.25.0
 
