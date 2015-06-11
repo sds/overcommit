@@ -42,7 +42,8 @@ module Overcommit::Hook
       if output = check_for_requirements
         status = :fail
       else
-        status, output = process_hook_return_value(run)
+        result = Overcommit::Utils.with_environment(@config.fetch('env', {})) { run }
+        status, output = process_hook_return_value(result)
       end
 
       [transform_status(status), output]
