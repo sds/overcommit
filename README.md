@@ -39,6 +39,7 @@ repository (but unlike regular Git hooks, are stored in source control).
 * [Repo-Specific Hooks](#repo-specific-hooks)
 * [Security](#security)
 * [Contributing](#contributing)
+* [Community](#community)
 * [Changelog](#changelog)
 * [License](#license)
 
@@ -474,6 +475,13 @@ While not recommended, you can disable signature verification by setting
 We love contributions to Overcommit, be they bug reports, feature ideas, or
 pull requests. See our [guidelines for contributing](CONTRIBUTING.md) to best
 ensure your thoughts, ideas, or code get merged.
+
+## Community
+
+All major discussion surrounding Overcommit happens on the
+[GitHub issues list](https://github.com/brigade/overcommit/issues).
+
+You can also follow [@git_overcommit on Twitter](https://twitter.com/git_overcommit).
 
 ## Changelog
 
