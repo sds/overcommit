@@ -88,19 +88,27 @@ module Overcommit::HookContext
     # Renames and deletions are ignored, since there should be nothing to check.
     def modified_files
       unless @modified_files
-        @modified_files = Overcommit::GitRepo.modified_files(staged: true)
+        currently_staged = Overcommit::GitRepo.modified_files(staged: true)
+        @modified_files = currently_staged
 
         # Include files modified in last commit if amending
         if amendment?
           subcmd = 'show --format=%n'
-          @modified_files += Overcommit::GitRepo.modified_files(subcmd: subcmd)
+          previously_modified = Overcommit::GitRepo.modified_files(subcmd: subcmd)
+
+          # Filter out non-existent files. This could happen if a file was
+          # renamed as part of the amendment, leading to the old file no longer
+          # existing.
+          previously_modified.select! { |file| File.exist?(file) }
 
           # Filter out directories. This could happen when changing a symlink to
           # a directory as part of an amendment, since the symlink will still
           # appear as a file, but the actual working tree will have a directory.
-          @modified_files.reject! do |file|
+          previously_modified.reject! do |file|
             File.directory?(file) && !File.symlink?(file)
           end
+
+          @modified_files |= previously_modified
         end
       end
       @modified_files

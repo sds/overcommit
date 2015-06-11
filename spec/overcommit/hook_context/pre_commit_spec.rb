@@ -491,6 +491,27 @@ describe Overcommit::HookContext::PreCommit do
       it { should =~ [File.expand_path('some-file'), File.expand_path('other-file')] }
     end
 
+    context 'when renaming a file during an amendment' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          FileUtils.touch 'some-file'
+          `git add some-file`
+          `git commit -m "Add file"`
+          `git mv some-file renamed-file`
+          example.run
+        end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it 'does not include the old file name in the list of modified files' do
+        subject.should_not include File.expand_path('some-file')
+      end
+    end
+
     context 'when changing a symlink to a directory during an amendment' do
       around do |example|
         repo do
