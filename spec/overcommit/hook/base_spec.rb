@@ -27,7 +27,7 @@ describe Overcommit::Hook::Base do
     context 'when env configuration option is specified' do
       let(:hook_config) { { 'env' => { var_name => 'pass' } } }
 
-      it 'does not modify the environment' do
+      it 'modifies the environment' do
         subject.first.should == :pass
       end
     end
