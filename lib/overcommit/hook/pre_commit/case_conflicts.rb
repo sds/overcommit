@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
       repo_files = Set.new(applicable_files)
 
       unless Overcommit::GitRepo.initial_commit?
-        paths = repo_files.map { |file| File.dirname(file) + File::SEPARATOR }
+        paths = repo_files.map { |file| File.dirname(file) + File::SEPARATOR }.uniq
         repo_files += Overcommit::GitRepo.list_files(paths)
       end
 
