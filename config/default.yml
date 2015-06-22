@@ -195,6 +195,13 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "\t"]
 
+  HtmlHint:
+    enabled: false
+    description: 'Analyzing with HTMLHint'
+    required_executable: 'htmlhint'
+    install_command: 'npm install -g htmlhint'
+    include: '**/*.html'
+
   HtmlTidy:
     enabled: false
     description: 'Analyzing HTML with tidy'
