@@ -1,6 +1,12 @@
-# Bootstrap code coverage instrumentation. This must happen first!
-require 'coveralls'
-Coveralls.wear!
+if ENV['TRAVIS']
+  # When running in Travis, report coverage stats to Coveralls.
+  require 'coveralls'
+  Coveralls.wear!
+else
+  # Otherwise render coverage information in coverage/index.html and display
+  # coverage percentage in the console.
+  require 'simplecov'
+end
 
 require 'overcommit'
 require 'tempfile'
