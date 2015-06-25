@@ -334,6 +334,7 @@ that you want to run before you allow a commit to even be created.
 * [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
 * [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
+* [HtmlHint](lib/overcommit/hook/pre_commit/html_hint.rb)
 * [HtmlTidy](lib/overcommit/hook/pre_commit/html_tidy.rb)
 * [ImageOptim](lib/overcommit/hook/pre_commit/image_optim.rb)
 * [JavaCheckstyle](lib/overcommit/hook/pre_commit/java_checkstyle.rb)
