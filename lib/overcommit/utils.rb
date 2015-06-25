@@ -72,6 +72,16 @@ module Overcommit
           end
       end
 
+      # Remove ANSI escape sequences from a string.
+      #
+      # This is useful for stripping colorized output from external tools.
+      #
+      # @param text [String]
+      # @return [String]
+      def strip_color_codes(text)
+        text.gsub(/\e\[(\d+)(;\d+)*m/, '')
+      end
+
       # Shamelessly stolen from:
       # stackoverflow.com/questions/1509915/converting-camel-case-to-underscore-case-in-ruby
       def snake_case(str)

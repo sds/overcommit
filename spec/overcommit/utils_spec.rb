@@ -77,6 +77,28 @@ describe Overcommit::Utils do
     end
   end
 
+  describe '.strip_color_codes' do
+    subject { described_class.strip_color_codes(text) }
+
+    context 'with an empty string' do
+      let(:text) { '' }
+
+      it { should == '' }
+    end
+
+    context 'with a string with no escape sequences' do
+      let(:text) { 'A normal string' }
+
+      it { should == text }
+    end
+
+    context 'with a string with escape sequences' do
+      let(:text) { "A \e[31mcolored string\e[39m" }
+
+      it { should == 'A colored string' }
+    end
+  end
+
   describe '.snake_case' do
     it 'converts camel case to underscores' do
       described_class.snake_case('HelloWorld').should == 'hello_world'

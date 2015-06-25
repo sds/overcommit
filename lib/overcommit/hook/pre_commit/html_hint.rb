@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   class HtmlHint < Base
     def run
       result = execute(command + applicable_files)
-      output = strip_color_codes(result.stdout.chomp)
+      output = Overcommit::Utils.strip_color_codes(result.stdout.chomp)
 
       message_groups = output.split("\n\n")[0..-2]
       message_groups.map do |group|
@@ -16,12 +16,6 @@ module Overcommit::Hook::PreCommit
           /^(?<file>[^:]+): line (?<line>\d+)/
         )
       end.flatten
-    end
-
-    private
-
-    def strip_color_codes(output)
-      output.gsub(/\e\[(\d+)(;\d+)*m/, '')
     end
   end
 end
