@@ -5,6 +5,8 @@
 * Fix pre-commit hook bug where amending a commit which breaks a symlink would
   result in that symlink not being included in the list of modified files
 * Fix `CaseConflicts` pre-commit hook handling of large sets of files
+* Add `HtmlHint` pre-commit hook that checks HTML files with
+  [HTMLHint](http://htmlhint.com/)
 
 ## 0.26.0
 
