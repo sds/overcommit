@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::SemiStandard do
   context 'when semistandard exits successfully' do
     before do
       result = double('result')
-      result.stub(success?: true, stderr: '')
+      result.stub(success?: true, stdout: '')
       subject.stub(:execute).and_return(result)
     end
 
@@ -29,9 +29,9 @@ describe Overcommit::Hook::PreCommit::SemiStandard do
 
     context 'and it reports an error' do
       before do
-        result.stub(:stderr).and_return([
-          'Error: Code style check failed:',
-          'file1.js:1:1: Extra semicolon. (eslint/semi)'
+        result.stub(:stdout).and_return([
+          'semistandard: Use Semicolons For All! (https://github.com/Flet/semistandard)',
+          '  file1.js:1:1: Extra semicolon. (eslint/semi)'
         ].join("\n"))
       end
 

@@ -12,7 +12,7 @@ describe Overcommit::Hook::PreCommit::Standard do
   context 'when standard exits successfully' do
     before do
       result = double('result')
-      result.stub(success?: true, stderr: '')
+      result.stub(success?: true, stdout: '')
       subject.stub(:execute).and_return(result)
     end
 
@@ -29,9 +29,9 @@ describe Overcommit::Hook::PreCommit::Standard do
 
     context 'and it reports an error' do
       before do
-        result.stub(:stderr).and_return([
-          'Error: Use JavaScript Standard Style (https://github.com/feross/standard)',
-          'file1.js:1:1: Extra semicolon. (eslint/semi)'
+        result.stub(:stdout).and_return([
+          'standard: Use JavaScript Standard Style (https://github.com/feross/standard)',
+          '  file1.js:1:1: Extra semicolon. (eslint/semi)'
         ].join("\n"))
       end
 
