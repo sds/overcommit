@@ -21,7 +21,7 @@ module Overcommit
     # Returns absolute path to the directory that external hook plugins should
     # be loaded from.
     def plugin_directory
-      File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.githooks')
+      File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.git-hooks')
     end
 
     def verify_plugin_signatures?
