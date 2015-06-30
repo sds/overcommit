@@ -1,5 +1,7 @@
 require 'pathname'
 require 'overcommit/subprocess'
+require 'overcommit/command_splitter'
+require 'tempfile'
 
 module Overcommit
   # Utility functions for general use.
@@ -141,15 +143,30 @@ module Overcommit
       # This is intended to provide a centralized place to perform any checks or
       # filtering of the command before executing it.
       #
+      # The `splittable_args` parameter provides a convenient way of splitting
+      # up long argument lists which would otherwise exceed the maximum command
+      # line length of the OS. It will break up the list into chunks and run the
+      # command with the same prefix `args`, finally combining the output
+      # together at the end.
+      #
+      # This requires that the external command you are running can have its
+      # work split up in this way and still produce the same resultant output
+      # when outputs of the individual commands are concatenated back together.
+      #
       # @param args [Array<String>]
+      # @param splittable_args [Array<String>]
       # @return [Overcommit::Subprocess::Result] status, stdout, and stderr
-      def execute(args)
+      def execute(args, splittable_args = nil)
         if args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Cannot pipe commands with the `execute` helper'
         end
 
-        Subprocess.spawn(args)
+        if splittable_args
+          Overcommit::CommandSplitter.execute(args, splittable_args)
+        else
+          Overcommit::Subprocess.spawn(args)
+        end
       end
 
       # Execute a command in a subprocess, returning immediately.

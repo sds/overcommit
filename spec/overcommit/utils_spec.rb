@@ -173,6 +173,25 @@ describe Overcommit::Utils do
         expect { subject }.to raise_error Overcommit::Exceptions::InvalidCommandArgs
       end
     end
+
+    context 'when given a list of arguments to execute in chunks' do
+      let(:arguments) { ['echo'] }
+      let(:splittable_args) { %w[1 2 3] }
+
+      subject { described_class.execute(arguments, splittable_args) }
+
+      it 'invokes CommandSplitter.execute' do
+        Overcommit::CommandSplitter.should_receive(:execute).
+                                    with(arguments, splittable_args)
+        subject
+      end
+
+      it 'returns a result' do
+        subject.should be_success
+        subject.stdout.should == "1 2 3\n"
+        subject.stderr.should == ''
+      end
+    end
   end
 
   describe '.execute_in_background' do

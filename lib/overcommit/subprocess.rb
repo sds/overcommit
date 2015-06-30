@@ -6,6 +6,10 @@ module Overcommit
   # standard out/error output.
   class Subprocess
     # Encapsulates the result of a process.
+    #
+    # @attr_reader status [Integer] exit status code returned by process
+    # @attr_reader stdout [String] standard output stream output
+    # @attr_reader stderr [String] standard error stream output
     Result = Struct.new(:status, :stdout, :stderr) do
       def success?
         status == 0

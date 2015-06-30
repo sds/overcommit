@@ -9,6 +9,9 @@
   [HTMLHint](http://htmlhint.com/)
 * Fix `SemiStandard`/`Standard` hooks to read from `STDOUT` instead of `STDERR`
   and handle new output format
+* Add support to the hook `execute` helper for accepting an optional list of
+  splittable command arguments for transparently dealing with really long file
+  lists and the operating system command length limit
 
 ## 0.26.0
 

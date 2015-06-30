@@ -82,8 +82,19 @@ module Overcommit::Hook
       Overcommit::Utils.in_path?(cmd)
     end
 
-    def execute(cmd)
-      Overcommit::Utils.execute(cmd)
+    # Execute a command in a separate process.
+    #
+    # If `splittable_args` is specified, ensures that those arguments are
+    # concatenated onto the end of the `cmd` arguments, but split up so that the
+    # operating system's maximum command length is not exceeded. This is useful
+    # for splitting up long file lists.
+    #
+    # @param cmd [Array<String>] command arguments
+    # @param splittable_args [Array<String>] arguments that can be split up over
+    #   multiple invocations (usually a list of files)
+    # @return [#status,#stdout,#stderr] struct containing result of invocation
+    def execute(cmd, splittable_args = nil)
+      Overcommit::Utils.execute(cmd, splittable_args)
     end
 
     def execute_in_background(cmd)
