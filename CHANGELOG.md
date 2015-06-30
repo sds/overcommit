@@ -7,6 +7,8 @@
 * Fix `CaseConflicts` pre-commit hook handling of large sets of files
 * Add `HtmlHint` pre-commit hook that checks HTML files with
   [HTMLHint](http://htmlhint.com/)
+* Fix `SemiStandard`/`Standard` hooks to read from `STDOUT` instead of `STDERR`
+  and handle new output format
 
 ## 0.26.0
 
