@@ -319,6 +319,21 @@ commit message editor is displayed. If a hook fails, the commit will not be
 created. These hooks are ideal for syntax checkers, linters, and other checks
 that you want to run before you allow a commit to even be created.
 
+#### WARNING: pre-commit hooks cannot have side effects
+
+`pre-commit` hooks currently do not support hooks with side effects (such as
+modifying files and adding them to the index with `git add`). This is a
+consequence of Overcommit's pre-commit hook stashing behavior to ensure hooks
+are run against _only the changes you are about to commit_.
+
+Without Overcommit, the proper way to write a `pre-commit` hook would be to
+extract the staged changes into temporary files and lint those files
+instead of whatever contents are in your working tree (as you don't want
+unstaged changes to taint your results). Overcommit takes care
+of this for you, but to do it in a generalized way introduces this
+limitation. See the [thread tracking this
+issue](https://github.com/brigade/overcommit/issues/238) for more details.
+
 * [`*`AuthorEmail](lib/overcommit/hook/pre_commit/author_email.rb)
 * [`*`AuthorName](lib/overcommit/hook/pre_commit/author_name.rb)
 * [BerksfileCheck](lib/overcommit/hook/pre_commit/berksfile_check.rb)
