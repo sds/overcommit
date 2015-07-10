@@ -14,5 +14,18 @@ module Overcommit::HookContext
     def rebase?
       @args[0] == 'rebase'
     end
+
+    # Returns the list of commits rewritten by the action that triggered this
+    # hook run.
+    #
+    # @return [Array<RewrittenCommit>]
+    def rewritten_commits
+      @rewritten_commits ||= input_lines.map do |line|
+        RewrittenCommit.new(*line.split(' '))
+      end
+    end
+
+    # Struct encapsulating the old and new sha1 hashes of a rewritten commit
+    RewrittenCommit = Struct.new(:old_sha1, :new_sha1)
   end
 end
