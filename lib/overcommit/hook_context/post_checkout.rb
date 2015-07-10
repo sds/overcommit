@@ -22,5 +22,13 @@ module Overcommit::HookContext
     def file_checkout?
       !branch_checkout?
     end
+
+    # Get a list of files that have been added or modified between
+    # `previous_head` and `new_head`. Renames and deletions are ignored, since
+    # there should be nothing to check.
+    def modified_files
+      @modified_files ||=
+        Overcommit::GitRepo.modified_files(refs: "#{previous_head} #{new_head}")
+    end
   end
 end

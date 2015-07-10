@@ -49,4 +49,101 @@ describe Overcommit::HookContext::PostCheckout do
       it { should == false }
     end
   end
+
+  describe '#modified_files' do
+    subject { context.modified_files }
+
+    let(:new_head) { 'HEAD' }
+    let(:previous_head) { 'HEAD~' }
+
+    it 'does not include submodules' do
+      submodule = repo do
+        FileUtils.touch 'foo'
+        `git add foo`
+        `git commit -m "Initial commit"`
+      end
+
+      repo do
+        `git commit --allow-empty -m "Initial commit"`
+        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git commit -m "Add submodule"`
+        expect(subject).to_not include File.expand_path('test-sub')
+      end
+    end
+
+    context 'when no files were modified' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          `git commit --allow-empty -m "Another commit"`
+          example.run
+        end
+      end
+
+      before do
+      end
+
+      it { should be_empty }
+    end
+
+    context 'when files were added' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          FileUtils.touch('some-file')
+          `git add some-file`
+          `git commit -m "Add file"`
+          example.run
+        end
+      end
+
+      it { should == [File.expand_path('some-file')] }
+    end
+
+    context 'when files were modified' do
+      around do |example|
+        repo do
+          FileUtils.touch('some-file')
+          `git add some-file`
+          `git commit -m "Initial commit"`
+          echo('Hello', 'some-file')
+          `git add some-file`
+          `git commit -m "Modify file"`
+          example.run
+        end
+      end
+
+      it { should == [File.expand_path('some-file')] }
+    end
+
+    context 'when files were deleted' do
+      around do |example|
+        repo do
+          FileUtils.touch('some-file')
+          `git add some-file`
+          `git commit -m "Initial commit"`
+          `git rm some-file`
+          `git commit -m "Delete file"`
+          example.run
+        end
+      end
+
+      it { should be_empty }
+    end
+
+    context 'when files were renamed' do
+      around do |example|
+        repo do
+          FileUtils.touch 'some-file'
+          `git add some-file`
+          `git commit -m "Add file"`
+          `git mv some-file renamed-file`
+          `git commit -m "Rename file"`
+          example.run
+        end
+      end
+
+      it { should == [File.expand_path('renamed-file')] }
+    end
+  end
 end
