@@ -80,9 +80,6 @@ describe Overcommit::HookContext::PostCheckout do
         end
       end
 
-      before do
-      end
-
       it { should be_empty }
     end
 
