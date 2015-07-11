@@ -12,6 +12,8 @@
 * Add support to the hook `execute` helper for accepting an optional list of
   splittable command arguments for transparently dealing with really long file
   lists and the operating system command length limit
+* Add `modified_files` helper to `PostCheckout` hooks
+* Add `rewritten_commits` helper to `PostRewrite` hooks
 
 ## 0.26.0
 
