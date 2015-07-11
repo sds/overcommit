@@ -5,6 +5,6 @@ module Overcommit::Hook::PostRewrite
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegators :@context, :amend?, :rebase?
+    def_delegators :@context, :amend?, :rebase?, :rewritten_commits
   end
 end

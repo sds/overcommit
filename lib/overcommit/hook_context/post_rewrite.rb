@@ -25,7 +25,7 @@ module Overcommit::HookContext
       end
     end
 
-    # Struct encapsulating the old and new sha1 hashes of a rewritten commit
-    RewrittenCommit = Struct.new(:old_sha1, :new_sha1)
+    # Struct encapsulating the old and new SHA1 hashes of a rewritten commit
+    RewrittenCommit = Struct.new(:old_hash, :new_hash)
   end
 end

@@ -41,22 +41,22 @@ describe Overcommit::HookContext::PostRewrite do
   describe '#rewritten_commits' do
     subject(:rewritten_commits) { context.rewritten_commits }
 
-    let(:old_sha1_1) { random_hash }
-    let(:new_sha1_1) { random_hash }
-    let(:old_sha1_2) { random_hash }
-    let(:new_sha1_2) { random_hash }
+    let(:old_hash_1) { random_hash }
+    let(:new_hash_1) { random_hash }
+    let(:old_hash_2) { random_hash }
+    let(:new_hash_2) { random_hash }
 
     context 'when rewrite was triggered by amend' do
       let(:args) { ['amend'] }
 
       before do
-        input.stub(:read).and_return("#{old_sha1_1} #{new_sha1_1}\n")
+        input.stub(:read).and_return("#{old_hash_1} #{new_hash_1}\n")
       end
 
       it 'should parse rewritten commit info from the input' do
         rewritten_commits.length.should == 1
-        rewritten_commits[0].old_sha1.should == old_sha1_1
-        rewritten_commits[0].new_sha1.should == new_sha1_1
+        rewritten_commits[0].old_hash.should == old_hash_1
+        rewritten_commits[0].new_hash.should == new_hash_1
       end
     end
 
@@ -65,17 +65,17 @@ describe Overcommit::HookContext::PostRewrite do
 
       before do
         input.stub(:read).and_return([
-          "#{old_sha1_1} #{new_sha1_1}",
-          "#{old_sha1_2} #{new_sha1_2}"
+          "#{old_hash_1} #{new_hash_1}",
+          "#{old_hash_2} #{new_hash_2}"
         ].join("\n"))
       end
 
       it 'should parse rewritten commit info from the input' do
         rewritten_commits.length.should == 2
-        rewritten_commits[0].old_sha1.should == old_sha1_1
-        rewritten_commits[0].new_sha1.should == new_sha1_1
-        rewritten_commits[1].old_sha1.should == old_sha1_2
-        rewritten_commits[1].new_sha1.should == new_sha1_2
+        rewritten_commits[0].old_hash.should == old_hash_1
+        rewritten_commits[0].new_hash.should == new_hash_1
+        rewritten_commits[1].old_hash.should == old_hash_2
+        rewritten_commits[1].new_hash.should == new_hash_2
       end
     end
   end
