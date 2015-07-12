@@ -449,7 +449,7 @@ Out of the box, `overcommit` comes with a set of hooks that enforce a variety of
 styles and lints. However, some hooks only make sense in the context of a
 specific repository.
 
-At Brigade, for example, we have a number of ad hoc Ruby checks that we run
+At Brigade, for example, we have a number of simple checks that we run
 against our code to catch common errors. For example, since we use
 [RSpec](http://rspec.info/), we want to make sure all spec files contain the
 line `require 'spec_helper'`.
@@ -491,6 +491,27 @@ PreCommit:
 You can see a great example of writing custom Overcommit hooks from the
 following blog post: [How to Write a Custom Overcommit PreCommit
 Git Hook in 4 Steps](http://www.guoxiang.me/posts/28-how-to-write-a-custom-overcommit-precommit-git-hook-in-4-steps)
+
+### Ad hoc hooks
+
+You might already have scripts written which you'd like to integrate with
+Overcommit right away. To make this easy, Overcommit allows you to define a
+hook entirely within the `.overcommit.yml` file without writing any Ruby code.
+For example:
+
+```yaml
+PreCommit:
+  CustomScript:
+    enabled: true
+    required_executable: './bin/custom-script'
+    flags: ['--flag', '--another-flag']
+```
+
+So long as a command can be inferred (either by specifying the `command`
+option directly or specifying `required_executable`) a special ad hoc
+hook is created that executes the command and passes or fails based on
+the exit status of that command&mdash;a non-zero status indicating
+failure.
 
 ## Security
 

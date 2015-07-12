@@ -96,6 +96,14 @@ module Overcommit
         select { |hook_name| hook_enabled?(hook_context, hook_name) }
     end
 
+    # Returns the ad hoc hooks that have been enabled for a hook type.
+    def enabled_ad_hoc_hooks(hook_context)
+      @hash[hook_context.hook_class_name].keys.
+        select { |hook_name| hook_name != 'ALL' }.
+        select { |hook_name| ad_hoc_hook?(hook_context, hook_name) }.
+        select { |hook_name| hook_enabled?(hook_context, hook_name) }
+    end
+
     # Returns a non-modifiable configuration for a hook.
     def for_hook(hook, hook_type = nil)
       unless hook_type
@@ -157,6 +165,16 @@ module Overcommit
 
     private
 
+    def ad_hoc_hook?(hook_context, hook_name)
+      ad_hoc_conf = @hash.fetch(hook_context.hook_class_name, {}).fetch(hook_name, {})
+
+      # Ad hoc hooks are neither built-in nor have a plugin file written but
+      # still have a `command` specified to be run
+      !built_in_hook?(hook_context, hook_name) &&
+        !plugin_hook?(hook_context, hook_name) &&
+        (ad_hoc_conf['command'] || ad_hoc_conf['required_executable'])
+    end
+
     def built_in_hook?(hook_context, hook_name)
       hook_name = Overcommit::Utils.snake_case(hook_name)
 
@@ -166,7 +184,8 @@ module Overcommit
 
     def hook_exists?(hook_context, hook_name)
       built_in_hook?(hook_context, hook_name) ||
-        plugin_hook?(hook_context, hook_name)
+        plugin_hook?(hook_context, hook_name) ||
+        ad_hoc_hook?(hook_context, hook_name)
     end
 
     def hook_enabled?(hook_context_or_type, hook_name)
