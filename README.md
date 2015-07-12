@@ -14,7 +14,9 @@
 
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a
-repository (but unlike regular Git hooks, are stored in source control).
+repository, but unlike regular Git hooks are stored in source control. You can
+also easily [add your existing hook scripts](#adding-existing-git-hooks) without
+writing any Ruby code.
 
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
@@ -38,6 +40,7 @@ repository (but unlike regular Git hooks, are stored in source control).
   * [PrePush](#prepush)
   * [PreRebase](#prerebase)
 * [Repo-Specific Hooks](#repo-specific-hooks)
+  * [Adding Existing Git Hooks](#adding-existing-git-hooks)
 * [Security](#security)
 * [Contributing](#contributing)
 * [Community](#community)
@@ -492,26 +495,25 @@ You can see a great example of writing custom Overcommit hooks from the
 following blog post: [How to Write a Custom Overcommit PreCommit
 Git Hook in 4 Steps](http://www.guoxiang.me/posts/28-how-to-write-a-custom-overcommit-precommit-git-hook-in-4-steps)
 
-### Ad hoc hooks
+### Adding Existing Git Hooks
 
-You might already have scripts written which you'd like to integrate with
-Overcommit right away. To make this easy, Overcommit allows you to define a
-hook entirely within the `.overcommit.yml` file without writing any Ruby code.
+You might already have hook scripts written which you'd like to integrate with
+Overcommit right away. To make this easy, Overcommit allows you to include
+your hook script in your configuration without writing any Ruby code.
 For example:
 
 ```yaml
-PreCommit:
+PostCheckout:
   CustomScript:
     enabled: true
     required_executable: './bin/custom-script'
-    flags: ['--flag', '--another-flag']
 ```
 
-So long as a command can be inferred (either by specifying the `command`
-option directly or specifying `required_executable`) a special ad hoc
-hook is created that executes the command and passes or fails based on
-the exit status of that command&mdash;a non-zero status indicating
-failure.
+So long as a command is given (either by specifying the `command` option
+directly or specifying `required_executable`) a special hook is created that
+executes the command and appends any arguments and standard input stream that
+would have been passed to the regular hook. The hook passes or fails based
+on the exit status of the command.
 
 ## Security
 

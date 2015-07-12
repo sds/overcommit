@@ -18,7 +18,7 @@ module Overcommit::HookLoader
       # based on the exit status
       hook_class = Class.new(hook_base) do
         def run # rubocop:disable Lint/NestedMethodDefinition
-          result = execute(command, applicable_files)
+          result = @context.execute_hook(command)
 
           if result.success?
             :pass
