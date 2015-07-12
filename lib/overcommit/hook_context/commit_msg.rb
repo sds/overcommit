@@ -19,8 +19,8 @@ module Overcommit::HookContext
 
     def commit_message_lines
       raw_commit_message_lines.
-        reject     { |line| line =~ /^#/ }.
-        take_while { |line| !line.start_with?('diff --git') }
+        take_while { |line| !line.start_with?('diff --git') }.
+        reject     { |line| line =~ /^#/ }
     end
 
     def commit_message_file
