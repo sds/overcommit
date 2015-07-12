@@ -144,6 +144,18 @@ module Overcommit
 
       # Load plugin hooks after so they can subclass existing hooks
       @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log).load_hooks
+    rescue LoadError => ex
+      # Include a more helpful message that will probably save some confusion
+      message = 'A load error occurred. ' +
+        if @config['gemfile']
+          "Did you forget to specify a gem in your `#{@config['gemfile']}`?"
+        else
+          'Did you forget to install a gem?'
+        end
+
+      raise Overcommit::Exceptions::HookLoadError,
+            "#{message}\n#{ex.message}",
+            ex.backtrace
     end
   end
 end

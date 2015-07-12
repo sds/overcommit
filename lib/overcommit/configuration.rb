@@ -18,6 +18,14 @@ module Overcommit
     end
     alias_method :eql?, :==
 
+    # Access the configuration as if it were a hash.
+    #
+    # @param key [String]
+    # @return [Array,Hash,Number,String]
+    def [](key)
+      @hash[key]
+    end
+
     # Returns absolute path to the directory that external hook plugins should
     # be loaded from.
     def plugin_directory

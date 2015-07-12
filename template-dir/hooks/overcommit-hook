@@ -75,6 +75,10 @@ rescue Overcommit::Exceptions::HookContextLoadError => error
   puts error
   puts 'Are you running an old version of Overcommit?'
   exit 69 # EX_UNAVAILABLE
+rescue Overcommit::Exceptions::HookLoadError => error
+  puts error.message
+  puts error.backtrace
+  exit 78 # EX_CONFIG
 rescue Overcommit::Exceptions::HookSetupFailed,
        Overcommit::Exceptions::HookCleanupFailed => error
   puts error.message
