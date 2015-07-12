@@ -17,7 +17,7 @@ module Overcommit
     end
 
     def nothing_to_run
-      log.success "✓ No applicable #{hook_script_name} hooks to run"
+      log.debug "✓ No applicable #{hook_script_name} hooks to run"
     end
 
     # Executed at the start of an individual hook run.

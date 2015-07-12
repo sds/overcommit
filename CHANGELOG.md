@@ -18,6 +18,8 @@
   loaded by Bundler to enforce particular gem versions during hook runs
 * Add support for `OVERCOMMIT_DEBUG` environment variable which toggles the
   display of additional verbose output from executed commands
+* Don't display "No applicable _hook-type_ hooks to run" message unless debug
+  mode is enabled
 
 ## 0.26.0
 
