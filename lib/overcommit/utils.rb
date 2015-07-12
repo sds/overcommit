@@ -146,32 +146,33 @@ module Overcommit
       # This is intended to provide a centralized place to perform any checks or
       # filtering of the command before executing it.
       #
-      # The `splittable_args` parameter provides a convenient way of splitting
-      # up long argument lists which would otherwise exceed the maximum command
-      # line length of the OS. It will break up the list into chunks and run the
-      # command with the same prefix `args`, finally combining the output
-      # together at the end.
+      # The `args` option provides a convenient way of splitting up long
+      # argument lists which would otherwise exceed the maximum command line
+      # length of the OS. It will break up the list into chunks and run the
+      # command with the same prefix `initial_args`, finally combining the
+      # output together at the end.
       #
       # This requires that the external command you are running can have its
       # work split up in this way and still produce the same resultant output
       # when outputs of the individual commands are concatenated back together.
       #
-      # @param args [Array<String>]
-      # @param splittable_args [Array<String>]
+      # @param initial_args [Array<String>]
+      # @param options [Hash]
+      # @option options [Array<String>] :args long list of arguments to split up
       # @return [Overcommit::Subprocess::Result] status, stdout, and stderr
-      def execute(args, splittable_args = nil)
-        if args.include?('|')
+      def execute(initial_args, options = {})
+        if initial_args.include?('|')
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Cannot pipe commands with the `execute` helper'
         end
 
         result =
-          if splittable_args
-            debug(args.join(' ') + " ... (#{splittable_args.length} splittable args)")
-            Overcommit::CommandSplitter.execute(args, splittable_args)
+          if splittable_args = options[:args]
+            debug(initial_args.join(' ') + " ... (#{splittable_args.length} splittable args)")
+            Overcommit::CommandSplitter.execute(initial_args, options)
           else
-            debug(args.join(' '))
-            Overcommit::Subprocess.spawn(args)
+            debug(initial_args.join(' '))
+            Overcommit::Subprocess.spawn(initial_args, options)
           end
 
         debug("EXIT STATUS: #{result.status}")

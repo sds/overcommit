@@ -174,15 +174,26 @@ describe Overcommit::Utils do
       end
     end
 
+    context 'when given an input stream' do
+      let(:arguments) { ['cat', '-'] }
+      let(:input) { 'Hello world' }
+
+      subject { described_class.execute(arguments, input: input) }
+
+      it 'passes the input to the standard input stream' do
+        subject.stdout.should == "Hello world\n"
+      end
+    end
+
     context 'when given a list of arguments to execute in chunks' do
       let(:arguments) { ['echo'] }
       let(:splittable_args) { %w[1 2 3] }
 
-      subject { described_class.execute(arguments, splittable_args) }
+      subject { described_class.execute(arguments, args: splittable_args) }
 
       it 'invokes CommandSplitter.execute' do
         Overcommit::CommandSplitter.should_receive(:execute).
-                                    with(arguments, splittable_args).
+                                    with(arguments, args: splittable_args).
                                     and_return(double(status: 0, stdout: '', stderr: ''))
         subject
       end

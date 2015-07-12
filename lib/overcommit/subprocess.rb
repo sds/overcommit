@@ -19,12 +19,22 @@ module Overcommit
     class << self
       # Spawns a new process using the given array of arguments (the first
       # element is the command).
-      def spawn(args)
+      #
+      # @param args [Array<String>]
+      # @param options [Hash]
+      # @option options [String] input string to pass via standard input stream
+      # @return [Result]
+      def spawn(args, options = {})
         process = ChildProcess.build(*args)
 
         out, err = assign_output_streams(process)
 
+        process.duplex = true if options[:input] # Make stdin available if needed
         process.start
+        if options[:input]
+          process.io.stdin.puts(options[:input])
+          process.io.stdin.close
+        end
         process.wait
 
         err.rewind

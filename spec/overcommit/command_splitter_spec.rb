@@ -4,8 +4,9 @@ describe Overcommit::CommandSplitter do
   describe '.execute' do
     let(:args_prefix) { %w[cmd] }
     let(:max_command_length) { 10 }
+    let(:options) { { args: splittable_args } }
 
-    subject { described_class.execute(args_prefix, splittable_args) }
+    subject { described_class.execute(args_prefix, options) }
 
     before do
       described_class.stub(:max_command_length).and_return(max_command_length)
@@ -35,8 +36,10 @@ describe Overcommit::CommandSplitter do
       let(:splittable_args) { %w[1 2 3 4 5 6 7 8] }
 
       it 'executes two commands with the appropriately split arguments' do
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 1 2 3 4 5 6 7])
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 8])
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 1 2 3 4 5 6 7],
+                                                           hash_excluding(:args))
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 8],
+                                                           hash_excluding(:args))
         subject
       end
 
@@ -55,7 +58,7 @@ describe Overcommit::CommandSplitter do
       context 'when one command fails' do
         before do
           Overcommit::Subprocess.stub(:spawn).
-            with(%w[cmd 8]).
+            with(%w[cmd 8], anything).
             and_return(Overcommit::Subprocess::Result.new(2, 'whoa', 'bad error'))
         end
 
@@ -75,10 +78,14 @@ describe Overcommit::CommandSplitter do
       let(:splittable_args) { 15.times.map { |i| (i + 1).to_s } }
 
       it 'executes multiple commands with the appropriately split arguments' do
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 1 2 3 4 5 6 7])
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 8 9 10 11])
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 12 13 14])
-        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 15])
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 1 2 3 4 5 6 7],
+                                                           hash_excluding(:args))
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 8 9 10 11],
+                                                           hash_excluding(:args))
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 12 13 14],
+                                                           hash_excluding(:args))
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 15],
+                                                           hash_excluding(:args))
         subject
       end
     end
@@ -99,6 +106,20 @@ describe Overcommit::CommandSplitter do
       it 'executes no commands and raises an exception' do
         Overcommit::Subprocess.should_not_receive(:spawn)
         expect { subject }.to raise_error Overcommit::Exceptions::InvalidCommandArgs
+      end
+    end
+
+    context 'with a standard input stream specified' do
+      let(:max_command_length) { 5 }
+      let(:args_prefix) { %w[cat] }
+      let(:options) { { args: %w[- - -], input: 'Hello' } }
+
+      it 'passes the same standard input to each command' do
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cat - -],
+                                                           hash_including(input: 'Hello'))
+        Overcommit::Subprocess.should_receive(:spawn).with(%w[cat -],
+                                                           hash_including(input: 'Hello'))
+        subject
       end
     end
   end

@@ -90,11 +90,14 @@ module Overcommit::Hook
     # for splitting up long file lists.
     #
     # @param cmd [Array<String>] command arguments
-    # @param splittable_args [Array<String>] arguments that can be split up over
+    # @param options [Hash]
+    # @option options [Array<String>] :args arguments that can be split up over
     #   multiple invocations (usually a list of files)
+    # @option options [String] :input string to pass to process' standard input
+    #   stream
     # @return [#status,#stdout,#stderr] struct containing result of invocation
-    def execute(cmd, splittable_args = nil)
-      Overcommit::Utils.execute(cmd, splittable_args)
+    def execute(cmd, options = {})
+      Overcommit::Utils.execute(cmd, options)
     end
 
     def execute_in_background(cmd)

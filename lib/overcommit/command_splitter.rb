@@ -51,8 +51,10 @@ module Overcommit
     end
 
     class << self
-      def execute(args, splittable_args)
-        if splittable_args.empty?
+      def execute(initial_args, options)
+        options = options.dup
+
+        if (splittable_args = (options.delete(:args) { [] })).empty?
           raise Overcommit::Exceptions::InvalidCommandArgs,
                 'Must specify list of arguments to split on'
         end
@@ -60,8 +62,8 @@ module Overcommit
         # Execute each chunk of arguments in serial. We don't parallelize (yet)
         # since in theory we want to support parallelization at the hook level
         # and not within individual hooks.
-        results = extract_argument_lists(args, splittable_args).map do |arg_list|
-          Overcommit::Subprocess.spawn(arg_list)
+        results = extract_argument_lists(initial_args, splittable_args).map do |arg_list|
+          Overcommit::Subprocess.spawn(arg_list, options)
         end
 
         Result.new(results.map(&:status), results.map(&:stdout), results.map(&:stderr))
