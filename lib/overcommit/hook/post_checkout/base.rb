@@ -6,7 +6,6 @@ module Overcommit::Hook::PostCheckout
     extend Forwardable
 
     def_delegators :@context,
-                   :previous_head, :new_head, :branch_checkout?, :file_checkout?,
-                   :modified_files
+                   :previous_head, :new_head, :branch_checkout?, :file_checkout?
   end
 end
