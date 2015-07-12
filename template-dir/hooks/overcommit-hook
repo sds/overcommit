@@ -25,13 +25,27 @@ if hook_type == 'overcommit-hook'
   exit 64 # EX_USAGE
 end
 
+# Check if Overcommit should invoke a Bundler context for loading gems
+require 'yaml'
+if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
+  ENV['BUNDLE_GEMFILE'] = gemfile
+  require 'bundler/setup'
+end
+
 begin
   require 'overcommit'
 rescue LoadError
-  puts 'This repository contains hooks installed by Overcommit, but the ' \
-       "overcommit gem is not installed.\n" \
-       'Install it with `gem install overcommit`.'
-  exit
+  if gemfile
+    puts 'You have specified the `gemfile` option in your Overcommit ' \
+         'configuration but have not added the `overcommit` gem to ' \
+         "#{gemfile}."
+  else
+    puts 'This repository contains hooks installed by Overcommit, but the ' \
+         "`overcommit` gem is not installed.\n" \
+         'Install it with `gem install overcommit`.'
+  end
+
+  exit 64 # EX_USAGE
 end
 
 begin

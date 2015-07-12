@@ -2,6 +2,37 @@
 #
 # This is an opinionated list of which hooks are valuable to run and what their
 # out-of-the-box settings should be.
+#-------------------------------------------------------------------------------
+
+# Loads Bundler context from a Gemfile. If false, does nothing (default).
+#
+# Specifying a Gemfile for Bundler to load allows you to control which gems are
+# available in the load path (i.e. loadable via `require`) within your hook
+# runs. Note that having a Gemfile requires you to include `overcommit` itself
+# in your Gemfile (otherwise Overcommit can't load itself!).
+#
+# This is useful if you want to:
+#
+#   - Enforce a specific version of Overcommit to use for all hook runs
+#     (or to use a version from the master branch that has not been released yet)
+#   - Enforce a specific version or unreleased branch is used for a gem you want
+#     to use in your git hooks
+#
+# WARNING: This makes your hook runs slower, but you can work around this!
+#
+# Loading a Bundler context necessarily adds a startup delay to your hook runs
+# as Bundler parses the Gemfile and checks that the dependencies are satisfied.
+# Thus for projects with many gems this can introduce a noticeable delay.
+#
+# The recommended workaround is to create a separate Gemfile in the root of your
+# repository (call it `.overcommit_gems.rb`), and include only the gems that
+# your Overcommit hooks need in order to run. This significantly reduces the
+# startup delay in your hook runs. Make sure to commit both
+# `.overcommit_gems.rb` and the resulting `.overcommit_gems.rb.lock` file to
+# your repository, and then set the `gemfile` option below to the name you gave
+# the file.
+# (Generate lock file by running `bundle install --gemfile=.overcommit_gems.rb`)
+gemfile: false
 
 # Where to store hook plugins specific to a repository. These are loaded in
 # addition to the default hooks Overcommit comes with. The location is relative

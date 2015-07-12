@@ -14,6 +14,8 @@
   lists and the operating system command length limit
 * Add `modified_files` helper to `PostCheckout` hooks
 * Add `rewritten_commits` helper to `PostRewrite` hooks
+* Add `gemfile` option to configuration file which allows a `Gemfile` to be
+  loaded by Bundler to enforce particular gem versions during hook runs
 
 ## 0.26.0
 

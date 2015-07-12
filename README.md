@@ -25,6 +25,7 @@ repository (but unlike regular Git hooks, are stored in source control).
 * [Configuration](#configuration)
   * [Hooks](#hooks)
   * [Hook Categories](#hook-categories)
+  * [Gemfile](#gemfile)
   * [Plugin Directory](#plugin-directory)
   * [Signature Verification](#signature-verification)
 * [Built-In Hooks](#built-in-hooks)
@@ -60,6 +61,10 @@ Some of the hooks have third-party dependencies. For example, to lint your
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
 Most hooks will display a warning if a required executable isn't available.
+
+If you are using Bundler to manage your Ruby gem dependencies, you'll likely
+want to use the [`gemfile`](#gemfile) option to control which gem versions are
+available during your hook runs.
 
 ## Installation
 
@@ -238,6 +243,44 @@ hooks.
 
 Again, you can consult the [default configuration](config/default.yml) for
 detailed examples of how the `ALL` hook can be used.
+
+### Gemfile
+
+You may want to enforce the version of Overcommit or other gems that you use in
+your git hooks. This can be done by specifying the `gemfile` option in your
+`.overcommit.yml`.
+
+The `gemfile` option tells Overcommit to load the specified file with
+[Bundler](http://bundler.io/), the standard gem dependency manager for Ruby.
+This is useful if you would like to:
+
+  - Enforce a specific version of Overcommit to use for all hook runs
+    (or to use a version from the master branch that has not been released yet)
+  - Enforce a specific version or unreleased branch is used for a gem you want
+    to use in your git hooks
+
+Loading a Bundler context necessarily adds a startup delay to your hook runs
+as Bundler parses the specified `Gemfile` and checks that the dependencies are
+satisfied. Thus for projects with many gems this can introduce a noticeable
+delay.
+
+The recommended workaround is to create a separate `Gemfile` in the root of
+your repository (call it `.overcommit_gems.rb`), and include only the gems that
+your Overcommit hooks need in order to run. Generate the associated lock file
+by running:
+
+```bash
+bundle install --gemfile=.overcommit_gems.rb
+```
+
+...and commit `.overcommit_gems.rb` and the resulting
+`.overcommit_gems.rb.lock` file to your repository. Set your `gemfile` option
+to `.overcommit_gems.rb`, and you're all set.
+
+Using a smaller Gemfile containing only the gems used by your Overcommit hooks
+significantly reduces the startup delay in your hook runs. It is thus the
+recommended approach unless your project has a relatively small number of gems
+in your `Gemfile`.
 
 ### Plugin Directory
 
