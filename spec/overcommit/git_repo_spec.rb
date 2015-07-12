@@ -107,6 +107,31 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe '.initial_commit?' do
+    subject { described_class.initial_commit? }
+
+    context 'when there are no existing commits in the repository' do
+      around do |example|
+        repo do
+          example.run
+        end
+      end
+
+      it { should == true }
+    end
+
+    context 'when there are commits in the repository' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          example.run
+        end
+      end
+
+      it { should == false }
+    end
+  end
+
   describe '.staged_submodule_removals' do
     subject { described_class.staged_submodule_removals }
 
