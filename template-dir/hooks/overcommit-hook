@@ -50,6 +50,7 @@ end
 
 begin
   logger = Overcommit::Logger.new(STDOUT)
+  Overcommit::Utils.log = logger
 
   # Ensure master hook is up-to-date
   installer = Overcommit::Installer.new(logger)

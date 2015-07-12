@@ -25,6 +25,9 @@ module Overcommit
     end
 
     class << self
+      # @return [Overcommit::Logger] logger with which to send debug output
+      attr_accessor :log
+
       def script_path(script)
         File.join(Overcommit::HOME, 'libexec', script)
       end
@@ -162,11 +165,20 @@ module Overcommit
                 'Cannot pipe commands with the `execute` helper'
         end
 
-        if splittable_args
-          Overcommit::CommandSplitter.execute(args, splittable_args)
-        else
-          Overcommit::Subprocess.spawn(args)
-        end
+        result =
+          if splittable_args
+            log.debug(args.join(' ') + " ... (#{splittable_args.length} splittable args)")
+            Overcommit::CommandSplitter.execute(args, splittable_args)
+          else
+            log.debug(args.join(' '))
+            Overcommit::Subprocess.spawn(args)
+          end
+
+        log.debug("EXIT STATUS: #{result.status}")
+        log.debug("STDOUT: #{result.stdout.inspect}")
+        log.debug("STDERR: #{result.stderr.inspect}")
+
+        result
       end
 
       # Execute a command in a subprocess, returning immediately.
@@ -182,6 +194,7 @@ module Overcommit
                 'Cannot pipe commands with the `execute_in_background` helper'
         end
 
+        log.debug("Spawning background task: #{args.join(' ')}")
         Subprocess.spawn_detached(args)
       end
 

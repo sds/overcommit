@@ -16,6 +16,8 @@
 * Add `rewritten_commits` helper to `PostRewrite` hooks
 * Add `gemfile` option to configuration file which allows a `Gemfile` to be
   loaded by Bundler to enforce particular gem versions during hook runs
+* Add support for `OVERCOMMIT_DEBUG` environment variable which toggles the
+  display of additional verbose output from executed commands
 
 ## 0.26.0
 
