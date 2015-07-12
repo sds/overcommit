@@ -82,6 +82,30 @@ describe Overcommit::Logger do
     end
   end
 
+  describe '#debug' do
+    context 'when debug mode is enabled' do
+      around do |example|
+        Overcommit::Utils.with_environment 'OVERCOMMIT_DEBUG' => '1' do
+          example.run
+        end
+      end
+
+      it_behaves_like 'colorized output' do
+        let(:method) { :debug }
+        let(:color_code) { '35' }
+      end
+    end
+
+    context 'when debug mode is not enabled' do
+      subject { super().debug('Hello') }
+
+      it 'does not write to the output stream' do
+        subject
+        output.should be_empty
+      end
+    end
+  end
+
   describe '#bold' do
     it_behaves_like 'colorized output' do
       let(:method) { :bold }

@@ -30,6 +30,11 @@ module Overcommit
       @out.puts(*args)
     end
 
+    # Write a line of output if debug mode is enabled.
+    def debug(*args)
+      color('35', *args) unless ENV.fetch('OVERCOMMIT_DEBUG', '').empty?
+    end
+
     # Write a line of output that is intended to be emphasized.
     def bold(*args)
       color('1', *args)
