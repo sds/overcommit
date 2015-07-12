@@ -1,6 +1,51 @@
 require 'spec_helper'
 
 describe Overcommit::GitRepo do
+  describe '.submodule_statuses' do
+    let(:options) { {} }
+    subject { described_class.submodule_statuses(options) }
+
+    context 'when repo contains no submodules' do
+      around do |example|
+        repo do
+          example.run
+        end
+      end
+
+      it { should be_empty }
+    end
+
+    context 'when repo contains submodules' do
+      around do |example|
+        nested_submodule = repo do
+          `git commit --allow-empty -m "Initial commit"`
+        end
+
+        submodule = repo do
+          `git submodule add #{nested_submodule} nested-sub 2>&1 > #{File::NULL}`
+          `git commit -m "Add nested submodule"`
+        end
+
+        repo do
+          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+          example.run
+        end
+      end
+
+      it 'returns the submodule statuses' do
+        subject.map(&:path).should == ['sub']
+      end
+
+      context 'when recursive flag is specified' do
+        let(:options) { { recursive: true } }
+
+        it 'returns submodule statuses including nested submodules' do
+          subject.map(&:path).sort.should == ['sub', 'sub/nested-sub']
+        end
+      end
+    end
+  end
+
   describe '.list_files' do
     let(:paths) { [] }
     let(:options) { {} }
