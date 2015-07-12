@@ -167,16 +167,16 @@ module Overcommit
 
         result =
           if splittable_args
-            log.debug(args.join(' ') + " ... (#{splittable_args.length} splittable args)")
+            debug(args.join(' ') + " ... (#{splittable_args.length} splittable args)")
             Overcommit::CommandSplitter.execute(args, splittable_args)
           else
-            log.debug(args.join(' '))
+            debug(args.join(' '))
             Overcommit::Subprocess.spawn(args)
           end
 
-        log.debug("EXIT STATUS: #{result.status}")
-        log.debug("STDOUT: #{result.stdout.inspect}")
-        log.debug("STDERR: #{result.stderr.inspect}")
+        debug("EXIT STATUS: #{result.status}")
+        debug("STDOUT: #{result.stdout.inspect}")
+        debug("STDERR: #{result.stderr.inspect}")
 
         result
       end
@@ -194,7 +194,7 @@ module Overcommit
                 'Cannot pipe commands with the `execute_in_background` helper'
         end
 
-        log.debug("Spawning background task: #{args.join(' ')}")
+        debug("Spawning background task: #{args.join(' ')}")
         Subprocess.spawn_detached(args)
       end
 
@@ -239,6 +239,19 @@ module Overcommit
                       File::FNM_PATHNAME | # Wildcard doesn't match separator
                       File::FNM_DOTMATCH   # Wildcards match dotfiles
         )
+      end
+
+      private
+
+      # Log debug output.
+      #
+      # This is necessary since some specs indirectly call utility functions but
+      # don't explicitly set the logger for the Utils class, so we do a quick
+      # check here to see if it's set before we attempt to log.
+      #
+      # @param args [Array<String>]
+      def debug(*args)
+        log.debug(*args) if log
       end
     end
   end
