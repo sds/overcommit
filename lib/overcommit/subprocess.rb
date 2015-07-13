@@ -32,8 +32,15 @@ module Overcommit
         process.duplex = true if options[:input] # Make stdin available if needed
         process.start
         if options[:input]
-          process.io.stdin.puts(options[:input])
-          process.io.stdin.close
+          begin
+            process.io.stdin.puts(options[:input])
+          rescue
+            # Silently ignore if the standard input stream of the spawned
+            # process is closed before we get a chance to write to it. This
+            # happens on JRuby a lot.
+          ensure
+            process.io.stdin.close
+          end
         end
         process.wait
 
