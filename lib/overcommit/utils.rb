@@ -167,7 +167,7 @@ module Overcommit
         end
 
         result =
-          if splittable_args = options[:args]
+          if (splittable_args = options.fetch(:args, [])).any?
             debug(initial_args.join(' ') + " ... (#{splittable_args.length} splittable args)")
             Overcommit::CommandSplitter.execute(initial_args, options)
           else
