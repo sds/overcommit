@@ -46,6 +46,44 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe '.extract_modified_lines' do
+    let(:file) { 'file.txt' }
+    let(:options) { {} }
+
+    subject { described_class.extract_modified_lines(file, options) }
+
+    around do |example|
+      repo do
+        echo("Hello World\nHow are you?", file)
+        `git add file.txt`
+        `git commit -m "Initial commit"`
+        example.run
+      end
+    end
+
+    context 'when no lines were modified' do
+      it { should be_empty }
+    end
+
+    context 'when lines were added' do
+      before do
+        echo('Hello Again', file, append: true)
+      end
+
+      it 'includes the added lines' do
+        subject.to_a.should == [3]
+      end
+    end
+
+    context 'when lines were removed' do
+      before do
+        echo('Hello World', file)
+      end
+
+      it { should be_empty }
+    end
+  end
+
   describe '.list_files' do
     let(:paths) { [] }
     let(:options) { {} }
