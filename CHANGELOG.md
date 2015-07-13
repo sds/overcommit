@@ -12,7 +12,7 @@
 * Add support to the hook `execute` helper for accepting an optional list of
   splittable command arguments for transparently dealing with really long file
   lists and the operating system command length limit
-* Add `modified_files` helper to `PostCheckout` hooks
+* Add `modified_files` helper to `PostCheckout` and `PostRewrite` hooks
 * Add `rewritten_commits` helper to `PostRewrite` hooks
 * Add `gemfile` option to configuration file which allows a `Gemfile` to be
   loaded by Bundler to enforce particular gem versions during hook runs
