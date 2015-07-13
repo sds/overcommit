@@ -13,7 +13,7 @@ describe Overcommit::Hook::PostRewrite::NpmInstall do
 
   context 'when npm install exits successfully' do
     before do
-      subject.stub(:success?).and_return(true)
+      result.stub(:success?).and_return(true)
     end
 
     it { should pass }
@@ -21,7 +21,7 @@ describe Overcommit::Hook::PostRewrite::NpmInstall do
 
   context 'when npm install exits unsuccessfully' do
     before do
-      subject.stub(success?: false, stderr: "npm ERR! install Couldn't read dependencies")
+      result.stub(success?: false, stderr: "npm ERR! install Couldn't read dependencies")
     end
 
     it { should fail_hook }
