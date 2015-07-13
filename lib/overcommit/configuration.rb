@@ -133,17 +133,25 @@ module Overcommit
     # environment variables.
     def apply_environment!(hook_context, env)
       skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(/[:, ]/)
+      only_hooks = env.fetch('ONLY', '').split(/[:, ]/)
       hook_type = hook_context.hook_class_name
 
-      if skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
+      if only_hooks.any? || skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
         @hash[hook_type]['ALL']['skip'] = true
-      else
-        skipped_hooks.select { |hook_name| hook_exists?(hook_context, hook_name) }.
-                      map { |hook_name| Overcommit::Utils.camel_case(hook_name) }.
-                      each do |hook_name|
-          @hash[hook_type][hook_name] ||= {}
-          @hash[hook_type][hook_name]['skip'] = true
-        end
+      end
+
+      only_hooks.select { |hook_name| hook_exists?(hook_context, hook_name) }.
+                 map { |hook_name| Overcommit::Utils.camel_case(hook_name) }.
+                 each do |hook_name|
+        @hash[hook_type][hook_name] ||= {}
+        @hash[hook_type][hook_name]['skip'] = false
+      end
+
+      skipped_hooks.select { |hook_name| hook_exists?(hook_context, hook_name) }.
+                    map { |hook_name| Overcommit::Utils.camel_case(hook_name) }.
+                    each do |hook_name|
+        @hash[hook_type][hook_name] ||= {}
+        @hash[hook_type][hook_name]['skip'] = true
       end
     end
 

@@ -279,5 +279,17 @@ describe Overcommit::Configuration do
         end
       end
     end
+
+    context 'when hooks are filtered using the ONLY environment variable' do
+      let(:env) { { 'ONLY' => 'AuthorName' } }
+
+      it 'sets the skip option of the ALL section to true' do
+        subject.for_hook('ALL', 'PreCommit')['skip'].should == true
+      end
+
+      it 'sets the skip option of the filtered hook to false' do
+        subject.for_hook('AuthorName', 'PreCommit')['skip'].should == false
+      end
+    end
   end
 end

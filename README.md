@@ -132,9 +132,18 @@ the name of the relevant hook in the `SKIP` environment variable, e.g.
 SKIP=RuboCop git commit
 ```
 
+If you would prefer to specify a whitelist of hooks rather than a blacklist, use
+the `ONLY` environment variable instead.
+
+```bash
+ONLY=RuboCop git commit
+```
+
 Use this feature sparingly, as there is no point to having the hook in the first
 place if you're just going to ignore it. If you want to ensure a hook is never
-skipped, set the `required` option to `true` in its configuration.
+skipped, set the `required` option to `true` in its configuration. If you
+attempt to skip it, you'll see a warning telling you that the hook is required,
+and the hook will still run.
 
 ### Disabling Overcommit
 

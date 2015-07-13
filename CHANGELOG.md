@@ -25,6 +25,9 @@
 * Add support for defining
   [hooks based on your existing git hooks](README.md#adding-existing-git-hooks)
   within your `.overcommit.yml` (no Ruby code required)
+* Add support for filtering all hooks except a small list via the `ONLY`
+  environment variable (similar to `SKIP` except a whitelist instead of
+  blacklist)
 
 ## 0.26.0
 
