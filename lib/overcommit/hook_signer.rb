@@ -36,16 +36,21 @@ module Overcommit
                           hook_config['required_executable'])
 
           unless !@config.verify_plugin_signatures? ||
-                 command.first.start_with?(".#{File::SEPARATOR}")
+                 signable_file?(command.first)
             raise Overcommit::Exceptions::InvalidHookDefinition,
                   'Hook must specify a `required_executable` or `command` that ' \
-                  'is under source control (i.e. is a path relative to the root ' \
+                  'is tracked by git (i.e. is a path relative to the root ' \
                   'of the repository) so that it can be signed'
           end
 
           File.join(Overcommit::Utils.repo_root, command.first)
         end
       end
+    end
+
+    def signable_file?(file)
+      file.start_with?(".#{File::SEPARATOR}") &&
+        Overcommit::GitRepo.tracked?(file)
     end
 
     # Return whether the signature for this hook has changed since it was last

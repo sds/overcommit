@@ -113,6 +113,14 @@ module Overcommit
         reject { |file| File.directory?(file) } # Exclude submodule directories
     end
 
+    # Returns whether the specified file/path is tracked by this repository.
+    #
+    # @param path [String]
+    # @return [true,false]
+    def tracked?(path)
+      Overcommit::Utils.execute(%W[git ls-files #{path} --error-unmatch]).success?
+    end
+
     # Returns the names of all files that are tracked by git.
     #
     # @return [Array<String>] list of absolute file paths
