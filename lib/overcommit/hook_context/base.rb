@@ -94,5 +94,30 @@ module Overcommit::HookContext
     def input_lines
       @input_lines ||= input_string.split("\n")
     end
+
+    private
+
+    def filter_modified_files(modified_files)
+      filter_directories(filter_nonexistent(modified_files))
+    end
+
+    # Filter out non-existent files (unless it's a broken symlink, in which case
+    # it's a file that points to a non-existent file). This could happen if a
+    # file was renamed as part of an amendment, leading to the old file no
+    # longer existing.
+    def filter_nonexistent(modified_files)
+      modified_files.select do |file|
+        File.exist?(file) || Overcommit::Utils.broken_symlink?(file)
+      end
+    end
+
+    # Filter out directories. This could happen when changing a symlink to a
+    # directory as part of an amendment, since the symlink will still appear as
+    # a file, but the actual working tree will have a directory.
+    def filter_directories(modified_files)
+      modified_files.reject do |file|
+        File.directory?(file) && !File.symlink?(file)
+      end
+    end
   end
 end
