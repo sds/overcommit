@@ -527,6 +527,16 @@ PostCheckout:
     quiet: true
     required_executable: 'ctags'
 
+  NpmInstall:
+    enabled: false
+    description: 'Installing NPM dependencies'
+    requires_files: true
+    required_executable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
@@ -554,6 +564,16 @@ PostCommit:
     quiet: true
     required_executable: 'ctags'
 
+  NpmInstall:
+    enabled: false
+    description: 'Installing NPM dependencies'
+    requires_files: true
+    required_executable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
@@ -572,6 +592,16 @@ PostMerge:
     quiet: true
     required_executable: 'ctags'
 
+  NpmInstall:
+    enabled: false
+    description: 'Installing NPM dependencies'
+    requires_files: true
+    required_executable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
   SubmoduleStatus:
     enabled: false
     description: 'Checking submodule status'
@@ -589,6 +619,16 @@ PostRewrite:
     description: 'Generating tags file from source'
     quiet: true
     required_executable: 'ctags'
+
+  NpmInstall:
+    enabled: false
+    description: 'Installing NPM dependencies'
+    requires_files: true
+    required_executable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
 
   SubmoduleStatus:
     enabled: false
