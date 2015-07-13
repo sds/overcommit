@@ -7,11 +7,15 @@ module Overcommit::HookLoader
     def load_hooks
       check_for_modified_plugins if @config.verify_plugin_signatures?
 
-      plugin_paths.map do |plugin_path|
+      hooks = plugin_paths.map do |plugin_path|
         require plugin_path
 
         hook_name = Overcommit::Utils.camel_case(File.basename(plugin_path, '.rb'))
         create_hook(hook_name)
+      end
+
+      hooks + ad_hoc_hook_names.map do |hook_name|
+        create_ad_hoc_hook(hook_name)
       end
     end
 
@@ -31,9 +35,19 @@ module Overcommit::HookLoader
       Dir[File.join(directory, '*.rb')].sort
     end
 
+    def plugin_hook_names
+      plugin_paths.map do |path|
+        Overcommit::Utils.camel_case(File.basename(path, '.rb'))
+      end
+    end
+
+    def ad_hoc_hook_names
+      @config.enabled_ad_hoc_hooks(@context)
+    end
+
     def modified_plugins
-      plugin_paths.
-        map { |path| Overcommit::HookSigner.new(path, @config, @context) }.
+      (plugin_hook_names + ad_hoc_hook_names).
+        map { |hook_name| Overcommit::HookSigner.new(hook_name, @config, @context) }.
         select(&:signature_changed?)
     end
 
@@ -56,6 +70,31 @@ module Overcommit::HookLoader
       log.log "For more information, see #{Overcommit::REPO_URL}#security"
 
       raise Overcommit::Exceptions::InvalidHookSignature
+    end
+
+    def create_ad_hoc_hook(hook_name)
+      hook_module = Overcommit::Hook.const_get(@context.hook_class_name)
+      hook_base = hook_module.const_get('Base')
+
+      # Implement a simple class that executes the command and returns pass/fail
+      # based on the exit status
+      hook_class = Class.new(hook_base) do
+        def run # rubocop:disable Lint/NestedMethodDefinition
+          result = @context.execute_hook(command)
+
+          if result.success?
+            :pass
+          else
+            [:fail, result.stdout + result.stderr]
+          end
+        end
+      end
+
+      hook_module.const_set(hook_name, hook_class).new(@config, @context)
+    rescue LoadError, NameError => error
+      raise Overcommit::Exceptions::HookLoadError,
+            "Unable to load hook '#{hook_name}': #{error}",
+            error.backtrace
     end
   end
 end

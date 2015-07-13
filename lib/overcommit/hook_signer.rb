@@ -1,21 +1,51 @@
 module Overcommit
   # Calculates, stores, and retrieves stored signatures of hook plugins.
   class HookSigner
-    attr_reader :hook_path, :hook_name
+    attr_reader :hook_name
 
     # We don't want to include the skip setting as it is set by Overcommit
     # itself
     IGNORED_CONFIG_KEYS = %w[skip]
 
-    # @param hook_path [String] path to the actual hook definition
+    # @param hook_name [String] name of the hook
     # @param config [Overcommit::Configuration]
     # @param context [Overcommit::HookContext]
-    def initialize(hook_path, config, context)
-      @hook_path = hook_path
+    def initialize(hook_name, config, context)
+      @hook_name = hook_name
       @config = config
       @context = context
+    end
 
-      @hook_name = Overcommit::Utils.camel_case(File.basename(@hook_path, '.rb'))
+    # Returns the path of the file that should be incorporated into this hooks
+    # signature.
+    #
+    # @return [String]
+    def hook_path
+      @hook_path ||= begin
+        plugin_path = File.join(@config.plugin_directory,
+                                @context.hook_type_name,
+                                "#{Overcommit::Utils.snake_case(@hook_name)}.rb")
+
+        if File.exist?(plugin_path)
+          plugin_path
+        else
+          # Otherwise this is an ad hoc hook using an existing hook script
+          hook_config = @config.for_hook(@hook_name, @context.hook_class_name)
+
+          command = Array(hook_config['command'] ||
+                          hook_config['required_executable'])
+
+          unless !@config.verify_plugin_signatures? ||
+                 command.first.start_with?(".#{File::SEPARATOR}")
+            raise Overcommit::Exceptions::InvalidHookDefinition,
+                  'Hook must specify a `required_executable` or `command` that ' \
+                  'is under source control (i.e. is a path relative to the root ' \
+                  'of the repository) so that it can be signed'
+          end
+
+          File.join(Overcommit::Utils.repo_root, command.first)
+        end
+      end
     end
 
     # Return whether the signature for this hook has changed since it was last
@@ -54,7 +84,7 @@ module Overcommit
     end
 
     def hook_contents
-      File.open(@hook_path, 'r').read
+      File.read(hook_path)
     end
 
     def stored_signature
