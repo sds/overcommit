@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Ensure `applicable_files` hook helper returns files in lexicographic order
+
 ## 0.27.0
 
 ### New Features
