@@ -147,7 +147,7 @@ module Overcommit::Hook
     # Gets a list of staged files that apply to this hook based on its
     # configured `include` and `exclude` lists.
     def applicable_files
-      @applicable_files ||= modified_files.select { |file| applicable_file?(file) }
+      @applicable_files ||= modified_files.select { |file| applicable_file?(file) }.sort
     end
 
     private
