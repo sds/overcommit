@@ -79,4 +79,144 @@ describe Overcommit::HookContext::PostRewrite do
       end
     end
   end
+
+  describe '#modified_files' do
+    subject { context.modified_files }
+
+    before do
+      context.stub(:rewritten_commits).and_return(rewritten_commits)
+    end
+
+    context 'when rewrite was triggered by amend' do
+      let(:args) { ['amend'] }
+      let(:rewritten_commits) { [double(old_hash: 'HEAD@{1}', new_hash: 'HEAD')] }
+
+      it 'does not include submodules' do
+        submodule = repo do
+          FileUtils.touch 'foo'
+          `git add foo`
+          `git commit -m "Initial commit"`
+        end
+
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+          `git commit --amend -m "Add submodule"`
+          expect(subject).to_not include File.expand_path('test-sub')
+        end
+      end
+
+      context 'when no files were modified' do
+        around do |example|
+          repo do
+            `git commit --allow-empty -m "Initial commit"`
+            `git commit --amend --allow-empty -m "Another commit"`
+            example.run
+          end
+        end
+
+        it { should be_empty }
+      end
+
+      context 'when files were added' do
+        around do |example|
+          repo do
+            `git commit --allow-empty -m "Initial commit"`
+            FileUtils.touch('some-file')
+            `git add some-file`
+            `git commit --amend -m "Add file"`
+            example.run
+          end
+        end
+
+        it { should == [File.expand_path('some-file')] }
+      end
+
+      context 'when files were modified' do
+        around do |example|
+          repo do
+            FileUtils.touch('some-file')
+            `git add some-file`
+            `git commit -m "Initial commit"`
+            echo('Hello', 'some-file')
+            `git add some-file`
+            `git commit --amend -m "Modify file"`
+            example.run
+          end
+        end
+
+        it { should == [File.expand_path('some-file')] }
+      end
+
+      context 'when files were deleted' do
+        around do |example|
+          repo do
+            FileUtils.touch('some-file')
+            `git add some-file`
+            `git commit -m "Initial commit"`
+            `git rm some-file`
+            `git commit --amend --allow-empty -m "Delete file"`
+            example.run
+          end
+        end
+
+        it { should be_empty }
+      end
+
+      context 'when files were renamed' do
+        around do |example|
+          repo do
+            FileUtils.touch 'some-file'
+            `git add some-file`
+            `git commit -m "Add file"`
+            `git mv some-file renamed-file`
+            `git commit --amend -m "Rename file"`
+            example.run
+          end
+        end
+
+        it { should == [File.expand_path('renamed-file')] }
+      end
+
+      context 'when changing a symlink to a directory during an amendment' do
+        around do |example|
+          repo do
+            FileUtils.mkdir 'some-directory'
+            FileUtils.ln_s 'some-directory', 'some-symlink'
+            `git add some-symlink some-directory`
+            `git commit -m "Add file"`
+            `git rm some-symlink`
+            FileUtils.mkdir 'some-symlink'
+            FileUtils.touch File.join('some-symlink', 'another-file')
+            `git add some-symlink`
+            `git commit --amend -m "Change symlink to directory"`
+            example.run
+          end
+        end
+
+        it 'does not include the directory in the list of modified files' do
+          subject.should_not include File.expand_path('some-symlink')
+        end
+      end
+
+      context 'when breaking a symlink during an amendment' do
+        around do |example|
+          repo do
+            FileUtils.mkdir 'some-directory'
+            FileUtils.touch File.join('some-directory', 'some-file')
+            FileUtils.ln_s 'some-directory', 'some-symlink'
+            `git add some-symlink some-directory`
+            `git commit -m "Add file"`
+            `git rm -rf some-directory`
+            `git commit --amend -m "Remove directory to break symlink"`
+            example.run
+          end
+        end
+
+        it 'does not include the broken symlink in the list of modified files' do
+          subject.should_not include File.expand_path('some-symlink')
+        end
+      end
+    end
+  end
 end
