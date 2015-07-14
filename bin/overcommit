@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'overcommit'
 require 'overcommit/cli'
 
 logger = Overcommit::Logger.new(STDOUT)

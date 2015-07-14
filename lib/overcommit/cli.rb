@@ -1,3 +1,4 @@
+require 'overcommit'
 require 'optparse'
 
 module Overcommit
