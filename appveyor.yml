@@ -4,10 +4,6 @@ clone_depth: 1
 
 environment:
   matrix:
-    - RUBY_FOLDER_VERSION: "193"
-      RUBY_GEMS_FOLDER: "1.9.3"
-    - RUBY_FOLDER_VERSION: "193-x64"
-      RUBY_GEMS_FOLDER: "1.9.3"
     - RUBY_FOLDER_VERSION: "200"
       RUBY_GEMS_FOLDER: "2.0.0"
     - RUBY_FOLDER_VERSION: "200-x64"
