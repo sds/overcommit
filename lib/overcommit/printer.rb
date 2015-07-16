@@ -81,7 +81,7 @@ module Overcommit
       log.partial hook_name
     end
 
-    def print_result(hook, status, output) # rubocop:disable CyclomaticComplexity, MethodLength
+    def print_result(hook, status, output)
       case status
       when :pass
         log.success 'OK' unless hook.quiet?
