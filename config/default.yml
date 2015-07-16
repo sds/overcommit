@@ -541,6 +541,18 @@ PostCheckout:
     flags: ['install']
     include: 'bower.json'
 
+  BundleInstall:
+    enabled: false
+    description: 'Installing Bundler dependencies'
+    requires_files: true
+    required_executable: 'bundle'
+    install_command: 'gem install bundler'
+    flags: ['install']
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '*.gemspec'
+
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
@@ -578,6 +590,18 @@ PostCommit:
     install_command: 'npm install -g bower'
     flags: ['install']
     include: 'bower.json'
+
+  BundleInstall:
+    enabled: false
+    description: 'Installing Bundler dependencies'
+    requires_files: true
+    required_executable: 'bundle'
+    install_command: 'gem install bundler'
+    flags: ['install']
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '*.gemspec'
 
   GitGuilt:
     enabled: false
@@ -624,6 +648,18 @@ PostMerge:
     flags: ['install']
     include: 'bower.json'
 
+  BundleInstall:
+    enabled: false
+    description: 'Installing Bundler dependencies'
+    requires_files: true
+    required_executable: 'bundle'
+    install_command: 'gem install bundler'
+    flags: ['install']
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '*.gemspec'
+
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
@@ -660,6 +696,18 @@ PostRewrite:
     install_command: 'npm install -g bower'
     flags: ['install']
     include: 'bower.json'
+
+  BundleInstall:
+    enabled: false
+    description: 'Installing Bundler dependencies'
+    requires_files: true
+    required_executable: 'bundle'
+    install_command: 'gem install bundler'
+    flags: ['install']
+    include:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '*.gemspec'
 
   IndexTags:
     enabled: false
