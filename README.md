@@ -335,6 +335,7 @@ follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-abou
 `post-checkout` hooks run after a successful `git checkout`, or in other words
 any time your `HEAD` changes or a file is explicitly checked out.
 
+* [BowerInstall](lib/overcommit/hook/post_checkout/bower_install.rb)
 * [IndexTags](lib/overcommit/hook/post_checkout/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_checkout/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_checkout/submodule_status.rb)
@@ -345,6 +346,7 @@ any time your `HEAD` changes or a file is explicitly checked out.
 in this case does not prevent the merge since it has already occurred; however,
 it can be used to alert the user to some issue.
 
+* [BowerInstall](lib/overcommit/hook/post_commit/bower_install.rb)
 * [GitGuilt](lib/overcommit/hook/post_commit/git_guilt.rb)
 * [IndexTags](lib/overcommit/hook/post_commit/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_commit/npm_install.rb)
@@ -356,6 +358,7 @@ it can be used to alert the user to some issue.
 conflicts. A hook failing in this case does not prevent the merge since it has
 already occurred; however, it can be used to alert the user to some issue.
 
+* [BowerInstall](lib/overcommit/hook/post_merge/bower_install.rb)
 * [IndexTags](lib/overcommit/hook/post_merge/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_merge/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_merge/submodule_status.rb)
@@ -367,6 +370,7 @@ or `git rebase`. A hook failing in this case does not prevent the rewrite since
 it has already occurred; however, it can be used to alert the user to some
 issue.
 
+* [BowerInstall](lib/overcommit/hook/post_rewrite/bower_install.rb)
 * [IndexTags](lib/overcommit/hook/post_rewrite/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_rewrite/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_rewrite/submodule_status.rb)
