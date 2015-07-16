@@ -6,6 +6,7 @@
 * Add `NpmInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add `PuppetLint` pre-commit hook that checks Puppet code with
   [puppet-lint](http://puppet-lint.com/)
+* Add `BowerInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 
 ## 0.27.0
 
