@@ -336,6 +336,7 @@ follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-abou
 any time your `HEAD` changes or a file is explicitly checked out.
 
 * [IndexTags](lib/overcommit/hook/post_checkout/index_tags.rb)
+* [NpmInstall](lib/overcommit/hook/post_checkout/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_checkout/submodule_status.rb)
 
 ### PostCommit
@@ -346,6 +347,7 @@ it can be used to alert the user to some issue.
 
 * [GitGuilt](lib/overcommit/hook/post_commit/git_guilt.rb)
 * [IndexTags](lib/overcommit/hook/post_commit/index_tags.rb)
+* [NpmInstall](lib/overcommit/hook/post_commit/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_commit/submodule_status.rb)
 
 ### PostMerge
@@ -355,6 +357,7 @@ conflicts. A hook failing in this case does not prevent the merge since it has
 already occurred; however, it can be used to alert the user to some issue.
 
 * [IndexTags](lib/overcommit/hook/post_merge/index_tags.rb)
+* [NpmInstall](lib/overcommit/hook/post_merge/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_merge/submodule_status.rb)
 
 ### PostRewrite
@@ -365,6 +368,7 @@ it has already occurred; however, it can be used to alert the user to some
 issue.
 
 * [IndexTags](lib/overcommit/hook/post_rewrite/index_tags.rb)
+* [NpmInstall](lib/overcommit/hook/post_rewrite/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_rewrite/submodule_status.rb)
 
 ### PreCommit
