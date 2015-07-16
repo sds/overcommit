@@ -532,6 +532,15 @@ PostCheckout:
     required: false
     quiet: false
 
+  BowerInstall:
+    enabled: false
+    description: 'Installing bower dependencies'
+    requires_files: true
+    required_executable: 'bower'
+    install_command: 'npm install -g bower'
+    flags: ['install']
+    include: 'bower.json'
+
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
@@ -560,6 +569,15 @@ PostCommit:
     requires_files: false
     required: false
     quiet: false
+
+  BowerInstall:
+    enabled: false
+    description: 'Installing bower dependencies'
+    requires_files: true
+    required_executable: 'bower'
+    install_command: 'npm install -g bower'
+    flags: ['install']
+    include: 'bower.json'
 
   GitGuilt:
     enabled: false
@@ -597,6 +615,15 @@ PostMerge:
     requires_files: false
     quiet: false
 
+  BowerInstall:
+    enabled: false
+    description: 'Installing bower dependencies'
+    requires_files: true
+    required_executable: 'bower'
+    install_command: 'npm install -g bower'
+    flags: ['install']
+    include: 'bower.json'
+
   IndexTags:
     enabled: false
     description: 'Generating tags file from source'
@@ -624,6 +651,15 @@ PostRewrite:
   ALL:
     requires_files: false
     quiet: false
+
+  BowerInstall:
+    enabled: false
+    description: 'Installing bower dependencies'
+    requires_files: true
+    required_executable: 'bower'
+    install_command: 'npm install -g bower'
+    flags: ['install']
+    include: 'bower.json'
 
   IndexTags:
     enabled: false
