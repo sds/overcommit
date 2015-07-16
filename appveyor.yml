@@ -42,10 +42,8 @@ install:
   - ruby --version
   - where ruby
 
-  # Install rubygems 2.3.0. Later versions cause errors when building some
-  # native extensions.
-  - gem --version
-  - gem update --system 2.3.0 --no-ri --no-rdoc
+  # Install latest version of RubyGems
+  - gem update --system --no-ri --no-rdoc
   - gem --version
   - where gem
 
