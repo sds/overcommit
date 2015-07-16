@@ -3,7 +3,9 @@
 ## master (unreleased)
 
 * Ensure `applicable_files` hook helper returns files in lexicographic order
-* Add NpmInstall post-checkout, post-commit, post-merge, and post-rewrite hooks
+* Add `NpmInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
+* Add `PuppetLint` pre-commit hook that checks Puppet code with
+  [puppet-lint](http://puppet-lint.com/)
 
 ## 0.27.0
 
