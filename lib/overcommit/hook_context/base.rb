@@ -116,7 +116,7 @@ module Overcommit::HookContext
     # a file, but the actual working tree will have a directory.
     def filter_directories(modified_files)
       modified_files.reject do |file|
-        File.directory?(file) && !File.symlink?(file)
+        File.directory?(file) && !Overcommit::Utils::FileUtils.symlink?(file)
       end
     end
   end
