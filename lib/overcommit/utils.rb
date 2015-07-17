@@ -129,8 +129,9 @@ module Overcommit
         exts  = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
         paths.each do |path|
           exts.each do |ext|
-            exe = File.join(path, "#{cmd}#{ext}")
-            return true if File.executable?(exe)
+            cmd_with_ext = cmd.upcase.end_with?(ext.upcase) ? cmd : "#{cmd}#{ext}"
+            full_path = File.join(path, cmd_with_ext)
+            return true if File.executable?(full_path)
           end
         end
         false
