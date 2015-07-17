@@ -442,6 +442,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [SemiStandard](lib/overcommit/hook/pre_commit/semi_standard.rb)
 * [ShellCheck](lib/overcommit/hook/pre_commit/shell_check.rb)
 * [SlimLint](lib/overcommit/hook/pre_commit/slim_lint.rb)
+* [Sqlint](lib/overcommit/hook/pre_commit/sqlint.rb)
 * [Standard](lib/overcommit/hook/pre_commit/standard.rb)
 * [TrailingWhitespace](lib/overcommit/hook/pre_commit/trailing_whitespace.rb)
 * [TravisLint](lib/overcommit/hook/pre_commit/travis_lint.rb)
