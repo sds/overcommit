@@ -8,6 +8,8 @@
   [puppet-lint](http://puppet-lint.com/)
 * Add `BowerInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add `BundleInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
+* Add `Sqlint` pre-commit hook that checks SQL code with
+  [sqlint](https://github.com/purcell/sqlint)
 
 ## 0.27.0
 
