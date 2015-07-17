@@ -127,7 +127,7 @@ describe Overcommit::GitRepo do
         let(:file) { "#{dir}/file" }
 
         before do
-          FileUtils.touch(file)
+          touch(file)
           `git add "#{file}"`
           `git commit -m "Add file"`
         end

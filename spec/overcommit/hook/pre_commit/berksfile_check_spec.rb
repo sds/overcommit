@@ -8,7 +8,7 @@ describe Overcommit::Hook::PreCommit::BerksfileCheck do
   context 'when Berksfile.lock is ignored' do
     around do |example|
       repo do
-        FileUtils.touch 'Berksfile.lock'
+        touch 'Berksfile.lock'
         echo('Berksfile.lock', '.gitignore')
         `git add .gitignore`
         `git commit -m "Ignore Berksfile.lock"`

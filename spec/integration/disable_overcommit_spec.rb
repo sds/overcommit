@@ -7,7 +7,7 @@ describe 'disabling Overcommit' do
     repo do
       `overcommit --install > #{File::NULL}`
       Overcommit::Utils.with_environment('OVERCOMMIT_DISABLE' => overcommit_disable) do
-        FileUtils.touch 'blah'
+        touch 'blah'
         `git add blah`
         example.run
       end

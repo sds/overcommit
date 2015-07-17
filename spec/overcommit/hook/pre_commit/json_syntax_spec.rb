@@ -14,7 +14,7 @@ describe Overcommit::Hook::PreCommit::JsonSyntax do
 
   around do |example|
     repo do
-      FileUtils.touch staged_file
+      touch staged_file
       `git add #{staged_file}`
       example.run
     end

@@ -84,7 +84,7 @@ describe Overcommit::HookContext::PostMerge do
 
     it 'does not include submodules' do
       submodule = repo do
-        FileUtils.touch 'foo'
+        touch 'foo'
         `git add foo`
         `git commit -m "Initial commit"`
       end
@@ -120,7 +120,7 @@ describe Overcommit::HookContext::PostMerge do
         repo do
           `git commit --allow-empty -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Branch commit"`
           `git checkout master > #{File::NULL} 2>&1`
@@ -135,7 +135,7 @@ describe Overcommit::HookContext::PostMerge do
     context 'when files were modified' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
@@ -154,7 +154,7 @@ describe Overcommit::HookContext::PostMerge do
     context 'when files were deleted' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
@@ -176,7 +176,7 @@ describe Overcommit::HookContext::PostMerge do
         repo do
           `git commit --allow-empty -m "Initial commit"`
           `git checkout -b child > #{File::NULL} 2>&1`
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Branch commit"`
           `git checkout master > #{File::NULL} 2>&1`

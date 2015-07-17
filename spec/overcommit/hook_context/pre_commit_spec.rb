@@ -154,7 +154,7 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          FileUtils.touch 'some-file'
+          touch 'some-file'
           `git add some-file`
           `git commit -m "Add file"`
           `git mv some-file renamed-file`
@@ -410,7 +410,7 @@ describe Overcommit::HookContext::PreCommit do
 
     it 'does not include submodules' do
       submodule = repo do
-        FileUtils.touch 'foo'
+        touch 'foo'
         `git add foo`
         `git commit -m "Initial commit"`
       end
@@ -434,7 +434,7 @@ describe Overcommit::HookContext::PreCommit do
     context 'when files were added' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           example.run
         end
@@ -446,7 +446,7 @@ describe Overcommit::HookContext::PreCommit do
     context 'when files were modified' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           echo('Hello', 'some-file')
@@ -461,7 +461,7 @@ describe Overcommit::HookContext::PreCommit do
     context 'when files were deleted' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           `git rm some-file`
@@ -475,10 +475,10 @@ describe Overcommit::HookContext::PreCommit do
     context 'when amending last commit' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
-          FileUtils.touch('other-file')
+          touch('other-file')
           `git add other-file`
           example.run
         end
@@ -495,7 +495,7 @@ describe Overcommit::HookContext::PreCommit do
       around do |example|
         repo do
           `git commit --allow-empty -m "Initial commit"`
-          FileUtils.touch 'some-file'
+          touch 'some-file'
           `git add some-file`
           `git commit -m "Add file"`
           `git mv some-file renamed-file`
@@ -522,7 +522,7 @@ describe Overcommit::HookContext::PreCommit do
           `git commit -m "Add file"`
           `git rm some-symlink`
           FileUtils.mkdir 'some-symlink'
-          FileUtils.touch File.join('some-symlink', 'another-file')
+          touch File.join('some-symlink', 'another-file')
           `git add some-symlink`
           example.run
         end
@@ -542,7 +542,7 @@ describe Overcommit::HookContext::PreCommit do
         repo do
           `git commit --allow-empty -m "Initial commit"`
           FileUtils.mkdir 'some-directory'
-          FileUtils.touch File.join('some-directory', 'some-file')
+          touch File.join('some-directory', 'some-file')
           symlink('some-directory', 'some-symlink')
           `git add some-symlink some-directory`
           `git commit -m "Add file"`

@@ -12,7 +12,7 @@ describe Overcommit::HookContext::PostCommit do
 
     it 'does not include submodules' do
       submodule = repo do
-        FileUtils.touch 'foo'
+        touch 'foo'
         `git add foo`
         `git commit -m "Initial commit"`
       end
@@ -38,7 +38,7 @@ describe Overcommit::HookContext::PostCommit do
     context 'when files were added' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           example.run
@@ -51,7 +51,7 @@ describe Overcommit::HookContext::PostCommit do
     context 'when files were modified' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           echo('Hello', 'some-file')
@@ -67,7 +67,7 @@ describe Overcommit::HookContext::PostCommit do
     context 'when files were deleted' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
           `git commit -m "Initial commit"`
           `git rm some-file`
