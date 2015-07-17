@@ -49,7 +49,8 @@ module Overcommit
     end
 
     def signable_file?(file)
-      file.start_with?(".#{File::SEPARATOR}") &&
+      sep = Overcommit::OS.windows? ? '\\' : File::SEPARATOR
+      file.start_with?(".#{sep}") &&
         Overcommit::GitRepo.tracked?(file)
     end
 
