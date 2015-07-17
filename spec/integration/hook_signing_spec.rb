@@ -10,7 +10,9 @@ describe 'hook signing' do
     }
   end
 
-  let(:script_path) { './pre-commit' }
+  let(:script_path) do
+    Overcommit::OS.windows? ? '.\\pre-commit.bat' : './pre-commit'
+  end
 
   let(:hook_script) { normalize_indent(<<-BASH) }
     #!/usr/bin/env bash
