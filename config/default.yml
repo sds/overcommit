@@ -447,6 +447,13 @@ PreCommit:
     install_command: 'gem install slim_lint'
     include: '**/*.slim'
 
+  Sqlint:
+    enabled: false
+    description: 'Analyzing with sqlint'
+    required_executable: 'sqlint'
+    install_command: 'gem install sqlint'
+    include: '**/*.sql'
+
   Standard:
     enabled: false
     description: 'Analyzing with standard'
