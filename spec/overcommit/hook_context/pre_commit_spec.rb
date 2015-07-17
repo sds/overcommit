@@ -517,7 +517,7 @@ describe Overcommit::HookContext::PreCommit do
         repo do
           `git commit --allow-empty -m "Initial commit"`
           FileUtils.mkdir 'some-directory'
-          FileUtils.ln_s 'some-directory', 'some-symlink'
+          symlink('some-directory', 'some-symlink')
           `git add some-symlink some-directory`
           `git commit -m "Add file"`
           `git rm some-symlink`
@@ -543,7 +543,7 @@ describe Overcommit::HookContext::PreCommit do
           `git commit --allow-empty -m "Initial commit"`
           FileUtils.mkdir 'some-directory'
           FileUtils.touch File.join('some-directory', 'some-file')
-          FileUtils.ln_s 'some-directory', 'some-symlink'
+          symlink('some-directory', 'some-symlink')
           `git add some-symlink some-directory`
           `git commit -m "Add file"`
           `git rm -rf some-directory`
