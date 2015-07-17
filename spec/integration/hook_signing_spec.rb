@@ -15,7 +15,6 @@ describe 'hook signing' do
   end
 
   let(:hook_script) { normalize_indent(<<-BASH) }
-    #!/usr/bin/env bash
     echo Hello
   BASH
 
@@ -78,7 +77,6 @@ describe 'hook signing' do
 
   context 'and a plugin hook is changed' do
     let(:new_hook_script) { normalize_indent(<<-BASH) }
-      #!/usr/bin/env bash
       echo This could potentially be malicious code
     BASH
 
