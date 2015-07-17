@@ -23,9 +23,9 @@ describe Overcommit::HookContext::RunAll do
     context 'when repo contains files' do
       around do |example|
         repo do
-          FileUtils.touch('some-file')
+          touch('some-file')
           `git add some-file`
-          FileUtils.touch('some-other-file')
+          touch('some-other-file')
           `git add some-other-file`
           `git commit -m "Add files"`
           example.run
@@ -38,7 +38,7 @@ describe Overcommit::HookContext::RunAll do
     context 'when repo contains submodules' do
       around do |example|
         submodule = repo do
-          FileUtils.touch 'foo'
+          touch 'foo'
           `git add foo`
           `git commit -m "Initial commit"`
         end

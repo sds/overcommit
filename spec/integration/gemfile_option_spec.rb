@@ -56,7 +56,7 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
       Bundler.with_clean_env do
         FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
         echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
-        FileUtils.touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
+        touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
 
         echo(gemfile, '.overcommit_gems.rb')
         `bundle install --gemfile=.overcommit_gems.rb`

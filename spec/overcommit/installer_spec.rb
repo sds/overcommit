@@ -76,7 +76,7 @@ describe Overcommit::Installer do
           before do
             FileUtils.mkdir_p(hooks_dir)
             Dir.chdir(hooks_dir) do
-              old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
+              old_hooks.each { |hook_type| touch(hook_type) }
             end
           end
 
@@ -184,7 +184,7 @@ describe Overcommit::Installer do
             before do
               FileUtils.mkdir_p(old_hooks_dir)
               Dir.chdir(old_hooks_dir) do
-                old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
+                old_hooks.each { |hook_type| touch(hook_type) }
               end
             end
 
@@ -201,7 +201,7 @@ describe Overcommit::Installer do
             before do
               FileUtils.mkdir_p(hooks_dir)
               Dir.chdir(hooks_dir) do
-                old_hooks.each { |hook_type| FileUtils.touch(hook_type) }
+                old_hooks.each { |hook_type| touch(hook_type) }
               end
             end
 
