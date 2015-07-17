@@ -64,7 +64,8 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
         echo(config, '.overcommit.yml')
 
         # Set BUNDLE_GEMFILE so we load Overcommit from the current repo
-        `BUNDLE_GEMFILE=.overcommit_gems.rb bundle exec overcommit --install > #{File::NULL}`
+        ENV['BUNDLE_GEMFILE'] = '.overcommit_gems.rb'
+        `bundle exec overcommit --install > #{File::NULL}`
         FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
         echo(hook, File.join('.git-hooks', 'pre_commit', 'fake_hook.rb'))
 
