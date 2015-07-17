@@ -178,43 +178,46 @@ describe Overcommit::HookContext::PostRewrite do
         it { should == [File.expand_path('renamed-file')] }
       end
 
-      context 'when changing a symlink to a directory during an amendment' do
-        around do |example|
-          repo do
-            FileUtils.mkdir 'some-directory'
-            symlink('some-directory', 'some-symlink')
-            `git add some-symlink some-directory`
-            `git commit -m "Add file"`
-            `git rm some-symlink`
-            FileUtils.mkdir 'some-symlink'
-            touch File.join('some-symlink', 'another-file')
-            `git add some-symlink`
-            `git commit --amend -m "Change symlink to directory"`
-            example.run
+      # Git cannot track Windows symlinks
+      unless Overcommit::OS.windows?
+        context 'when changing a symlink to a directory during an amendment' do
+          around do |example|
+            repo do
+              FileUtils.mkdir 'some-directory'
+              symlink('some-directory', 'some-symlink')
+              `git add some-symlink some-directory`
+              `git commit -m "Add file"`
+              `git rm some-symlink`
+              FileUtils.mkdir 'some-symlink'
+              touch File.join('some-symlink', 'another-file')
+              `git add some-symlink`
+              `git commit --amend -m "Change symlink to directory"`
+              example.run
+            end
+          end
+
+          it 'does not include the directory in the list of modified files' do
+            subject.should_not include File.expand_path('some-symlink')
           end
         end
 
-        it 'does not include the directory in the list of modified files' do
-          subject.should_not include File.expand_path('some-symlink')
-        end
-      end
-
-      context 'when breaking a symlink during an amendment' do
-        around do |example|
-          repo do
-            FileUtils.mkdir 'some-directory'
-            touch File.join('some-directory', 'some-file')
-            symlink('some-directory', 'some-symlink')
-            `git add some-symlink some-directory`
-            `git commit -m "Add file"`
-            `git rm -rf some-directory`
-            `git commit --amend -m "Remove directory to break symlink"`
-            example.run
+        context 'when breaking a symlink during an amendment' do
+          around do |example|
+            repo do
+              FileUtils.mkdir 'some-directory'
+              touch File.join('some-directory', 'some-file')
+              symlink('some-directory', 'some-symlink')
+              `git add some-symlink some-directory`
+              `git commit -m "Add file"`
+              `git rm -rf some-directory`
+              `git commit --amend -m "Remove directory to break symlink"`
+              example.run
+            end
           end
-        end
 
-        it 'does not include the broken symlink in the list of modified files' do
-          subject.should_not include File.expand_path('some-symlink')
+          it 'does not include the broken symlink in the list of modified files' do
+            subject.should_not include File.expand_path('some-symlink')
+          end
         end
       end
     end
