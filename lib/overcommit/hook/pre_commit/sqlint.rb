@@ -1,5 +1,5 @@
 module Overcommit::Hook::PreCommit
-  # Runs 'sqlint' against any modified Puppet files.
+  # Runs 'sqlint' against any modified SQL files.
   #
   # @see https://github.com/purcell/sqlint
   class Sqlint < Base
