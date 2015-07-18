@@ -1,13 +1,16 @@
 require 'spec_helper'
-require 'w3c_validators'
 
 describe Overcommit::Hook::PreCommit::W3cHtml do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
+  let(:fake_exception) { Class.new(StandardError) }
+
   before do
     subject.stub(:applicable_files).and_return(%w[file1.html file2.html])
+    stub_const('W3CValidators::ValidatorUnavailable', fake_exception)
+    stub_const('W3CValidators::ParsingError', fake_exception)
   end
 
   context 'when w3c_validators exits with an exception' do
