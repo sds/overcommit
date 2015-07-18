@@ -31,5 +31,4 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'travis', '~> 1.7'
-  s.add_development_dependency 'w3c_validators', '~> 1.2'
 end
