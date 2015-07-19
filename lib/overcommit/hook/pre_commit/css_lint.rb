@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/CSSLint/csslint
   class CssLint < Base
     MESSAGE_REGEX = /
-      ^(?<file>[^:]+):\s
+      ^(?<file>(?:\w:)?[^:]+):\s
       (?:line\s(?<line>\d+)[^EW]+)?
       (?<type>Error|Warning)
     /x

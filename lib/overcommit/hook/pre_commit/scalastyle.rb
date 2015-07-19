@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   class Scalastyle < Base
     MESSAGE_REGEX = /
       ^(?<type>error|warning)\s
-      file=(?<file>.+)\s
+      file=(?<file>(?:\w:)?.+)\s
       message=.+\s
       line=(?<line>\d+)
     /x

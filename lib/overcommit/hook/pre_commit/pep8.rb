@@ -13,7 +13,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.py:88:5: E301 expected 1 blank line, found 0
       extract_messages(
         output.split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+):\d+:\s(?<type>E|W)/,
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):\d+:\s(?<type>E|W)/,
         lambda { |type| type.include?('W') ? :warning : :error }
       )
     end

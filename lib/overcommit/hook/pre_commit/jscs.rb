@@ -17,7 +17,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.js: line 7, col 0, ruleName: Error message
       extract_messages(
         result.stdout.split("\n"),
-        /^(?<file>[^:]+):[^\d]+(?<line>\d+)/,
+        /^(?<file>(?:\w:)?[^:]+):[^\d]+(?<line>\d+)/,
       )
     end
   end

@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://puppet-lint.com/
   class PuppetLint < Base
-    MESSAGE_REGEX = /(?<file>.+):(?<line>\d+):\d+:(?<type>\w+)/
+    MESSAGE_REGEX = /(?<file>(?:\w:)?.+):(?<line>\d+):\d+:(?<type>\w+)/
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type == 'ERROR' ? :error : :warning

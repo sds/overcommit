@@ -13,7 +13,7 @@ module Overcommit::Hook::PreCommit
 
       extract_messages(
         result.stdout.split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+):[^ ]+ (?<type>[^ ]+)/,
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]+ (?<type>[^ ]+)/,
         MESSAGE_TYPE_CATEGORIZER,
       )
     end

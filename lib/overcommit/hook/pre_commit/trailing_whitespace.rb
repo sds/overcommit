@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
 
       extract_messages(
         result.stdout.split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+)/,
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/,
       )
     end
   end
