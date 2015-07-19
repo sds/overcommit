@@ -19,9 +19,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Performance/ParallelAssignment:
-  Enabled: false
-
 # Enforcing this results in a lot of unnecessary indentation.
 Style/ClassAndModuleChildren:
   Enabled: false
@@ -70,6 +67,9 @@ Style/MultilineOperationIndentation:
   Enabled: false
 
 Style/Next:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false
 
 # Prefer curly braces except for %i/%w/%W, since those return arrays.
