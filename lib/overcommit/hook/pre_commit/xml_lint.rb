@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://xmlsoft.org/xmllint.html
   class XmlLint < Base
-    MESSAGE_REGEX = /^(?<file>[^:]+):(?<line>\d+):/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):/
 
     def run
       result = execute(command + applicable_files)

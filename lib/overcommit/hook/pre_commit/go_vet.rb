@@ -15,7 +15,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.go:7: Error message
       extract_messages(
         result.stderr.split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+)/
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
       )
     end
   end

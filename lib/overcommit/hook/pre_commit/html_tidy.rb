@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see http://www.html-tidy.org/
   class HtmlTidy < Base
     MESSAGE_REGEX = /
-      ^(?<file>[^:]+):\s
+      ^(?<file>(?:\w:)?[^:]+):\s
       line\s(?<line>\d+)\s
       column\s(?<col>\d+)\s-\s
       (?<type>Error|Warning):\s(?<message>.+)$

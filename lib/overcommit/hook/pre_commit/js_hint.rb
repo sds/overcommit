@@ -13,7 +13,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.js: line 1, col 0, Error message (E001)
       extract_messages(
         output.split("\n").grep(/E|W/),
-        /^(?<file>[^:]+):[^\d]+(?<line>\d+).+\((?<type>E|W)\d+\)/,
+        /^(?<file>(?:\w:)?[^:]+):[^\d]+(?<line>\d+).+\((?<type>E|W)\d+\)/,
         lambda { |type| type.include?('W') ? :warning : :error }
       )
     end

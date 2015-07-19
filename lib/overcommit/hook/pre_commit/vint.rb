@@ -13,7 +13,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.vim:1:1: Error message
       extract_messages(
         result.stdout.split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+)/
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
       )
     end
   end

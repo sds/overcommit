@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.js:1:1: Error message (ruleName)
       extract_messages(
         output.split("\n")[1..-1], # ignore header line
-        /^\s*(?<file>[^:]+):(?<line>\d+)/
+        /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
       )
     end
   end

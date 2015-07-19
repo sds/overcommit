@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/mdr/scalariform
   class Scalariform < Base
-    MESSAGE_REGEX = /^\[(?<type>FAILED|ERROR)\]\s+(?<file>.+)/
+    MESSAGE_REGEX = /^\[(?<type>FAILED|ERROR)\]\s+(?<file>(?:\w:)?.+)/
 
     def run
       result = execute(command + applicable_files)

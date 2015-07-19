@@ -14,7 +14,7 @@ module Overcommit::Hook::PreCommit
       #           D102: Docstring missing
       extract_messages(
         output.gsub(/:\s+/, ': ').split("\n"),
-        /^(?<file>[^:]+):(?<line>\d+)/
+        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
       )
     end
   end
