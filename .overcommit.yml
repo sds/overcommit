@@ -8,6 +8,11 @@ PreCommit:
   RuboCop:
     enabled: true
     command: ['bundle', 'exec', 'rubocop']
+    include:
+      - '**/*.gemspec'
+      - '**/*.rb'
+      - '**/Gemfile'
+      - template-dir/hooks/overcommit-hook
 
   TravisLint:
     enabled: true
