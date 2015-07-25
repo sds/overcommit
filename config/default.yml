@@ -176,8 +176,7 @@ PreCommit:
     enabled: false
     description: 'Analyzing with coffeelint'
     required_executable: 'coffeelint'
-    required_library: 'json'
-    flags: ['--reporter=raw']
+    flags: ['--reporter=csv']
     install_command: 'npm install -g coffeelint'
     include: '**/*.coffee'
 

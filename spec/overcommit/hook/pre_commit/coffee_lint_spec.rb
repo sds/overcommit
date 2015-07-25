@@ -19,9 +19,9 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
 
     context 'with no warnings' do
       before do
-        result.stub(:stdout).and_return('{
-          "file1.coffee": []
-        }')
+        result.stub(:stdout).and_return(normalize_indent(<<-OUT))
+          path,lineNumber,lineNumberEnd,level,message
+        OUT
       end
 
       it { should pass }
@@ -29,20 +29,10 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
 
     context 'and it reports a warning' do
       before do
-        result.stub(:stdout).and_return('{
-          "file1.coffee": [
-            {
-              "name": "ensure_comprehensions",
-              "level": "warn",
-              "message": "Comprehensions must have parentheses around them",
-              "description": "This rule makes sure that parentheses are around comprehensions.",
-              "context": "",
-              "lineNumber": 31,
-              "line": "cubes = math.cube num for num in list",
-              "rule": "ensure_comprehensions"
-            }
-          ]
-        }')
+        result.stub(:stdout).and_return(normalize_indent(<<-OUT))
+          path,lineNumber,lineNumberEnd,level,message
+          file1.coffee,31,,warn,Comprehensions must have parentheses around them
+        OUT
       end
 
       it { should warn }
@@ -59,27 +49,10 @@ describe Overcommit::Hook::PreCommit::CoffeeLint do
 
     context 'and it reports an error' do
       before do
-        result.stub(:stdout).and_return('{
-          "file1.coffee": [
-            {
-              "name": "duplicate_key",
-              "level": "error",
-              "message": "Duplicate key defined in object or class",
-              "description": "Prevents defining duplicate keys in object literals and classes",
-              "lineNumber": 17,
-              "line": "  root: foo",
-              "rule": "duplicate_key"
-            }
-          ]
-        }')
-      end
-
-      it { should fail_hook }
-    end
-
-    context 'and its output is not valid JSON' do
-      before do
-        result.stub(:stdout).and_return('foo')
+        result.stub(:stdout).and_return(normalize_indent(<<-OUT))
+          path,lineNumber,lineNumberEnd,level,message
+          file1.coffee,17,,error,Duplicate key defined in object or class
+        OUT
       end
 
       it { should fail_hook }
