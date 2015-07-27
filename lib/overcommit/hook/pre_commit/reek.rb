@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/troessner/reek
   class Reek < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       output = scrub_output(result.stdout + result.stderr)

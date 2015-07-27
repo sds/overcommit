@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
     /x
 
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       output = result.stdout.chomp
       return :pass if result.success? && output.empty?
 

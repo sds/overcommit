@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/travis-ci/travis.rb
   class TravisLint < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       [:fail, (result.stdout + result.stderr).strip]

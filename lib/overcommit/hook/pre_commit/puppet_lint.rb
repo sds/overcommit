@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       output = result.stdout.chomp.gsub(/^"|"$/, '')
       return :pass if result.success? && output.empty?
 

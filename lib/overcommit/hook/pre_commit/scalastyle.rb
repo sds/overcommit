@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
     /x
 
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       output = result.stdout.chomp
       messages = output.split("\n").grep(MESSAGE_REGEX)
       return :pass if result.success? && messages.empty?

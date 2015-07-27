@@ -3,16 +3,18 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/feross/standard
   class Standard < Base
+    MESSAGE_REGEX = /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       output = result.stdout.chomp
       return :pass if result.success? && output.empty?
 
       # example message:
       #   path/to/file.js:1:1: Error message (ruleName)
       extract_messages(
-        output.split("\n")[1..-1], # ignore header line
-        /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+        output.split("\n").grep(MESSAGE_REGEX), # ignore header line
+        MESSAGE_REGEX
       )
     end
   end

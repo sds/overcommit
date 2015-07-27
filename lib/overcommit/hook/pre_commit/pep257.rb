@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://pypi.python.org/pypi/pep257
   class Pep257 < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       output = result.stderr.chomp

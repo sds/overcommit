@@ -15,7 +15,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       parse_messages(result.stdout)
     end
 

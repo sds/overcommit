@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see http://jshint.com/
   class JsHint < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       output = result.stdout.chomp
 
       return :pass if result.success? && output.empty?

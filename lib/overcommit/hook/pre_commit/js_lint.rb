@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
     MESSAGE_REGEX = /(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
 
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       # example message:

@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   # @see http://jscs.info/
   class Jscs < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       if result.status == 1

@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/toy/image_optim
   class ImageOptim < Base
     def run
-      result = execute(command + applicable_files)
+      result = execute(command, args: applicable_files)
       return [:fail, result.stdout + result.stderr] unless result.success?
 
       optimized_files = extract_optimized_files(result.stdout)
