@@ -10,6 +10,7 @@
 * Add `BundleInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add `Sqlint` pre-commit hook that checks SQL code with
   [sqlint](https://github.com/purcell/sqlint)
+* Add Windows support
 
 ## 0.27.0
 
