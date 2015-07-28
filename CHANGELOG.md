@@ -11,6 +11,8 @@
 * Add `Sqlint` pre-commit hook that checks SQL code with
   [sqlint](https://github.com/purcell/sqlint)
 * Add Windows support
+* Add `Hlint` pre-commit hook that checks Haskell files with
+  [hlint](https://github.com/ndmitchell/hlint)
 
 ## 0.27.0
 
