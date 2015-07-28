@@ -416,6 +416,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
 * [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
+* [Hlint](lib/overcommit/hook/pre_commit/hlint.rb)
 * [HtmlHint](lib/overcommit/hook/pre_commit/html_hint.rb)
 * [HtmlTidy](lib/overcommit/hook/pre_commit/html_tidy.rb)
 * [ImageOptim](lib/overcommit/hook/pre_commit/image_optim.rb)
