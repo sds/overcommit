@@ -225,6 +225,13 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "\t"]
 
+  Hlint:
+    enabled: false
+    description: 'Analyzing with hlint'
+    required_executable: 'hlint'
+    install_command: 'cabal install hlint'
+    include: '**/*.hs'
+
   HtmlHint:
     enabled: false
     description: 'Analyzing with HTMLHint'
