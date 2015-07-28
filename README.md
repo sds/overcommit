@@ -312,6 +312,10 @@ enable them in your `.overcommit.yml`.
 
 **Note**: Hooks with a `*` are enabled by default.
 
+**Warning**: This list represents the list of hooks available on the `master`
+branch. Please consult the [change log](CHANGELOG.md) to view which hooks have
+not been released yet.
+
 ### CommitMsg
 
 `commit-msg` hooks are run against every commit message you write before a
