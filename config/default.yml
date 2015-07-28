@@ -368,6 +368,14 @@ PreCommit:
       - 'db/schema.rb'
       - 'db/structure.sql'
 
+  Recess:
+    enabled: false
+    description: 'Analyzing with recess'
+    required_executable: 'recess'
+    install_command: 'npm install -g recess'
+    flags: ['--format=compact', '--stripColors']
+    include: '**/*.css'
+
   Reek:
     enabled: false
     description: 'Analyzing with Reek'
