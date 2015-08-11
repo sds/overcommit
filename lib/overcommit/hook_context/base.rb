@@ -49,7 +49,7 @@ module Overcommit::HookContext
     #
     # @return [String]
     def hook_script_name
-      hook_type_name.gsub('_', '-')
+      hook_type_name.tr('_', '-')
     end
 
     # Initializes anything related to the environment.

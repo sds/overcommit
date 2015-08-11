@@ -56,7 +56,7 @@ class HookMatcher
 end
 
 # Can't use 'fail' as it is a reserved word.
-RSpec::Matchers.define :fail_hook  do |*args|
+RSpec::Matchers.define :fail_hook do |*args|
   check_matcher = HookMatcher.new(:fail, args)
 
   match do

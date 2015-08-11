@@ -7,7 +7,7 @@ describe 'default configuration' do
   Overcommit::Utils.supported_hook_types.each do |hook_type|
     hook_class = Overcommit::Utils.camel_case(hook_type)
 
-    Dir[File.join(Overcommit::HOOK_DIRECTORY, hook_type.gsub('-', '_'), '*')].
+    Dir[File.join(Overcommit::HOOK_DIRECTORY, hook_type.tr('-', '_'), '*')].
       map { |hook_file| Overcommit::Utils.camel_case(File.basename(hook_file, '.rb')) }.
       each do |hook|
       next if hook == 'Base'

@@ -71,7 +71,7 @@ module Overcommit
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         hook_type_class_name = Overcommit::Utils.camel_case(hook_type)
 
-        directory = File.join(plugin_directory, hook_type.gsub('-', '_'))
+        directory = File.join(plugin_directory, hook_type.tr('-', '_'))
         plugin_paths = Dir[File.join(directory, '*.rb')].sort
 
         hook_names = plugin_paths.map do |path|

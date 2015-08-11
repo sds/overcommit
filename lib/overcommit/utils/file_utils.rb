@@ -58,7 +58,7 @@ module Overcommit::Utils
       end
 
       def win32_fix_pathsep(path)
-        path.gsub('/', '\\')
+        path.tr('/', '\\')
       end
 
       def win32_symlink?(dir_output)

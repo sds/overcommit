@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Overcommit::Hook::PreCommit::AuthorEmail do
-  let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
+  let(:config) { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
-  let(:result)  { double('result') }
+  let(:result) { double('result') }
 
   before do
     result.stub(:stdout).and_return(email)

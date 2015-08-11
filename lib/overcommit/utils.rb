@@ -108,7 +108,7 @@ module Overcommit
         Dir[File.join(HOOK_DIRECTORY, '*')].
           select { |file| File.directory?(file) }.
           reject { |file| File.basename(file) == 'shared' }.
-          map { |file| File.basename(file).gsub('_', '-') }
+          map { |file| File.basename(file).tr('_', '-') }
       end
 
       # Returns a list of supported hook classes (PreCommit, CommitMsg, etc.)
