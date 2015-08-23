@@ -84,6 +84,78 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe '.modified_files' do
+    let(:options) { {} }
+    subject { described_class.modified_files(options) }
+
+    around do |example|
+      repo do
+        example.run
+      end
+    end
+
+    context 'when `staged` option is set' do
+      let(:options) { { staged: true } }
+
+      context 'when files were added' do
+        before do
+          touch 'added.txt'
+          `git add added.txt`
+        end
+
+        it { should == [File.expand_path('added.txt')] }
+      end
+
+      context 'when files were renamed' do
+        before do
+          touch 'file.txt'
+          `git add file.txt`
+          `git commit -m "Initial commit"`
+          `git mv file.txt renamed.txt`
+        end
+
+        it { should == [File.expand_path('renamed.txt')] }
+      end
+
+      context 'when files were modified' do
+        before do
+          touch 'file.txt'
+          `git add file.txt`
+          `git commit -m "Initial commit"`
+          echo('Modification', 'file.txt', append: true)
+          `git add file.txt`
+        end
+
+        it { should == [File.expand_path('file.txt')] }
+      end
+
+      context 'when files were deleted' do
+        before do
+          touch 'file.txt'
+          `git add file.txt`
+          `git commit -m "Initial commit"`
+          `git rm file.txt`
+        end
+
+        it { should == [] }
+      end
+
+      context 'when submodules were added' do
+        let(:submodule) do
+          repo do
+            `git commit --allow-empty -m "Initial commit"`
+          end
+        end
+
+        before do
+          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+        end
+
+        it { should_not include File.expand_path('sub') }
+      end
+    end
+  end
+
   describe '.list_files' do
     let(:paths) { [] }
     let(:options) { {} }

@@ -83,8 +83,7 @@ module Overcommit
       lines
     end
 
-    # Returns the names of all files that have been modified from compared to
-    # HEAD.
+    # Returns the names of all files that have been modified compared to HEAD.
     #
     # @param options [Hash]
     # @return [Array<String>] list of absolute file paths
