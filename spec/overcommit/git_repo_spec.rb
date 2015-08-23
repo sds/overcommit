@@ -217,6 +217,40 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe '.tracked?' do
+    subject { described_class.tracked?(file) }
+
+    around do |example|
+      repo do
+        touch 'untracked'
+        touch 'tracked'
+        `git add tracked`
+        `git commit -m "Initial commit"`
+        touch 'staged'
+        `git add staged`
+        example.run
+      end
+    end
+
+    context 'when file is untracked' do
+      let(:file) { 'untracked' }
+
+      it { should == false }
+    end
+
+    context 'when file is committed' do
+      let(:file) { 'tracked' }
+
+      it { should == true }
+    end
+
+    context 'when file is staged' do
+      let(:file) { 'staged' }
+
+      it { should == true }
+    end
+  end
+
   describe '.initial_commit?' do
     subject { described_class.initial_commit? }
 
