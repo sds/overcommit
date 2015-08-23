@@ -251,6 +251,32 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe '.all_files' do
+    subject { described_class.all_files }
+
+    let(:submodule) do
+      repo do
+        `git commit --allow-empty -m "Initial commit"`
+      end
+    end
+
+    around do |example|
+      repo do
+        touch 'untracked'
+        touch 'tracked'
+        `git add tracked`
+        `git commit -m "Initial commit"`
+        `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+        touch 'staged'
+        `git add staged`
+        example.run
+      end
+    end
+
+    it { should include(*%w[tracked staged].map { |file| File.expand_path(file) }) }
+    it { should_not include File.expand_path('sub') }
+  end
+
   describe '.initial_commit?' do
     subject { described_class.initial_commit? }
 
