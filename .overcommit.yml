@@ -2,6 +2,13 @@ PreCommit:
   BundleCheck:
     enabled: true
 
+  ExecutePermissions:
+    enabled: true
+    exclude:
+      - 'bin/overcommit'
+      - 'libexec/**/*'
+      - 'template-dir/hooks/overcommit-hook'
+
   HardTabs:
     enabled: true
 
