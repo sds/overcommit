@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   class Base < Overcommit::Hook::Base
     extend Forwardable
 
-    def_delegators :@context, :modified_lines_in_file, :amendment?
+    def_delegators :@context, :modified_lines_in_file, :amendment?, :initial_commit?
 
     private
 

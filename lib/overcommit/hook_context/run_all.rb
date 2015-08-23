@@ -32,6 +32,11 @@ module Overcommit::HookContext
       'pre-commit'
     end
 
+    def initial_commit?
+      return @initial_commit unless @initial_commit.nil?
+      @initial_commit = Overcommit::GitRepo.initial_commit?
+    end
+
     private
 
     def count_lines(file)
