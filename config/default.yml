@@ -196,6 +196,11 @@ PreCommit:
     install_command: 'npm install -g eslint'
     include: '**/*.js'
 
+  ExecutePermissions:
+    enabled: false
+    description: 'Checking for file execute permissions'
+    quiet: true
+
   GoLint:
     enabled: false
     description: 'Analyzing with golint'

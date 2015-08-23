@@ -13,6 +13,8 @@
 * Add Windows support
 * Add `Hlint` pre-commit hook that checks Haskell files with
   [hlint](https://github.com/ndmitchell/hlint)
+* Add `ExecutePermissions` pre-commit hook that checks file mode for
+  unnecessary execute permissions
 
 ## 0.27.0
 

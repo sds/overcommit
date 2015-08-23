@@ -416,6 +416,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
 * [EsLint](lib/overcommit/hook/pre_commit/es_lint.rb)
+* [ExecutePermissions](lib/overcommit/hook/pre_commit/execute_permissions.rb)
 * [GoLint](lib/overcommit/hook/pre_commit/go_lint.rb)
 * [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
