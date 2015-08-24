@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
 [![Build Status](https://travis-ci.org/brigade/overcommit.svg)](https://travis-ci.org/brigade/overcommit)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/brigade/overcommit?branch=master&svg=true)](https://ci.appveyor.com/project/sds/overcommit)
 [![Coverage Status](https://coveralls.io/repos/brigade/overcommit/badge.svg)](https://coveralls.io/r/brigade/overcommit)
 [![Code Climate](https://codeclimate.com/github/brigade/overcommit.png)](https://codeclimate.com/github/brigade/overcommit)
 [![Dependency Status](https://gemnasium.com/brigade/overcommit.svg)](https://gemnasium.com/brigade/overcommit)
