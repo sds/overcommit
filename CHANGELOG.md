@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.28.0
 
 * Ensure `applicable_files` hook helper returns files in lexicographic order
 * Add `NpmInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
