@@ -56,6 +56,8 @@ This project aims to support the following Ruby runtimes:
 * JRuby 1.7.x
 * Rubinius 2.x
 
+Windows is currently supported only for MRI Ruby 2.x
+
 ### Dependencies
 
 Some of the hooks have third-party dependencies. For example, to lint your
