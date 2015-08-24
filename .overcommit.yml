@@ -7,7 +7,7 @@ PreCommit:
     exclude:
       - 'bin/overcommit'
       - 'libexec/**/*'
-      - 'template-dir/hooks/overcommit-hook'
+      - 'template-dir/hooks/**/*'
 
   HardTabs:
     enabled: true
