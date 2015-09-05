@@ -100,7 +100,7 @@ module Overcommit
 
       # Converts a string containing underscores/hyphens/spaces into CamelCase.
       def camel_case(str)
-        str.split(/_|-| /).map { |part| part.sub(/^\w/) { |c| c.upcase } }.join
+        str.split(/_|-| /).map { |part| part.sub(/^\w/, &:upcase) }.join
       end
 
       # Returns a list of supported hook types (pre-commit, commit-msg, etc.)
