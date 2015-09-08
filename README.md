@@ -26,7 +26,7 @@ writing any Ruby code.
 * [Usage](#usage)
 * [Continuous Integration](#continuous-integration)
 * [Configuration](#configuration)
-  * [Hooks](#hooks)
+  * [Hook Options](#hook-options)
   * [Hook Categories](#hook-categories)
   * [Gemfile](#gemfile)
   * [Plugin Directory](#plugin-directory)
