@@ -256,6 +256,25 @@ The `ALL` configuration is useful for when you want to
 configuration, or when you want to apply changes across an entire category of
 hooks.
 
+Note that array configuration options (like `include`/`exclude`) in the
+special `ALL` hook section are not merged with individual hook configurations
+if custom ones are defined for the hook.
+Any custom configuration option for `include`/`exclude` will replace the `ALL`
+hook's configuration. If you want to have a global list of default exclusions
+and extend them with a custom list, you can use YAML references, e.g.
+
+```yaml
+PreCommit:
+  ALL:
+    exclude: &default_excludes
+      - 'node_modules/**/*'
+      - 'vendor/**/*'
+  MyHook:
+    exclude:
+      - *default_excludes
+      - 'another/directory/in/addition/to/default/excludes/**/*'
+```
+
 Again, you can consult the [default configuration](config/default.yml) for
 detailed examples of how the `ALL` hook can be used.
 

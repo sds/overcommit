@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Allow nested arrays in `include` and `exclude` options so lists of file
+  glob patterns can be shared across hook configurations via YAML references
+
 ## 0.28.0
 
 * Ensure `applicable_files` hook helper returns files in lexicographic order

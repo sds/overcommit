@@ -153,7 +153,7 @@ module Overcommit::Hook
     private
 
     def applicable_file?(file)
-      includes = Array(@config['include']).map do |glob|
+      includes = Array(@config['include']).flatten.map do |glob|
         Overcommit::Utils.convert_glob_to_absolute(glob)
       end
 
@@ -161,7 +161,7 @@ module Overcommit::Hook
         Overcommit::Utils.matches_path?(glob, file)
       end
 
-      excludes = Array(@config['exclude']).map do |glob|
+      excludes = Array(@config['exclude']).flatten.map do |glob|
         Overcommit::Utils.convert_glob_to_absolute(glob)
       end
 
