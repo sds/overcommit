@@ -13,15 +13,16 @@ describe Overcommit::Hook::PreCommit::Jscs do
     before do
       result = double('result')
       result.stub(success?: false,
-                  status: 1,
+                  status: 4,
+                  stdout: '',
                   stderr: 'Configuration file some-path/.jscs.json was not found.')
       subject.stub(:execute).and_return(result)
     end
 
-    it { should warn }
+    it { should fail_hook }
   end
 
-  context 'when jscs exits unsucessfully' do
+  context 'when jscs exits unsucessfully with status code 2' do
     let(:result) { double('result') }
 
     before do

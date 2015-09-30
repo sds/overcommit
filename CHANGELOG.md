@@ -4,6 +4,9 @@
 
 * Allow nested arrays in `include` and `exclude` options so lists of file
   glob patterns can be shared across hook configurations via YAML references
+* Fix `Jscs` pre-commit hook to handle the new `jscs`
+  [exit codes](https://github.com/jscs-dev/node-jscs/wiki/Exit-codes) introduced
+  as of 2.2.0
 
 ## 0.28.0
 
