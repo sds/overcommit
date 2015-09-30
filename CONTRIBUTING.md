@@ -7,7 +7,9 @@
 * Include the steps you carried out to produce the problem.
 * Include the behavior you observed along with the behavior you expected, and
   why you expected it.
-* Include the stack trace reported by Overcommit if there is one.
+* Try setting the `OVERCOMMIT_DEBUG` environment variable to enable the display
+  of additional verbose output from executed commands.
+* Include the stack trace and any debugging output reported by Overcommit.
 
 ## Feature Requests
 
