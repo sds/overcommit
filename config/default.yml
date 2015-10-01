@@ -322,6 +322,13 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
+  NginxTest:
+    enabled: false
+    description: 'Testing nginx configs'
+    required_executable: 'nginx'
+    flags: ['-t']
+    include: '**/nginx.conf'
+
   Pep257:
     enabled: false
     description: 'Analyzing docstrings with pep257'
