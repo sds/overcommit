@@ -455,6 +455,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [JsonSyntax](lib/overcommit/hook/pre_commit/json_syntax.rb)
 * [LocalPathsInGemfile](lib/overcommit/hook/pre_commit/local_paths_in_gemfile.rb)
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
+* [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
 * [Pep257](lib/overcommit/hook/pre_commit/pep257.rb)
 * [Pep8](lib/overcommit/hook/pre_commit/pep8.rb)
 * [PuppetLint](lib/overcommit/hook/pre_commit/puppet_lint.rb)

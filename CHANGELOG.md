@@ -7,6 +7,8 @@
 * Fix `Jscs` pre-commit hook to handle the new `jscs`
   [exit codes](https://github.com/jscs-dev/node-jscs/wiki/Exit-codes) introduced
   as of 2.2.0
+* Add `NginxTest` pre-commit hook that checks nginx configuration files with
+  [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
 
 ## 0.28.0
 
