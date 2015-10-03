@@ -9,6 +9,7 @@
   as of 2.2.0
 * Add `NginxTest` pre-commit hook that checks nginx configuration files with
   [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
+* Fix `Scalastyle` pre-commit hook to fail with non-zero exit statuses
 
 ## 0.28.0
 
