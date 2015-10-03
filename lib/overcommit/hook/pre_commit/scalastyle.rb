@@ -12,9 +12,10 @@ module Overcommit::Hook::PreCommit
 
     def run
       result = execute(command, args: applicable_files)
-      output = result.stdout.chomp
+      output = result.stdout.chomp + result.stderr.chomp
       messages = output.split("\n").grep(MESSAGE_REGEX)
-      return :pass if result.success? && messages.empty?
+
+      return [:fail, output] unless result.success? || messages.any?
 
       # example message:
       #   error file=/path/to/file.scala message=Error message line=1 column=1
