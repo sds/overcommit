@@ -92,7 +92,7 @@ module Overcommit
       refs = options[:refs]
       subcmd = options[:subcmd] || 'diff'
 
-      `git #{subcmd} --name-only -z --diff-filter=ACM --ignore-submodules=all #{flags} #{refs}`.
+      `git #{subcmd} --name-only -z --diff-filter=ACMR --ignore-submodules=all #{flags} #{refs}`.
         split("\0").
         map(&:strip).
         reject(&:empty?).
