@@ -10,6 +10,7 @@
 * Add `NginxTest` pre-commit hook that checks nginx configuration files with
   [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
 * Fix `Scalastyle` pre-commit hook to fail with non-zero exit statuses
+* Respect `core.commentchar` configuration when reading commit messages
 
 ## 0.28.0
 
