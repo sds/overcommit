@@ -62,7 +62,7 @@ Windows is currently supported only for MRI Ruby 2.x
 
 Some of the hooks have third-party dependencies. For example, to lint your
 [SCSS](http://sass-lang.com/) files, you're going to need our
-[scss-lint gem](https://github.com/brigade/scss-lint).
+[scss_lint gem](https://github.com/brigade/scss-lint).
 
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
