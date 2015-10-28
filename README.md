@@ -370,8 +370,8 @@ any time your `HEAD` changes or a file is explicitly checked out.
 ### PostCommit
 
 `post-commit` hooks run after a commit is successfully created. A hook failing
-in this case does not prevent the merge since it has already occurred; however,
-it can be used to alert the user to some issue.
+in this case does not prevent the commit since it has already occurred;
+however, it can be used to alert the user to some issue.
 
 * [BowerInstall](lib/overcommit/hook/post_commit/bower_install.rb)
 * [BundleInstall](lib/overcommit/hook/post_commit/bundle_install.rb)
