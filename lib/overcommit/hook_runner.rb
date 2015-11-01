@@ -1,7 +1,7 @@
 module Overcommit
   # Responsible for loading the hooks the repository has configured and running
   # them, collecting and displaying the results.
-  class HookRunner
+  class HookRunner # rubocop:disable Metrics/ClassLength
     # @param config [Overcommit::Configuration]
     # @param logger [Overcommit::Logger]
     # @param context [Overcommit::HookContext]
@@ -12,6 +12,12 @@ module Overcommit
       @context = context
       @printer = printer
       @hooks = []
+
+      @lock = Mutex.new
+      @resource = ConditionVariable.new
+      @main = ConditionVariable.new
+      @slots_available = @config.concurrency
+      @hooks_finished = 0
     end
 
     # Loads and runs the hooks registered for this {HookRunner}.
@@ -51,41 +57,95 @@ module Overcommit
       if @hooks.any?(&:enabled?)
         @printer.start_run
 
-        interrupted = false
-        run_failed = false
-        run_warned = false
+        @threads = @hooks.map { |hook| Thread.new(hook, &method(:run_hook)) }
 
-        @hooks.each do |hook|
-          hook_status = run_hook(hook)
-
-          run_failed = true if hook_status == :fail
-          run_warned = true if hook_status == :warn
-
-          if hook_status == :interrupt
-            # Stop running any more hooks and assume a bad result
-            interrupted = true
-            break
+        begin
+          InterruptHandler.disable_until_finished_or_interrupted do
+            start_and_wait_for_workers
           end
+        rescue Interrupt
+          @printer.interrupt_triggered
+          # We received an interrupt on the main thread, so alert the
+          # remaining workers that an exception occurred
+          @interrupted = true
+          @threads.each { |thread| thread.raise Interrupt }
         end
 
-        print_results(run_failed, run_warned, interrupted)
+        calculate_results
+        print_results
 
-        !(run_failed || interrupted)
+        !(@failed || @interrupted)
       else
         @printer.nothing_to_run
         true # Run was successful
       end
     end
 
-    # @param failed [Boolean]
-    # @param warned [Boolean]
-    # @param interrupted [Boolean]
-    def print_results(failed, warned, interrupted)
-      if interrupted
+    def start_and_wait_for_workers
+      @resource.signal
+
+      @lock.synchronize do
+        @main.wait(@lock)
+      end
+    end
+
+    def wait_for_slot(hook)
+      @lock.synchronize do
+        slots_needed = hook.parallelize? ? 1 : @config.concurrency
+
+        loop do
+          @resource.wait(@lock)
+
+          if @slots_available >= slots_needed
+            @slots_available -= slots_needed
+            @resource.signal if @slots_available > 0
+            break
+          elsif @slots_available > 0
+            # It's possible that another hook that requires fewer slots can be
+            # served, so give another a chance
+            @resource.signal
+          end
+        end
+      end
+    end
+
+    def release_slot(hook)
+      @lock.synchronize do
+        slots_released = hook.parallelize? ? 1 : @config.concurrency
+        @slots_available += slots_released
+        @hooks_finished += 1
+
+        if @hooks_finished < @hooks.size
+          # Signal once. `wait_for_slot` will perform additional signals if
+          # there are still slots available. This prevents us from sending out
+          # useless signals
+          @resource.signal
+        else
+          # Otherwise signal the main thread that we're done!
+          @main.signal
+        end
+      end
+    end
+
+    def calculate_results
+      return if @interrupted
+
+      @failed = false
+      @warned = false
+
+      @threads.each do |thread|
+        hook_status, _hook_output = thread.value
+        @failed = true if hook_status == :fail
+        @warned = true if hook_status == :warn
+      end
+    end
+
+    def print_results
+      if @interrupted
         @printer.run_interrupted
-      elsif failed
+      elsif @failed
         @printer.run_failed
-      elsif warned
+      elsif @warned
         @printer.run_warned
       else
         @printer.run_succeeded
@@ -93,36 +153,31 @@ module Overcommit
     end
 
     def run_hook(hook)
-      return if should_skip?(hook)
+      Thread.handle_interrupt(Interrupt => :immediate) do
+        status, output = nil, nil
 
-      @printer.start_hook(hook)
+        begin
+          wait_for_slot(hook)
+          return if should_skip?(hook)
 
-      status, output = nil, nil
-
-      begin
-        # Disable the interrupt handler during individual hook run so that
-        # Ctrl-C actually stops the current hook from being run, but doesn't
-        # halt the entire process.
-        InterruptHandler.disable_until_finished_or_interrupted do
           status, output = hook.run_and_transform
+        rescue => ex
+          status = :fail
+          output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
         end
-      rescue => ex
-        status = :fail
-        output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
-      rescue Interrupt
-        # At this point, interrupt has been handled and protection is back in
-        # effect thanks to the InterruptHandler.
-        status = :interrupt
-        output = 'Hook was interrupted by Ctrl-C; restoring repo state...'
+
+        @printer.end_hook(hook, status, output) unless @interrupted
+
+        status
       end
-
-      @printer.end_hook(hook, status, output)
-
-      status
+    rescue Interrupt
+      @interrupted = true
+    ensure
+      release_slot(hook)
     end
 
     def should_skip?(hook)
-      return true unless hook.enabled?
+      return true if @interrupted || !hook.enabled?
 
       if hook.skip?
         if hook.required?

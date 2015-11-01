@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'monitor'
+
 module Overcommit
   # Provide a set of callbacks which can be executed as events occur during the
   # course of {HookRunner#run}.
@@ -9,6 +11,8 @@ module Overcommit
     def initialize(logger, context)
       @log = logger
       @context = context
+      @lock = Monitor.new # Need to use monitor so we can have re-entrant locks
+      synchronize_all_methods
     end
 
     # Executed at the very beginning of running the collection of hooks.
@@ -18,13 +22,6 @@ module Overcommit
 
     def nothing_to_run
       log.debug "✓ No applicable #{hook_script_name} hooks to run"
-    end
-
-    # Executed at the start of an individual hook run.
-    def start_hook(hook)
-      unless hook.quiet?
-        print_header(hook)
-      end
     end
 
     def hook_skipped(hook)
@@ -39,9 +36,14 @@ module Overcommit
     def end_hook(hook, status, output)
       # Want to print the header for quiet hooks only if the result wasn't good
       # so that the user knows what failed
-      print_header(hook) if hook.quiet? && status != :pass
+      print_header(hook) if !hook.quiet? || status != :pass
 
       print_result(hook, status, output)
+    end
+
+    def interrupt_triggered
+      log.newline
+      log.error 'Interrupt signal received. Stopping hooks...'
     end
 
     # Executed when a hook run was interrupted/cancelled by user.
@@ -107,6 +109,28 @@ module Overcommit
 
     def hook_script_name
       @context.hook_script_name
+    end
+
+    # Get all public methods that were defined on this class and wrap them with
+    # synchronization locks so we ensure the output isn't interleaved amongst
+    # the various threads.
+    def synchronize_all_methods
+      methods = self.class.instance_methods - self.class.superclass.instance_methods
+
+      methods.each do |method_name|
+        old_method = :"old_#{method_name}"
+        new_method = :"synchronized_#{method_name}"
+
+        self.class.__send__(:alias_method, old_method, method_name)
+
+        self.class.send(:define_method, new_method) do |*args|
+          @lock.synchronize do
+            __send__(old_method, *args)
+          end
+        end
+
+        self.class.__send__(:alias_method, method_name, new_method)
+      end
     end
   end
 end

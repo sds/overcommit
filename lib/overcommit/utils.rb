@@ -211,6 +211,42 @@ module Overcommit
         Subprocess.spawn_detached(args)
       end
 
+      # Return the number of processors used by the OS for process scheduling.
+      #
+      # @see https://github.com/grosser/parallel/blob/v1.6.1/lib/parallel/processor_count.rb#L17-L51
+      def processor_count # rubocop:disable all
+        @processor_count ||=
+          begin
+            if Overcommit::OS.windows?
+              require 'win32ole'
+              result = WIN32OLE.connect('winmgmts://').ExecQuery(
+                'select NumberOfLogicalProcessors from Win32_Processor')
+              result.to_enum.collect(&:NumberOfLogicalProcessors).reduce(:+)
+            elsif File.readable?('/proc/cpuinfo')
+              IO.read('/proc/cpuinfo').scan(/^processor/).size
+            elsif File.executable?('/usr/bin/hwprefs')
+              IO.popen('/usr/bin/hwprefs thread_count').read.to_i
+            elsif File.executable?('/usr/sbin/psrinfo')
+              IO.popen('/usr/sbin/psrinfo').read.scan(/^.*on-*line/).size
+            elsif File.executable?('/usr/sbin/ioscan')
+              IO.popen('/usr/sbin/ioscan -kC processor') do |out|
+                out.read.scan(/^.*processor/).size
+              end
+            elsif File.executable?('/usr/sbin/pmcycles')
+              IO.popen('/usr/sbin/pmcycles -m').read.count("\n")
+            elsif File.executable?('/usr/sbin/lsdev')
+              IO.popen('/usr/sbin/lsdev -Cc processor -S 1').read.count("\n")
+            elsif File.executable?('/usr/sbin/sysctl')
+              IO.popen('/usr/sbin/sysctl -n hw.ncpu').read.to_i
+            elsif File.executable?('/sbin/sysctl')
+              IO.popen('/sbin/sysctl -n hw.ncpu').read.to_i
+            else
+              # Unknown platform; assume 1 processor
+              1
+            end
+          end
+      end
+
       # Calls a block of code with a modified set of environment variables,
       # restoring them once the code has executed.
       def with_environment(env)

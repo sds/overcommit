@@ -34,6 +34,23 @@ module Overcommit
       File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.git-hooks')
     end
 
+    def concurrency
+      @concurrency ||=
+        begin
+          cores = Overcommit::Utils.processor_count
+          concurrency_expr = @hash.fetch('concurrency', '%{processors}') % {
+            processors: cores,
+          }
+
+          a, op, b = concurrency_expr.scan(%r{(\d+)\s*([+\-*\/])\s*(\d+)})[0]
+          if a
+            a.to_i.send(op, b.to_i)
+          else
+            concurrency_expr.to_i
+          end
+        end
+    end
+
     # Returns configuration for all hooks in each hook type.
     #
     # @return [Hash]

@@ -61,6 +61,10 @@ module Overcommit::Hook
       @config['required']
     end
 
+    def parallelize?
+      @config['parallelize'] != false
+    end
+
     def quiet?
       @config['quiet']
     end

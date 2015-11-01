@@ -39,6 +39,13 @@ gemfile: false
 # to the root of the repository.
 plugin_directory: '.git-hooks'
 
+# Number of hooks that can be run concurrently. Typically this won't need to be
+# adjusted, but if you know that some of your hooks themselves use multiple
+# processors you can lower this value accordingly. You can define
+# single-operator mathematical expressions, e.g. '%{processors} * 2', or
+# '%{processors} / 2'.
+concurrency: '%{processors}'
+
 # Whether to check if a hook plugin has changed since Overcommit last ran it.
 # This is a defense mechanism when working with repositories which can contain
 # untrusted code (e.g. when you fetch a pull request from a third party).
