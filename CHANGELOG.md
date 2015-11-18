@@ -4,6 +4,7 @@
 
 * Raise error when hooks are defined with invalid names (i.e. non-alphanumeric
   characters)
+* Fix hook signing when specifying hook name
 
 ## 0.29.0
 

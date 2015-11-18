@@ -95,7 +95,7 @@ module Overcommit
     end
 
     def add_other_options(opts)
-      opts.on('-s', '--sign', 'Update hook signatures') do |hook_to_sign|
+      opts.on('-s', '--sign [hook]', 'Update hook signatures', String) do |hook_to_sign|
         @options[:hook_to_sign] = hook_to_sign if hook_to_sign.is_a?(String)
         @options[:action] = :sign
       end

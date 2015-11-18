@@ -52,6 +52,7 @@ describe 'hook signing' do
         FileUtils.chmod(0755, script_path)
         `git add #{script_path}`
 
+        `overcommit --sign`
         `overcommit --sign pre-commit`
         echo(new_config.to_yaml, '.overcommit.yml')
 
@@ -90,6 +91,7 @@ describe 'hook signing' do
         FileUtils.chmod(0755, script_path)
         `git add #{script_path}`
 
+        `overcommit --sign`
         `overcommit --sign pre-commit`
         echo(new_hook_script, script_path)
 
