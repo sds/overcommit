@@ -10,7 +10,7 @@ module Overcommit
       #
       # @return [Overcommit::Configuration]
       def default_configuration
-        @default_config ||= load_from_file(DEFAULT_CONFIG_PATH, default: true)
+        @default_config ||= load_from_file(DEFAULT_CONFIG_PATH, default: true, verify: false)
       end
 
       # Loads configuration from file.
@@ -18,6 +18,7 @@ module Overcommit
       # @param file [String] path to file
       # @param options [Hash]
       # @option default [Boolean] whether this is the default built-in configuration
+      # @option verify [Boolean] whether to verify the signature of the configuration
       # @option logger [Overcommit::Logger]
       # @return [Overcommit::Configuration]
       def load_from_file(file, options = {})
@@ -34,8 +35,13 @@ module Overcommit
 
     # Create a configuration loader which writes warnings/errors to the given
     # {Overcommit::Logger} instance.
-    def initialize(logger)
+    #
+    # @param logger [Overcommit::Logger]
+    # @param options [Hash]
+    # @option verify [Boolean] whether to verify signatures
+    def initialize(logger, options = {})
       @log = logger
+      @options = options
     end
 
     # Loads and returns the configuration for the repository we're running in.
@@ -55,12 +61,32 @@ module Overcommit
     # Loads a configuration, ensuring it extends the default configuration.
     def load_file(file)
       config = self.class.load_from_file(file, default: false, logger: @log)
+      config = self.class.default_configuration.merge(config)
 
-      self.class.default_configuration.merge(config)
+      if @options.fetch(:verify, config.verify_signatures?)
+        verify_signatures(config)
+      end
+
+      config
     rescue => error
       raise Overcommit::Exceptions::ConfigurationError,
             "Unable to load configuration from '#{file}': #{error}",
             error.backtrace
+    end
+
+    private
+
+    def verify_signatures(config)
+      if !config.previous_signature?
+        raise Overcommit::Exceptions::ConfigurationSignatureChanged,
+              "No previously recorded signature for configuration file.\n" \
+              'Run `overcommit --sign` if you trust the hooks in this repository.'
+
+      elsif config.signature_changed?
+        raise Overcommit::Exceptions::ConfigurationSignatureChanged,
+              "Signature of configuration file has changed!\n" \
+              "Run `overcommit --sign` once you've verified the configuration changes."
+      end
     end
   end
 end

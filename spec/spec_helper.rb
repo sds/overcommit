@@ -40,6 +40,18 @@ RSpec.configure do |config|
     c.syntax = :should
   end
 
+  config.around(:each) do |example|
+    # Most tests don't deal with verification, so disable it by default
+    env = {}
+    unless respond_to?(:enable_verification) && enable_verification
+      env['OVERCOMMIT_NO_VERIFY'] = '1'
+    end
+
+    Overcommit::Utils.with_environment env do
+      example.run
+    end
+  end
+
   # Much of Overcommit depends on these helpers, so they are aggressively
   # cached. Unset them before each example so we always get fresh values.
   config.before(:each) do

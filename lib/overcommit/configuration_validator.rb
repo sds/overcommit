@@ -15,6 +15,7 @@ module Overcommit
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
       check_for_missing_enabled_option(hash) unless @options[:default]
+      check_for_verify_plugin_signatures_option(hash)
 
       hash
     end
@@ -67,6 +68,19 @@ module Overcommit
       end
 
       @log.newline if any_warnings
+    end
+
+    # Prints a warning if the `verify_plugin_signatures` option is used instead
+    # of the new `verify_signatures` option.
+    def check_for_verify_plugin_signatures_option(hash)
+      return unless @log
+
+      if hash.key?('verify_plugin_signatures')
+        @log.warning '`verify_plugin_signatures` has been renamed to ' \
+                     '`verify_signatures`. Defaulting to verifying signatures.'
+        @log.warning "See change log at #{REPO_URL}/blob/v0.29.0/CHANGELOG.md for details."
+        @log.newline
+      end
     end
   end
 end

@@ -35,8 +35,7 @@ module Overcommit
           command = Array(hook_config['command'] ||
                           hook_config['required_executable'])
 
-          unless !@config.verify_plugin_signatures? ||
-                 signable_file?(command.first)
+          unless !@config.verify_signatures? || signable_file?(command.first)
             raise Overcommit::Exceptions::InvalidHookDefinition,
                   'Hook must specify a `required_executable` or `command` that ' \
                   'is tracked by git (i.e. is a path relative to the root ' \

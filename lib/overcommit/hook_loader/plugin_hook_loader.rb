@@ -5,7 +5,7 @@ module Overcommit::HookLoader
   # is running in.
   class PluginHookLoader < Base
     def load_hooks
-      check_for_modified_plugins if @config.verify_plugin_signatures?
+      check_for_modified_plugins if @config.verify_signatures?
 
       hooks = plugin_paths.map do |plugin_path|
         require plugin_path

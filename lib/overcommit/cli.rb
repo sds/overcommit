@@ -22,8 +22,8 @@ module Overcommit
         install_or_uninstall
       when :template_dir
         print_template_directory_path
-      when :sign_plugins
-        sign_plugins
+      when :sign
+        sign
       when :run_all
         run_all
       end
@@ -95,9 +95,9 @@ module Overcommit
     end
 
     def add_other_options(opts)
-      opts.on('-s', '--sign hook', 'Update plugin signatures for hook', String) do |hook|
-        @options[:action] = :sign_plugins
-        @options[:hook_to_sign] = hook
+      opts.on('-s', '--sign', 'Update hook signatures') do |hook_to_sign|
+        @options[:hook_to_sign] = hook_to_sign if hook_to_sign.is_a?(String)
+        @options[:action] = :sign
       end
 
       opts.on('-t', '--template-dir', 'Print location of template directory') do
@@ -175,14 +175,20 @@ module Overcommit
       end
     end
 
-    def sign_plugins
-      context = Overcommit::HookContext.create(@options[:hook_to_sign],
-                                               config,
-                                               @arguments,
-                                               @input)
-      Overcommit::HookLoader::PluginHookLoader.new(config,
-                                                   context,
-                                                   log).update_signatures
+    def sign
+      if @options[:hook_to_sign]
+        context = Overcommit::HookContext.create(@options[:hook_to_sign],
+                                                 config,
+                                                 @arguments,
+                                                 @input)
+        Overcommit::HookLoader::PluginHookLoader.new(config,
+                                                     context,
+                                                     log).update_signatures
+      else
+        log.log 'Updating signature for configuration file...'
+        config(verify: false).update_signature!
+      end
+
       halt
     end
 
@@ -204,8 +210,8 @@ module Overcommit
     end
 
     # Returns the configuration for this repository.
-    def config
-      @config ||= Overcommit::ConfigurationLoader.new(log).load_repo_config
+    def config(options = {})
+      @config ||= Overcommit::ConfigurationLoader.new(log, options).load_repo_config
     end
   end
 end

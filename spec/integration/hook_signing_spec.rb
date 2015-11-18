@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'yaml'
 
 describe 'hook signing' do
+  let(:enable_verification) { true }
   let(:fake_hook_config) do
     {
       'enabled' => true,
@@ -20,7 +21,7 @@ describe 'hook signing' do
 
   let(:config) do
     {
-      'verify_plugin_signatures' => verify_signatures,
+      'verify_signatures' => verify_signatures,
       'CommitMsg' => {
         'ALL' => { 'enabled' => false },
       },

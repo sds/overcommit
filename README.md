@@ -323,9 +323,9 @@ the `plugin_directory` option. The default directory is `.git-hooks`.
 
 ### Signature Verification
 
-You can disable manual verification of plugin signatures by setting
-`verify_plugin_signatures` to `false`. See the [Security](#security) section
-for more information on this option and what exactly it controls.
+You can disable manual verification of signatures by setting
+`verify_signatures` to `false`. See the [Security](#security) section for more
+information on this option and what exactly it controls.
 
 ## Built-In Hooks
 
@@ -584,11 +584,11 @@ that executes some malicious code. When you fetch and checkout this pull
 request, the `post-checkout` hook will be run on your machine, along with
 the malicious code that you just checked out.
 
-Overcommit attempts to address this problem by storing a signature of all
-hook plugins since the last time it ran the plugin. When the signature
-changes, a warning is displayed alerting you to which plugins have changed.
-It is then up to you to manually verify that the changes are not malicious,
-and then continue running the hooks.
+Overcommit attempts to address this problem by storing a signature of your
+configuration and all hook plugin code since the last time it ran. When the
+signature changes, a warning is displayed alerting you to which plugins have
+changed. It is then up to you to manually verify that the changes are not
+malicious, and then continue running the hooks.
 
 The signature is derived from the contents of the plugin's source code itself
 and any configuration for the plugin. Thus a change to the plugin's source
@@ -603,7 +603,14 @@ repositories where all developers who can push changes to the repository
 already have a minimum security clearance may wish to disable this check.
 
 While not recommended, you can disable signature verification by setting
-`verify_plugin_signatures` to `false` in your `.overcommit.yml` file.
+`verify_signatures` to `false` in your `.overcommit.yml` file.
+
+**Regardless of whether you have `verify_signatures` disabled for your project,
+if you are running Overcommit for the first time you will need to sign your
+configuration with `overcommit --sign`**. This needs to happen once so
+Overcommit can record in your local git repo's configuration (outside of source
+control) that you intend to enable/disable verification. This way if someone
+changes else `verify_signatures` you'll be asked to confirm the change.
 
 ## Contributing
 

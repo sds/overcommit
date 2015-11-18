@@ -35,7 +35,7 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
   RUBY
 
   let(:config) { normalize_indent(<<-YAML) }
-    verify_plugin_signatures: false
+    verify_signatures: false
 
     CommitMsg:
       ALL:
@@ -69,7 +69,9 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
         FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
         echo(hook, File.join('.git-hooks', 'pre_commit', 'fake_hook.rb'))
 
-        example.run
+        Overcommit::Utils.with_environment 'OVERCOMMIT_NO_VERIFY' => '1' do
+          example.run
+        end
       end
     end
   end

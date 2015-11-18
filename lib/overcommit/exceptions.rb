@@ -2,6 +2,9 @@ module Overcommit::Exceptions
   # Raised when a {Configuration} could not be loaded from a file.
   class ConfigurationError < StandardError; end
 
+  # Raised when the Overcommit configuration file signature has changed.
+  class ConfigurationSignatureChanged < StandardError; end
+
   # Raised when trying to read/write to/from the local repo git config fails.
   class GitConfigError < StandardError; end
 

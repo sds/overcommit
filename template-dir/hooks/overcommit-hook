@@ -93,6 +93,10 @@ rescue Overcommit::Exceptions::HookCancelled
 rescue Overcommit::Exceptions::InvalidGitRepo => error
   puts error
   exit 64 # EX_USAGE
+rescue Overcommit::Exceptions::ConfigurationSignatureChanged => error
+  puts error
+  puts "For more information, see #{Overcommit::REPO_URL}#security"
+  exit 1
 rescue Overcommit::Exceptions::InvalidHookSignature
   exit 1
 rescue => error

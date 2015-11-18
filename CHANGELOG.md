@@ -11,6 +11,9 @@
   [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
 * Fix `Scalastyle` pre-commit hook to fail with non-zero exit statuses
 * Respect `core.commentchar` configuration when reading commit messages
+* Rename `verify_plugin_signatures` to `verify_signatures`
+* Fix vulnerability where disabling signature verification would not be caught
+  by signature verification, allowing an attacker to bypass the check
 
 ## 0.28.0
 
