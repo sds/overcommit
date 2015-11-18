@@ -1,19 +1,32 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.29.0
+
+### Important Security Fix
+
+* Fix vulnerability where disabling signature verification would not be caught
+  by signature verification, allowing an attacker to bypass the check. If you
+  disable signature verification in your configuration, you must rename the
+  option to `verify_signatures` and should audit your hooks.
+
+### New Features
 
 * Allow nested arrays in `include` and `exclude` options so lists of file
   glob patterns can be shared across hook configurations via YAML references
+* Add `NginxTest` pre-commit hook that checks nginx configuration files with
+  [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
+* Respect `core.commentchar` configuration when reading commit messages
+
+### Changes
+
+* Rename `verify_plugin_signatures` to `verify_signatures`
+
+### Bug Fixes
+
 * Fix `Jscs` pre-commit hook to handle the new `jscs`
   [exit codes](https://github.com/jscs-dev/node-jscs/wiki/Exit-codes) introduced
   as of 2.2.0
-* Add `NginxTest` pre-commit hook that checks nginx configuration files with
-  [`nginx -t`](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
 * Fix `Scalastyle` pre-commit hook to fail with non-zero exit statuses
-* Respect `core.commentchar` configuration when reading commit messages
-* Rename `verify_plugin_signatures` to `verify_signatures`
-* Fix vulnerability where disabling signature verification would not be caught
-  by signature verification, allowing an attacker to bypass the check
 
 ## 0.28.0
 
