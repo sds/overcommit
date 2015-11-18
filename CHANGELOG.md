@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.29.1
 
 * Raise error when hooks are defined with invalid names (i.e. non-alphanumeric
   characters)
