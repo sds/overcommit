@@ -5,6 +5,8 @@
 * Raise error when hooks are defined with invalid names (i.e. non-alphanumeric
   characters)
 * Fix hook signing when specifying hook name
+* Fix `BundleCheck` pre-commit hook to not report false negatives when running
+  via `overcommit --run` with local changes
 
 ## 0.29.0
 

@@ -30,7 +30,8 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
 
     before do
       result.stub(success?: success, stdout: 'Bundler error message')
-      subject.stub(:execute).and_call_original
+      subject.stub(:execute).with(%w[git ls-files -o -i --exclude-standard]).
+                             and_return(double(stdout: ''))
       subject.stub(:execute).with(%w[bundle check]).and_return(result)
     end
 
@@ -40,10 +41,21 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
       it { should fail_hook }
     end
 
-    context 'and bundle check exist successfully' do
+    context 'and bundle check exits successfully' do
       let(:success) { true }
 
       it { should pass }
+
+      context 'and there was a change to the Gemfile.lock' do
+        before do
+          subject.stub(:execute).with(%w[bundle check]) do
+            echo('stuff', 'Gemfile.lock')
+            double(success?: true)
+          end
+        end
+
+        it { should fail_hook }
+      end
     end
   end
 end
