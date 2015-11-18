@@ -16,6 +16,7 @@ module Overcommit
       @lock = Mutex.new
       @resource = ConditionVariable.new
       @main = ConditionVariable.new
+      @hooks_ready = 0
       @slots_available = @config.concurrency
       @hooks_finished = 0
     end
@@ -58,6 +59,7 @@ module Overcommit
         @printer.start_run
 
         @threads = @hooks.map { |hook| Thread.new(hook, &method(:run_hook)) }
+        wait_for_workers_to_start
 
         begin
           InterruptHandler.disable_until_finished_or_interrupted do
@@ -81,6 +83,14 @@ module Overcommit
       end
     end
 
+    def wait_for_workers_to_start
+      while @hooks_ready < @threads.size
+        @lock.synchronize do
+          @main.wait(@lock)
+        end
+      end
+    end
+
     def start_and_wait_for_workers
       @resource.signal
 
@@ -91,6 +101,8 @@ module Overcommit
 
     def wait_for_slot(hook)
       @lock.synchronize do
+        @main.signal # Tell the main thread that we're ready to run
+        @hooks_ready += 1
         slots_needed = hook.parallelize? ? 1 : @config.concurrency
 
         loop do
