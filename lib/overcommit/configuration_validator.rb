@@ -14,6 +14,7 @@ module Overcommit
 
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
+      check_hook_name_format(hash)
       check_for_missing_enabled_option(hash) unless @options[:default]
       check_for_verify_plugin_signatures_option(hash)
 
@@ -45,6 +46,31 @@ module Overcommit
           else
             value
           end
+      end
+    end
+
+    # Prints an error message and raises an exception if a hook has an
+    # invalid name, since this can result in strange errors elsewhere.
+    def check_hook_name_format(hash)
+      errors = []
+
+      Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
+        hash.fetch(hook_type, {}).each do |hook_name, _|
+          next if hook_name == 'ALL'
+
+          unless hook_name =~ /\A[A-Za-z0-9]+\z/
+            errors << "#{hook_type}::#{hook_name} has an invalid name " \
+                      "#{hook_name}. It must contain only alphanumeric " \
+                      'characters (no underscores or dashes, etc.)'
+          end
+        end
+      end
+
+      if errors.any?
+        @log.error errors.join("\n") if @log
+        @log.newline if @log
+        raise Overcommit::Exceptions::ConfigurationError,
+              'One or more hooks had invalid names'
       end
     end
 

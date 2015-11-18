@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Raise error when hooks are defined with invalid names (i.e. non-alphanumeric
+  characters)
+
 ## 0.29.0
 
 ### Important Security Fix
