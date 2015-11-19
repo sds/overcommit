@@ -610,7 +610,7 @@ if you are running Overcommit for the first time you will need to sign your
 configuration with `overcommit --sign`**. This needs to happen once so
 Overcommit can record in your local git repo's configuration (outside of source
 control) that you intend to enable/disable verification. This way if someone
-changes else `verify_signatures` you'll be asked to confirm the change.
+else changes `verify_signatures` you'll be asked to confirm the change.
 
 ## Contributing
 
