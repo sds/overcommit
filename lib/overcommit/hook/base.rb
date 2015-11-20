@@ -65,6 +65,10 @@ module Overcommit::Hook
       @config['parallelize'] != false
     end
 
+    def processors
+      @config.fetch('processors', 1)
+    end
+
     def quiet?
       @config['quiet']
     end

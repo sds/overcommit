@@ -103,7 +103,7 @@ module Overcommit
       @lock.synchronize do
         @main.signal # Tell the main thread that we're ready to run
         @hooks_ready += 1
-        slots_needed = hook.parallelize? ? 1 : @config.concurrency
+        slots_needed = hook.parallelize? ? hook.processors : @config.concurrency
 
         loop do
           @resource.wait(@lock)
@@ -123,7 +123,7 @@ module Overcommit
 
     def release_slot(hook)
       @lock.synchronize do
-        slots_released = hook.parallelize? ? 1 : @config.concurrency
+        slots_released = hook.parallelize? ? hook.processors : @config.concurrency
         @slots_available += slots_released
         @hooks_finished += 1
 

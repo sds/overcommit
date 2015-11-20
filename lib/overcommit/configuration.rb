@@ -13,7 +13,10 @@ module Overcommit
     def initialize(hash, options = {})
       @options = options.dup
       @options[:logger] ||= Overcommit::Logger.silent
-      @hash = Overcommit::ConfigurationValidator.new.validate(hash, options)
+      @hash = hash # Assign so validator can read original values
+      unless options[:validate] == false
+        @hash = Overcommit::ConfigurationValidator.new.validate(self, hash, options)
+      end
     end
 
     def ==(other)
@@ -38,15 +41,18 @@ module Overcommit
       @concurrency ||=
         begin
           cores = Overcommit::Utils.processor_count
-          concurrency_expr = @hash.fetch('concurrency', '%{processors}') % {
-            processors: cores,
-          }
+          content = @hash.fetch('concurrency', '%{processors}')
+          if content.is_a?(String)
+            concurrency_expr = content % { processors: cores }
 
-          a, op, b = concurrency_expr.scan(%r{(\d+)\s*([+\-*\/])\s*(\d+)})[0]
-          if a
-            a.to_i.send(op, b.to_i)
+            a, op, b = concurrency_expr.scan(%r{(\d+)\s*([+\-*\/])\s*(\d+)})[0]
+            if a
+              a.to_i.send(op, b.to_i)
+            else
+              concurrency_expr.to_i
+            end
           else
-            concurrency_expr.to_i
+            content.to_i
           end
         end
     end
