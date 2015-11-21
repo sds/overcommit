@@ -193,7 +193,8 @@ module Overcommit
     end
 
     def run_all
-      context = Overcommit::HookContext.create('run-all', config, @arguments, @input)
+      empty_stdin = File.open(File::NULL) # pre-commit hooks don't take input
+      context = Overcommit::HookContext.create('run-all', config, @arguments, empty_stdin)
       config.apply_environment!(context, ENV)
 
       printer = Overcommit::Printer.new(log, context)

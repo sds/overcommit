@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `--run` flag to not block reading STDIN when using existing hook scripts
+
 ## 0.29.1
 
 * Raise error when hooks are defined with invalid names (i.e. non-alphanumeric
