@@ -188,6 +188,14 @@ PreCommit:
     install_command: 'npm install -g csslint'
     include: '**/*.css'
 
+  Dogma:
+    enabled: false
+    description: 'Analyzing with dogma'
+    required_executable: 'mix'
+    include:
+      - '**/*.ex'
+      - '**/*.exs'
+
   EsLint:
     enabled: false
     description: 'Analyzing with ESLint'
