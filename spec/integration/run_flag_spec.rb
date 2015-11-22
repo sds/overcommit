@@ -26,7 +26,7 @@ describe 'overcommit --run' do
     end
 
     it 'completes successfully without blocking' do
-      wait_until { subject }
+      wait_until(timeout: 10) { subject } # Need to wait long time for JRuby startup
       subject.status.should == 0
     end
   end
