@@ -192,6 +192,7 @@ PreCommit:
     enabled: false
     description: 'Analyzing with dogma'
     required_executable: 'mix'
+    flags: ['dogma']
     include:
       - '**/*.ex'
       - '**/*.exs'
