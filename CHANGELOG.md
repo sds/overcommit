@@ -3,6 +3,8 @@
 ## master (unreleased)
 
 * Fix `--run` flag to not block reading STDIN when using existing hook scripts
+* Add `Dogma` pre-commit hook to lint Elixir files with
+  [dogma](http://elixir-lang.org/) files
 
 ## 0.29.1
 
