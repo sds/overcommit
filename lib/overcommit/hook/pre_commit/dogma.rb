@@ -1,7 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `dogma` against any modified ex files.
   #
-  # @see http://eslint.org/
+  # @see https://github.com/lpil/dogma
   class Dogma < Base
     def run
       result = execute command
