@@ -783,6 +783,12 @@ PrePush:
     description: 'Running RSpec test suite'
     required_executable: 'rspec'
 
+  Minitest:
+    enabled: false
+    description: 'Running Minitest test suite'
+    command: ['ruby', '-Ilib:test', 'test']
+    required_library: 'minitest'
+
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
 PreRebase:
