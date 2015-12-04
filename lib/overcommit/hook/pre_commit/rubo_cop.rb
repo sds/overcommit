@@ -10,6 +10,7 @@ module Overcommit::Hook::PreCommit
     def run
       result = execute(command, args: applicable_files)
       return :pass if result.success?
+      return [:fail, result.stderr] unless result.stderr.empty?
 
       extract_messages(
         result.stdout.split("\n"),

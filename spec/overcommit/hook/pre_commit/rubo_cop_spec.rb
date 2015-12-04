@@ -48,5 +48,16 @@ describe Overcommit::Hook::PreCommit::RuboCop do
 
       it { should fail_hook }
     end
+
+    context 'when there is an error running rubocop' do
+      before do
+        result.stub(:stdout).and_return('')
+        result.stub(:stderr).and_return([
+          'Could not find rubocop in any of the sources'
+        ].join("\n"))
+      end
+
+      it { should fail_hook }
+    end
   end
 end
