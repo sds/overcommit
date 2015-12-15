@@ -6,6 +6,8 @@
 * Add `Dogma` pre-commit hook to lint Elixir files with
   [dogma](http://elixir-lang.org/) files
 * Add `Minitest` pre-push hook to run Minitest tests
+* Fix `RuboCop` pre-commit hook to fail when RuboCop version specified by
+  Bundler context is not available
 
 ## 0.29.1
 
