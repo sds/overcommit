@@ -5,6 +5,7 @@
 * Fix `--run` flag to not block reading STDIN when using existing hook scripts
 * Add `Dogma` pre-commit hook to lint Elixir files with
   [dogma](http://elixir-lang.org/) files
+* Add `Minitest` pre-push hook to run Minitest tests
 
 ## 0.29.1
 
