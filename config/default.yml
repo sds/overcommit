@@ -388,6 +388,12 @@ PreCommit:
     install_command: 'pip install flake8'
     include: '**/*.py'
 
+  RailsBestPractices:
+    enabled: false
+    description: 'Analyzing with RailsBestPractices'
+    required_executable: 'rails_best_practices'
+    install_command: 'gem install rails_best_practices'
+
   RailsSchemaUpToDate:
     enabled: false
     description: 'Checking if database schema is up to date'
