@@ -7,7 +7,7 @@ module Overcommit::Hook::CommitMsg
 
       @errors = []
 
-      find_errors_in_subject(commit_message_lines.first)
+      find_errors_in_subject(commit_message_lines.first.chomp)
       find_errors_in_body(commit_message_lines)
 
       return :warn, @errors.join("\n") if @errors.any?
