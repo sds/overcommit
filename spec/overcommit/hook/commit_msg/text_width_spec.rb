@@ -28,6 +28,17 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     it { should pass }
   end
 
+  context 'when a line in the message is 72 characters followed by a newline' do
+    let(:commit_msg) { <<-MSG }
+      Some summary
+
+      This line has 72 characters, but with newline it has 73 characters
+      That shouldn't be a problem.
+    MSG
+
+    it { should pass }
+  end
+
   context 'when a line in the message is longer than 72 characters' do
     let(:commit_msg) { <<-MSG }
       Some summary
