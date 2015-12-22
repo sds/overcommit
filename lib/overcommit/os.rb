@@ -30,5 +30,7 @@ module Overcommit
         @os ||= ::RbConfig::CONFIG['host_os']
       end
     end
+
+    SEPARATOR = self.windows? ? '\\' : File::SEPARATOR
   end
 end

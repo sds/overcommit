@@ -11,13 +11,14 @@ describe 'overcommit --run' do
       let(:script_name) { 'test-script' }
       let(:script_contents) { "#!/bin/bash\nexit 0" }
     end
+    let(:script_path) { ".#{Overcommit::OS::SEPARATOR}#{script_name}" }
 
     let(:config) do
       {
         'PreCommit' => {
           'MyHook' => {
             'enabled' => true,
-            'required_executable' => "./#{script_name}",
+            'required_executable' => script_path,
           }
         }
       }
@@ -26,9 +27,9 @@ describe 'overcommit --run' do
     around do |example|
       repo do
         File.open('.overcommit.yml', 'w') { |f| f.puts(config.to_yaml) }
-        echo(script_contents, script_name)
-        `git add #{script_name}`
-        FileUtils.chmod(0755, script_name)
+        echo(script_contents, script_path)
+        `git add #{script_path}`
+        FileUtils.chmod(0755, script_path)
         example.run
       end
     end

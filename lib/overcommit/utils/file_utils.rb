@@ -58,7 +58,7 @@ module Overcommit::Utils
       end
 
       def win32_fix_pathsep(path)
-        path.tr('/', '\\')
+        path.tr(File::SEPARATOR, Overcommit::OS::SEPARATOR)
       end
 
       def win32_symlink?(dir_output)
