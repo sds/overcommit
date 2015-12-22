@@ -7,7 +7,7 @@ describe Overcommit::GitConfig do
     context 'with no configuration' do
       it 'should be "#"' do
         repo do
-          `git config --local core.commentchar ''`
+          `git config --local core.commentchar ""`
           expect(subject).to eq '#'
         end
       end
