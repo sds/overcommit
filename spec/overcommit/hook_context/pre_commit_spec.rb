@@ -183,8 +183,8 @@ describe Overcommit::HookContext::PreCommit do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
-          `git submodule foreach "git add submodule-file"`
-          `git submodule foreach "git commit -m \\"Another commit\\""`
+          `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           `git add sub`
           example.run
         end
@@ -337,8 +337,8 @@ describe Overcommit::HookContext::PreCommit do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
-          `git submodule foreach "git add submodule-file"`
-          `git submodule foreach "git commit -m \\"Another commit\\""`
+          `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           `git add sub`
           example.run
         end
@@ -362,8 +362,8 @@ describe Overcommit::HookContext::PreCommit do
           `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
-          `git submodule foreach "git add submodule-file"`
-          `git submodule foreach "git commit -m \\"Another commit\\""`
+          `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           echo('Hello Again', 'tracked-file')
           `git add sub tracked-file`
           example.run
