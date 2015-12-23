@@ -5,7 +5,7 @@ describe 'overcommit --run' do
 
   context 'when using an existing pre-commit hook script' do
     if Overcommit::OS.windows?
-      let(:script_name) { 'test-script.exe' }
+      let(:script_name) { 'test-script.bat' }
       let(:script_contents) { 'exit 0' }
     else
       let(:script_name) { 'test-script' }
