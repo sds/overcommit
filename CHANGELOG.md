@@ -10,6 +10,8 @@
   Bundler context is not available
 * Add `RailsBestPractices` pre-commit hook which lints code with
   [`rails_best_practices`](https://github.com/railsbp/rails_best_practices)
+* Fix `TextWidth` commit-msg hook to not include newline characters in
+  calculated width
 
 ## 0.29.1
 
