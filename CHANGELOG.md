@@ -8,6 +8,8 @@
 * Add `Minitest` pre-push hook to run Minitest tests
 * Fix `RuboCop` pre-commit hook to fail when RuboCop version specified by
   Bundler context is not available
+* Add `RailsBestPractices` pre-commit hook which lints code with
+  [`rails_best_practices`](https://github.com/railsbp/rails_best_practices)
 
 ## 0.29.1
 

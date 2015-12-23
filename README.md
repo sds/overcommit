@@ -463,6 +463,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Pyflakes](lib/overcommit/hook/pre_commit/pyflakes.rb)
 * [Pylint](lib/overcommit/hook/pre_commit/pylint.rb)
 * [PythonFlake8](lib/overcommit/hook/pre_commit/python_flake8.rb)
+* [RailsBestPractices](lib/overcommit/hook/pre_commit/rails_best_practices.rb)
 * [RailsSchemaUpToDate](lib/overcommit/hook/pre_commit/rails_schema_up_to_date.rb)
 * [Reek](lib/overcommit/hook/pre_commit/reek.rb)
 * [RuboCop](lib/overcommit/hook/pre_commit/rubo_cop.rb)
