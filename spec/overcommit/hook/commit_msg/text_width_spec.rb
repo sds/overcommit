@@ -6,7 +6,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
   subject { described_class.new(config, context) }
 
   before do
-    context.stub(:commit_message_lines).and_return(commit_msg.lines)
+    context.stub(:commit_message_lines).and_return(commit_msg.lines.to_a)
     context.stub(:empty_message?).and_return(commit_msg.empty?)
   end
 
