@@ -1,4 +1,4 @@
 # Defines the gem version.
 module Overcommit
-  VERSION = '0.29.1'
+  VERSION = '0.30.0'
 end

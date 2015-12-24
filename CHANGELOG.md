@@ -1,15 +1,20 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.30.0
 
-* Fix `--run` flag to not block reading STDIN when using existing hook scripts
+### New Features
+
 * Add `Dogma` pre-commit hook to lint Elixir files with
   [dogma](http://elixir-lang.org/) files
 * Add `Minitest` pre-push hook to run Minitest tests
-* Fix `RuboCop` pre-commit hook to fail when RuboCop version specified by
-  Bundler context is not available
 * Add `RailsBestPractices` pre-commit hook which lints code with
   [`rails_best_practices`](https://github.com/railsbp/rails_best_practices)
+
+### Bug Fixes
+
+* Fix `--run` flag to not block reading STDIN when using existing hook scripts
+* Fix `RuboCop` pre-commit hook to fail when RuboCop version specified by
+  Bundler context is not available
 * Fix `TextWidth` commit-msg hook to not include newline characters in
   calculated width
 
