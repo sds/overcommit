@@ -13,15 +13,22 @@ module Overcommit::Hook::PrePush
 
     private
 
-    def branches
-      @branches ||= config['branches']
-    end
-
     def illegal_pushes
       @illegal_pushes ||= pushed_refs.select do |pushed_ref|
-        (pushed_ref.deleted? || pushed_ref.forced?) &&
-          branches.any? { |branch| pushed_ref.remote_ref == "refs/heads/#{branch}" }
+        protected?(pushed_ref.remote_ref) && pushed_ref.destructive?
       end
+    end
+
+    def protected?(remote_ref)
+      ref_name = remote_ref[%r{refs/heads/(.*)}, 1]
+      protected_branch_patterns.any? do |pattern|
+        File.fnmatch(pattern, ref_name)
+      end
+    end
+
+    def protected_branch_patterns
+      @protected_branch_patterns ||= Array(config['branches']).
+        concat(Array(config['branch_patterns']))
     end
   end
 end
