@@ -11,6 +11,9 @@ module Overcommit::Exceptions
   # Raised when there was a problem reading submodule information for a repo.
   class GitSubmoduleError < StandardError; end
 
+  # Raised when there was a problem reading git revision information with `rev-list`.
+  class GitRevListError < StandardError; end
+
   # Raised when a {HookContext} is unable to setup the environment before a run.
   class HookSetupFailed < StandardError; end
 

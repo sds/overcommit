@@ -89,6 +89,21 @@ describe Overcommit::HookContext::PrePush do
 
         it { should == true }
       end
+
+      context 'when remote ref head does not exist locally' do
+        let(:git_error_msg) { "fatal: bad object #{remote_sha1}" }
+
+        before do
+          pushed_ref.stub(created?: false, deleted?: false)
+          result = double(success?: false, stderr: git_error_msg)
+          Overcommit::Subprocess.stub(:spawn).and_return(result)
+        end
+
+        it 'should raise' do
+          expect { subject }.to raise_error(Overcommit::Exceptions::GitRevListError,
+                                            /#{git_error_msg}/)
+        end
+      end
     end
 
     describe '#created?' do
