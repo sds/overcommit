@@ -130,5 +130,33 @@ describe Overcommit::HookContext::PrePush do
         it { should == false }
       end
     end
+
+    describe '#destructive?' do
+      subject { pushed_ref.destructive? }
+
+      context 'when deleting a ref' do
+        before do
+          pushed_ref.stub(:deleted?).and_return(true)
+        end
+
+        it { should == true }
+      end
+
+      context 'when force-pushing a ref' do
+        before do
+          pushed_ref.stub(deleted?: false, forced?: true)
+        end
+
+        it { should == true }
+      end
+
+      context 'when not deleting or force-pushing a ref' do
+        before do
+          pushed_ref.stub(deleted?: false, forced?: false)
+        end
+
+        it { should == false }
+      end
+    end
   end
 end

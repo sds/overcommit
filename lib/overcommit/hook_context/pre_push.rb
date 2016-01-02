@@ -30,6 +30,10 @@ module Overcommit::HookContext
         local_sha1 == '0' * 40
       end
 
+      def destructive?
+        deleted? || forced?
+      end
+
       def to_s
         "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
       end
