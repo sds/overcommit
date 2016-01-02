@@ -65,6 +65,6 @@ before_test:
   - git config --global core.safecrlf false
 
 test_script:
-  - bundle exec rspec --tty --backtrace --color --format documentation
+  - bundle exec rspec --tty --backtrace --color
   - bundle exec overcommit --sign
   - bundle exec overcommit --run
