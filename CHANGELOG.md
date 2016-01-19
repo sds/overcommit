@@ -1,5 +1,11 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add support for glob patterns to `ProtectedBranches` pre-commit hook
+* Add `Mdl` pre-commit hook to run
+  [`mdl`](https://github.com/mivok/markdownlint) on Markdown files
+
 ## 0.30.0
 
 ### New Features
