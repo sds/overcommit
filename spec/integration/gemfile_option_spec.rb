@@ -7,6 +7,8 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
   # We point the overcommit gem back to this repo since we can't assume the gem
   # has already been installed in a test environment
   let(:gemfile) { normalize_indent(<<-RUBY) }
+    source 'https://rubygems.org'
+
     gem 'overcommit', path: '#{repo_root}'
     gem 'my_fake_gem', path: '#{fake_gem_path}'
   RUBY
