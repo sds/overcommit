@@ -4,6 +4,6 @@ source 'https://rubygems.org'
 gem 'coveralls'
 
 # Pin RuboCop for Travis builds.
-gem 'rubocop', '0.35.1'
+gem 'rubocop', '0.36.0'
 
 gemspec

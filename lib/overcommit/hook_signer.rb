@@ -5,7 +5,7 @@ module Overcommit
 
     # We don't want to include the skip setting as it is set by Overcommit
     # itself
-    IGNORED_CONFIG_KEYS = %w[skip]
+    IGNORED_CONFIG_KEYS = %w[skip].freeze
 
     # @param hook_name [String] name of the hook
     # @param config [Overcommit::Configuration]

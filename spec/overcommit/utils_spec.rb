@@ -192,9 +192,10 @@ describe Overcommit::Utils do
       subject { described_class.execute(arguments, args: splittable_args) }
 
       it 'invokes CommandSplitter.execute' do
-        Overcommit::CommandSplitter.should_receive(:execute).
-                                    with(arguments, args: splittable_args).
-                                    and_return(double(status: 0, stdout: '', stderr: ''))
+        Overcommit::CommandSplitter.
+          should_receive(:execute).
+          with(arguments, args: splittable_args).
+          and_return(double(status: 0, stdout: '', stderr: ''))
         subject
       end
 

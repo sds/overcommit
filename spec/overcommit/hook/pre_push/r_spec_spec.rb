@@ -26,7 +26,6 @@ describe Overcommit::Hook::PrePush::RSpec do
 
     context 'with a runtime error' do
       before do
-        # rubocop:disable Metrics/LineLength
         result.stub(stdout: '', stderr: <<-EOS)
           /home/user/.rbenv/gems/2.2.0/gems/rspec-core-3.2.2/lib/rspec/core/configuration.rb:1226:in `load': /home/user/dev/github/overcommit/spec/overcommit/hook/pre_push/rspec_spec.rb:49: can't find string "EOS" anywhere before EOF (SyntaxError)
           /home/user/dev/overcommit/spec/overcommit/hook/pre_push/rspec_spec.rb:29: syntax error, unexpected end-of-input
@@ -41,7 +40,6 @@ describe Overcommit::Hook::PrePush::RSpec do
             from /home/user/.rbenv/versions/2.2.1/bin/rspec:23:in `load'
             from /home/user/.rbenv/versions/2.2.1/bin/rspec:23:in `<main>'
         EOS
-        # rubocop:enable Metrics/LineLength
       end
 
       it { should fail_hook }
@@ -49,7 +47,6 @@ describe Overcommit::Hook::PrePush::RSpec do
 
     context 'with a test failure' do
       before do
-        # rubocop:disable Metrics/LineLength
         result.stub(stderr: '', stdout: <<-EOS)
           .FF
 
@@ -73,7 +70,6 @@ describe Overcommit::Hook::PrePush::RSpec do
           rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:45 # Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a runtime error should fail
           rspec ./spec/overcommit/hook/pre_push/rspec_spec.rb:57 # Overcommit::Hook::PrePush::RSpec when rspec exits unsuccessfully with a test failure should fail
         EOS
-        # rubocop:enable Metrics/LineLength
       end
 
       it { should fail_hook }

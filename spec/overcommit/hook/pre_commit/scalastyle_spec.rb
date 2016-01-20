@@ -88,7 +88,6 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
 
     context 'with a runtime error' do
       before do
-        # rubocop:disable Metrics/LineLength
         result.stub(stdout: '', stderr: normalize_indent(<<-ERR))
           Exception in thread "main" java.io.FileNotFoundException: scalastyle-config.xml (No such file or directory)
                   at java.io.FileInputStream.open0(Native Method)
@@ -103,7 +102,6 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
                   at org.scalastyle.Main$.main(Main.scala:95)
                   at org.scalastyle.Main.main(Main.scala)
         ERR
-        # rubocop:enable Metrics/LineLength
       end
 
       it { should fail_hook }

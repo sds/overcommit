@@ -27,10 +27,10 @@ module Overcommit
       private
 
       def host_os
-        @os ||= ::RbConfig::CONFIG['host_os']
+        @os ||= ::RbConfig::CONFIG['host_os'].freeze
       end
     end
 
-    SEPARATOR = self.windows? ? '\\' : File::SEPARATOR
+    SEPARATOR = (windows? ? '\\' : File::SEPARATOR).freeze
   end
 end

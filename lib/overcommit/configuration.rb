@@ -19,7 +19,6 @@ module Overcommit
     def ==(other)
       super || @hash == other.hash
     end
-    alias_method :eql?, :==
 
     # Access the configuration as if it were a hash.
     #

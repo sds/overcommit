@@ -11,7 +11,7 @@ module Overcommit::Hook
   end
 
   # Possible types of messages.
-  MESSAGE_TYPES = [:error, :warning]
+  MESSAGE_TYPES = [:error, :warning].freeze
 
   # Functionality common to all hooks.
   class Base # rubocop:disable Metrics/ClassLength

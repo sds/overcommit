@@ -54,6 +54,9 @@ Style/FormatString:
 Style/GuardClause:
   Enabled: false
 
+Style/IndentArray:
+  Enabled: false
+
 Style/IfUnlessModifier:
   Enabled: false
 
@@ -61,6 +64,9 @@ Style/IfUnlessModifier:
 # doesn't allow. We're also not too worried about people using `lambda` for
 # single-line lambdas either.
 Style/Lambda:
+  Enabled: false
+
+Style/MultilineMethodCallIndentation:
   Enabled: false
 
 Style/MultilineOperationIndentation:
@@ -98,12 +104,15 @@ Style/SignalException:
 Style/SingleLineBlockParams:
   Enabled: false
 
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Exclude:
     - '*.gemspec'
 
 Style/SpecialGlobalVars:
   Enabled: false
 
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
   Enabled: false

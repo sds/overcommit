@@ -75,7 +75,7 @@ describe Overcommit::CommandSplitter do
     end
 
     context 'with splittable arguments well over the limit' do
-      let(:splittable_args) { 15.times.map { |i| (i + 1).to_s } }
+      let(:splittable_args) { Array.new(15) { |i| (i + 1).to_s } }
 
       it 'executes multiple commands with the appropriately split arguments' do
         Overcommit::Subprocess.should_receive(:spawn).with(%w[cmd 1 2 3 4 5 6 7],

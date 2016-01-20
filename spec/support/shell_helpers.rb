@@ -20,10 +20,10 @@ module ShellHelpers
   #
   # @param options [Hash]
   # @raise [Timeout::TimeoutError] timeout has elapsed before condition holds
-  def wait_until(options = {}, &block)
+  def wait_until(options = {})
     Timeout.timeout(options.fetch(:timeout, 1)) do
       loop do
-        return if block.call
+        return if yield
         sleep options.fetch(:check_interval, 0.1)
       end
     end
