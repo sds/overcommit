@@ -2,7 +2,7 @@
 
 ## master (unreleased)
 
-* Add support for glob patterns to `ProtectedBranches` pre-commit hook
+* Add support for glob patterns to `ProtectedBranches` pre-push hook
 * Add `Mdl` pre-commit hook to run
   [`mdl`](https://github.com/mivok/markdownlint) on Markdown files
 
