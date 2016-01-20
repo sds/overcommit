@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Check if local Gemfile.lock matches Gemfile when either changes, unless
   # Gemfile.lock is ignored by git.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Check if local Berksfile.lock matches Berksfile when either changes, unless
   # Berksfile.lock is ignored by git.

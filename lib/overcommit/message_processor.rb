@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit
   # Utility class that encapsulates the handling of hook messages and whether
   # they affect lines the user has modified or not.
