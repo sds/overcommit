@@ -5,6 +5,8 @@
 * Add support for glob patterns to `ProtectedBranches` pre-push hook
 * Add `Mdl` pre-commit hook to run
   [`mdl`](https://github.com/mivok/markdownlint) on Markdown files
+* Add `--without-color` flag to `RailsBestPractices` pre-commit hook
+  to fix parsing issues due to color escape sequences
 
 ## 0.30.0
 
