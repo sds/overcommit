@@ -40,7 +40,9 @@ module Overcommit::Hook::PreCommit
     end
 
     def extract_file(match, message)
-      if match[:file].nil? || match[:file].empty?
+      return unless match.names.include?('file')
+
+      if match[:file].to_s.empty?
         raise "Unexpected output: no file found in '#{message}'"
       end
 
@@ -48,6 +50,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def extract_line(match, message)
+      return unless match.names.include?('line')
       Integer(match[:line])
     rescue ArgumentError, TypeError
       raise "Unexpected output: invalid line number found in '#{message}'"

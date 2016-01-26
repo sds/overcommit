@@ -8,6 +8,8 @@
 * Add `--without-color` flag to `RailsBestPractices` pre-commit hook
   to fix parsing issues due to color escape sequences
 * Improve error message when `gemfile` has not had a dependency installed
+* Fix `RuboCop` pre-commit hook to not swallow cop messages when `parser` gem
+  warnings are output to STDERR
 
 ## 0.30.0
 

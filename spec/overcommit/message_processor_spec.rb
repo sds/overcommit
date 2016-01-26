@@ -6,6 +6,8 @@ describe Overcommit::MessageProcessor do
   WMH = Overcommit::MessageProcessor::WARNINGS_MODIFIED_HEADER + "\n"
   EUH = Overcommit::MessageProcessor::ERRORS_UNMODIFIED_HEADER + "\n"
   WUH = Overcommit::MessageProcessor::WARNINGS_UNMODIFIED_HEADER + "\n"
+  EGH = Overcommit::MessageProcessor::ERRORS_GENERIC_HEADER + "\n"
+  WGH = Overcommit::MessageProcessor::WARNINGS_GENERIC_HEADER + "\n"
 
   let(:config) { double('config') }
   let(:context) { double('context') }
@@ -27,11 +29,11 @@ describe Overcommit::MessageProcessor do
       end
     end
 
-    def error(file, line)
+    def error(file = nil, line = nil)
       Overcommit::Hook::Message.new(:error, file, line, 'Error')
     end
 
-    def warning(file, line)
+    def warning(file = nil, line = nil)
       Overcommit::Hook::Message.new(:warning, file, line, 'Warning')
     end
 
@@ -207,6 +209,81 @@ describe Overcommit::MessageProcessor do
       context 'and setting is `ignore`' do
         let(:setting) { 'ignore' }
         it { should == [:fail, "#{EMH}Error\n#{WMH}Warning\n"] }
+      end
+    end
+
+    context 'when there are generic errors' do
+      let(:messages) { [error] * 2 }
+      let(:setting) { 'report' }
+
+      it { should == [:fail, "Error\nError\n"] }
+    end
+
+    context 'when there are generic warnings' do
+      let(:messages) { [warning] * 2 }
+      let(:setting) { 'report' }
+
+      it { should == [:warn, "Warning\nWarning\n"] }
+    end
+
+    context 'when there are generic errors and warnings' do
+      let(:messages) { [warning, error] * 2 }
+      let(:setting) { 'report' }
+
+      it { should == [:fail, "Warning\nError\nWarning\nError\n"] }
+    end
+
+    context 'when there are errors and warnings on modified/unmodified lines' do
+      let(:modified_lines) { { 'a.txt' => [2], 'b.txt' => [3, 4] } }
+      let(:setting) { 'report' }
+
+      let(:messages) do
+        [
+          warning('a.txt', 3),
+          warning('b.txt', 3),
+          error('a.txt', 2),
+          error('b.txt', 5),
+        ]
+      end
+
+      context 'and there are generic errors before them' do
+        let(:messages) { [error] * 2 + super() }
+
+        it do
+          should == [:fail, "#{EGH}Error\nError\n" \
+                            "#{EMH}Error\n#{WMH}Warning\n" \
+                            "#{EUH}Error\n#{WUH}Warning\n"]
+        end
+      end
+
+      context 'and there are generic warnings before them' do
+        let(:messages) { [warning] * 2 + super() }
+
+        it do
+          should == [:fail, "#{WGH}Warning\nWarning\n" \
+                            "#{EMH}Error\n#{WMH}Warning\n" \
+                            "#{EUH}Error\n#{WUH}Warning\n"]
+        end
+      end
+
+      context 'and there are generic errors after them' do
+        let(:messages) { super() + [error] * 2 }
+
+        it do
+          should == [:fail, "#{EGH}Error\nError\n" \
+                            "#{EMH}Error\n#{WMH}Warning\n" \
+                            "#{EUH}Error\n#{WUH}Warning\n"]
+        end
+      end
+
+      context 'and there are generic warnings after them' do
+        let(:messages) { super() + [warning] * 2 }
+
+        it do
+          should == [:fail, "#{WGH}Warning\nWarning\n" \
+                            "#{EMH}Error\n#{WMH}Warning\n" \
+                            "#{EUH}Error\n#{WUH}Warning\n"]
+        end
       end
     end
   end
