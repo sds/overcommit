@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.31.0
 
 * Add support for glob patterns to `ProtectedBranches` pre-push hook
 * Add `Mdl` pre-commit hook to run
