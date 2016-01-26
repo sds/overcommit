@@ -7,6 +7,7 @@
   [`mdl`](https://github.com/mivok/markdownlint) on Markdown files
 * Add `--without-color` flag to `RailsBestPractices` pre-commit hook
   to fix parsing issues due to color escape sequences
+* Improve error message when `gemfile` has not had a dependency installed
 
 ## 0.30.0
 

@@ -30,7 +30,15 @@ require 'yaml'
 # rubocop:disable Style/RescueModifier
 if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
   ENV['BUNDLE_GEMFILE'] = gemfile
-  require 'bundler/setup'
+  require 'bundler'
+
+  begin
+    Bundler.setup
+  rescue Bundler::BundlerError => ex
+    puts "Problem loading '#{gemfile}': #{ex.message}"
+    puts "Try running:\nbundle install --gemfile=#{gemfile}" if ex.is_a?(Bundler::GemNotFound)
+    exit 78 # EX_CONFIG
+  end
 end
 # rubocop:enable Style/RescueModifier
 
