@@ -15,10 +15,7 @@ module Overcommit
 
       @lock = Mutex.new
       @resource = ConditionVariable.new
-      @main = ConditionVariable.new
-      @hooks_ready = 0
       @slots_available = @config.concurrency
-      @hooks_finished = 0
     end
 
     # Loads and runs the hooks registered for this {HookRunner}.
@@ -58,12 +55,14 @@ module Overcommit
       if @hooks.any?(&:enabled?)
         @printer.start_run
 
-        @threads = @hooks.map { |hook| Thread.new(hook, &method(:run_hook)) }
-        wait_for_workers_to_start
+        # Sort so hooks requiring fewer processors get queued first. This
+        # ensures we make better use of our available processors
+        @hooks_left = @hooks.sort_by { |hook| processors_for_hook(hook) }
+        @threads = Array.new(@config.concurrency) { Thread.new(&method(:consume)) }
 
         begin
           InterruptHandler.disable_until_finished_or_interrupted do
-            start_and_wait_for_workers
+            @threads.each(&:join)
           end
         rescue Interrupt
           @printer.interrupt_triggered
@@ -73,7 +72,6 @@ module Overcommit
           @threads.each { |thread| thread.raise Interrupt }
         end
 
-        calculate_results
         print_results
 
         !(@failed || @interrupted)
@@ -83,39 +81,32 @@ module Overcommit
       end
     end
 
-    def wait_for_workers_to_start
-      while @hooks_ready < @threads.size
-        @lock.synchronize do
-          @main.wait(@lock)
-        end
-      end
-    end
-
-    def start_and_wait_for_workers
-      @resource.signal
-
-      @lock.synchronize do
-        @main.wait(@lock)
+    def consume
+      loop do
+        hook = @lock.synchronize { @hooks_left.pop }
+        break unless hook
+        run_hook(hook)
       end
     end
 
     def wait_for_slot(hook)
       @lock.synchronize do
-        @main.signal # Tell the main thread that we're ready to run
-        @hooks_ready += 1
-        slots_needed = hook.parallelize? ? hook.processors : @config.concurrency
+        slots_needed = processors_for_hook(hook)
 
         loop do
-          @resource.wait(@lock)
-
           if @slots_available >= slots_needed
             @slots_available -= slots_needed
+
+            # Give another thread a chance since there are still slots available
             @resource.signal if @slots_available > 0
             break
           elsif @slots_available > 0
             # It's possible that another hook that requires fewer slots can be
             # served, so give another a chance
             @resource.signal
+
+            # Wait for a signal from another thread to try again
+            @resource.wait(@lock)
           end
         end
       end
@@ -123,33 +114,20 @@ module Overcommit
 
     def release_slot(hook)
       @lock.synchronize do
-        slots_released = hook.parallelize? ? hook.processors : @config.concurrency
+        slots_released = processors_for_hook(hook)
         @slots_available += slots_released
-        @hooks_finished += 1
 
-        if @hooks_finished < @hooks.size
+        if @hooks_left.any?
           # Signal once. `wait_for_slot` will perform additional signals if
           # there are still slots available. This prevents us from sending out
           # useless signals
           @resource.signal
-        else
-          # Otherwise signal the main thread that we're done!
-          @main.signal
         end
       end
     end
 
-    def calculate_results
-      return if @interrupted
-
-      @failed = false
-      @warned = false
-
-      @threads.each do |thread|
-        hook_status, _hook_output = thread.value
-        @failed = true if hook_status == :fail
-        @warned = true if hook_status == :warn
-      end
+    def processors_for_hook(hook)
+      hook.parallelize? ? hook.processors : @config.concurrency
     end
 
     def print_results
@@ -164,24 +142,25 @@ module Overcommit
       end
     end
 
-    def run_hook(hook)
-      Thread.handle_interrupt(Interrupt => :immediate) do
-        status, output = nil, nil
+    def run_hook(hook) # rubocop:disable Metrics/CyclomaticComplexity
+      status, output = nil, nil
 
-        begin
-          wait_for_slot(hook)
-          return if should_skip?(hook)
+      begin
+        wait_for_slot(hook)
+        return if should_skip?(hook)
 
-          status, output = hook.run_and_transform
-        rescue => ex
-          status = :fail
-          output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
-        end
-
-        @printer.end_hook(hook, status, output) unless @interrupted
-
-        status
+        status, output = hook.run_and_transform
+      rescue => ex
+        status = :fail
+        output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
       end
+
+      @failed = true if status == :fail
+      @warned = true if status == :warn
+
+      @printer.end_hook(hook, status, output) unless @interrupted
+
+      status
     rescue Interrupt
       @interrupted = true
     ensure
