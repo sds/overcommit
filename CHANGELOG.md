@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.32.0.rc1
 
 * Add `concurrency` global option allowing you to specify the number of threads
   to use when running hooks concurrently
