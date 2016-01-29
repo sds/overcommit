@@ -1,5 +1,14 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `concurrency` global option allowing you to specify the number of threads
+  to use when running hooks concurrently
+* Add `parallelize` hook option which specifies whether or not this hook should
+  be run in parallel (default is `true`)
+* Add `processors` hook option allowing you to specify how many processing
+  units a hook should require
+
 ## 0.31.0
 
 * Add support for glob patterns to `ProtectedBranches` pre-push hook
