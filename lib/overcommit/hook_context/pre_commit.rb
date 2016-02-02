@@ -15,6 +15,13 @@ module Overcommit::HookContext
       cmd = Overcommit::Utils.parent_command
       amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
 
+      # Since the ps command can return invalid byte sequences for commands
+      # containing unicode characters, we replace the offending characters,
+      # since the pattern we're looking for will consist of ASCII characters
+      unless cmd.valid_encoding?
+        cmd = cmd.encode('UTF-16be', invalid: :replace, replace: '?').encode('UTF-8')
+      end
+
       return @amendment if
         # True if the command is a commit with the --amend flag
         @amendment = !(/\s#{amend_pattern}/ =~ cmd).nil?

@@ -20,6 +20,12 @@ describe Overcommit::HookContext::PreCommit do
       it { should == true }
     end
 
+    context 'when the parent command contains invalid byte sequence' do
+      let(:command) { "git commit --amend -m \xE3M^AM^B" }
+
+      it { should == true }
+    end
+
     context 'when amending a commit using a git alias' do
       around do |example|
         repo do

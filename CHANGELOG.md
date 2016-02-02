@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix bug where amending a commit with command line arguments containing
+  Unicode characters could cause a crash due to invalid byte sequences
+
 ## 0.32.0.rc1
 
 * Add `concurrency` global option allowing you to specify the number of threads
