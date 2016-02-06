@@ -217,6 +217,12 @@ PreCommit:
     description: 'Checking for file execute permissions'
     quiet: true
 
+  ForbiddenBranches:
+    enabled: false
+    description: 'Checking for commit to forbidden branch'
+    quiet: true
+    branch_patterns: ['master']
+
   GoLint:
     enabled: false
     description: 'Analyzing with golint'
