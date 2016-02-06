@@ -266,5 +266,11 @@ module Overcommit
         split(/\s+/).
         reject { |s| s.empty? || s == '*' }
     end
+
+    # Returns the name of the currently checked out branch.
+    # @return [String]
+    def current_branch
+      `git symbolic-ref --short -q HEAD`.chomp
+    end
   end
 end
