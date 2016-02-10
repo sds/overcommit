@@ -458,6 +458,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Dogma](lib/overcommit/hook/pre_commit/dogma.rb)
 * [EsLint](lib/overcommit/hook/pre_commit/es_lint.rb)
 * [ExecutePermissions](lib/overcommit/hook/pre_commit/execute_permissions.rb)
+* [ForbiddenBranches](lib/overcommit/hook/pre_commit/forbidden_branches.rb)
 * [GoLint](lib/overcommit/hook/pre_commit/go_lint.rb)
 * [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)

@@ -4,6 +4,8 @@
 
 * Fix bug where amending a commit with command line arguments containing
   Unicode characters could cause a crash due to invalid byte sequences
+* Add `ForbiddenBranches` pre-commit hook which prevents creating a commit
+  on any blacklisted branch by name/pattern
 
 ## 0.32.0.rc1
 
