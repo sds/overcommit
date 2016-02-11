@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PrePush::ProtectedBranches do
+describe Overcommit::Hook::PrePush::ProtectedBranches,
+         if: Overcommit::GIT_VERSION >= '2.0' do
   let(:flags) { '' }
   let(:pushed_ref) { remote_ref }
   subject do
