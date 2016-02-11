@@ -21,6 +21,7 @@ writing any Ruby code.
 
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
+* [Limitations](#limitations)
 * [Installation](#installation)
   * [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
 * [Usage](#usage)
@@ -57,6 +58,13 @@ This project aims to support the following Ruby runtimes:
 * Rubinius 2.x
 
 Windows is currently supported only for MRI Ruby 2.x
+
+## Limitations
+
+Overcommit does not currently support
+[`git-worktree`](https://git-scm.com/docs/git-worktree) (introduced in Git 2.5),
+but there is an [open issue](https://github.com/brigade/overcommit/issues/336)
+tracking progress on adding support.
 
 ### Dependencies
 
