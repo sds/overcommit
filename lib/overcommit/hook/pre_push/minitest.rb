@@ -10,5 +10,9 @@ module Overcommit::Hook::PrePush
       output = result.stdout + result.stderr
       [:fail, output]
     end
+
+    def command
+      super + included_files.map { |file| "-r#{file}" }
+    end
   end
 end
