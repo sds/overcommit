@@ -53,7 +53,7 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
   end
 
   shared_context 'local branch up-to-date' do
-    before { `git rebase --keep-empty origin/#{remote_ref}` }
+    before { `git rebase --keep-empty origin/#{remote_ref} > #{File::NULL} 2>&1` }
   end
 
   shared_context 'ProtectedBranches enabled' do
