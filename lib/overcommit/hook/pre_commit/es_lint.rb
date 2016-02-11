@@ -1,6 +1,16 @@
 module Overcommit::Hook::PreCommit
   # Runs `eslint` against any modified JavaScript files.
   #
+  # Protip: if you have an npm script set up to run eslint, you can configure
+  # this hook to run eslint via your npm script by using the `command` option in
+  # your .overcommit.yml file. This can be useful if you have some eslint
+  # configuration built into your npm script that you don't want to repeat
+  # somewhere else. Example:
+  #
+  #   EsLint:
+  #     enabled: true
+  #     command: ['npm', 'run', 'lint']
+  #
   # @see http://eslint.org/
   class EsLint < Base
     def run
