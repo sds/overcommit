@@ -17,7 +17,7 @@ module Overcommit::Hook
   class Base # rubocop:disable Metrics/ClassLength
     extend Forwardable
 
-    def_delegators :@context, :modified_files
+    def_delegators :@context, :all_files, :modified_files
     attr_reader :config
 
     # @param config [Overcommit::Configuration]
@@ -155,10 +155,20 @@ module Overcommit::Hook
     # Gets a list of staged files that apply to this hook based on its
     # configured `include` and `exclude` lists.
     def applicable_files
-      @applicable_files ||= modified_files.select { |file| applicable_file?(file) }.sort
+      @applicable_files ||= select_applicable(modified_files)
+    end
+
+    # Gets a list of all files that apply to this hook based on its
+    # configured `include` and `exclude` lists.
+    def included_files
+      @included_files ||= select_applicable(all_files)
     end
 
     private
+
+    def select_applicable(list)
+      list.select { |file| applicable_file?(file) }.sort
+    end
 
     def applicable_file?(file)
       includes = Array(@config['include']).flatten.map do |glob|

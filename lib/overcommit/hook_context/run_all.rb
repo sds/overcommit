@@ -7,7 +7,7 @@ module Overcommit::HookContext
   # which is useful for automated CI scripts.
   class RunAll < Base
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.all_files
+      @modified_files ||= all_files
     end
 
     # Returns all lines in the file since in this context the entire repo is

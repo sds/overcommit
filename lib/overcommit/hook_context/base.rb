@@ -79,6 +79,13 @@ module Overcommit::HookContext
       []
     end
 
+    # Returns the full list of files tracked by git
+    #
+    # @return [Array<String>]
+    def all_files
+      Overcommit::GitRepo.all_files
+    end
+
     # Returns the contents of the entire standard input stream that were passed
     # to the hook.
     #
