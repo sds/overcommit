@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Overcommit::Hook::PrePush::Minitest do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
-  let(:context) { double('context') }
+  let(:context) { double('context', all_files: ['test/test_foo.rb']) }
   subject { described_class.new(config, context) }
 
   context 'when minitest exits successfully' do

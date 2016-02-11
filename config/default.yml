@@ -813,8 +813,8 @@ PrePush:
   Minitest:
     enabled: false
     description: 'Running Minitest test suite'
-    command: ['ruby', '-Ilib:test', 'test']
-    required_library: 'minitest'
+    command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
+    include: 'test/**/*_test.rb'
 
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
