@@ -150,6 +150,9 @@ module Overcommit
         return if should_skip?(hook)
 
         status, output = hook.run_and_transform
+      rescue Overcommit::Exceptions::MessageProcessingError => ex
+        status = :fail
+        output = ex.message
       rescue => ex
         status = :fail
         output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"

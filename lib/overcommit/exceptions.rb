@@ -42,6 +42,9 @@ module Overcommit::Exceptions
   # Raised when one or more hook plugin signatures have changed.
   class InvalidHookSignature < StandardError; end
 
+  # Raised when there is a problem processing output into {Hook::Messages}s.
+  class MessageProcessingError < StandardError; end
+
   # Raised when an installation target already contains non-Overcommit hooks.
   class PreExistingHooks < StandardError; end
 end

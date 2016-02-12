@@ -6,6 +6,8 @@
   Unicode characters could cause a crash due to invalid byte sequences
 * Add `ForbiddenBranches` pre-commit hook which prevents creating a commit
   on any blacklisted branch by name/pattern
+* Improve error message output when there is a problem processing messages
+  via `extract_messages` pre-commit hook helper
 
 ## 0.32.0.rc1
 

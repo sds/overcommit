@@ -22,13 +22,16 @@ module Overcommit::Hook::PreCommit
     # @param type_categorizer [Proc] function executed against the `type`
     #   capture group to convert it to a `:warning` or `:error` symbol. Assumes
     #   `:error` if `nil`.
-    # @raise [RuntimeError] line of output did not match regex
+    # @raise [Overcommit::Exceptions::MessageProcessingError] line of output did
+    #   not match regex
     # @return [Array<Message>]
     def extract_messages(output_messages, regex, type_categorizer = nil)
-      output_messages.map do |message|
+      output_messages.map.with_index do |message, index|
         unless match = message.match(regex)
-          raise 'Unexpected output: unable to determine line number or type ' \
-                "of error/warning for message '#{message}'"
+          raise Overcommit::Exceptions::MessageProcessingError,
+                'Unexpected output: unable to determine line number or type ' \
+                "of error/warning for output:\n" \
+                "#{output_messages[index..-1].join("\n")}"
         end
 
         file = extract_file(match, message)
@@ -43,7 +46,8 @@ module Overcommit::Hook::PreCommit
       return unless match.names.include?('file')
 
       if match[:file].to_s.empty?
-        raise "Unexpected output: no file found in '#{message}'"
+        raise Overcommit::Exceptions::MessageProcessingError,
+              "Unexpected output: no file found in '#{message}'"
       end
 
       match[:file]
@@ -53,7 +57,8 @@ module Overcommit::Hook::PreCommit
       return unless match.names.include?('line')
       Integer(match[:line])
     rescue ArgumentError, TypeError
-      raise "Unexpected output: invalid line number found in '#{message}'"
+      raise Overcommit::Exceptions::MessageProcessingError,
+            "Unexpected output: invalid line number found in '#{message}'"
     end
 
     def extract_type(match, message, type_categorizer)
@@ -61,7 +66,8 @@ module Overcommit::Hook::PreCommit
         type_match = match.names.include?('type') ? match[:type] : nil
         type = type_categorizer.call(type_match)
         unless Overcommit::Hook::MESSAGE_TYPES.include?(type)
-          raise "Invalid message type '#{type}' for '#{message}': must " \
+          raise Overcommit::Exceptions::MessageProcessingError,
+                "Invalid message type '#{type}' for '#{message}': must " \
                 "be one of #{Overcommit::Hook::MESSAGE_TYPES.inspect}"
         end
         type
