@@ -6,7 +6,9 @@
 [![Dependency Status](https://gemnasium.com/brigade/overcommit.svg)](https://gemnasium.com/brigade/overcommit)
 [![Inline docs](http://inch-ci.org/github/brigade/overcommit.svg?branch=master)](http://inch-ci.org/github/brigade/overcommit)
 
-# Overcommit
+<p align="center">
+  <img src="https://raw.githubusercontent.com/brigade/overcommit/master/logo/horizontal.png" alt="Overcommit Logo"/>
+</p>
 
 `overcommit` is a tool to manage and configure
 [Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
@@ -664,3 +666,9 @@ of `overcommit`, read the [Overcommit Changelog](CHANGELOG.md).
 ## License
 
 This project is released under the [MIT license](MIT-LICENSE).
+
+The Overcommit logo is adapted from the [Git Logo by Jason Long][GL], and
+is licensed under the [Creative Commons Attribution 3.0 Unported License][CC3].
+
+[GL]: https://git-scm.com/downloads/logos
+[CC3]: http://creativecommons.org/licenses/by/3.0/
