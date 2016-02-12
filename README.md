@@ -7,7 +7,7 @@
 [![Inline docs](http://inch-ci.org/github/brigade/overcommit.svg?branch=master)](http://inch-ci.org/github/brigade/overcommit)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/brigade/overcommit/master/logo/horizontal.png" alt="Overcommit Logo"/>
+  <img src="https://raw.githubusercontent.com/brigade/overcommit/master/logo/horizontal.png" width="65%" alt="Overcommit Logo"/>
 </p>
 
 `overcommit` is a tool to manage and configure
