@@ -2,6 +2,16 @@ module Overcommit::Hook::PreCommit
   # Checks for files with execute permissions, which are usually not necessary
   # in source code files (and are typically caused by a misconfigured editor
   # assigning incorrect default permissions).
+  #
+  # Protip: if you have some files that you want to allow execute permissions
+  # on, you can disable this hook for those files by using the `exclude` option
+  # on your .overcommit.yml file. Example:
+  #
+  #   ExecutePermissions:
+  #     enabled: true
+  #     exclude:
+  #       - 'path/to/my/file/that/should/have/execute/permissions.sh'
+  #       - 'directory/that/should/have/execute/permissions/**/*'
   class ExecutePermissions < Base
     def run
       file_modes = {}
