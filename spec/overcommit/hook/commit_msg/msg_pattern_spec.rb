@@ -32,8 +32,11 @@ describe Overcommit::Hook::CommitMsg::MsgPattern do
 
   context 'when message does not match the pattern' do
     let(:commit_msg) { 'Some Message' }
-
-    it { should fail_hook "Commit message pattern mismatch.\nExpected : <Issue Id> | <Commit Message Description> | <Developer(s)>\nSample : DEFECT-1234 | Refactored Onboarding flow | John Doe" }
+    expected_message = [
+      'Commit message pattern mismatch.',
+      'Expected : <Issue Id> | <Commit Message Description> | <Developer(s)>',
+      'Sample : DEFECT-1234 | Refactored Onboarding flow | John Doe'
+    ].join("\n")
+    it { should fail_hook expected_message }
   end
-
 end

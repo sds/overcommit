@@ -18,9 +18,11 @@ module Overcommit::Hook::CommitMsg
       expected_pattern_message = config['expected_pattern_message'] || ''
       sample_message = config['sample_message'] || ''
       return if pattern.empty?
-      @errors << ["Commit message pattern mismatch.",
-        "Expected : #{expected_pattern_message}", 
-        "Sample : #{sample_message}"].join("\n") unless message =~ /#{pattern}/
+      @errors << [
+        'Commit message pattern mismatch.',
+        "Expected : #{expected_pattern_message}",
+        "Sample : #{sample_message}"
+      ].join("\n") unless message =~ /#{pattern}/
     end
   end
 end
