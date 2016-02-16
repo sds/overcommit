@@ -383,6 +383,7 @@ follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-abou
 * [SpellCheck](lib/overcommit/hook/commit_msg/spell_check.rb)
 * [`*`TextWidth](lib/overcommit/hook/commit_msg/text_width.rb)
 * [`*`TrailingPeriod](lib/overcommit/hook/commit_msg/trailing_period.rb)
+* [`*`MsgPattern](lib/overcommit/hook/commit_msg/msg_pattern.rb)
 
 ### PostCheckout
 
