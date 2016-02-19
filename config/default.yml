@@ -78,6 +78,13 @@ CommitMsg:
     enabled: false
     description: 'Checking for hard tabs'
 
+  MessageFormat:
+    enabled: false
+    description: 'Checking commit message matches expected pattern'
+    pattern: '(.+)[|](.+)[|](.+)'
+    expected_pattern_message: '<Issue Id> | <Commit Message Description> | <Developer(s)>'
+    sample_message: 'DEFECT-1234 | Refactored Onboarding flow | John Doe'
+
   RussianNovel:
     enabled: false
     description: 'Checking length of commit message'
@@ -102,13 +109,6 @@ CommitMsg:
   TrailingPeriod:
     enabled: true
     description: 'Checking for trailing periods in subject'
-
-  MsgPattern:
-    enabled: false
-    description: 'Checking for message pattern'
-    pattern: '(.+)[|](.+)[|](.+)'
-    expected_pattern_message: '<Issue Id> | <Commit Message Description> | <Developer(s)>'
-    sample_message: 'DEFECT-1234 | Refactored Onboarding flow | John Doe'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and

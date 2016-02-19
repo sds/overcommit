@@ -378,12 +378,12 @@ follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-abou
 * [`*`EmptyMessage](lib/overcommit/hook/commit_msg/empty_message.rb)
 * [GerritChangeId](lib/overcommit/hook/commit_msg/gerrit_change_id.rb)
 * [HardTabs](lib/overcommit/hook/commit_msg/hard_tabs.rb)
+* [MessageFormat](lib/overcommit/hook/commit_msg/message_format.rb)
 * [RussianNovel](lib/overcommit/hook/commit_msg/russian_novel.rb)
 * [`*`SingleLineSubject](lib/overcommit/hook/commit_msg/single_line_subject.rb)
 * [SpellCheck](lib/overcommit/hook/commit_msg/spell_check.rb)
 * [`*`TextWidth](lib/overcommit/hook/commit_msg/text_width.rb)
 * [`*`TrailingPeriod](lib/overcommit/hook/commit_msg/trailing_period.rb)
-* [`*`MsgPattern](lib/overcommit/hook/commit_msg/msg_pattern.rb)
 
 ### PostCheckout
 
