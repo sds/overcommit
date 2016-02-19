@@ -10,12 +10,6 @@ describe Overcommit::Hook::CommitMsg::MessageFormat do
     context.stub(:empty_message?).and_return(commit_msg.empty?)
   end
 
-  context 'when commit message is empty' do
-    let(:commit_msg) { '' }
-
-    it { should fail_hook }
-  end
-
   context 'when pattern is empty' do
     let(:config) do
       super().merge(Overcommit::Configuration.new(
