@@ -145,6 +145,8 @@ module Overcommit
     def run_hook(hook) # rubocop:disable Metrics/CyclomaticComplexity
       status, output = nil, nil
 
+      @printer.begin_hook(hook) unless @interrupted
+
       begin
         wait_for_slot(hook)
         return if should_skip?(hook)

@@ -32,11 +32,16 @@ module Overcommit
       log.warning "Cannot skip #{hook.name} since it is required"
     end
 
+    # Executed at the beginning of an individual hook run.
+    def begin_hook(hook)
+      print_header(hook) unless hook.quiet?
+    end
+
     # Executed at the end of an individual hook run.
     def end_hook(hook, status, output)
       # Want to print the header for quiet hooks only if the result wasn't good
       # so that the user knows what failed
-      print_header(hook) if !hook.quiet? || status != :pass
+      print_header(hook) if hook.quiet? && status != :pass
 
       print_result(hook, status, output)
     end
