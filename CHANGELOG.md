@@ -2,20 +2,35 @@
 
 ## master (unreleased)
 
-* Fix bug where amending a commit with command line arguments containing
-  Unicode characters could cause a crash due to invalid byte sequences
+### New Features
+
+* Hooks are now run in parallel by default
+* Add `concurrency` global option allowing you to specify the number of threads
+  to use when running hooks concurrently
+* Add `parallelize` hook option which specifies whether or not this hook should
+  be run in parallel (default is `true`)
+* Add `processors` hook option allowing you to specify how many processing
+  units a hook should require
 * Add `ForbiddenBranches` pre-commit hook which prevents creating a commit
   on any blacklisted branch by name/pattern
-* Improve error message output when there is a problem processing messages
-  via `extract_messages` pre-commit hook helper
-* Fix `Minitest` pre-push hook to include all test files
 * Add `MessageFormat` commit-msg hook to validate commit messages against
   a regex pattern
+
+### Changes
+
+* Improve error message output when there is a problem processing messages
+  via `extract_messages` pre-commit hook helper
 * Switch `ScssLint` pre-commit hook to use the JSON output formatter instead
   of the default formatter
 * Change tense of hook descriptions from progressive indicative form ("Running")
   to indicative present form ("Run") so output reads better in parallel hook
   runs
+
+### Bug Fixes
+
+* Fix bug where amending a commit with command line arguments containing
+  Unicode characters could cause a crash due to invalid byte sequences
+* Fix `Minitest` pre-push hook to include all test files
 
 ## 0.32.0.rc1
 
