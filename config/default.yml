@@ -62,53 +62,53 @@ CommitMsg:
 
   CapitalizedSubject:
     enabled: true
-    description: 'Checking subject capitalization'
+    description: 'Check subject capitalization'
 
   EmptyMessage:
     enabled: true
-    description: 'Checking for empty commit message'
+    description: 'Check for empty commit message'
     quiet: true
 
   GerritChangeId:
     enabled: false
-    description: 'Ensuring Gerrit Change-Id is present'
+    description: 'Ensure Gerrit Change-Id is present'
     required: true
 
   HardTabs:
     enabled: false
-    description: 'Checking for hard tabs'
+    description: 'Check for hard tabs'
 
   MessageFormat:
     enabled: false
-    description: 'Checking commit message matches expected pattern'
+    description: 'Check commit message matches expected pattern'
     pattern: '(.+)[|](.+)[|](.+)'
     expected_pattern_message: '<Issue Id> | <Commit Message Description> | <Developer(s)>'
     sample_message: 'DEFECT-1234 | Refactored Onboarding flow | John Doe'
 
   RussianNovel:
     enabled: false
-    description: 'Checking length of commit message'
+    description: 'Check length of commit message'
     quiet: true
 
   SingleLineSubject:
     enabled: true
-    description: 'Checking subject line'
+    description: 'Check subject line'
 
   SpellCheck:
     enabled: false
-    description: 'Checking for misspelled words'
+    description: 'Check for misspelled words'
     required_executable: 'hunspell'
     flags: ['-a']
 
   TextWidth:
     enabled: true
-    description: 'Checking text width'
+    description: 'Check text width'
     max_subject_width: 60
     max_body_width: 72
 
   TrailingPeriod:
     enabled: true
-    description: 'Checking for trailing periods in subject'
+    description: 'Check for trailing periods in subject'
 
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
@@ -123,7 +123,7 @@ PreCommit:
 
   AuthorEmail:
     enabled: true
-    description: 'Checking author email'
+    description: 'Check author email'
     requires_files: false
     required: true
     quiet: true
@@ -131,14 +131,14 @@ PreCommit:
 
   AuthorName:
     enabled: true
-    description: 'Checking for author name'
+    description: 'Check for author name'
     requires_files: false
     required: true
     quiet: true
 
   BerksfileCheck:
     enabled: false
-    description: 'Checking Berksfile lock'
+    description: 'Check Berksfile lock'
     required_executable: 'berks'
     flags: ['list', '--quiet']
     install_command: 'gem install berks'
@@ -148,7 +148,7 @@ PreCommit:
 
   Brakeman:
     enabled: false
-    description: 'Checking for security vulnerabilities'
+    description: 'Check for security vulnerabilities'
     required_executable: 'brakeman'
     flags: ['--exit-on-warn', '--quiet', '--summary', '--only-files']
     install_command: 'gem install brakeman'
@@ -157,12 +157,12 @@ PreCommit:
 
   BrokenSymlinks:
     enabled: true
-    description: 'Checking for broken symlinks'
+    description: 'Check for broken symlinks'
     quiet: true
 
   BundleCheck:
     enabled: false
-    description: 'Checking Gemfile dependencies'
+    description: 'Check Gemfile dependencies'
     required_executable: 'bundle'
     flags: ['check']
     install_command: 'gem install bundler'
@@ -173,12 +173,12 @@ PreCommit:
 
   CaseConflicts:
     enabled: true
-    description: 'Checking for case-insensitivity conflicts'
+    description: 'Check for case-insensitivity conflicts'
     quiet: true
 
   ChamberSecurity:
     enabled: false
-    description: 'Checking that settings have been secured with Chamber'
+    description: 'Check that settings have been secured with Chamber'
     required_executable: 'chamber'
     flags: ['secure', '--files']
     install_command: 'gem install chamber'
@@ -188,7 +188,7 @@ PreCommit:
 
   CoffeeLint:
     enabled: false
-    description: 'Analyzing with coffeelint'
+    description: 'Analyze with coffeelint'
     required_executable: 'coffeelint'
     flags: ['--reporter=csv']
     install_command: 'npm install -g coffeelint'
@@ -196,7 +196,7 @@ PreCommit:
 
   CssLint:
     enabled: false
-    description: 'Analyzing with csslint'
+    description: 'Analyze with csslint'
     required_executable: 'csslint'
     flags: ['--quiet', '--format=compact']
     install_command: 'npm install -g csslint'
@@ -204,7 +204,7 @@ PreCommit:
 
   Dogma:
     enabled: false
-    description: 'Analyzing with dogma'
+    description: 'Analyze with dogma'
     required_executable: 'mix'
     flags: ['dogma']
     include:
@@ -213,7 +213,7 @@ PreCommit:
 
   EsLint:
     enabled: false
-    description: 'Analyzing with ESLint'
+    description: 'Analyze with ESLint'
     required_executable: 'eslint'
     flags: ['--format=compact']
     install_command: 'npm install -g eslint'
@@ -221,25 +221,25 @@ PreCommit:
 
   ExecutePermissions:
     enabled: false
-    description: 'Checking for file execute permissions'
+    description: 'Check for file execute permissions'
     quiet: true
 
   ForbiddenBranches:
     enabled: false
-    description: 'Checking for commit to forbidden branch'
+    description: 'Check for commit to forbidden branch'
     quiet: true
     branch_patterns: ['master']
 
   GoLint:
     enabled: false
-    description: 'Analyzing with golint'
+    description: 'Analyze with golint'
     required_executable: 'golint'
     install_command: 'go get github.com/golang/lint/golint'
     include: '**/*.go'
 
   GoVet:
     enabled: false
-    description: 'Analyzing with go vet'
+    description: 'Analyze with go vet'
     required_executable: 'go'
     flags: ['tool', 'vet']
     install_command: 'go get golang.org/x/tools/cmd/vet'
@@ -247,42 +247,42 @@ PreCommit:
 
   HamlLint:
     enabled: false
-    description: 'Analyzing with haml-lint'
+    description: 'Analyze with haml-lint'
     required_executable: 'haml-lint'
     install_command: 'gem install haml-lint'
     include: '**/*.haml'
 
   HardTabs:
     enabled: false
-    description: 'Checking for hard tabs'
+    description: 'Check for hard tabs'
     quiet: true
     required_executable: 'grep'
     flags: ['-IHn', "\t"]
 
   Hlint:
     enabled: false
-    description: 'Analyzing with hlint'
+    description: 'Analyze with hlint'
     required_executable: 'hlint'
     install_command: 'cabal install hlint'
     include: '**/*.hs'
 
   HtmlHint:
     enabled: false
-    description: 'Analyzing with HTMLHint'
+    description: 'Analyze with HTMLHint'
     required_executable: 'htmlhint'
     install_command: 'npm install -g htmlhint'
     include: '**/*.html'
 
   HtmlTidy:
     enabled: false
-    description: 'Analyzing HTML with tidy'
+    description: 'Analyze HTML with tidy'
     required_executable: 'tidy'
     flags: ['-errors', '-quiet', '-utf8']
     include: '**/*.html'
 
   ImageOptim:
     enabled: false
-    description: 'Checking for optimizable images'
+    description: 'Check for optimizable images'
     required_executable: 'image_optim'
     install_command: 'gem install image_optim'
     include:
@@ -294,14 +294,14 @@ PreCommit:
 
   JavaCheckstyle:
     enabled: false
-    description: 'Analyzing with checkstyle'
+    description: 'Analyze with checkstyle'
     required_executable: 'checkstyle'
     flags: ['-c', '/sun_checks.xml']
     include: '**/*.java'
 
   Jscs:
     enabled: false
-    description: 'Analyzing with JSCS'
+    description: 'Analyze with JSCS'
     required_executable: 'jscs'
     flags: ['--reporter=inline', '--verbose']
     install_command: 'npm install -g jscs'
@@ -309,7 +309,7 @@ PreCommit:
 
   JsHint:
     enabled: false
-    description: 'Analyzing with JSHint'
+    description: 'Analyze with JSHint'
     required_executable: 'jshint'
     flags: ['--verbose']
     install_command: 'npm install -g jshint'
@@ -317,7 +317,7 @@ PreCommit:
 
   JsLint:
     enabled: false
-    description: 'Analyzing with JSLint'
+    description: 'Analyze with JSLint'
     required_executable: 'jslint'
     flags: ['--terse']
     install_command: 'npm install -g jslint'
@@ -325,63 +325,63 @@ PreCommit:
 
   Jsl:
     enabled: false
-    description: 'Analyzing with JSL'
+    description: 'Analyze with JSL'
     required_executable: 'jsl'
     flags: ['-nologo', '-nofilelisting', '-nocontext', '-nosummary']
     include: '**/*.js'
 
   JsonSyntax:
     enabled: false
-    description: 'Validating JSON syntax'
+    description: 'Validate JSON syntax'
     required_library: 'json'
     install_command: 'gem install json'
     include: '**/*.json'
 
   LocalPathsInGemfile:
     enabled: false
-    description: 'Checking for local paths in Gemfile'
+    description: 'Check for local paths in Gemfile'
     required_executable: 'grep'
     flags: ['-IHnE', "^[^#]*((\\bpath:)|(:path[ \t]*=>))"]
     include: '**/Gemfile'
 
   Mdl:
     enabled: false
-    description: 'Analyzing with mdl'
+    description: 'Analyze with mdl'
     required_executable: 'mdl'
     install_command: 'gem install mdl'
     include: '**/*.md'
 
   MergeConflicts:
     enabled: true
-    description: 'Checking for merge conflicts'
+    description: 'Check for merge conflicts'
     quiet: true
     required_executable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
   NginxTest:
     enabled: false
-    description: 'Testing nginx configs'
+    description: 'Test nginx configs'
     required_executable: 'nginx'
     flags: ['-t']
     include: '**/nginx.conf'
 
   Pep257:
     enabled: false
-    description: 'Analyzing docstrings with pep257'
+    description: 'Analyze docstrings with pep257'
     required_executable: 'pep257'
     install_command: 'pip install pep257'
     include: '**/*.py'
 
   Pep8:
     enabled: false
-    description: 'Analyzing with pep8'
+    description: 'Analyze with pep8'
     required_executable: 'pep8'
     install_command: 'pip install pep8'
     include: '**/*.py'
 
   PuppetLint:
     enabled: false
-    description: 'Analyzing with puppet-lint'
+    description: 'Analyze with puppet-lint'
     required_executable: 'puppet-lint'
     install_command: 'gem install puppet-lint'
     flags:
@@ -392,14 +392,14 @@ PreCommit:
 
   Pyflakes:
     enabled: false
-    description: 'Analyzing with pyflakes'
+    description: 'Analyze with pyflakes'
     required_executable: 'pyflakes'
     install_command: 'pip install pyflakes'
     include: '**/*.py'
 
   Pylint:
     enabled: false
-    description: 'Analyzing with Pylint'
+    description: 'Analyze with Pylint'
     required_executable: 'pylint'
     install_command: 'pip install pylint'
     flags:
@@ -410,21 +410,21 @@ PreCommit:
 
   PythonFlake8:
     enabled: false
-    description: 'Analyzing with flake8'
+    description: 'Analyze with flake8'
     required_executable: 'flake8'
     install_command: 'pip install flake8'
     include: '**/*.py'
 
   RailsBestPractices:
     enabled: false
-    description: 'Analyzing with RailsBestPractices'
+    description: 'Analyze with RailsBestPractices'
     required_executable: 'rails_best_practices'
     flags: ['--without-color']
     install_command: 'gem install rails_best_practices'
 
   RailsSchemaUpToDate:
     enabled: false
-    description: 'Checking if database schema is up to date'
+    description: 'Check if database schema is up to date'
     include:
       - 'db/migrate/*.rb'
       - 'db/schema.rb'
@@ -432,7 +432,7 @@ PreCommit:
 
   Reek:
     enabled: false
-    description: 'Analyzing with Reek'
+    description: 'Analyze with Reek'
     required_executable: 'reek'
     flags: ['--single-line', '--no-color']
     install_command: 'gem install reek'
@@ -445,7 +445,7 @@ PreCommit:
 
   RuboCop:
     enabled: false
-    description: 'Analyzing with RuboCop'
+    description: 'Analyze with RuboCop'
     required_executable: 'rubocop'
     flags: ['--format=emacs', '--force-exclusion', '--display-cop-names']
     install_command: 'gem install rubocop'
@@ -458,7 +458,7 @@ PreCommit:
 
   RubyLint:
     enabled: false
-    description: 'Analyzing with ruby-lint'
+    description: 'Analyze with ruby-lint'
     required_executable: 'ruby-lint'
     flags: ['--presenter=syntastic', '--levels=error,warning']
     install_command: 'gem install ruby-lint'
@@ -468,20 +468,20 @@ PreCommit:
 
   Scalariform:
     enabled: false
-    description: 'Checking formatting with Scalariform'
+    description: 'Check formatting with Scalariform'
     required_executable: 'scalariform'
     flags: ['--test']
     include: '**/*.scala'
 
   Scalastyle:
     enabled: false
-    description: 'Analyzing with Scalastyle'
+    description: 'Analyze with Scalastyle'
     required_executable: 'scalastyle'
     include: '**/*.scala'
 
   ScssLint:
     enabled: false
-    description: 'Analyzing with scss-lint'
+    description: 'Analyze with scss-lint'
     required_library: 'json'
     required_executable: 'scss-lint'
     flags: ['--format', 'JSON']
@@ -490,7 +490,7 @@ PreCommit:
 
   SemiStandard:
     enabled: false
-    description: 'Analyzing with semistandard'
+    description: 'Analyze with semistandard'
     required_executable: 'semistandard'
     flags: ['--verbose']
     install_command: 'npm install -g semistandard'
@@ -498,28 +498,28 @@ PreCommit:
 
   ShellCheck:
     enabled: false
-    description: 'Analyzing with ShellCheck'
+    description: 'Analyze with ShellCheck'
     required_executable: 'shellcheck'
     flags: ['--format=gcc']
     include: '**/*.sh'
 
   SlimLint:
     enabled: false
-    description: 'Analyzing with slim-lint'
+    description: 'Analyze with slim-lint'
     required_executable: 'slim-lint'
     install_command: 'gem install slim_lint'
     include: '**/*.slim'
 
   Sqlint:
     enabled: false
-    description: 'Analyzing with sqlint'
+    description: 'Analyze with sqlint'
     required_executable: 'sqlint'
     install_command: 'gem install sqlint'
     include: '**/*.sql'
 
   Standard:
     enabled: false
-    description: 'Analyzing with standard'
+    description: 'Analyze with standard'
     required_executable: 'standard'
     flags: ['--verbose']
     install_command: 'npm install -g standard'
@@ -527,13 +527,13 @@ PreCommit:
 
   TrailingWhitespace:
     enabled: false
-    description: 'Checking for trailing whitespace'
+    description: 'Check for trailing whitespace'
     required_executable: 'grep'
     flags: ['-IHn', "[ \t]$"]
 
   TravisLint:
     enabled: false
-    description: 'Checking Travis CI configuration'
+    description: 'Check Travis CI configuration'
     required_executable: 'travis'
     flags: ['lint']
     install_command: 'gem install travis'
@@ -541,7 +541,7 @@ PreCommit:
 
   Vint:
     enabled: false
-    description: 'Analyzing with Vint'
+    description: 'Analyze with Vint'
     required_executable: 'vint'
     install_command: 'pip install vim-vint'
     include:
@@ -550,7 +550,7 @@ PreCommit:
 
   W3cCss:
     enabled: false
-    description: 'Analyzing with W3C CSS validation service'
+    description: 'Analyze with W3C CSS validation service'
     required_library: 'w3c_validators'
     install_command: 'gem install w3c_validators'
     validator_uri: 'http://jigsaw.w3.org/css-validator/validator'
@@ -562,7 +562,7 @@ PreCommit:
 
   W3cHtml:
     enabled: false
-    description: 'Analyzing with W3C HTML validation service'
+    description: 'Analyze with W3C HTML validation service'
     required_library: 'w3c_validators'
     install_command: 'gem install w3c_validators'
     validator_uri: 'http://validator.w3.org/check'
@@ -573,7 +573,7 @@ PreCommit:
 
   XmlLint:
     enabled: false
-    description: 'Analyzing with xmllint'
+    description: 'Analyze with xmllint'
     required_executable: 'xmllint'
     flags: ['--noout']
     include:
@@ -582,7 +582,7 @@ PreCommit:
 
   XmlSyntax:
     enabled: false
-    description: 'Checking XML syntax'
+    description: 'Check XML syntax'
     required_library: 'rexml/document'
     include:
       - '**/*.xml'
@@ -590,7 +590,7 @@ PreCommit:
 
   YamlSyntax:
     enabled: false
-    description: 'Checking YAML syntax'
+    description: 'Check YAML syntax'
     required_library: 'yaml'
     include:
       - '**/*.yaml'
@@ -604,7 +604,7 @@ PostCheckout:
 
   BowerInstall:
     enabled: false
-    description: 'Installing bower dependencies'
+    description: 'Install bower dependencies'
     requires_files: true
     required_executable: 'bower'
     install_command: 'npm install -g bower'
@@ -613,7 +613,7 @@ PostCheckout:
 
   BundleInstall:
     enabled: false
-    description: 'Installing Bundler dependencies'
+    description: 'Install Bundler dependencies'
     requires_files: true
     required_executable: 'bundle'
     install_command: 'gem install bundler'
@@ -625,13 +625,13 @@ PostCheckout:
 
   IndexTags:
     enabled: false
-    description: 'Generating tags file from source'
+    description: 'Generate tags file from source'
     quiet: true
     required_executable: 'ctags'
 
   NpmInstall:
     enabled: false
-    description: 'Installing NPM dependencies'
+    description: 'Install NPM dependencies'
     requires_files: true
     required_executable: 'npm'
     flags: ['install']
@@ -641,7 +641,7 @@ PostCheckout:
 
   SubmoduleStatus:
     enabled: false
-    description: 'Checking submodule status'
+    description: 'Check submodule status'
     quiet: true
     recursive: false
 
@@ -654,7 +654,7 @@ PostCommit:
 
   BowerInstall:
     enabled: false
-    description: 'Installing bower dependencies'
+    description: 'Install bower dependencies'
     requires_files: true
     required_executable: 'bower'
     install_command: 'npm install -g bower'
@@ -663,7 +663,7 @@ PostCommit:
 
   BundleInstall:
     enabled: false
-    description: 'Installing Bundler dependencies'
+    description: 'Install Bundler dependencies'
     requires_files: true
     required_executable: 'bundle'
     install_command: 'gem install bundler'
@@ -675,7 +675,7 @@ PostCommit:
 
   GitGuilt:
     enabled: false
-    description: 'Calculating changes in blame since last commit'
+    description: 'Calculate changes in blame since last commit'
     requires_files: true
     required_executable: 'git-guilt'
     flags: ['HEAD~', 'HEAD']
@@ -683,13 +683,13 @@ PostCommit:
 
   IndexTags:
     enabled: false
-    description: 'Generating tags file from source'
+    description: 'Generate tags file from source'
     quiet: true
     required_executable: 'ctags'
 
   NpmInstall:
     enabled: false
-    description: 'Installing NPM dependencies'
+    description: 'Install NPM dependencies'
     requires_files: true
     required_executable: 'npm'
     flags: ['install']
@@ -699,7 +699,7 @@ PostCommit:
 
   SubmoduleStatus:
     enabled: false
-    description: 'Checking submodule status'
+    description: 'Check submodule status'
     quiet: true
     recursive: false
 
@@ -711,7 +711,7 @@ PostMerge:
 
   BowerInstall:
     enabled: false
-    description: 'Installing bower dependencies'
+    description: 'Install bower dependencies'
     requires_files: true
     required_executable: 'bower'
     install_command: 'npm install -g bower'
@@ -720,7 +720,7 @@ PostMerge:
 
   BundleInstall:
     enabled: false
-    description: 'Installing Bundler dependencies'
+    description: 'Install Bundler dependencies'
     requires_files: true
     required_executable: 'bundle'
     install_command: 'gem install bundler'
@@ -732,13 +732,13 @@ PostMerge:
 
   IndexTags:
     enabled: false
-    description: 'Generating tags file from source'
+    description: 'Generate tags file from source'
     quiet: true
     required_executable: 'ctags'
 
   NpmInstall:
     enabled: false
-    description: 'Installing NPM dependencies'
+    description: 'Install NPM dependencies'
     requires_files: true
     required_executable: 'npm'
     flags: ['install']
@@ -748,7 +748,7 @@ PostMerge:
 
   SubmoduleStatus:
     enabled: false
-    description: 'Checking submodule status'
+    description: 'Check submodule status'
     quiet: true
     recursive: false
 
@@ -760,7 +760,7 @@ PostRewrite:
 
   BowerInstall:
     enabled: false
-    description: 'Installing bower dependencies'
+    description: 'Install bower dependencies'
     requires_files: true
     required_executable: 'bower'
     install_command: 'npm install -g bower'
@@ -769,7 +769,7 @@ PostRewrite:
 
   BundleInstall:
     enabled: false
-    description: 'Installing Bundler dependencies'
+    description: 'Install Bundler dependencies'
     requires_files: true
     required_executable: 'bundle'
     install_command: 'gem install bundler'
@@ -781,13 +781,13 @@ PostRewrite:
 
   IndexTags:
     enabled: false
-    description: 'Generating tags file from source'
+    description: 'Generate tags file from source'
     quiet: true
     required_executable: 'ctags'
 
   NpmInstall:
     enabled: false
-    description: 'Installing NPM dependencies'
+    description: 'Install NPM dependencies'
     requires_files: true
     required_executable: 'npm'
     flags: ['install']
@@ -797,7 +797,7 @@ PostRewrite:
 
   SubmoduleStatus:
     enabled: false
-    description: 'Checking submodule status'
+    description: 'Check submodule status'
     quiet: true
     recursive: false
 
@@ -811,17 +811,17 @@ PrePush:
 
   ProtectedBranches:
     enabled: false
-    description: 'Checking for illegal pushes to protected branches'
+    description: 'Check for illegal pushes to protected branches'
     branches: ['master']
 
   RSpec:
     enabled: false
-    description: 'Running RSpec test suite'
+    description: 'Run RSpec test suite'
     required_executable: 'rspec'
 
   Minitest:
     enabled: false
-    description: 'Running Minitest test suite'
+    description: 'Run Minitest test suite'
     command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
     include: 'test/**/*_test.rb'
 
@@ -835,5 +835,5 @@ PreRebase:
 
   MergedCommits:
     enabled: false
-    description: 'Checking for commits that have already been merged'
+    description: 'Check for commits that have already been merged'
     branches: ['master']

@@ -13,6 +13,9 @@
   a regex pattern
 * Switch `ScssLint` pre-commit hook to use the JSON output formatter instead
   of the default formatter
+* Change tense of hook descriptions from progressive indicative form ("Running")
+  to indicative present form ("Run") so output reads better in parallel hook
+  runs
 
 ## 0.32.0.rc1
 

@@ -54,7 +54,7 @@ module Overcommit::Hook
     end
 
     def description
-      @config['description'] || "Running #{name}"
+      @config['description'] || "Run #{name}"
     end
 
     def required?
