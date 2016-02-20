@@ -3,10 +3,6 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/brigade/scss-lint
   class ScssLint < Base
-    MESSAGE_TYPE_CATEGORIZER = lambda do |type|
-      type.include?('W') ? :warning : :error
-    end
-
     def run
       result = execute(command, args: applicable_files)
 
@@ -16,13 +12,30 @@ module Overcommit::Hook::PreCommit
       return :pass if [0, 81].include?(result.status)
 
       # Any status that isn't indicating lint warnings or errors indicates failure
-      return :fail, result.stdout unless [1, 2].include?(result.status)
+      return :fail, (result.stdout + result.stderr) unless [1, 2].include?(result.status)
 
-      extract_messages(
-        result.stdout.split("\n"),
-        /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)[^ ]* (?<type>[^ ]+)/,
-        MESSAGE_TYPE_CATEGORIZER,
-      )
+      begin
+        collect_lint_messages(JSON.parse(result.stdout))
+      rescue JSON::ParserError => ex
+        return :fail, "Unable to parse JSON returned by SCSS-Lint: #{ex.message}\n" \
+                      "STDOUT: #{result.stdout}\nSTDERR: #{result.stderr}"
+      end
+    end
+
+    private
+
+    def collect_lint_messages(files_to_lints)
+      files_to_lints.flat_map do |path, lints|
+        lints.map do |lint|
+          severity = lint['severity'] == 'warning' ? :warning : :error
+
+          message = lint['reason']
+          message = "#{lint['linter']}: #{message}" if lint['linter']
+          message = "#{path}:#{lint['line']} #{message}"
+
+          Overcommit::Hook::Message.new(severity, path, lint['line'], message)
+        end
+      end
     end
   end
 end

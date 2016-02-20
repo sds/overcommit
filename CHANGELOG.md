@@ -11,6 +11,8 @@
 * Fix `Minitest` pre-push hook to include all test files
 * Add `MessageFormat` commit-msg hook to validate commit messages against
   a regex pattern
+* Switch `ScssLint` pre-commit hook to use the JSON output formatter instead
+  of the default formatter
 
 ## 0.32.0.rc1
 

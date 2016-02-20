@@ -30,9 +30,21 @@ describe Overcommit::Hook::PreCommit::ScssLint do
     context 'and it reports a warning' do
       before do
         result.stub(:status).and_return(1)
-        result.stub(:stdout).and_return([
-          'file1.scss:1 [W] Prefer single quoted strings',
-        ].join("\n"))
+        result.stub(:stderr).and_return('')
+        result.stub(:stdout).and_return(<<-JSON)
+          {
+            "test.scss": [
+              {
+                "line": 1,
+                "column": 1,
+                "length": 2,
+                "severity": "warning",
+                "reason": "Empty rule",
+                "linter": "EmptyRule"
+              }
+            ]
+          }
+        JSON
       end
 
       it { should warn }
@@ -41,17 +53,39 @@ describe Overcommit::Hook::PreCommit::ScssLint do
     context 'and it reports an error' do
       before do
         result.stub(:status).and_return(2)
-        result.stub(:stdout).and_return([
-          'file1.scss:1 [E] Syntax Error: Invalid CSS',
-        ].join("\n"))
+        result.stub(:stderr).and_return('')
+        result.stub(:stdout).and_return(<<-JSON)
+          {
+            "test.scss": [
+              {
+                "line": 1,
+                "column": 1,
+                "length": 2,
+                "severity": "error",
+                "reason": "Syntax error",
+              }
+            ]
+          }
+        JSON
       end
 
       it { should fail_hook }
     end
 
+    context 'and it returns invalid JSON' do
+      before do
+        result.stub(:status).and_return(1)
+        result.stub(:stderr).and_return('')
+        result.stub(:stdout).and_return('This is not JSON')
+      end
+
+      it { should fail_hook /Unable to parse JSON returned by SCSS-Lint/ }
+    end
+
     context 'and it returns status code indicating all files were filtered' do
       before do
         result.stub(:status).and_return(81)
+        result.stub(:stderr).and_return('')
         result.stub(:stdout).and_return('')
       end
 
