@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `AuthorName`/`AuthorEmail` pre-commit hooks to respect
+  `GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` environment variables, respectively
+
 ## 0.32.0
 
 ### New Features
