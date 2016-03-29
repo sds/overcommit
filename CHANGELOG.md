@@ -6,6 +6,10 @@
   `GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` environment variables, respectively
 * Fix `JavaCheckstyle` pre-commit hook to ignore `[ERROR]` prefix when parsing
   output messages
+* Official support for Rubinius has been dropped. It will probably still work
+  for most use cases, but parallelized hook runs may be problematic. If someone
+  from the community is willing to step up to support it, we'll gladly add it
+  back.
 
 ## 0.32.0
 
