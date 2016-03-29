@@ -53,7 +53,7 @@ module Overcommit
 
     def run_hooks
       if @hooks.any?(&:enabled?)
-        @printer.start_run
+        @printer.start_run if verbose_run_status?
 
         # Sort so hooks requiring fewer processors get queued first. This
         # ensures we make better use of our available processors
@@ -137,9 +137,13 @@ module Overcommit
         @printer.run_failed
       elsif @warned
         @printer.run_warned
-      else
+      elsif verbose_run_status?
         @printer.run_succeeded
       end
+    end
+
+    def verbose_run_status?
+      !@hooks.all?(&:quiet?)
     end
 
     def run_hook(hook) # rubocop:disable Metrics/CyclomaticComplexity
