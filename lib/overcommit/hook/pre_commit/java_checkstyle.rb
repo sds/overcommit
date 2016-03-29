@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://checkstyle.sourceforge.net/
   class JavaCheckstyle < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+    MESSAGE_REGEX = /^(\[[^\]]+\]\s+)?(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
 
     def run
       result = execute(command, args: applicable_files)

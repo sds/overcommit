@@ -4,6 +4,8 @@
 
 * Fix `AuthorName`/`AuthorEmail` pre-commit hooks to respect
   `GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` environment variables, respectively
+* Fix `JavaCheckstyle` pre-commit hook to ignore `[ERROR]` prefix when parsing
+  output messages
 
 ## 0.32.0
 
