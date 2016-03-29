@@ -28,8 +28,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency             'childprocess', '~> 0.5.8'
   s.add_dependency             'iniparse', '~> 1.4'
-
-  s.add_development_dependency 'rake', '~> 10.4'
-  s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'travis', '~> 1.7'
 end
