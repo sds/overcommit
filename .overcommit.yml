@@ -1,3 +1,5 @@
+gemfile: Gemfile
+
 PreCommit:
   BundleCheck:
     enabled: true
@@ -14,7 +16,6 @@ PreCommit:
 
   RuboCop:
     enabled: true
-    command: ['bundle', 'exec', 'rubocop']
     include:
       - '**/*.gemspec'
       - '**/*.rb'
@@ -23,7 +24,6 @@ PreCommit:
 
   TravisLint:
     enabled: true
-    command: ['bundle', 'exec', 'travis']
     flags: ['lint', '--skip-version-check']
 
   TrailingWhitespace:

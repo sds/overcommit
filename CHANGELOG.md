@@ -12,6 +12,9 @@
   back.
 * Add global `quiet` option which silences all hook output except in the case
   of warning or error
+* Change `overcommit` CLI to automatically run within a Bundler context if the
+  `gemfile` option is specified. This mainly saves you from needing
+  `bundle exec` when running `overcommit --run`
 
 ## 0.32.0
 

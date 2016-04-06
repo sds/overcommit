@@ -1,6 +1,44 @@
 #!/usr/bin/env ruby
 
-require 'overcommit/cli'
+# Check if Overcommit should invoke a Bundler context for loading gems
+require 'yaml'
+# rubocop:disable Style/RescueModifier
+if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
+  ENV['BUNDLE_GEMFILE'] = gemfile
+  require 'bundler'
+
+  begin
+    # We need to temporarily silence STDERR to remove annoying Gem specification
+    # warnings that ultimately don't matter, e.g.
+    # https://github.com/rubygems/rubygems/issues/1070
+    old_stderr = $stderr
+    begin
+      $stderr = File.new(File::NULL, 'w')
+      Bundler.setup
+    ensure
+      $stderr = old_stderr
+    end
+  rescue Bundler::BundlerError => ex
+    puts "Problem loading '#{gemfile}': #{ex.message}"
+    puts "Try running:\nbundle install --gemfile=#{gemfile}" if ex.is_a?(Bundler::GemNotFound)
+    exit 78 # EX_CONFIG
+  end
+end
+# rubocop:enable Style/RescueModifier
+
+begin
+  require 'overcommit/cli'
+rescue LoadError
+  if gemfile
+    puts 'You have specified the `gemfile` option in your Overcommit ' \
+         'configuration but have not added the `overcommit` gem to ' \
+         "#{gemfile}."
+  else
+    raise
+  end
+
+  exit 64 # EX_USAGE
+end
 
 logger = Overcommit::Logger.new(STDOUT)
 
