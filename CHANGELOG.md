@@ -1,20 +1,28 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.33.0
+
+### New Features
+
+* Add global `quiet` option which silences all hook output except in the case
+  of warning or error
+
+### Changes
+
+* Official support for Rubinius has been dropped. It will probably still work
+  for most use cases, but parallelized hook runs may be problematic. If someone
+  from the community is willing to step up to support it, we'll gladly add it
+  back
+* Change `overcommit` CLI to automatically run within a Bundler context if the
+  `gemfile` option is specified. This mainly saves you from needing
+  `bundle exec` when running `overcommit --run`
+
+### Bug Fixes
 
 * Fix `AuthorName`/`AuthorEmail` pre-commit hooks to respect
   `GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` environment variables, respectively
 * Fix `JavaCheckstyle` pre-commit hook to ignore `[ERROR]` prefix when parsing
   output messages
-* Official support for Rubinius has been dropped. It will probably still work
-  for most use cases, but parallelized hook runs may be problematic. If someone
-  from the community is willing to step up to support it, we'll gladly add it
-  back.
-* Add global `quiet` option which silences all hook output except in the case
-  of warning or error
-* Change `overcommit` CLI to automatically run within a Bundler context if the
-  `gemfile` option is specified. This mainly saves you from needing
-  `bundle exec` when running `overcommit --run`
 
 ## 0.32.0
 
