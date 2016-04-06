@@ -39,6 +39,10 @@ gemfile: false
 # to the root of the repository.
 plugin_directory: '.git-hooks'
 
+# Whether to hide hook output by default. This results in completely silent hook
+# runs except in the case of warning or failure.
+quiet: false
+
 # Number of hooks that can be run concurrently. Typically this won't need to be
 # adjusted, but if you know that some of your hooks themselves use multiple
 # processors you can lower this value accordingly. You can define

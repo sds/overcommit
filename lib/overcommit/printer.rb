@@ -8,7 +8,8 @@ module Overcommit
   class Printer
     attr_reader :log
 
-    def initialize(logger, context)
+    def initialize(config, logger, context)
+      @config = config
       @log = logger
       @context = context
       @lock = Monitor.new # Need to use monitor so we can have re-entrant locks
@@ -17,7 +18,7 @@ module Overcommit
 
     # Executed at the very beginning of running the collection of hooks.
     def start_run
-      log.bold "Running #{hook_script_name} hooks"
+      log.bold "Running #{hook_script_name} hooks" unless @config['quiet']
     end
 
     def nothing_to_run
@@ -36,7 +37,7 @@ module Overcommit
     def end_hook(hook, status, output)
       # Want to print the header for quiet hooks only if the result wasn't good
       # so that the user knows what failed
-      print_header(hook) if !hook.quiet? || status != :pass
+      print_header(hook) if (!hook.quiet? && !@config['quiet']) || status != :pass
 
       print_result(hook, status, output)
     end
@@ -69,9 +70,11 @@ module Overcommit
 
     # Executed when no hooks failed by the end of the run.
     def run_succeeded
-      log.newline
-      log.success "✓ All #{hook_script_name} hooks passed"
-      log.newline
+      unless @config['quiet']
+        log.newline
+        log.success "✓ All #{hook_script_name} hooks passed"
+        log.newline
+      end
     end
 
     private
@@ -83,10 +86,10 @@ module Overcommit
       log.partial hook_name
     end
 
-    def print_result(hook, status, output)
+    def print_result(hook, status, output) # rubocop:disable Metrics/CyclomaticComplexity
       case status
       when :pass
-        log.success 'OK' unless hook.quiet?
+        log.success 'OK' unless @config['quiet'] || hook.quiet?
       when :warn
         log.warning 'WARNING'
         print_report(output, :bold_warning)

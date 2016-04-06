@@ -10,6 +10,8 @@
   for most use cases, but parallelized hook runs may be problematic. If someone
   from the community is willing to step up to support it, we'll gladly add it
   back.
+* Add global `quiet` option which silences all hook output except in the case
+  of warning or error
 
 ## 0.32.0
 

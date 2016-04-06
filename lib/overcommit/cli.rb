@@ -197,7 +197,7 @@ module Overcommit
       context = Overcommit::HookContext.create('run-all', config, @arguments, empty_stdin)
       config.apply_environment!(context, ENV)
 
-      printer = Overcommit::Printer.new(log, context)
+      printer = Overcommit::Printer.new(config, log, context)
       runner  = Overcommit::HookRunner.new(config, log, context, printer)
 
       status = runner.run
