@@ -332,6 +332,13 @@ in your `Gemfile`.
 You can change the directory that project-specific hooks are loaded from via
 the `plugin_directory` option. The default directory is `.git-hooks`.
 
+### Quiet Hook Runs
+
+If you prefer to have your hooks be completely silent unless there is a
+problem, you can set the top-level `quiet` option to `true`. Note that if you
+have many hooks or slow hooks this may not be desirable, as you don't get
+visual feedback indicating the general progress of the hook run.
+
 ### Concurrency
 
 Overcommit runs hooks in parallel by default, with a number of concurrent
