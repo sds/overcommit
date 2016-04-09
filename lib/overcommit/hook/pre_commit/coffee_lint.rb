@@ -23,6 +23,7 @@ module Overcommit::Hook::PreCommit
 
     def parse_messages(output)
       output.scan(MESSAGE_REGEX).map do |file, line, type, msg|
+        line = line.to_i
         type = MESSAGE_TYPE_CATEGORIZER.call(type)
         text = "#{file}:#{line}:#{type} #{msg}"
         Overcommit::Hook::Message.new(type, file, line, text)
