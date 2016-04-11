@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `CoffeeLint` pre-commit hook detection of modified lines
+
 ## 0.33.0
 
 ### New Features
