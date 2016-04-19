@@ -2,6 +2,7 @@
 
 ## master (unreleased)
 
+* Fix `Scalastyle` pre-commit hook to capture messages with no line number
 * Fix `CoffeeLint` pre-commit hook detection of modified lines
 
 ## 0.33.0
