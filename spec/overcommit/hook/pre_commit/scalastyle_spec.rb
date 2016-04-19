@@ -41,7 +41,21 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
         OUT
       end
 
-      it { should warn }
+      it { should warn(/Use : Unit = for procedures/) }
+    end
+
+    context 'and it reports a warning with no line' do
+      before do
+        result.stub(stderr: '', stdout: normalize_indent(<<-OUT))
+          warning file=file1.scala message=File must end with newline character
+          Processed 1 file(s)
+          Found 0 errors
+          Found 1 warnings
+          Finished in 490 ms
+        OUT
+      end
+
+      it { should warn(/File must end with newline character/) }
     end
   end
 
@@ -64,7 +78,21 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
         OUT
       end
 
-      it { should fail_hook }
+      it { should fail_hook(/Use : Unit = for procedures/) }
+    end
+
+    context 'and it reports an error with no line' do
+      before do
+        result.stub(stderr: '', stdout: normalize_indent(<<-OUT))
+          error file=file1.scala message=File must end with newline character
+          Processed 1 file(s)
+          Found 1 errors
+          Found 0 warnings
+          Finished in 490 ms
+        OUT
+      end
+
+      it { should fail_hook(/File must end with newline character/) }
     end
 
     context 'with a usage message' do
@@ -83,7 +111,7 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
         OUT
       end
 
-      it { should fail_hook }
+      it { should fail_hook(/Usage/) }
     end
 
     context 'with a runtime error' do
@@ -104,7 +132,7 @@ describe Overcommit::Hook::PreCommit::Scalastyle do
         ERR
       end
 
-      it { should fail_hook }
+      it { should fail_hook(/Exception/) }
     end
   end
 end
