@@ -24,7 +24,7 @@ module Overcommit::Hook::PrePush
                      "on your path. If you no longer wish to use Git LFS, disable GitLfs in "\
                      ".overcommit.yml." unless File.exist?(path_to_git_lfs)
 
-      result = execute(command)
+      result = execute(command, input: pushed_refs)
       error_lines << "'#{command}' returned non-zero exit status: #{result.status}" unless
         result.success?
 

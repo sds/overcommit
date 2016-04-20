@@ -2,7 +2,13 @@ require 'spec_helper'
 
 describe Overcommit::Hook::PrePush::GitLfs do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
-  let(:context) { double('context', all_files: ['test/test_foo.rb'], remote_name: 'origin', remote_url: 'https://github.io/brigade/fake_repo') }
+  let(:context) {
+    double('context',
+           all_files: ['test/test_foo.rb'],
+           remote_name: 'origin',
+           remote_url: 'https://github.io/brigade/fake_repo',
+           pushed_refs: 'refs/heads/master master'
+          )}
   subject { described_class.new(config, context) }
 
   context 'when git_lfs exits successfully' do
