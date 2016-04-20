@@ -6,8 +6,8 @@ module Overcommit::Hook::PreCommit
     MESSAGE_REGEX = /
       ^(?<type>error|warning)\s
       file=(?<file>(?:\w:)?.+)\s
-      message=.+\s
-      line=(?<line>\d+)
+      message=.+\s*
+      (line=(?<line>\d+))?
     /x
 
     def run
