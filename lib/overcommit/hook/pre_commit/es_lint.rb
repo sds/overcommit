@@ -8,8 +8,21 @@ module Overcommit::Hook::PreCommit
   # somewhere else. Example:
   #
   #   EsLint:
+  #     required_executable: 'npm'
   #     enabled: true
   #     command: ['npm', 'run', 'lint']
+  #
+  # And currently this hook supports only eslint compact format, you can configure
+  # this in package.json. Example:
+  #
+  #   {
+  #     "scripts": {
+  #       "lint": "eslint -f compact"
+  #     },
+  #     "devDependencies": {
+  #       "eslint": "^2.0.0"
+  #     }
+  #   {
   #
   # @see http://eslint.org/
   class EsLint < Base
