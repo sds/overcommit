@@ -307,7 +307,7 @@ PreCommit:
     enabled: false
     description: 'Analyze with JSCS'
     required_executable: 'jscs'
-    flags: ['--reporter=inline', '--verbose']
+    flags: ['--reporter=inline']
     install_command: 'npm install -g jscs'
     include: '**/*.js'
 
