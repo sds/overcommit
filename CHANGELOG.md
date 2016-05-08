@@ -5,6 +5,8 @@
 * Fix `Scalastyle` pre-commit hook to capture messages with no line number
 * Fix `CoffeeLint` pre-commit hook detection of modified lines
 * Fix `Jscs` pre-commit hook to work with `jscs` 3.0.0+
+* Fix `CapitalizedSubject` pre-commit hook to ignore commit message subjects
+  starting with `fixup!` or `squash!` special prefixes
 
 ## 0.33.0
 

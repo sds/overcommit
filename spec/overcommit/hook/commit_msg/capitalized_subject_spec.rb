@@ -79,4 +79,24 @@ subject. Still mostly cats so far.
 
     it { should warn }
   end
+
+  context 'when subject starts with special "fixup!" prefix' do
+    let(:commit_msg) { <<-MSG }
+fixup! commit
+
+This was created by running git commit --fixup=...
+    MSG
+
+    it { should pass }
+  end
+
+  context 'when subject starts with special "squash!" prefix' do
+    let(:commit_msg) { <<-MSG }
+squash! commit
+
+This was created by running git commit --squash=...
+    MSG
+
+    it { should pass }
+  end
 end
