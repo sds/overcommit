@@ -823,6 +823,7 @@ PrePush:
   ProtectedBranches:
     enabled: false
     description: 'Check for illegal pushes to protected branches'
+    destructive_only: true
     branches: ['master']
 
   RSpec:

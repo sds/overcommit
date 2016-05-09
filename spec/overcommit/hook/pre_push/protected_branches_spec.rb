@@ -39,19 +39,41 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
 
   shared_examples_for 'protected branch' do
     context 'when push is not destructive' do
-      before do
-        pushed_ref.stub(:destructive?).and_return(false)
+      context 'and destructive_only set to false' do
+        before do
+          pushed_ref.stub(:destructive?).and_return(false)
+          subject.stub(destructive_only?: false)
+        end
+
+        it { should fail_hook }
       end
 
-      it { should pass }
+      context 'and destructive_only set to true' do
+        before do
+          subject.stub(destructive_only?: true)
+          pushed_ref.stub(:destructive?).and_return(false)
+        end
+
+        it { should pass }
+      end
     end
 
     context 'when push is destructive' do
-      before do
-        pushed_ref.stub(:destructive?).and_return(true)
+      context 'when destructive_only is set to true' do
+        before do
+          pushed_ref.stub(:destructive?).and_return(true)
+        end
+
+        it { should fail_hook }
       end
 
-      it { should fail_hook }
+      context 'when destructive_only is set to false' do
+        before do
+          subject.stub(:allow_non_destructive?).and_return(true)
+        end
+
+        it { should fail_hook }
+      end
     end
   end
 
