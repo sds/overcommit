@@ -7,6 +7,8 @@
 * Fix `Jscs` pre-commit hook to work with `jscs` 3.0.0+
 * Fix `CapitalizedSubject` pre-commit hook to ignore commit message subjects
   starting with `fixup!` or `squash!` special prefixes
+* Add `BundleOutdated` pre-commit hook to report gems in the `Gemfile.lock`
+  that have newer versions available
 
 ## 0.33.0
 

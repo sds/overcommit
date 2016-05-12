@@ -1,7 +1,6 @@
 module Overcommit::Hook::PreCommit
-  # Check if local Gemfile.lock matches Gemfile when either changes, unless
-  # Gemfile.lock is ignored by git.
-  # Check outdated rubyGems
+  # Check if any gems in Gemfile.lock have newer versions, unless the
+  # Gemfile.lock is ignored by Git.
   #
   # @see http://bundler.io/bundle_outdated.html
   class BundleOutdated < Base
