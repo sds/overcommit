@@ -175,6 +175,13 @@ PreCommit:
       - 'Gemfile.lock'
       - '*.gemspec'
 
+  BundleOutdated:
+    enabled: false
+    description: 'List installed gems with newer versions available'
+    required_executable: 'bundle'
+    flags: ['outdated', '--strict', '--parseable']
+    install_command: 'gem install bundler'
+
   CaseConflicts:
     enabled: true
     description: 'Check for case-insensitivity conflicts'
