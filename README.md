@@ -468,6 +468,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Brakeman](lib/overcommit/hook/pre_commit/brakeman.rb)
 * [`*`BrokenSymlinks](lib/overcommit/hook/pre_commit/broken_symlinks.rb)
 * [BundleCheck](lib/overcommit/hook/pre_commit/bundle_check.rb)
+* [BundleOutdated](lib/overcommit/hook/pre_commit/bundle_outdated.rb)
 * [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)
 * [ChamberSecurity](lib/overcommit/hook/pre_commit/chamber_security.rb)
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
