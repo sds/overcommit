@@ -15,7 +15,7 @@ module Overcommit::Hook::PrePush
 
     def illegal_pushes
       @illegal_pushes ||= pushed_refs.select do |pushed_ref|
-        protected?(pushed_ref.remote_ref) && pushed_ref.destructive?
+        protected?(pushed_ref.remote_ref) && allow_non_destructive?(pushed_ref)
       end
     end
 
@@ -29,6 +29,18 @@ module Overcommit::Hook::PrePush
     def protected_branch_patterns
       @protected_branch_patterns ||= Array(config['branches']).
         concat(Array(config['branch_patterns']))
+    end
+
+    def destructive_only?
+      config['destructive_only'].nil? || config['destructive_only']
+    end
+
+    def allow_non_destructive?(ref)
+      if destructive_only?
+        ref.destructive?
+      else
+        true
+      end
     end
   end
 end
