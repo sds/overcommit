@@ -31,8 +31,12 @@ module Overcommit::Hook::PrePush
         concat(Array(config['branch_patterns']))
     end
 
+    def destructive_only?
+      config['destructive_only'].nil? || config['destructive_only']
+    end
+
     def allow_non_destructive?(ref)
-      if config['destructive_only'].nil? || config['destructive_only']
+      if destructive_only?
         ref.destructive?
       else
         true
