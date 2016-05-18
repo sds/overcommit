@@ -9,6 +9,7 @@
   starting with `fixup!` or `squash!` special prefixes
 * Add `BundleOutdated` pre-commit hook to report gems in the `Gemfile.lock`
   that have newer versions available
+* Add `destructive_only` option to `ProtectedBranches` pre-push hook
 
 ## 0.33.0
 
