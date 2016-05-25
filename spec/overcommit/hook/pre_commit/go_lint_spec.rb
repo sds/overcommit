@@ -27,8 +27,9 @@ describe Overcommit::Hook::PreCommit::GoLint do
     context 'and it reports an error' do
       context 'on stdout' do
         before do
-          result.stub(stderr: '', stdout:
-            'file1.go:1:1: error should be the last type when returning multiple items'
+          result.stub(
+            stderr: '',
+            stdout: 'file1.go:1:1: error should be the last type when returning multiple items',
           )
         end
 
@@ -37,8 +38,9 @@ describe Overcommit::Hook::PreCommit::GoLint do
 
       context 'on stderr' do
         before do
-          result.stub(stdout: '', stderr:
-            "file1.go:1:1: expected 'package', found 'IDENT' foo"
+          result.stub(
+            stdout: '',
+            stderr: "file1.go:1:1: expected 'package', found 'IDENT' foo"
           )
         end
 

@@ -29,8 +29,8 @@ describe Overcommit::Hook::PreCommit::GoVet do
 
     context 'when go tool vet is not installed' do
       before do
-        result.stub(stderr:
-          'go tool: no such tool "vet"; to install:'
+        result.stub(
+          stderr: 'go tool: no such tool "vet"; to install:',
         )
       end
 
@@ -39,8 +39,8 @@ describe Overcommit::Hook::PreCommit::GoVet do
 
     context 'and it reports an error' do
       before do
-        result.stub(stderr:
-          'file1.go:1: possible formatting directive in Print call'
+        result.stub(
+          stderr: 'file1.go:1: possible formatting directive in Print call',
         )
       end
 

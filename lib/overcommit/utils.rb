@@ -220,7 +220,8 @@ module Overcommit
             if Overcommit::OS.windows?
               require 'win32ole'
               result = WIN32OLE.connect('winmgmts://').ExecQuery(
-                'select NumberOfLogicalProcessors from Win32_Processor')
+                'select NumberOfLogicalProcessors from Win32_Processor'
+              )
               result.to_enum.collect(&:NumberOfLogicalProcessors).reduce(:+)
             elsif File.readable?('/proc/cpuinfo')
               IO.read('/proc/cpuinfo').scan(/^processor/).size
@@ -284,9 +285,10 @@ module Overcommit
       # @param pattern [String]
       # @param path [String]
       def matches_path?(pattern, path)
-        File.fnmatch?(pattern, path,
-                      File::FNM_PATHNAME | # Wildcard doesn't match separator
-                      File::FNM_DOTMATCH   # Wildcards match dotfiles
+        File.fnmatch?(
+          pattern, path,
+          File::FNM_PATHNAME | # Wildcard doesn't match separator
+          File::FNM_DOTMATCH   # Wildcards match dotfiles
         )
       end
 

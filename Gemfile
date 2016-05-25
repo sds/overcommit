@@ -12,4 +12,4 @@ gem 'travis', '~> 1.7'
 gem 'coveralls'
 
 # Pin RuboCop for Travis builds.
-gem 'rubocop', '0.39.0'
+gem 'rubocop', '0.40.0'

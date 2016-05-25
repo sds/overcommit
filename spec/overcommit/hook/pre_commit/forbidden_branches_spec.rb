@@ -4,12 +4,15 @@ describe Overcommit::Hook::PreCommit::ForbiddenBranches do
   let(:default_config) { Overcommit::ConfigurationLoader.default_configuration }
   let(:branch_patterns) { ['master', 'release/*'] }
   let(:config) do
-    default_config.merge(Overcommit::Configuration.new(
-      'PreCommit' => {
-        'ForbiddenBranches' => {
-          'branch_patterns' => branch_patterns
+    default_config.merge(
+      Overcommit::Configuration.new(
+        'PreCommit' => {
+          'ForbiddenBranches' => {
+            'branch_patterns' => branch_patterns
+          }
         }
-      }))
+      )
+    )
   end
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
