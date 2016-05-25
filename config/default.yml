@@ -464,6 +464,7 @@ PreCommit:
       - '**/*.gemspec'
       - '**/*.rake'
       - '**/*.rb'
+      - '**/*.ru'
       - '**/Gemfile'
       - '**/Rakefile'
 
