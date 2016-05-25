@@ -10,6 +10,7 @@
 * Add `BundleOutdated` pre-commit hook to report gems in the `Gemfile.lock`
   that have newer versions available
 * Add `destructive_only` option to `ProtectedBranches` pre-push hook
+* Include `.ru` files in `RuboCop` pre-commit hook
 
 ## 0.33.0
 
