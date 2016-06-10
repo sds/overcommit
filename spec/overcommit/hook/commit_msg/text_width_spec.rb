@@ -28,6 +28,18 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     it { should pass }
   end
 
+  context 'when subject starts with special "fixup!" and is longer than 60 characters' do
+    let(:commit_msg) { 'fixup! ' + 'A' * 60 }
+
+    it { should pass }
+  end
+
+  context 'when subject starts with special "squash!" and is longer than 60 characters' do
+    let(:commit_msg) { 'squash! ' + 'A' * 60 }
+
+    it { should pass }
+  end
+
   context 'when the subject is 60 characters followed by a newline' do
     let(:commit_msg) { <<-MSG }
       This is 60 characters, or 61 if the newline is counted

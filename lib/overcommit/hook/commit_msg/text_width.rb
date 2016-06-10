@@ -18,7 +18,9 @@ module Overcommit::Hook::CommitMsg
     private
 
     def find_errors_in_subject(subject)
-      max_subject_width = config['max_subject_width']
+      max_subject_width =
+        config['max_subject_width'] +
+        special_prefix_length(subject)
       return unless subject.length > max_subject_width
 
       @errors << "Please keep the subject <= #{max_subject_width} characters"
@@ -35,6 +37,10 @@ module Overcommit::Hook::CommitMsg
                     "#{max_body_width} characters"
         end
       end
+    end
+
+    def special_prefix_length(subject)
+      subject.match(/^(fixup|squash)! /) { |match| match[0].length } || 0
     end
   end
 end
