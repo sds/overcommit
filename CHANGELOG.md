@@ -11,6 +11,8 @@
   that have newer versions available
 * Add `destructive_only` option to `ProtectedBranches` pre-push hook
 * Include `.ru` files in `RuboCop` pre-commit hook
+* Fix `TextWidth` to ignore special `fixup!`/`squash!` prefixes in commit
+  message subjects when determining width of line
 
 ## 0.33.0
 
