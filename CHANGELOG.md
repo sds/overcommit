@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.34.0
 
 * Fix `Scalastyle` pre-commit hook to capture messages with no line number
 * Fix `CoffeeLint` pre-commit hook detection of modified lines
