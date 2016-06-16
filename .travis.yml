@@ -19,4 +19,5 @@ before_script:
 script:
   - bundle exec rspec
   - bundle exec overcommit --sign
+  - bundle exec overcommit --sign pre-commit
   - bundle exec overcommit --run
