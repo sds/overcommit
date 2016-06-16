@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.34.1
 
 * Switch template directory hooks from symlinks to regular files so gem can
   be installed on Windows
