@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fileutils'
 
 describe 'template directory' do
   let(:template_dir) { File.join(Overcommit::HOME, 'template-dir') }
@@ -16,15 +17,16 @@ describe 'template directory' do
       Overcommit::Utils::FileUtils.symlink?(master_hook).should == false
     end
 
-    it 'contains all other hooks as symlinks to the master hook' do
-      if Overcommit::OS.windows?
-        # Symlinks in template-dir are not compatible with Windows.
-        # Windows users will need to manually install Overcommit for now.
-        skip 'Unix symlinks not compatible with Windows'
-      end
-
+    it 'contains all other hooks as copies of the master hook' do
       Overcommit::Utils.supported_hook_types.each do |hook_type|
-        Overcommit::Utils::FileUtils.symlink?(File.join(hooks_dir, hook_type)).should == true
+        FileUtils.compare_file(File.join(hooks_dir, hook_type),
+                               File.join(hooks_dir, 'overcommit-hook')).should == true
+      end
+    end
+
+    it 'contains no symlinks' do
+      Overcommit::Utils.supported_hook_types.each do |hook_type|
+        Overcommit::Utils::FileUtils.symlink?(File.join(hooks_dir, hook_type)).should == false
       end
     end
   end

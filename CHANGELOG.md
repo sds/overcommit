@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Switch template directory hooks from symlinks to regular files so gem can
+  be installed on Windows
+
 ## 0.34.0
 
 * Fix `Scalastyle` pre-commit hook to capture messages with no line number
