@@ -52,7 +52,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def extract_from_git_index(file_modes)
-      result = execute(%w[git diff --raw --cached --], args: applicable_files)
+      result = execute(%w[git diff --raw --cached --no-color --], args: applicable_files)
       raise 'Unable to access git index' unless result.success?
 
       result.stdout.split("\n").each do |line|

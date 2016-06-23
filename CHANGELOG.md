@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `--no-color` flag to all `git diff`/`git show` calls to override local
+  configuration
+
 ## 0.34.1
 
 * Switch template directory hooks from symlinks to regular files so gem can

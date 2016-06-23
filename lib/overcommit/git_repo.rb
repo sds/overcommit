@@ -69,7 +69,7 @@ module Overcommit
       refs = options[:refs]
       subcmd = options[:subcmd] || 'diff'
 
-      `git #{subcmd} --no-ext-diff -U0 #{flags} #{refs} -- "#{file_path}"`.
+      `git #{subcmd} --no-color --no-ext-diff -U0 #{flags} #{refs} -- "#{file_path}"`.
         scan(DIFF_HUNK_REGEX) do |start_line, lines_added|
         lines_added = (lines_added || 1).to_i # When blank, one line was added
         cur_line = start_line.to_i
