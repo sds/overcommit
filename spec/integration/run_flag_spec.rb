@@ -29,7 +29,7 @@ describe 'overcommit --run' do
         File.open('.overcommit.yml', 'w') { |f| f.puts(config.to_yaml) }
         echo(script_contents, script_path)
         `git add #{script_path}`
-        FileUtils.chmod(0755, script_path)
+        FileUtils.chmod(0o755, script_path)
         example.run
       end
     end

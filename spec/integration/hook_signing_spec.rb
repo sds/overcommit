@@ -49,7 +49,7 @@ describe 'hook signing' do
         `overcommit --install > #{File::NULL}`
 
         echo(hook_script, script_path)
-        FileUtils.chmod(0755, script_path)
+        FileUtils.chmod(0o755, script_path)
         `git add #{script_path}`
 
         `overcommit --sign`
@@ -88,7 +88,7 @@ describe 'hook signing' do
         `overcommit --install > #{File::NULL}`
 
         echo(hook_script, script_path)
-        FileUtils.chmod(0755, script_path)
+        FileUtils.chmod(0o755, script_path)
         `git add #{script_path}`
 
         `overcommit --sign`

@@ -10,7 +10,7 @@ describe Overcommit::Hook::PreCommit::ExecutePermissions do
     if Overcommit::OS.windows?
       `git update-index --add --chmod=#{exec_bit ? '+' : '-'}x #{file}`
     else
-      FileUtils.chmod(exec_bit ? 0755 : 0644, file)
+      FileUtils.chmod(exec_bit ? 0o755 : 0o644, file)
       `git add #{file}`
     end
   end
