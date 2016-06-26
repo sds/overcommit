@@ -67,4 +67,5 @@ before_test:
 test_script:
   - bundle exec rspec --tty --backtrace --color
   - bundle exec overcommit --sign
+  - bundle exec overcommit --sign pre-commit
   - bundle exec overcommit --run
