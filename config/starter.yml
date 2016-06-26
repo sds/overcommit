@@ -21,6 +21,7 @@
 #    on_warn: fail # Treat all warnings as failures
 #
 #  TrailingWhitespace:
+#    enabled: true
 #    exclude:
 #      - '**/db/structure.sql' # Ignore trailing whitespace in generated files
 #
