@@ -17,6 +17,7 @@ module GitSpecHelpers
       `git config --local user.name "Overcommit Tester"`
       `git config --local user.email "overcommit@example.com"`
       `git config --local rerere.enabled 0` # Don't record resolutions in tests
+      `git config --local commit.gpgsign false`
 
       yield if block_given?
     end

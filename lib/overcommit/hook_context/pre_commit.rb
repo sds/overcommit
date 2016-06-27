@@ -50,7 +50,7 @@ module Overcommit::HookContext
 
         stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
         result = Overcommit::Utils.execute(
-          %w[git stash save --keep-index --quiet] + [stash_message]
+          %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
         )
 
         unless result.success?

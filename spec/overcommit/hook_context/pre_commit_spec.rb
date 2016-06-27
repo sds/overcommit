@@ -190,6 +190,7 @@ describe Overcommit::HookContext::PreCommit do
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git config --local commit.gpgsign false"`
           `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           `git add sub`
           example.run
@@ -344,6 +345,7 @@ describe Overcommit::HookContext::PreCommit do
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git config --local commit.gpgsign false"`
           `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           `git add sub`
           example.run
@@ -369,6 +371,7 @@ describe Overcommit::HookContext::PreCommit do
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
+          `git submodule foreach "git config --local commit.gpgsign false"`
           `git submodule foreach "git commit -m \\"Another commit\\"" < #{File::NULL}`
           echo('Hello Again', 'tracked-file')
           `git add sub tracked-file`

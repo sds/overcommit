@@ -4,6 +4,8 @@
 
 * Add `--no-color` flag to all `git diff`/`git show` calls to override local
   configuration
+* Ignore `commit.gpgsign` configuration option when creating stash commits
+  in pre-commit hooks
 
 ## 0.34.1
 
