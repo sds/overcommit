@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::JavaCheckstyle do
     end
   end
 
-  context 'when checkstyle exits unsucessfully' do
+  context 'when checkstyle exits unsuccessfully' do
     let(:result) { double('result') }
 
     before do
@@ -37,7 +37,7 @@ describe Overcommit::Hook::PreCommit::JavaCheckstyle do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'and it reports an error' do
+    context 'and it reports a message with no severity tag' do
       before do
         result.stub(:stdout).and_return([
           'Starting audit...',
@@ -47,6 +47,42 @@ describe Overcommit::Hook::PreCommit::JavaCheckstyle do
       end
 
       it { should fail_hook }
+    end
+
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return([
+          'Starting audit...',
+          '[ERROR] file1.java:1: Missing a Javadoc comment.',
+          'Audit done.'
+        ].join("\n"))
+      end
+
+      it { should fail_hook }
+    end
+
+    context 'and it reports an warning' do
+      before do
+        result.stub(:stdout).and_return([
+          'Starting audit...',
+          '[WARN] file1.java:1: Missing a Javadoc comment.',
+          'Audit done.'
+        ].join("\n"))
+      end
+
+      it { should warn }
+    end
+
+    context 'and it reports an info message' do
+      before do
+        result.stub(:stdout).and_return([
+          'Starting audit...',
+          '[INFO] file1.java:1: Missing a Javadoc comment.',
+          'Audit done.'
+        ].join("\n"))
+      end
+
+      it { should warn }
     end
   end
 end
