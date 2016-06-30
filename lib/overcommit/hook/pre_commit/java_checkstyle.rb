@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       # Type may be nil if checkstyle doesn't output a 'tag'
-      type = type || ""
+      type ||= ''
 
       type.include?('WARN') || type.include?('INFO') ? :warning : :error
     end
