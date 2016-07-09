@@ -530,6 +530,7 @@ aborted.
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
 * [RSpec](lib/overcommit/hook/pre_push/r_spec.rb)
+* [TestUnit](lib/overcommit/hook/pre_push/test_unit.rb)
 
 ### PreRebase
 

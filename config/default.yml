@@ -838,6 +838,11 @@ PrePush:
     command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
     include: 'test/**/*_test.rb'
 
+  TestUnit:
+    enabled: false
+    description: 'Run Test::Unit test suite'
+    command: ['ruby', '-Ilib:test', '-rtest/unit', "-e 'exit! Test::Unit::AutoRunner.run'"]
+
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
 PreRebase:
