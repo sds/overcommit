@@ -465,6 +465,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [BerksfileCheck](lib/overcommit/hook/pre_commit/berksfile_check.rb)
 * [Brakeman](lib/overcommit/hook/pre_commit/brakeman.rb)
 * [`*`BrokenSymlinks](lib/overcommit/hook/pre_commit/broken_symlinks.rb)
+* [BundleAudit](lib/overcommit/hook/pre_commit/bundle_audit.rb)
 * [BundleCheck](lib/overcommit/hook/pre_commit/bundle_check.rb)
 * [BundleOutdated](lib/overcommit/hook/pre_commit/bundle_outdated.rb)
 * [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)

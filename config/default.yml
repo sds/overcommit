@@ -164,6 +164,12 @@ PreCommit:
     description: 'Check for broken symlinks'
     quiet: true
 
+  BundleAudit:
+    enabled: false
+    description: 'Check for vulnerable versions of gems'
+    required_executable: 'bundle-audit'
+    install_command: 'gem install bundler-audit'
+
   BundleCheck:
     enabled: false
     description: 'Check Gemfile dependencies'
