@@ -840,8 +840,9 @@ PrePush:
 
   TestUnit:
     enabled: false
-    description: 'Run test-unit'
-    command: ['rake', 'test']
+    description: 'Run Test::Unit test suite'
+    command: ['ruby', '-Ilib:test', '-rtest/unit', "-e 'exit! Test::Unit::AutoRunner.run'"]
+    include: 'test/**/*_test.rb'
 
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
