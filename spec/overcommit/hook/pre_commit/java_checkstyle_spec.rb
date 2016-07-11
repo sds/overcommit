@@ -29,7 +29,7 @@ describe Overcommit::Hook::PreCommit::JavaCheckstyle do
     end
   end
 
-  context 'when checkstyle exits unsucessfully' do
+  context 'when checkstyle exits unsuccessfully' do
     let(:result) { double('result') }
 
     before do
