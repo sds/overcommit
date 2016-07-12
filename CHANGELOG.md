@@ -3,6 +3,11 @@
 ## master (unreleased)
 
 * Drop support for Ruby 1.9.3
+* Fix `JavaCheckstyle` pre-commit hook to properly categorize `INFO` and
+  `WARN` messages
+* Add `TestUnit` pre-push hook to run tests with `Test::Unit`
+* Add `BundleAudit` pre-commit hook to scan gems for vulnerabilities with
+  [`bundle-audit`](https://github.com/rubysec/bundler-audit)
 
 ## 0.34.2
 
