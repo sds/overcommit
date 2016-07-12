@@ -53,12 +53,10 @@ writing any Ruby code.
 
 ## Requirements
 
-This project aims to support the following Ruby runtimes:
+This project aims to support the following Ruby runtimes on both \*nix and Windows:
 
-* MRI 1.9.3 & 2.x
+* MRI 2.x
 * JRuby 1.7.x
-
-Windows is currently supported only for MRI Ruby 2.x
 
 ## Limitations
 

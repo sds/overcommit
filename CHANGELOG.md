@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Drop support for Ruby 1.9.3
+
 ## 0.34.2
 
 * Add `--no-color` flag to all `git diff`/`git show` calls to override local
