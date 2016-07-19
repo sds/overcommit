@@ -5,25 +5,18 @@ clone_depth: 1
 environment:
   matrix:
     - RUBY_FOLDER_VERSION: "200"
-      RUBY_GEMS_FOLDER: "2.0.0"
     - RUBY_FOLDER_VERSION: "200-x64"
-      RUBY_GEMS_FOLDER: "2.0.0"
     - RUBY_FOLDER_VERSION: "21"
-      RUBY_GEMS_FOLDER: "2.1.0"
     - RUBY_FOLDER_VERSION: "21-x64"
-      RUBY_GEMS_FOLDER: "2.1.0"
     - RUBY_FOLDER_VERSION: "22"
-      RUBY_GEMS_FOLDER: "2.2.0"
     - RUBY_FOLDER_VERSION: "22-x64"
-      RUBY_GEMS_FOLDER: "2.2.0"
 
 matrix:
   fast_finish: true
 
 cache:
   # Cache installed gems unless dependencies change
-  - C:\Ruby%RUBY_FOLDER_VERSION%\bin -> Gemfile,overcommit.gemspec
-  - C:\Ruby%RUBY_FOLDER_VERSION%\lib\ruby\gems\%RUBY_GEMS_FOLDER% -> Gemfile,overcommit.gemspec
+  - vendor\bundle -> Gemfile,overcommit.gemspec
 
 install:
   # Add ruby executables to PATH
@@ -52,7 +45,7 @@ install:
   - where bundler
 
   # Install ruby dependencies
-  - bundle install --retry 3
+  - bundle install --retry 3 --path vendor\bundle
 
 build: off
 
