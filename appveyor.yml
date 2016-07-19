@@ -10,6 +10,8 @@ environment:
     - RUBY_FOLDER_VERSION: "21-x64"
     - RUBY_FOLDER_VERSION: "22"
     - RUBY_FOLDER_VERSION: "22-x64"
+    - RUBY_FOLDER_VERSION: "23"
+    - RUBY_FOLDER_VERSION: "23-x64"
 
 matrix:
   fast_finish: true
