@@ -4,6 +4,15 @@ describe Overcommit::Installer do
   let(:logger) { Overcommit::Logger.silent }
   let(:installer) { described_class.new(logger) }
 
+  def hook_files_installed?(hooks_dir)
+    Overcommit::Utils.supported_hook_types.all? do |hook_type|
+      hook_file = File.join(hooks_dir, hook_type)
+      master_hook = File.join(hooks_dir, 'overcommit-hook')
+      File.exist?(hook_file) && File.exist?(master_hook) &&
+        File.read(hook_file) == File.read(master_hook)
+    end
+  end
+
   describe '#run' do
     let(:options) { { action: :install } }
     subject { installer.run(target.to_s, options) }
@@ -28,22 +37,19 @@ describe Overcommit::Installer do
       let(:target) { repo }
       let(:hooks_dir) { File.join(target, '.git', 'hooks') }
       let(:old_hooks_dir) { File.join(hooks_dir, 'old-hooks') }
+      let(:master_hook) { File.join(hooks_dir, 'overcommit-hook') }
 
       context 'and an install is requested' do
         context 'and Overcommit hooks were not previously installed' do
           it 'installs the master hook into the hooks directory' do
             expect { subject }.to change {
-              File.file?(File.join(hooks_dir, 'overcommit-hook'))
+              File.file?(master_hook)
             }.from(false).to(true)
           end
 
-          it 'symlinks all supported hooks to the master hook' do
+          it 'copies all supported hooks from the master hook' do
             expect { subject }.to change {
-              Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                hook_file = File.join(hooks_dir, hook_type)
-                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
-                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
-              end
+              hook_files_installed?(hooks_dir)
             }.from(false).to(true)
           end
         end
@@ -55,17 +61,13 @@ describe Overcommit::Installer do
 
           it 'keeps the master hook' do
             expect { subject }.to_not change {
-              File.file?(File.join(hooks_dir, 'overcommit-hook'))
+              File.file?(master_hook)
             }.from(true)
           end
 
-          it 'maintains all symlinks to the master hook' do
+          it 'maintains all copies of the master hook' do
             expect { subject }.to_not change {
-              Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                hook_file = File.join(hooks_dir, hook_type)
-                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
-                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
-              end
+              hook_files_installed?(hooks_dir)
             }.from(true)
           end
         end
@@ -99,13 +101,9 @@ describe Overcommit::Installer do
               expect { subject }.to_not raise_error
             end
 
-            it 'symlinks all supported hooks to the master hook' do
+            it 'copies all supported hooks from the master hook' do
               expect { subject }.to change {
-                Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                  hook_file = File.join(hooks_dir, hook_type)
-                  Overcommit::Utils::FileUtils.symlink?(hook_file) &&
-                    Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
-                end
+                hook_files_installed?(hooks_dir)
               }.from(false).to(true)
             end
           end
@@ -156,17 +154,13 @@ describe Overcommit::Installer do
 
           it 'removes the master hook from the hooks directory' do
             expect { subject }.to change {
-              File.exist?(File.join(hooks_dir, 'overcommit-hook'))
+              File.exist?(master_hook)
             }.from(true).to(false)
           end
 
-          it 'removes all symlinks from the hooks directory' do
+          it 'removes all hook files from the hooks directory' do
             expect { subject }.to change {
-              Overcommit::Utils.supported_hook_types.all? do |hook_type|
-                hook_file = File.join(hooks_dir, hook_type)
-                Overcommit::Utils::FileUtils.symlink?(hook_file) &&
-                  Overcommit::Utils::FileUtils.readlink(hook_file) == 'overcommit-hook'
-              end
+              hook_files_installed?(hooks_dir)
             }.from(true).to(false)
           end
         end

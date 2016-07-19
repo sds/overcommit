@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # Entrypoint for Overcommit hook integration. Installing Overcommit will result
-# in all of your git hooks being symlinked to this file, allowing the framework
+# in all of your git hooks being copied from this file, allowing the framework
 # to manage your hooks for you.
 
 # Prevent a Ruby stack trace from appearing when we interrupt the hook.

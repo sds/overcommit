@@ -33,7 +33,7 @@ module Overcommit
       ensure_directory(hooks_path)
       preserve_old_hooks
       install_master_hook
-      install_hook_symlinks
+      install_hook_files
       install_starter_config
 
       log.success "Successfully installed hooks into #{@target}"
@@ -42,7 +42,7 @@ module Overcommit
     def uninstall
       log.log "Removing hooks from #{@target}"
 
-      uninstall_hook_symlinks
+      uninstall_hook_files
       uninstall_master_hook
       restore_old_hooks
 
@@ -54,7 +54,7 @@ module Overcommit
       unless FileUtils.compare_file(MASTER_HOOK, master_hook_install_path)
         preserve_old_hooks
         install_master_hook
-        install_hook_symlinks
+        install_hook_files
 
         log.success "Hooks updated to Overcommit version #{Overcommit::VERSION}"
         true
@@ -103,10 +103,8 @@ module Overcommit
       FileUtils.rm_rf(master_hook_install_path, secure: true)
     end
 
-    def install_hook_symlinks
-      # Link each hook type (pre-commit, commit-msg, etc.) to the master hook.
-      # We change directories so that the relative symlink paths work regardless
-      # of where the repository is located.
+    def install_hook_files
+      # Copy each hook type (pre-commit, commit-msg, etc.) from the master hook.
       Dir.chdir(hooks_path) do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           unless can_replace_file?(hook_type)
@@ -115,7 +113,7 @@ module Overcommit
                   'was not installed by Overcommit'
           end
           FileUtils.rm_f(hook_type)
-          Overcommit::Utils::FileUtils.symlink('overcommit-hook', hook_type)
+          FileUtils.cp('overcommit-hook', hook_type)
         end
       end
     end
@@ -158,7 +156,7 @@ module Overcommit
       log.success "Successfully restored old hooks from #{old_hooks_path}"
     end
 
-    def uninstall_hook_symlinks
+    def uninstall_hook_files
       return unless File.directory?(hooks_path)
 
       Dir.chdir(hooks_path) do
@@ -176,10 +174,7 @@ module Overcommit
     end
 
     def overcommit_hook?(file)
-      return true if File.read(file) =~ /OVERCOMMIT_DISABLE/
-      # TODO: Remove these checks once we hit version 1.0
-      Overcommit::Utils::FileUtils.symlink?(file) &&
-        Overcommit::Utils::FileUtils.readlink(file) == 'overcommit-hook'
+      File.read(file) =~ /OVERCOMMIT_DISABLE/
     rescue Errno::ENOENT
       # Some Ruby implementations (e.g. JRuby) raise an error when the file
       # doesn't exist. Standardize the behavior to return false.

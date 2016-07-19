@@ -9,12 +9,6 @@ describe 'installing Overcommit' do
     end
 
     it 'automatically installs Overcommit hooks for new repositories' do
-      if Overcommit::OS.windows?
-        # Symlinks in template-dir are not compatible with Windows.
-        # Windows users will need to manually install Overcommit for now.
-        skip 'Unix symlinks not compatible with Windows'
-      end
-
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         hook_file = File.join('.git', 'hooks', hook_type)
         File.read(hook_file).should include 'OVERCOMMIT'
@@ -26,10 +20,10 @@ describe 'installing Overcommit' do
         `overcommit --install`
       end
 
-      it 'replaces the hooks with symlinks' do
+      it 'leaves the hooks intact' do
         Overcommit::Utils.supported_hook_types.each do |hook_type|
           hook_file = File.join('.git', 'hooks', hook_type)
-          Overcommit::Utils::FileUtils.symlink?(hook_file).should == true
+          File.read(hook_file).should include 'OVERCOMMIT'
         end
       end
     end
