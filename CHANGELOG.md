@@ -8,6 +8,7 @@
 * Add `TestUnit` pre-push hook to run tests with `Test::Unit`
 * Add `BundleAudit` pre-commit hook to scan gems for vulnerabilities with
   [`bundle-audit`](https://github.com/rubysec/bundler-audit)
+* Copy hook files instead of symlinking
 
 ## 0.34.2
 
