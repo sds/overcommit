@@ -211,6 +211,15 @@ PreCommit:
     install_command: 'npm install -g coffeelint'
     include: '**/*.coffee'
 
+  Credo:
+    enabled: false
+    description: 'Analyze with credo'
+    required_executable: 'mix'
+    flags: ['credo', '--all', '--strict', '--format', 'flycheck']
+    include:
+      - '**/*.ex'
+      - '**/*.exs'
+
   CssLint:
     enabled: false
     description: 'Analyze with csslint'
