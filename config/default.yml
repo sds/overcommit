@@ -154,7 +154,7 @@ PreCommit:
     enabled: false
     description: 'Check for security vulnerabilities'
     required_executable: 'brakeman'
-    flags: ['--exit-on-warn', '--quiet', '--summary', '--only-files']
+    flags: ['--exit-on-warn', '--quiet', '--summary']
     install_command: 'gem install brakeman'
     include:
       - '**/*.rb'
