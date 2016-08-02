@@ -9,6 +9,7 @@
 * Add `BundleAudit` pre-commit hook to scan gems for vulnerabilities with
   [`bundle-audit`](https://github.com/rubysec/bundler-audit)
 * Copy hook files instead of symlinking
+* Add `Credo` pre-commit hook to check Elixir files
 
 ## 0.34.2
 
