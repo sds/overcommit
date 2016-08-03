@@ -589,6 +589,11 @@ PreCommit:
     include:
       - '**/*.html'
 
+  LineEndings:
+    description: 'Check line endings'
+    enabled: false
+    representation: 'unix'
+
   XmlLint:
     enabled: false
     description: 'Analyze with xmllint'
