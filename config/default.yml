@@ -150,15 +150,6 @@ PreCommit:
       - 'Berksfile'
       - 'Berksfile.lock'
 
-  Brakeman:
-    enabled: false
-    description: 'Check for security vulnerabilities'
-    required_executable: 'brakeman'
-    flags: ['--exit-on-warn', '--quiet', '--summary', '--only-files']
-    install_command: 'gem install brakeman'
-    include:
-      - '**/*.rb'
-
   BrokenSymlinks:
     enabled: true
     description: 'Check for broken symlinks'

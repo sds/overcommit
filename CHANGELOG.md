@@ -10,6 +10,10 @@
   [`bundle-audit`](https://github.com/rubysec/bundler-audit)
 * Copy hook files instead of symlinking
 * Add `Credo` pre-commit hook to check Elixir files
+* Remove `Brakeman` pre-commit hook as it could erroneously report clean
+  runs depending on which files were committed to your repository. You
+  should run this tool in a separate job/task in your CI runs as it doesn't
+  make for a good pre-commit hook.
 
 ## 0.34.2
 

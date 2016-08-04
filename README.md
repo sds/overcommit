@@ -463,7 +463,6 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [`*`AuthorEmail](lib/overcommit/hook/pre_commit/author_email.rb)
 * [`*`AuthorName](lib/overcommit/hook/pre_commit/author_name.rb)
 * [BerksfileCheck](lib/overcommit/hook/pre_commit/berksfile_check.rb)
-* [Brakeman](lib/overcommit/hook/pre_commit/brakeman.rb)
 * [`*`BrokenSymlinks](lib/overcommit/hook/pre_commit/broken_symlinks.rb)
 * [BundleAudit](lib/overcommit/hook/pre_commit/bundle_audit.rb)
 * [BundleCheck](lib/overcommit/hook/pre_commit/bundle_check.rb)
