@@ -1,5 +1,7 @@
 module Overcommit::Hook::CommitMsg
   # Check that a commit message conforms to a certain style
+  #
+  # @see https://www.npmjs.com/package/commitplease
   class Commitplease < Base
     def run
       result = execute(command)
