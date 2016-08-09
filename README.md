@@ -470,6 +470,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)
 * [ChamberSecurity](lib/overcommit/hook/pre_commit/chamber_security.rb)
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
+* [Commitplease](lib/overcommit/hook/pre_commit/commitplease.rb)
 * [Credo](lib/overcommit/hook/pre_commit/credo.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
 * [Dogma](lib/overcommit/hook/pre_commit/dogma.rb)
