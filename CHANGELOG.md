@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.35.0
 
 * Drop support for Ruby 1.9.3
 * Fix `JavaCheckstyle` pre-commit hook to properly categorize `INFO` and

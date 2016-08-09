@@ -2,5 +2,5 @@
 
 # Defines the gem version.
 module Overcommit
-  VERSION = '0.34.2'.freeze
+  VERSION = '0.35.0'.freeze
 end
