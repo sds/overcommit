@@ -14,6 +14,8 @@
   runs depending on which files were committed to your repository. You
   should run this tool in a separate job/task in your CI runs as it doesn't
   make for a good pre-commit hook.
+* Add `Commitplease` pre-commit hook which checks commit messages with
+  [`commitplease`](https://www.npmjs.com/package/commitplease)
 
 ## 0.34.2
 
