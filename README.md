@@ -529,6 +529,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 but before any objects have been transferred. If a hook fails, the push is
 aborted.
 
+* [Brakeman](lib/overcommit/hook/pre_commit/brakeman.rb)
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
 * [RSpec](lib/overcommit/hook/pre_push/r_spec.rb)
