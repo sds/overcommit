@@ -247,6 +247,11 @@ PreCommit:
     description: 'Check for file execute permissions'
     quiet: true
 
+  Fasterer:
+    enabled: false
+    description: 'Suggest some speed improvements'
+    required_executable: 'fasterer'
+
   ForbiddenBranches:
     enabled: false
     description: 'Check for commit to forbidden branch'
