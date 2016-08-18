@@ -861,8 +861,6 @@ PrePush:
     required_executable: 'brakeman'
     flags: ['--exit-on-warn', '--quiet', '--summary']
     install_command: 'gem install brakeman'
-    include:
-      - '**/*.rb'
 
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
