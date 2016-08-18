@@ -251,6 +251,7 @@ PreCommit:
     enabled: false
     description: 'Analyzing for potential speed improvements'
     required_executable: 'fasterer'
+    install_command: 'gem install fasterer'
     include: '**/*.rb'
 
   ForbiddenBranches:

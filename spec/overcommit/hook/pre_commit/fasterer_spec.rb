@@ -3,10 +3,11 @@ require 'spec_helper'
 describe Overcommit::Hook::PreCommit::Fasterer do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
+  let(:applicable_files) { %w[file1.rb file2.rb] }
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
+    subject.stub(:applicable_files).and_return(applicable_files)
   end
 
   around do |example|
@@ -16,7 +17,7 @@ describe Overcommit::Hook::PreCommit::Fasterer do
   end
 
   before do
-    subject.stub(:execute).with(%w[fasterer]).and_return(result)
+    subject.stub(:execute).with(%w[fasterer], args: applicable_files).and_return(result)
   end
 
   context 'and has 2 suggestions for speed improvement' do

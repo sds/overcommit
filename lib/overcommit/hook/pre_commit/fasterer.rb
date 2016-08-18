@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/DamirSvrtan/fasterer
   class Fasterer < Base
     def run
-      result = execute(command)
+      result = execute(command, args: applicable_files)
       output = result.stdout
 
       if extract_offense_num(output) == 0
