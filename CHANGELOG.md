@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook
+
 ## 0.35.0
 
 * Drop support for Ruby 1.9.3
