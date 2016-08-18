@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook
+* Add [`Brakeman`](http://brakemanscanner.org/) pre-push hook
 
 ## 0.35.0
 
