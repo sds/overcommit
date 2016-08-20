@@ -556,6 +556,14 @@ PreCommit:
     install_command: 'npm install -g standard'
     include: '**/*.js'
 
+  TsLint:
+      enabled: false
+      description: 'Analyze with TSLint'
+      required_executable: 'tslint'
+      install_command: 'npm install -g tslint typescript'
+      flags: ['--t=prose']
+      include: '**/*.ts'
+
   TrailingWhitespace:
     enabled: false
     description: 'Check for trailing whitespace'
