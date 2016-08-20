@@ -24,7 +24,6 @@ describe Overcommit::Hook::PreCommit::TsLint do
 
       it { should pass }
     end
-
   end
 
   context 'when tslint exits unsucessfully' do
