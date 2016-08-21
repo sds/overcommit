@@ -1,5 +1,5 @@
 module Overcommit::Hook::PreCommit
-  # Runs `tslint` against modified JavaScript files.
+  # Runs `tslint` against modified TypeScript files.
   # @see http://palantir.github.io/tslint/
   class TsLint < Base
     def run
