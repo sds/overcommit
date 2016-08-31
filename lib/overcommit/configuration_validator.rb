@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/LineLength
 module Overcommit
   # Validates and normalizes a configuration.
   class ConfigurationValidator
@@ -16,6 +17,7 @@ module Overcommit
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
       check_hook_name_format(hash)
+      check_hook_env(hash)
       check_for_missing_enabled_option(hash) unless @options[:default]
       check_for_too_many_processors(config, hash)
       check_for_verify_plugin_signatures_option(hash)
@@ -48,6 +50,42 @@ module Overcommit
           else
             value
           end
+      end
+    end
+
+    def check_hook_env(hash)
+      errors = []
+
+      Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
+        hash.fetch(hook_type, {}).each do |hook_name, hook_config|
+          hook_env = hook_config.fetch('env', {})
+
+          unless hook_env.is_a?(Hash)
+            errors << "#{hook_type}::#{hook_name} has an invalid `env` specified: " \
+                      'must be a hash of environment variable name to string value.'
+            next
+          end
+
+          hook_env.each do |var_name, var_value|
+            if var_name.include?('=')
+              errors << "#{hook_type}::#{hook_name} has an invalid `env` specified: " \
+                        "variable name `#{var_name}` cannot contain `=`."
+            end
+
+            unless var_value.nil? || var_value.is_a?(String)
+              errors << "#{hook_type}::#{hook_name} has an invalid `env` specified: " \
+                        "value of `#{var_name}` must be a string or `nil`, but was " \
+                        "#{var_value.inspect} (#{var_value.class})"
+            end
+          end
+        end
+      end
+
+      if errors.any?
+        @log.error errors.join("\n") if @log
+        @log.newline if @log
+        raise Overcommit::Exceptions::ConfigurationError,
+              'One or more hooks had an invalid `env` configuration option'
       end
     end
 

@@ -4,6 +4,7 @@
 
 * Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook
 * Add [`Brakeman`](http://brakemanscanner.org/) pre-push hook
+* Validate hook `env` environment configurations have valid names and values
 
 ## 0.35.0
 
