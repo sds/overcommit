@@ -1,10 +1,10 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.36.0
 
 * Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook
 * Add [`Brakeman`](http://brakemanscanner.org/) pre-push hook
-* Validate hook `env` environment configurations have valid names and values
+* Validate that hook `env` environment configurations have valid names/values
 
 ## 0.35.0
 
