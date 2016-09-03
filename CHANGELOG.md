@@ -4,6 +4,7 @@
 
 * Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook
 * Add [`Brakeman`](http://brakemanscanner.org/) pre-push hook
+* Add [`TSLint`](http://palantir.github.io/tslint/) pre-commit hook
 * Validate that hook `env` environment configurations have valid names/values
 
 ## 0.35.0
