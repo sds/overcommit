@@ -44,7 +44,7 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     around do |example|
       repo do
         FileUtils.mkdir_p('db/migrate')
-        File.open(ruby_schema_file, 'w') { |f| f.write('schema') }
+        File.open(ruby_schema_file, 'w') { |f| f.write('version: 20160904205635') }
         `git add #{ruby_schema_file}`
         example.run
       end
@@ -61,7 +61,7 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     around do |example|
       repo do
         FileUtils.mkdir_p('db/migrate')
-        File.open(sql_schema_file, 'w') { |f| f.write('schema') }
+        File.open(sql_schema_file, 'w') { |f| f.write("VALUES ('20151214213046')") }
         `git add #{sql_schema_file}`
         example.run
       end
@@ -192,5 +192,24 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     end
 
     it { should fail_hook }
+  end
+
+  context 'when the schema file is at version 0 and there are no migrations' do
+    before do
+      subject.stub(:applicable_files).and_return([ruby_schema_file])
+    end
+
+    around do |example|
+      repo do
+        FileUtils.mkdir_p('db')
+
+        File.open(ruby_schema_file, 'w') { |f| f.write('version: 0') }
+        `git add #{ruby_schema_file}`
+
+        example.run
+      end
+    end
+
+    it { should pass }
   end
 end
