@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
     def run
       messages = []
 
-      applicable_files.map do |file_name|
+      text_files.map do |file_name|
         file = File.open(file_name)
         file.each_line do |line|
           next if unix? && line =~ /\A((?!\r).)*\n\z/
@@ -24,12 +24,19 @@ module Overcommit::Hook::PreCommit
 
     private
 
+    def text_files
+      result = execute(%w[git grep -zIl \'\' --], args: applicable_files)
+      raise 'Unable to access git tree' unless result.success?
+
+      result.stdout.split("\0")
+    end
+
     def unix?
-      config['representation'] == 'unix'
+      config['eol'] == 'lf'
     end
 
     def windows?
-      config['representation'] == 'windows'
+      config['eol'] == 'crlf'
     end
   end
 end

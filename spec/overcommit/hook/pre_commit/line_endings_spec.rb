@@ -6,7 +6,7 @@ describe Overcommit::Hook::PreCommit::LineEndings do
       Overcommit::Configuration.new(
         'PreCommit' => {
           'LineEndings' => {
-            'representation' => representation
+            'eol' => eol
           }
         }
       )
@@ -14,7 +14,7 @@ describe Overcommit::Hook::PreCommit::LineEndings do
   end
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
-  let(:representation) { 'unix' }
+  let(:eol) { 'lf' }
   let(:staged_file) { 'filename.txt' }
 
   before do
@@ -29,30 +29,30 @@ describe Overcommit::Hook::PreCommit::LineEndings do
     end
   end
 
-  context 'when enforcing unix representation' do
-    context 'when file contains windows line endings' do
+  context 'when enforcing lf' do
+    context 'when file contains crlf line endings' do
       let(:contents) { "CR-LF\r\nline\r\nendings\r\n" }
 
       it { should fail_hook }
     end
 
-    context 'when file contains unix line endings' do
+    context 'when file contains lf endings' do
       let(:contents) { "LF\nline\nendings\n" }
 
       it { should pass }
     end
   end
 
-  context 'when enforcing windows representation' do
-    let(:representation) { 'windows' }
+  context 'when enforcing crlf' do
+    let(:eol) { 'crlf' }
 
-    context 'when file contains windows line endings' do
+    context 'when file contains crlf line endings' do
       let(:contents) { "CR-LF\r\nline\r\nendings\r\n" }
 
       it { should pass }
     end
 
-    context 'when file contains unix line endings' do
+    context 'when file contains lf line endings' do
       let(:contents) { "LF\nline\nendings\n" }
 
       it { should fail_hook }
