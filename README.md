@@ -87,18 +87,22 @@ available during your hook runs.
 gem install overcommit
 ```
 
-You can then run the `overcommit` command to install hooks into repositories:
+You can then run the `overcommit` command to install hooks into repositories.
 
 ```bash
 mkdir important-project
 cd important-project
 git init
 overcommit --install
+overcommit --sign    # See Security section below for explanation
 ```
 
-Any existing hooks for your repository which Overcommit would have replaced
-will be backed up. You can restore everything to the way it was by running
-`overcommit --uninstall`.
+See the [Security](#security) section of the documentation to understand why
+`overcommit --sign` is necessary after installing hooks for the first time.
+
+After running `overcommit --install`, any existing hooks for your repository
+which Overcommit will replace will be backed up. You can restore everything to
+the way it was by running `overcommit --uninstall`.
 
 ### Automatically Install Overcommit Hooks
 
