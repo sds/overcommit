@@ -75,6 +75,10 @@ Style/MultilineOperationIndentation:
 Style/Next:
   Enabled: false
 
+# Calling .zero? instead of comparing `== 0` seems unnecessarily verbose
+Style/NumericPredicate:
+  Enabled: false
+
 Style/ParallelAssignment:
   Enabled: false
 
@@ -115,4 +119,8 @@ Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/TrailingCommaInLiteral:
+  Enabled: false
+
+# commit_sha1 is indeed how we want to write such a variable, so ignore this cop
+Style/VariableNumber:
   Enabled: false
