@@ -592,8 +592,7 @@ PreCommit:
   LineEndings:
     description: 'Check line endings'
     enabled: false
-    eol: 'lf'
-    # eol: 'crlf'
+    eol: "\n"
 
   XmlLint:
     enabled: false

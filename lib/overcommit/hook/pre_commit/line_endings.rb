@@ -4,11 +4,14 @@ module Overcommit::Hook::PreCommit
     def run
       messages = []
 
-      text_files.map do |file_name|
+      offending_files.map do |file_name|
         file = File.open(file_name)
         file.each_line do |line|
-          next if unix? && line =~ /\A((?!\r).)*\n\z/
-          next if windows? && line =~ /\A.*\r\n\z/
+          # remove configured line-ending
+          line.gsub!(/#{config['eol']}/, '')
+
+          # detect any left over line-ending characters
+          next unless line.end_with?("\n", "\r")
 
           messages << Overcommit::Hook::Message.new(
             :error,
@@ -24,19 +27,24 @@ module Overcommit::Hook::PreCommit
 
     private
 
-    def text_files
-      result = execute(%w[git grep -zIl \'\' --], args: applicable_files)
+    def offending_files
+      result = execute(%w[git ls-files --eol -z --], args: applicable_files)
       raise 'Unable to access git tree' unless result.success?
 
-      result.stdout.split("\0")
+      result.stdout.split("\0").map do |file_info|
+        i, _w, _attr, path = file_info.split
+        next if i == "l/#{eol}"
+        path
+      end.compact
     end
 
-    def unix?
-      config['eol'] == 'lf'
-    end
-
-    def windows?
-      config['eol'] == 'crlf'
+    def eol
+      @eol ||=  case config['eol']
+                when "\n"
+                  'lf'
+                when "\r\n"
+                  'crlf'
+                end
     end
   end
 end
