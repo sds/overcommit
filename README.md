@@ -81,7 +81,14 @@ available during your hook runs.
 
 ## Installation
 
-`overcommit` is installed via [RubyGems](https://rubygems.org/):
+`overcommit` is installed via [RubyGems](https://rubygems.org/). It is strongly
+recommended that your environment support running `gem install` without
+requiring `sudo` privileges. Using a Ruby version manager like
+[`rbenv`](https://github.com/rbenv/rbenv/) or [`rvm`](https://rvm.io/) can help
+here.
+
+Once you have an environment that allows you to install gems without `sudo`,
+run:
 
 ```bash
 gem install overcommit
