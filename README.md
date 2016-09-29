@@ -533,6 +533,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [W3cHtml](lib/overcommit/hook/pre_commit/w3c_html.rb)
 * [XmlLint](lib/overcommit/hook/pre_commit/xml_lint.rb)
 * [XmlSyntax](lib/overcommit/hook/pre_commit/xml_syntax.rb)
+* [YamlLint](lib/overcommit/hook/pre_commit/yaml_lint.rb)
 * [YamlSyntax](lib/overcommit/hook/pre_commit/yaml_syntax.rb)
 
 ### PrePush

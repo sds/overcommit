@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master
+
+* Add [`YAMLLint`](https://github.com/adrienverge/yamllint) pre-commit hook
+
 ## 0.36.0
 
 * Add [`Fasterer`](https://github.com/DamirSvrtan/fasterer) pre-commit hook

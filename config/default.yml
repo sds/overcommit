@@ -627,6 +627,16 @@ PreCommit:
       - '**/*.xml'
       - '**/*.svg'
 
+  YamlLint:
+    enabled: false
+    description: 'Analyze with YAMLlint'
+    required_executable: 'yamllint'
+    flags: ['--format=parsable']
+    install_command: 'pip install yamllint'
+    include:
+      - '**/*.yaml'
+      - '**/*.yml'
+
   YamlSyntax:
     enabled: false
     description: 'Check YAML syntax'
