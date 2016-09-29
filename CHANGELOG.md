@@ -3,6 +3,7 @@
 ## master
 
 * Add [`YAMLLint`](https://github.com/adrienverge/yamllint) pre-commit hook
+* Add [`Foodcritic`](http://www.foodcritic.io/) pre-commit hook
 
 ## 0.36.0
 
