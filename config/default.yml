@@ -254,6 +254,14 @@ PreCommit:
     install_command: 'gem install fasterer'
     include: '**/*.rb'
 
+  Foodcritic:
+    enabled: false
+    description: 'Analyze with Foodcritic'
+    required_executable: 'foodcritic'
+    flags: ['-f', 'any']
+    install_command: 'gem install foodcritic'
+    include: '**/*.rb'
+
   ForbiddenBranches:
     enabled: false
     description: 'Check for commit to forbidden branch'
