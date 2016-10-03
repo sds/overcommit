@@ -3,6 +3,8 @@
 ## master
 
 * Add [`YAMLLint`](https://github.com/adrienverge/yamllint) pre-commit hook
+* Add `LicenceHeader` pre-commit enforcement to ensure open source projects
+  contain proper licence comments.
 
 ## 0.36.0
 

@@ -371,6 +371,7 @@ PreCommit:
     enabled: false
     include: '**/*.*'
     licence_file: 'LICENSE.txt'
+    description: 'Check source files for licence headers'
 
   LocalPathsInGemfile:
     enabled: false
