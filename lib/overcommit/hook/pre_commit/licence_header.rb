@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       end
 
       messages = applicable_files.map do |file|
-        check_file(file, license_contents)
+        check_file(file, licence_contents)
       end.compact
 
       return :fail, messages.join("\n") if messages.any?
