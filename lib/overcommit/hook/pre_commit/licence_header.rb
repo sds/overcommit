@@ -8,12 +8,11 @@ module Overcommit::Hook::PreCommit
         return :fail, "Unable to load licence file #{licence_file}"
       end
 
-      applicable_files.each do |file|
-        message = check_file(file, licence_contents)
-        if message
-          return :fail, message
-        end
-      end
+      messages = applicable_files.map do |file|
+        check_file(file, license_contents)
+      end.compact
+
+      return :fail, messages.join("\n") if messages.any?
 
       :pass
     end
