@@ -30,13 +30,18 @@ describe Overcommit::Hook::PreCommit::LicenceHeader do
 
     context 'when all files contain the license header' do
       before do
-        File.open(file, 'w') { |f| f.puts(license_contents); f.write('And some text') }
+        File.open(file, 'w') do |f|
+          license_contents.split("\n").each do |line|
+            f.puts("// #{line}")
+          end
+          f.write('And some text')
+        end
       end
 
       it { should pass }
     end
 
-    context 'when all files contain the license header' do
+    context 'when a file is missing a licence header' do
       before do
         File.open(file, 'w') { |f| f.write('Some text without a license') }
       end
