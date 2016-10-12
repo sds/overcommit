@@ -13,3 +13,6 @@ gem 'coveralls'
 
 # Pin RuboCop for Travis builds.
 gem 'rubocop', '0.43.0'
+
+# Prevent errors for Ruby < 2.1
+gem 'net-http-persistent', '~> 2.7'
