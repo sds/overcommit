@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
                             Dir['libexec/**/*'] +
                             Dir['template-dir/**/*']
 
-  s.required_ruby_version = '>= 2.1'
+  s.required_ruby_version = '>= 2'
 
   s.add_dependency             'childprocess', '~> 0.5.8'
   s.add_dependency             'iniparse', '~> 1.4'
