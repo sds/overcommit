@@ -1,44 +1,106 @@
 module Overcommit::Hook::PreCommit
-  # Runs `foodcritic` against any modified Ruby files from chef directory structure.
+  # Runs `foodcritic` against any modified Ruby files from Chef directory structure.
   #
   # @see http://www.foodcritic.io/
   #
-  # Provides three configuration options:
+  # There are two "modes" you can run this hook in based on the repo:
   #
-  # * `cookbooks_directory`
-  #   If not set, or set to false, the current directory will be treated as a cookbook directory
-  #   (the one containing recipes, libraries, etc.)
-  #   If set to path (absolute or relative), hook will interpret it as a cookbooks directory
-  #   (so all each subdirectory will be treated as separate cookbook)
-  # * `environments_directory`
-  #   If provided, the given path will be treated as environments directory
-  # * `roles_directory`
-  #   If provided, the given path will be treated as roles directory
+  # SINGLE COOKBOOK REPO MODE
+  # -------------------------
+  # The default. Use this if your repository contains just a single cookbook,
+  # i.e. the top-level repo directory contains directories called `attributes`,
+  # `libraries`, `recipes`, etc.
   #
-  # By default, none of those options is set, which means, the repo directory will be treaded
-  # as a cookbook directory (with recipes, libraries etc.)
+  # To get this to work well, you'll want to set your Overcommit configuration
+  # for this hook to something like:
   #
-  # Example:
+  # PreCommit:
+  #   Foodcritic:
+  #     enabled: true
+  #     include:
+  #       - 'attributes/**/*'
+  #       - 'definitions/**/*'
+  #       - 'files/**/*'
+  #       - 'libraries/**/*'
+  #       - 'providers/**/*'
+  #       - 'recipes/**/*'
+  #       - 'resources/**/*'
+  #       - 'templates/**/*'
   #
-  # Foodcritic:
-  #   enabled: true
-  #   cookbooks_directory: './cookbooks'
-  #   environments_directory: './environments'
-  #   roles_directory: './roles'
+  # MONOLITHIC REPO MODE
+  # --------------------
+  # Use this if you store multiple cookbooks, environments, and roles (or any
+  # combination thereof) in a single repository.
+  #
+  # There are three configuration options relevant here:
+  #
+  #   * `cookbooks_directory`
+  #     When set, hook will treat the path as a directory containing cookbooks.
+  #     Each subdirectory of this directory will be treated as a separate
+  #     cookbook.
+  #
+  #   * `environments_directory`
+  #     When set, hook will treat the path as a directory containing environment
+  #     files.
+  #
+  #   * `roles_directory`
+  #     When set, hook will treat the given path as a directory containing role
+  #     files.
+  #
+  # In order to run in monolithic repo mode, YOU MUST SET `cookbooks_directory`.
+  # The other configuration options are optional, if you happen to store
+  # environments/roles in another repo.
+  #
+  # To get this to work well, you'll want to set your Overcommit configuration
+  # for this hook to something like:
+  #
+  # PreCommit:
+  #   Foodcritic:
+  #     enabled: true
+  #     cookbooks_directory: 'cookbooks'
+  #     environments_directory: 'environments'
+  #     roles_directory: 'roles'
+  #     include:
+  #       - 'cookbooks/**/*'
+  #       - 'environments/**/*'
+  #       - 'roles/**/*'
+  #
+  # ADDITIONAL CONFIGURATION
+  # ------------------------
+  # You can disable rules using the `flags` hook option. For example:
+  #
+  # PreCommit:
+  #   Foodcritic:
+  #     enabled: true
+  #     ...
+  #     flags:
+  #       - '--epic-fail=any'
+  #       - '-t~FC011' # Missing README in markdown format
+  #       - '-t~FC064' # Ensure issues_url is set in metadata
+  #
+  # Any other command line flag supported by the `foodcritic` executable can be
+  # specified here.
+  #
+  # If you want the hook run to fail (and not just warn), set the `on_warn`
+  # option for the hook to `fail`:
+  #
+  # PreCommit:
+  #   Foodcritic:
+  #     enabled: true
+  #     on_warn: fail
+  #     ...
+  #
+  # This will treat any warnings as failures and cause the hook to exit
+  # unsuccessfully.
   class Foodcritic < Base
     def run
-      args = modified_environments_args + modified_roles_args + modified_cookbooks_args
-
-      args += applicable_files.reject do |file|
-        %w[spec test].any? { |dir| file.include?("#{File::SEPARATOR}#{dir}#{File::SEPARATOR}") }
-      end - modified_environments - modified_roles if modified_cookbooks.empty?
-
+      args = modified_cookbooks_args + modified_environments_args + modified_roles_args
       result = execute(command, args: args)
 
       if result.success?
         :pass
       else
-        return [:warn, result.stdout]
+        return [:warn, result.stderr + result.stdout]
       end
     end
 
@@ -50,31 +112,25 @@ module Overcommit::Hook::PreCommit
         map       { |path| path.gsub(%r{^#{dir_prefix}/}, '') }.
         group_by  { |path| path.split('/').first }.
         keys.
-        map { |cookbook| File.join(dir_prefix, cookbook) }
+        map { |path| File.join(dir_prefix, path) }
     end
 
     def modified_environments_args
-      modified_environments.map { |env| %W[-E #{env}] }.flatten
+      modified('environments').map { |env| %W[-E #{env}] }.flatten
     end
 
     def modified_roles_args
-      modified_roles.map { |role| %W[-R #{role}] }.flatten
+      modified('roles').map { |role| %W[-R #{role}] }.flatten
     end
 
     def modified_cookbooks_args
-      modified_cookbooks.map { |cookbook| %W[-B #{cookbook}] }.flatten
-    end
-
-    def modified_environments
-      modified 'environments'
-    end
-
-    def modified_roles
-      modified 'roles'
-    end
-
-    def modified_cookbooks
-      modified 'cookbooks'
+      # Return the repo root if repository contains a single cookbook
+      if !config['cookbooks_directory'] || config['cookbooks_directory'].empty?
+        ['-B', Overcommit::Utils.repo_root]
+      else
+        # Otherwise return all modified cookbooks in the cookbook directory
+        modified('cookbooks').map { |cookbook| ['-B', cookbook] }.flatten
+      end
     end
 
     def modified(type)
@@ -85,11 +141,7 @@ module Overcommit::Hook::PreCommit
 
     def full_directory_path(config_option)
       return config[config_option] if config[config_option].start_with?(File::SEPARATOR)
-      File.absolute_path(File.join(repo_root, config[config_option]))
-    end
-
-    def repo_root
-      Overcommit::Utils.repo_root
+      File.absolute_path(File.join(Overcommit::Utils.repo_root, config[config_option]))
     end
   end
 end

@@ -38,7 +38,7 @@ RSpec.configure do |config|
   end
 
   config.mock_with :rspec do |c|
-    c.syntax = :should
+    c.syntax = [:expect, :should]
   end
 
   config.around(:each) do |example|

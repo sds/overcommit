@@ -258,9 +258,8 @@ PreCommit:
     enabled: false
     description: 'Analyze with Foodcritic'
     required_executable: 'foodcritic'
-    flags: ['-f', 'any']
+    flags: ['--epic-fail=any']
     install_command: 'gem install foodcritic'
-    include: '**/*.rb'
 
   ForbiddenBranches:
     enabled: false
