@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::LicenceHeader do
+describe Overcommit::Hook::PreCommit::LicenseHeader do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -41,7 +41,7 @@ describe Overcommit::Hook::PreCommit::LicenceHeader do
       it { should pass }
     end
 
-    context 'when a file is missing a licence header' do
+    context 'when a file is missing a license header' do
       before do
         File.open(file, 'w') { |f| f.write('Some text without a license') }
       end

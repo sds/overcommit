@@ -3,8 +3,8 @@
 ## master
 
 * Add [`YAMLLint`](https://github.com/adrienverge/yamllint) pre-commit hook
-* Add `LicenceHeader` pre-commit enforcement to ensure open source projects
-  contain proper licence comments.
+* Add `LicenseHeader` pre-commit enforcement to ensure open source projects
+  contain proper license comments.
 * Add [`Foodcritic`](http://www.foodcritic.io/) pre-commit hook
 * Fix `CapitalizedSubject` to not fail when commit message starts with one or
   more empty lines
