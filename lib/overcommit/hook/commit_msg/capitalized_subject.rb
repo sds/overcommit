@@ -4,7 +4,8 @@ module Overcommit::Hook::CommitMsg
     def run
       return :pass if empty_message?
 
-      subject = commit_message_lines[0].to_s
+      # Git treats the first non-empty line as the subject
+      subject = commit_message_lines.find { |line| !line.strip.empty? }.to_s
       first_letter = subject.match(/^[[:punct:]]*(.)/)[1]
       unless special_prefix?(subject) || first_letter =~ /[[:upper:]]/
         return :warn, 'Subject should start with a capital letter'

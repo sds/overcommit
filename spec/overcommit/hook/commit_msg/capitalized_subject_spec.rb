@@ -99,4 +99,15 @@ This was created by running git commit --squash=...
 
     it { should pass }
   end
+
+  context 'when first line of commit message is an empty line' do
+    let(:commit_msg) { <<-MSG }
+
+There was no first line
+
+This is a mistake.
+    MSG
+
+    it { should pass }
+  end
 end
