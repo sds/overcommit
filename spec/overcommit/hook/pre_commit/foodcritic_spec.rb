@@ -33,8 +33,7 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
       it 'passes the repository root as the cookbook path' do
         expect(subject).to receive(:execute).
           with(subject.command,
-               hash_including(args: ['-B', Overcommit::Utils.repo_root])).
-          and_call_original
+               hash_including(args: ['-B', Overcommit::Utils.repo_root]))
         subject.run
       end
 
@@ -96,7 +95,7 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
                  '-E', File.join(Overcommit::Utils.repo_root, 'environments', 'staging.json'),
                  '-R', File.join(Overcommit::Utils.repo_root, 'roles', 'role_a.json'),
                  '-R', File.join(Overcommit::Utils.repo_root, 'roles', 'role_b.json'),
-               ])).and_call_original
+               ]))
         subject.run
       end
 
