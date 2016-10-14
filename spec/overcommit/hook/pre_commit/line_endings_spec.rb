@@ -24,7 +24,7 @@ describe Overcommit::Hook::PreCommit::LineEndings do
   around do |example|
     repo do
       File.open(staged_file, 'w') { |f| f.write(contents) }
-      `git add #{staged_file}`
+      `git add #{staged_file} > #{File::NULL} 2>&1`
       example.run
     end
   end
