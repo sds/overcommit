@@ -45,6 +45,8 @@ module Overcommit::Hook::PreCommit
                   'lf'
                 when "\r\n"
                   'crlf'
+                else
+                  raise 'Invalid `eol` option specified: must be "\n" or "\r\n"'
                 end
     end
   end
