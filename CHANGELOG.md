@@ -1,17 +1,22 @@
 # Overcommit Changelog
 
-## master
+## 0.37.0
+
+### New Features
 
 * Add `FixMe` pre-commit hook, to ensure that no "token" words slips through.
-  These strings are things you should fix now, not later.
+  These strings are things you should fix now, not later
 * Add [`YAMLLint`](https://github.com/adrienverge/yamllint) pre-commit hook
 * Add `LicenseHeader` pre-commit enforcement to ensure open source projects
-  contain proper license comments.
+  contain proper license comments
 * Add [`Foodcritic`](http://www.foodcritic.io/) pre-commit hook
-* Fix `CapitalizedSubject` to not fail when commit message starts with one or
-  more empty lines
 * Add `LineEndings` pre-commit hook that allows you to enforcing UNIX- or
   Windows-style line endings
+
+### Bug Fixes
+
+* Fix `CapitalizedSubject` to not fail when commit message starts with one or
+  more empty lines
 
 ## 0.36.0
 
