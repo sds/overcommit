@@ -12,12 +12,14 @@ describe Overcommit::Hook::PreCommit::LineEndings do
       )
     )
   end
+
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
   let(:eol) { "\n" }
   let(:staged_file) { 'filename.txt' }
 
   before do
+    skip('Skip LineEndings tests for Git < 2.10') if Overcommit::GIT_VERSION < '2.10'
     subject.stub(:applicable_files).and_return([staged_file])
   end
 

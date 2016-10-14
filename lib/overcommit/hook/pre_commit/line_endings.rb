@@ -1,5 +1,7 @@
 module Overcommit::Hook::PreCommit
   # Checks for line endings in files.
+  #
+  # WARNING: Works with Git 2.10.0 or newer.
   class LineEndings < Base
     def run
       messages = []
