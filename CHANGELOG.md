@@ -10,6 +10,8 @@
 * Add [`Foodcritic`](http://www.foodcritic.io/) pre-commit hook
 * Fix `CapitalizedSubject` to not fail when commit message starts with one or
   more empty lines
+* Add `LineEndings` pre-commit hook that allows you to enforcing UNIX- or
+  Windows-style line endings
 
 ## 0.36.0
 

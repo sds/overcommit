@@ -505,6 +505,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Jsl](lib/overcommit/hook/pre_commit/jsl.rb)
 * [JsonSyntax](lib/overcommit/hook/pre_commit/json_syntax.rb)
 * [LicenseHeader](lib/overcommit/hook/pre_commit/license_header.rb)
+* [LineEndings](lib/overcommit/hook/pre_commit/line_endings.rb)
 * [LocalPathsInGemfile](lib/overcommit/hook/pre_commit/local_paths_in_gemfile.rb)
 * [Mdl](lib/overcommit/hook/pre_commit/mdl.rb)
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
