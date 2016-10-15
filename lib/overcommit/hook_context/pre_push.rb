@@ -17,7 +17,7 @@ module Overcommit::HookContext
       end
     end
 
-    PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
+    PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do # rubocop:disable Metrics/BlockLength, Metrics/LineLength
       def forced?
         !(created? || deleted? || overwritten_commits.empty?)
       end

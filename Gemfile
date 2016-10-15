@@ -12,7 +12,7 @@ gem 'travis', '~> 1.7'
 gem 'coveralls'
 
 # Pin RuboCop for Travis builds.
-gem 'rubocop', '0.43.0'
+gem 'rubocop', '0.44.1'
 
 # Prevent errors for Ruby < 2.1
 gem 'net-http-persistent', '~> 2.7'
