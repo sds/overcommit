@@ -26,10 +26,6 @@ PreCommit:
       - '**/Gemfile'
       - template-dir/hooks/overcommit-hook
 
-  TravisLint:
-    enabled: true
-    flags: ['lint', '--skip-version-check']
-
   TrailingWhitespace:
     enabled: true
 

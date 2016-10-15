@@ -3,6 +3,7 @@
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/iqsr6jtrq6y0jhqq/branch/master?svg=true)](https://ci.appveyor.com/project/brigade/overcommit/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/brigade/overcommit/badge.svg?branch=master)](https://coveralls.io/github/brigade/overcommit?branch=master)
 [![Code Climate](https://codeclimate.com/github/brigade/overcommit.svg)](https://codeclimate.com/github/brigade/overcommit)
+[![Dependency Status](https://gemnasium.com/brigade/overcommit.svg)](https://gemnasium.com/brigade/overcommit)
 [![Inline docs](http://inch-ci.org/github/brigade/overcommit.svg?branch=master)](http://inch-ci.org/github/brigade/overcommit)
 
 <p align="center">
