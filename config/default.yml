@@ -674,6 +674,7 @@ PostCheckout:
   ALL:
     required: false
     quiet: false
+    skip_file_checkout: true
 
   BowerInstall:
     enabled: false

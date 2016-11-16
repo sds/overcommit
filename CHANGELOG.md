@@ -1,5 +1,11 @@
 # Overcommit Changelog
 
+## master
+
+### New Features
+
+* Add `skip_file_checkout` hook setting for `PostCheckout` hooks
+
 ## 0.37.0
 
 ### New Features
