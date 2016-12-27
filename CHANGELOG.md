@@ -4,6 +4,7 @@
 
 ### New Features
 
+* Moved `CommitPlease` from `CommitMsg` to `PostCommit` hook
 * Add `skip_file_checkout` hook setting for `PostCheckout` hooks
 
 ## 0.37.0

@@ -114,12 +114,6 @@ CommitMsg:
     enabled: true
     description: 'Check for trailing periods in subject'
 
-  Commitplease:
-    enabled: false
-    description: 'Analyze with Commitplease'
-    required_executable: './node_modules/.bin/commitplease'
-    install_command: 'npm install --save-dev commitplease'
-
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed. These hooks are ideal for syntax checkers, linters, and
 # other checks that you want to run before you allow a commit object to be
@@ -746,6 +740,13 @@ PostCommit:
       - 'Gemfile'
       - 'Gemfile.lock'
       - '*.gemspec'
+
+  Commitplease:
+    enabled: false
+    description: 'Analyze with Commitplease'
+    required_executable: './node_modules/.bin/commitplease'
+    install_command: 'npm install --save-dev commitplease'
+    flags: ['-1']
 
   GitGuilt:
     enabled: false
