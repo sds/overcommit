@@ -1,4 +1,4 @@
-module Overcommit::Hook::CommitMsg
+module Overcommit::Hook::PostCommit
   # Check that a commit message conforms to a certain style
   #
   # @see https://www.npmjs.com/package/commitplease

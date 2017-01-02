@@ -391,7 +391,6 @@ a task ID is included for tracking purposes, or ensuring your commit messages
 follow [proper formatting guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
 
 * [`*`CapitalizedSubject](lib/overcommit/hook/commit_msg/capitalized_subject.rb)
-* [Commitplease](lib/overcommit/hook/commit_msg/commitplease.rb)
 * [`*`EmptyMessage](lib/overcommit/hook/commit_msg/empty_message.rb)
 * [GerritChangeId](lib/overcommit/hook/commit_msg/gerrit_change_id.rb)
 * [HardTabs](lib/overcommit/hook/commit_msg/hard_tabs.rb)
@@ -421,6 +420,7 @@ however, it can be used to alert the user to some issue.
 
 * [BowerInstall](lib/overcommit/hook/post_commit/bower_install.rb)
 * [BundleInstall](lib/overcommit/hook/post_commit/bundle_install.rb)
+* [Commitplease](lib/overcommit/hook/post_commit/commitplease.rb)
 * [GitGuilt](lib/overcommit/hook/post_commit/git_guilt.rb)
 * [IndexTags](lib/overcommit/hook/post_commit/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_commit/npm_install.rb)
