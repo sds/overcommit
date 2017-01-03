@@ -458,6 +458,16 @@ PreCommit:
     install_command: 'pip install flake8'
     include: '**/*.py'
 
+  RakeTarget:
+    enabled: false
+    description: 'Run rake targets'
+    # targets:
+    #  - 'lint'
+    #  - 'validate'
+    #  - '...'
+    required_executable: 'rake'
+    install_command: 'gem install rake'
+
   RailsBestPractices:
     enabled: false
     description: 'Analyze with RailsBestPractices'
@@ -894,6 +904,16 @@ PrePush:
     enabled: false
     description: 'Run RSpec test suite'
     required_executable: 'rspec'
+
+  RakeTarget:
+    enabled: false
+    description: 'Run rake targets'
+    # targets:
+    #  - 'lint'
+    #  - 'validate'
+    #  - '...'
+    required_executable: 'rake'
+    install_command: 'gem install rake'
 
   Minitest:
     enabled: false

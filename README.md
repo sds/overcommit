@@ -518,6 +518,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Pyflakes](lib/overcommit/hook/pre_commit/pyflakes.rb)
 * [Pylint](lib/overcommit/hook/pre_commit/pylint.rb)
 * [PythonFlake8](lib/overcommit/hook/pre_commit/python_flake8.rb)
+* [RakeTarget](lib/overcommit/hook/pre_commit/rake_target.rb)
 * [RailsBestPractices](lib/overcommit/hook/pre_commit/rails_best_practices.rb)
 * [RailsSchemaUpToDate](lib/overcommit/hook/pre_commit/rails_schema_up_to_date.rb)
 * [Reek](lib/overcommit/hook/pre_commit/reek.rb)
@@ -551,6 +552,7 @@ aborted.
 * [Brakeman](lib/overcommit/hook/pre_push/brakeman.rb)
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
+* [RakeTarget](lib/overcommit/hook/pre_push/rake_target.rb)
 * [RSpec](lib/overcommit/hook/pre_push/r_spec.rb)
 * [TestUnit](lib/overcommit/hook/pre_push/test_unit.rb)
 
