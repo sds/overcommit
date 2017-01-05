@@ -539,7 +539,7 @@ PreCommit:
     required_library: 'json'
     required_executable: 'scss-lint'
     flags: ['--format', 'JSON']
-    install_command: 'gem install scss-lint'
+    install_command: 'gem install scss_lint'
     include: '**/*.scss'
 
   SemiStandard:
