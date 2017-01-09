@@ -272,5 +272,23 @@ module Overcommit
     def current_branch
       `git symbolic-ref --short -q HEAD`.chomp
     end
+
+    # Returns the names of the files that have been modified comparing the
+    # current local branch with the corresponding remote one if it does exist or
+    # the current local branch with the parent one if not.
+    # @param remote [String] name of the remote
+    #
+    # @return [Array<String>] list of relative file paths
+    def modified_file_in_branch(remote)
+      remote_url = `git remote get-url #{remote}`.split("\n").first
+      parent_branch = `git show-branch | grep '*' | grep -v "#{current_branch}" | head -n1`.
+                      match(/\[([^~^\]]+)/).captures.first
+      commits_count = if `git ls-remote --heads #{remote_url} #{current_branch}`.empty?
+                        `git rev-list #{parent_branch}..#{current_branch} --count`
+                      else
+                        `git rev-list #{remote}/#{current_branch}..#{current_branch} --count`
+                      end
+      `git diff --name-only HEAD~#{commits_count}`.split("\n")
+    end
   end
 end
