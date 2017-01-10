@@ -21,6 +21,8 @@ module Overcommit::Hook::PreCommit
       output = result.stdout.chomp
       return :pass if result.success? && output.empty?
 
+      return [:fail, result.stderr] unless result.stderr.empty?
+
       # example message:
       #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
       extract_messages(
