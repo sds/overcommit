@@ -1,11 +1,17 @@
 # Overcommit Changelog
 
-## master
+## 0.38.0
 
 ### New Features
 
+* Add `Pytest` pre-push hook
+* Add `RakeTarget` pre-commit and pre-push hook
 * Moved `CommitPlease` from `CommitMsg` to `PostCommit` hook
 * Add `skip_file_checkout` hook setting for `PostCheckout` hooks
+
+### Bug Fixes
+
+* Fix `install_command` for scss_lint gem
 
 ## 0.37.0
 
