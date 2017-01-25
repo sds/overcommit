@@ -553,6 +553,7 @@ aborted.
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
 * [Pytest](lib/overcommit/hook/pre_push/pytest.rb)
+* [PythonNose](lib/overcommit/hook/pre_push/python_nose.rb)
 * [RakeTarget](lib/overcommit/hook/pre_push/rake_target.rb)
 * [RSpec](lib/overcommit/hook/pre_push/r_spec.rb)
 * [TestUnit](lib/overcommit/hook/pre_push/test_unit.rb)

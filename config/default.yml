@@ -906,6 +906,12 @@ PrePush:
     required_executable: 'pytest'
     install_command: 'pip install -U pytest'
 
+  PythonNose:
+    enabled: false
+    description: 'Run nose test suite'
+    required_executable: 'nosetests'
+    install_command: 'pip install -U nose'
+
   RSpec:
     enabled: false
     description: 'Run RSpec test suite'
