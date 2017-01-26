@@ -16,7 +16,7 @@ before_script:
   - git config --global user.name "Travis CI"
 
 before_install:
-  - gem install rainbow -v '2.2.1'
+  - gem update --system
 
 script:
   - bundle exec rspec
