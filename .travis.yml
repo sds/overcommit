@@ -16,7 +16,7 @@ before_script:
   - git config --global user.name "Travis CI"
 
 before_install:
-  - '[[ $TRAVIS_RUBY_VERSION =~ ^jruby ]] && gem install bundler -v "1.13.7" || true'
+  - gem install rainbow -v '2.2.1'
 
 script:
   - bundle exec rspec
