@@ -126,6 +126,12 @@ module Overcommit::HookContext
       @modified_lines[file]
     end
 
+    # Returns whether the current git branch is empty (has no commits).
+    def initial_commit?
+      return @initial_commit unless @initial_commit.nil?
+      @initial_commit = Overcommit::GitRepo.initial_commit?
+    end
+
     private
 
     # Clears the working tree so that the stash can be applied.
@@ -168,12 +174,6 @@ module Overcommit::HookContext
         map { |line| line.gsub(/[^\s]+\s+(.+)/, '\\1') }
 
       modified_files.any?
-    end
-
-    # Returns whether the current git branch is empty (has no commits).
-    def initial_commit?
-      return @initial_commit unless @initial_commit.nil?
-      @initial_commit = Overcommit::GitRepo.initial_commit?
     end
 
     # Stores the modification times for all modified files to make it appear like
