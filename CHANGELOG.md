@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Fix `forwarding to private method` warning on Ruby 2.4.x
+* Update `childprocess` dependency to 0.6.x series
 
 ## 0.38.0
 
