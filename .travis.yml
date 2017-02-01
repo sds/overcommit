@@ -15,6 +15,9 @@ before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
 
+before_install:
+  - '[[ $TRAVIS_RUBY_VERSION =~ ^jruby ]] && gem update --system || true'
+
 script:
   - bundle exec rspec
   # Skip Overcommit on JRuby since it's unstable and doesn't actually test Overcommit
