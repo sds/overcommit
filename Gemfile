@@ -4,7 +4,6 @@ gemspec
 
 # Development dependencies are listed below
 
-gem 'rake', '>= 10', '< 12'
 gem 'rspec', '~> 3.0'
 
 # Generate coverage information in Travis builds
