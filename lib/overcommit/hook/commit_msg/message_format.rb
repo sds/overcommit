@@ -17,11 +17,13 @@ module Overcommit::Hook::CommitMsg
       expected_pattern_message = config['expected_pattern_message']
       sample_message = config['sample_message']
 
-      [
-        'Commit message pattern mismatch.',
-        "Expected : #{expected_pattern_message}",
-        "Sample : #{sample_message}"
-      ].join("\n") unless message =~ /#{pattern}/
+      unless message =~ /#{pattern}/
+        [
+          'Commit message pattern mismatch.',
+          "Expected : #{expected_pattern_message}",
+          "Sample : #{sample_message}"
+        ].join("\n")
+      end
     end
   end
 end
