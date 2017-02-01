@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `forwarding to private method` warning on Ruby 2.4.x
+
 ## 0.38.0
 
 ### New Features
