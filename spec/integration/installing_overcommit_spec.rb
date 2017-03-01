@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe 'installing Overcommit' do
+  let(:enable_verification) { true }
+
+  it 'signs the configuration file' do
+    repo do
+      `overcommit --install`
+      touch('some-file')
+      `git add some-file`
+      result = shell(%w[git commit --allow-empty -m Test])
+      result.status.should == 0
+    end
+  end
+
   context 'when template directory points to the Overcommit template directory' do
     around do |example|
       repo(template_dir: Overcommit::Installer::TEMPLATE_DIRECTORY) do
