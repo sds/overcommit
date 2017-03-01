@@ -27,8 +27,8 @@ describe 'configuration file signing' do
 
   around do |example|
     repo do
-      echo(config.to_yaml, '.overcommit.yml')
       `overcommit --install > #{File::NULL}`
+      echo(config.to_yaml, '.overcommit.yml')
 
       `overcommit --sign` if configuration_signed
       echo(new_config.to_yaml, '.overcommit.yml')

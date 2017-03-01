@@ -101,7 +101,6 @@ mkdir important-project
 cd important-project
 git init
 overcommit --install
-overcommit --sign    # See Security section below for explanation
 ```
 
 See the [Security](#security) section of the documentation to understand why

@@ -4,6 +4,7 @@
 
 * Fix `forwarding to private method` warning on Ruby 2.4.x
 * Update `childprocess` dependency to 0.6.x series
+* Auto-sign configuration file when installing hooks for the first time
 
 ## 0.38.0
 

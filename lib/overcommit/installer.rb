@@ -36,6 +36,9 @@ module Overcommit
       install_hook_files
       install_starter_config
 
+      # Auto-sign configuration file on install
+      config(verify: false).update_signature!
+
       log.success "Successfully installed hooks into #{@target}"
     end
 
@@ -179,6 +182,11 @@ module Overcommit
       # Some Ruby implementations (e.g. JRuby) raise an error when the file
       # doesn't exist. Standardize the behavior to return false.
       false
+    end
+
+    # Returns the configuration for this repository.
+    def config(options = {})
+      Overcommit::ConfigurationLoader.new(log, options).load_repo_config
     end
   end
 end
