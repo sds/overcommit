@@ -25,7 +25,7 @@ module Overcommit::Hook::PreCommit
       messages = output.split("\n").grep(/Warning|Error/)
 
       # Fail for issues relative to the tool used.
-      if messages.empty? && !result.success?
+      if !config['bindly_pass'] && messages.empty? && !result.success?
         $stderr.puts result.stderrs
         return :fail
       end

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'stringio'
 
 describe Overcommit::Hook::PreCommit::EsLint do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
