@@ -39,7 +39,6 @@ module Overcommit::Hook::PreCommit
         /^(?<file>(?:\w:)?[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/,
         lambda { |type| type.downcase.to_sym }
       )
-
     end
   end
 end
