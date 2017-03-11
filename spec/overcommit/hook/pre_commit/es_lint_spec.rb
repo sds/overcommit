@@ -13,7 +13,7 @@ describe Overcommit::Hook::PreCommit::EsLint do
     let(:result) { double('result') }
 
     before do
-      result.stub(:stderrs).and_return('SyntaxError: Use of const in strict mode.')
+      result.stub(:stderr).and_return('SyntaxError: Use of const in strict mode.')
       result.stub(:stdout).and_return('')
 
       result.stub(:success?).and_return(false)

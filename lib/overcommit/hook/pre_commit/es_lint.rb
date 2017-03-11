@@ -26,8 +26,7 @@ module Overcommit::Hook::PreCommit
 
       # Fail for issues relative to the tool used.
       if !config['bindly_pass'] && messages.empty? && !result.success?
-        $stderr.puts result.stderrs
-        return :fail
+        return [:fail, result.stderr]
       end
 
       return :pass if result.success? && output.empty?
