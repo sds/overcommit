@@ -12,9 +12,6 @@ module Overcommit::Hook::PreCommit
   #     enabled: true
   #     command: ['npm', 'run', 'lint', '--', '-f', 'compact']
   #
-  # If ESLint returns some errors, you can bindly pass by
-  # setting `bindly_pass` option to true.
-  #
   # Note: This hook supports only compact format.
   #
   # @see http://eslint.org/
@@ -24,11 +21,7 @@ module Overcommit::Hook::PreCommit
       output = result.stdout.chomp
       messages = output.split("\n").grep(/Warning|Error/)
 
-      # Fail for issues relative to the tool used.
-      if !config['bindly_pass'] && messages.empty? && !result.success?
-        return [:fail, result.stderr]
-      end
-
+      return [:fail, result.stderr] if messages.empty? && !result.success?
       return :pass if result.success? && output.empty?
 
       # example message:
