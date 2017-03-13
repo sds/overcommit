@@ -578,7 +578,7 @@ PreCommit:
     flags: ['--verbose']
     install_command: 'npm install -g standard'
     include: '**/*.js'
-  
+
   SwiftLint:
     enabled: false
     description: 'Analyze with SwiftLint'
