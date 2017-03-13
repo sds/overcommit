@@ -10,7 +10,9 @@ module Overcommit::Hook::PreCommit
 
     def run
       result = execute(command, args: applicable_files)
-      output = result.stdout.split("\n").map { |message| [message.match(MESSAGE_REGEX)].join.chomp(':') }
+      output = result.stdout.split("\n").map do |message|
+        [message.match(MESSAGE_REGEX)].join.chomp(':')
+      end
 
       return :pass if result.success? && output.empty?
 
