@@ -19,12 +19,15 @@ module Overcommit::Hook::PreCommit
     def run
       result = execute(command, args: applicable_files)
       output = result.stdout.chomp
+      messages = output.split("\n").grep(/Warning|Error/)
+
+      return [:fail, result.stderr] if messages.empty? && !result.success?
       return :pass if result.success? && output.empty?
 
       # example message:
       #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
       extract_messages(
-        output.split("\n").grep(/Warning|Error/),
+        messages,
         /^(?<file>(?:\w:)?[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/,
         lambda { |type| type.downcase.to_sym }
       )
