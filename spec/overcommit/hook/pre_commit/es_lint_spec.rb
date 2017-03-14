@@ -9,6 +9,20 @@ describe Overcommit::Hook::PreCommit::EsLint do
     subject.stub(:applicable_files).and_return(%w[file1.js file2.js])
   end
 
+  context 'when eslint is unable to run' do
+    let(:result) { double('result') }
+
+    before do
+      result.stub(:stderr).and_return('SyntaxError: Use of const in strict mode.')
+      result.stub(:stdout).and_return('')
+
+      result.stub(:success?).and_return(false)
+      subject.stub(:execute).and_return(result)
+    end
+
+    it { should fail_hook }
+  end
+
   context 'when eslint exits successfully' do
     let(:result) { double('result') }
 
