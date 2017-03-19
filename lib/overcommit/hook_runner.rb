@@ -107,6 +107,9 @@ module Overcommit
 
             # Wait for a signal from another thread to try again
             @resource.wait(@lock)
+          else
+            # Otherwise there are not slots left, so just wait for signal
+            @resource.wait(@lock)
           end
         end
       end
