@@ -21,7 +21,7 @@ before_script:
   - git config --global user.name "Travis CI"
 
 before_install:
-  - '[[ $TRAVIS_RUBY_VERSION =~ ^jruby ]] && gem update --system || true'
+  - gem update --system
 
 script:
   - bundle exec rspec
