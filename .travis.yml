@@ -12,6 +12,10 @@ rvm:
   - 2.4.0
   - jruby-9.1.2.0
 
+matrix:
+  allow_failures:
+    - rvm: jruby-9.1.2.0
+
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
