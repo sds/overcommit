@@ -549,6 +549,7 @@ but before any objects have been transferred. If a hook fails, the push is
 aborted.
 
 * [Brakeman](lib/overcommit/hook/pre_push/brakeman.rb)
+* [GitLfs](lib/overcommit/hook/pre_push/git_lfs.rb)
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
 * [Pytest](lib/overcommit/hook/pre_push/pytest.rb)
