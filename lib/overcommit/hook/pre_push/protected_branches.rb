@@ -21,6 +21,7 @@ module Overcommit::Hook::PrePush
 
     def protected?(remote_ref)
       ref_name = remote_ref[%r{refs/heads/(.*)}, 1]
+      return false if ref_name.nil?
       protected_branch_patterns.any? do |pattern|
         File.fnmatch(pattern, ref_name)
       end

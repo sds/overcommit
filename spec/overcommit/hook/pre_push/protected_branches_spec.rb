@@ -93,4 +93,14 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
       include_examples 'protected branch'
     end
   end
+
+  context 'when pushing tags' do
+    let(:pushed_ref_name) { 'redundant' }
+
+    before do
+      pushed_ref.stub(:remote_ref).and_return("refs/tags/#{pushed_ref_name}")
+    end
+
+    it { should pass }
+  end
 end
