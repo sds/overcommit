@@ -4,10 +4,9 @@ module Overcommit::Hook::PrePush
   # @see https://git-lfs.github.com/
   class GitLfs < Base
     def run
-      result = execute(['command', '-v', 'git-lfs'])
-      unless result.success?
+      unless in_path?('git-lfs')
         return :warn, 'This repository is configured for Git LFS but \'git-lfs\' ' \
-        'was not found on your path.\nIf you no longer wish to use Git LFS, ' \
+        "was not found on your path.\nIf you no longer wish to use Git LFS, " \
         'disable this hook by removing or setting \'enabled: false\' for GitLFS ' \
         'hook in your .overcommit.yml file'
       end
