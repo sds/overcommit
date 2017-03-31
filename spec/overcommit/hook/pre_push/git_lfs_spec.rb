@@ -8,12 +8,13 @@ describe Overcommit::Hook::PrePush::GitLfs do
   let(:result) { double('result') }
 
   before do
+    subject.stub(in_path?: true)
     subject.stub(:execute).and_return(result)
   end
 
   context 'when git-lfs is not on path' do
     before do
-      result.stub(success?: false, stderr: '')
+      subject.stub(in_path?: false)
     end
 
     it { should warn }
@@ -29,9 +30,8 @@ describe Overcommit::Hook::PrePush::GitLfs do
 
   context 'when git lfs hook exits unsuccessfully' do
     before do
-      # First for checking that git-lfs is on path, second for calling the hook itself
-      result.stub(:success?).and_return(true, false)
-      result.stub(:stderr).and_return('', 'error: failed to push some refs')
+      result.stub(success?: false)
+      result.stub(stderr: 'error: failed to push some refs')
     end
 
     it { should fail_hook }
