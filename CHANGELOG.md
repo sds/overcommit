@@ -1,13 +1,21 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.39.0
 
-* Fix `forwarding to private method` warning on Ruby 2.4.x
+### New Features
+
+* Add [`GitLfs`](https://git-lfs.github.com/) pre-push hook
+
+### Changes
+
 * Update `childprocess` dependency to 0.6.x series
 * Auto-sign configuration file when installing hooks for the first time
+
+### Bug Fixes
+
+* Fix `forwarding to private method` warning on Ruby 2.4.x
 * Fix potential hang when a hook's `parallelize` option was set to `false`
 * Fix `empty strings as pathspecs` warning introduced in Git 2.11
-* Add [`GitLfs`](https://git-lfs.github.com/) pre-push hook
 
 ## 0.38.0
 
