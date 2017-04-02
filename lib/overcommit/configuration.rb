@@ -112,7 +112,7 @@ module Overcommit
     # Returns the built-in hooks that have been enabled for a hook type.
     def enabled_builtin_hooks(hook_context)
       @hash[hook_context.hook_class_name].keys.
-        select { |hook_name| hook_name != 'ALL' }.
+        reject { |hook_name| hook_name == 'ALL' }.
         select { |hook_name| built_in_hook?(hook_context, hook_name) }.
         select { |hook_name| hook_enabled?(hook_context, hook_name) }
     end
@@ -120,7 +120,7 @@ module Overcommit
     # Returns the ad hoc hooks that have been enabled for a hook type.
     def enabled_ad_hoc_hooks(hook_context)
       @hash[hook_context.hook_class_name].keys.
-        select { |hook_name| hook_name != 'ALL' }.
+        reject { |hook_name| hook_name == 'ALL' }.
         select { |hook_name| ad_hoc_hook?(hook_context, hook_name) }.
         select { |hook_name| hook_enabled?(hook_context, hook_name) }
     end

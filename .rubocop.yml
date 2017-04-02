@@ -1,3 +1,6 @@
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
@@ -60,6 +63,9 @@ Style/GuardClause:
 Style/IndentArray:
   Enabled: false
 
+Style/IndentHeredoc:
+  Enabled: false
+
 Style/IfUnlessModifier:
   Enabled: false
 
@@ -116,6 +122,9 @@ Style/SpaceBeforeFirstArg:
     - '*.gemspec'
 
 Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/SymbolArray:
   Enabled: false
 
 Style/TrailingCommaInArguments:
