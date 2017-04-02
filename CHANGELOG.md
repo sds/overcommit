@@ -7,6 +7,7 @@
 * Auto-sign configuration file when installing hooks for the first time
 * Fix potential hang when a hook's `parallelize` option was set to `false`
 * Fix `empty strings as pathspecs` warning introduced in Git 2.11
+* Add [`GitLfs`](https://git-lfs.github.com/) pre-push hook
 
 ## 0.38.0
 
