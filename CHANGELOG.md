@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## unreleased
+## 0.39.1
 
 ### Bug Fixes
 
