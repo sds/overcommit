@@ -103,9 +103,6 @@ git init
 overcommit --install
 ```
 
-See the [Security](#security) section of the documentation to understand why
-`overcommit --sign` is necessary after installing hooks for the first time.
-
 After running `overcommit --install`, any existing hooks for your repository
 which Overcommit will replace will be backed up. You can restore everything to
 the way it was by running `overcommit --uninstall`.
