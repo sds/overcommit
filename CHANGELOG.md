@@ -1,5 +1,11 @@
 # Overcommit Changelog
 
+## unreleased
+
+### Bug Fixes
+
+* Update `childprocess` to 0.6.3
+
 ## 0.39.0
 
 ### New Features
