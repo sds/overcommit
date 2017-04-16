@@ -666,6 +666,11 @@ PreCommit:
       - '**/*.yaml'
       - '**/*.yml'
 
+  XmlSyntax:
+    description: 'Checking XML syntax'
+    required_library: 'rexml/document'
+    include: '**/*.xml'
+
   YamlSyntax:
     enabled: false
     description: 'Check YAML syntax'
