@@ -194,6 +194,12 @@ PreCommit:
       - 'config/settings.yml'
       - 'config/settings/**/*.yml'
 
+  Checkstyle:
+    description: 'Analyzing with checkstyle'
+    required_executable: 'checkstyle'
+    flags: ['-c', '/sun_checks.xml']
+    include: '**/*.java'
+
   CoffeeLint:
     enabled: false
     description: 'Analyze with coffeelint'
