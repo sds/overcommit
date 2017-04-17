@@ -14,6 +14,7 @@ module Overcommit::Hook::PreCommit
     def run
       result = execute(command, args: applicable_files)
       return :pass if result.success?
+      return [:fail, result.stderr] unless result.stderr.empty?
 
       generic_messages = extract_messages(
         result.stderr.split("\n"),
