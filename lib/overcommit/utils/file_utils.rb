@@ -53,7 +53,7 @@ module Overcommit::Utils
 
       def win32_mklink_cmd(old_name, new_name)
         Overcommit::Subprocess.spawn(
-          %W[mklink #{win32_fix_pathsep(new_name)} #{win32_fix_pathsep(old_name)}]
+          %W[mklink /H #{win32_fix_pathsep(new_name)} #{win32_fix_pathsep(old_name)}]
         )
       end
 
