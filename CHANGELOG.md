@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master
+
+* Add [`hadolint`](https://github.com/lukasmartinelli/hadolint) pre-commit hook
+
 ## 0.39.1
 
 ### Bug Fixes
