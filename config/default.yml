@@ -283,6 +283,13 @@ PreCommit:
     install_command: 'go get golang.org/x/tools/cmd/vet'
     include: '**/*.go'
 
+  Hadolint:
+    enabled: false
+    description: 'Analyze with hadolint'
+    required_executable: 'hadolint'
+    include:
+      - '**/Dockerfile*'
+
   HamlLint:
     enabled: false
     description: 'Analyze with haml-lint'
