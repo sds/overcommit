@@ -42,6 +42,10 @@ Style/DotPosition:
 Style/Encoding:
   EnforcedStyle: when_needed
 
+# Fails on AppVeyor builds
+Style/EndOfLine:
+  Enabled: false
+
 Style/FileName:
   Exclude:
     - 'template-dir/hooks/*'
