@@ -60,7 +60,7 @@ describe Overcommit::GitConfig do
       end
 
       it 'returns the absolute path' do
-        expect(subject).to eq '/etc/hooks'
+        expect(subject).to eq File.absolute_path('/etc/hooks')
       end
     end
 
