@@ -3,6 +3,7 @@
 ## master
 
 * Add [`hadolint`](https://github.com/lukasmartinelli/hadolint) pre-commit hook
+* Use the `core.hooksPath` Git configuration option when installing hooks
 
 ## 0.39.1
 

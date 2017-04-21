@@ -142,6 +142,22 @@ describe Overcommit::Installer do
             }.from(false).to(true)
           end
         end
+
+        context 'and a custom core.hooksPath directory is set' do
+          around do |example|
+            Dir.chdir(target) do
+              FileUtils.mkdir 'my-hooks'
+              `git config core.hooksPath my-hooks`
+              example.run
+            end
+          end
+
+          it 'installs the hooks in the custom directory' do
+            expect { subject }.to change { hook_files_installed?(File.join(target, 'my-hooks')) }.
+                               from(false).
+                               to(true)
+          end
+        end
       end
 
       context 'and an uninstall is requested' do

@@ -65,8 +65,7 @@ module Overcommit
     end
 
     def hooks_path
-      absolute_target = File.expand_path(@target)
-      File.join(Overcommit::Utils.git_dir(absolute_target), 'hooks')
+      @hooks_path ||= Dir.chdir(@target) { GitConfig.hooks_path }
     end
 
     def old_hooks_path
