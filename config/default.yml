@@ -435,7 +435,7 @@ PreCommit:
     description: 'Analyzing with pronto'
     required_executable: 'pronto'
     install_command: 'gem install pronto'
-    flags: ['run', '--staged --exit-code']
+    flags: ['run', '--staged', '--exit-code']
 
   PuppetLint:
     enabled: false
