@@ -491,6 +491,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [GoLint](lib/overcommit/hook/pre_commit/go_lint.rb)
 * [GoVet](lib/overcommit/hook/pre_commit/go_vet.rb)
 * [Hadolint](lib/overcommit/hook/pre_commit/hadolint.rb)
+* [LicenseFinder](lib/overcommit/hook/pre_commit/license_finder.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
 * [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
 * [Hlint](lib/overcommit/hook/pre_commit/hlint.rb)
