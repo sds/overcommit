@@ -1,3 +1,32 @@
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+# Fails on AppVeyor builds
+Layout/EndOfLine:
+  Enabled: false
+
+Layout/FirstParameterIndentation:
+  Enabled: false
+
+Layout/IndentArray:
+  Enabled: false
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/SpaceBeforeFirstArg:
+  Exclude:
+    - '*.gemspec'
+
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
@@ -29,22 +58,12 @@ Metrics/ModuleLength:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-Style/ClosingParenthesisIndentation:
-  Enabled: false
-
 Style/Documentation:
   Exclude:
     - 'spec/overcommit/**/*'
 
-Style/DotPosition:
-  EnforcedStyle: trailing
-
 Style/Encoding:
   EnforcedStyle: when_needed
-
-# Fails on AppVeyor builds
-Style/EndOfLine:
-  Enabled: false
 
 Style/FileName:
   Exclude:
@@ -52,9 +71,6 @@ Style/FileName:
     - 'Gemfile'
     - 'Rakefile'
     - '*.gemspec'
-
-Style/FirstParameterIndentation:
-  Enabled: false
 
 Style/FormatString:
   Enabled: false
@@ -64,12 +80,6 @@ Style/FormatString:
 Style/GuardClause:
   Enabled: false
 
-Style/IndentArray:
-  Enabled: false
-
-Style/IndentHeredoc:
-  Enabled: false
-
 Style/IfUnlessModifier:
   Enabled: false
 
@@ -77,12 +87,6 @@ Style/IfUnlessModifier:
 # doesn't allow. We're also not too worried about people using `lambda` for
 # single-line lambdas either.
 Style/Lambda:
-  Enabled: false
-
-Style/MultilineMethodCallIndentation:
-  Enabled: false
-
-Style/MultilineOperationIndentation:
   Enabled: false
 
 Style/Next:
@@ -120,10 +124,6 @@ Style/SignalException:
 # choosing intention-revealing names.
 Style/SingleLineBlockParams:
   Enabled: false
-
-Style/SpaceBeforeFirstArg:
-  Exclude:
-    - '*.gemspec'
 
 Style/SpecialGlobalVars:
   Enabled: false

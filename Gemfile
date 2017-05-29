@@ -10,4 +10,4 @@ gem 'rspec', '~> 3.0'
 gem 'coveralls', '~> 0.8'
 
 # Pin RuboCop for Travis builds.
-gem 'rubocop', '0.48.1'
+gem 'rubocop', '0.49.1'

@@ -41,7 +41,7 @@ module Overcommit
       @concurrency ||=
         begin
           cores = Overcommit::Utils.processor_count
-          content = @hash.fetch('concurrency', '%{processors}')
+          content = @hash.fetch('concurrency', '%<processors>d')
           if content.is_a?(String)
             concurrency_expr = content % { processors: cores }
 
