@@ -22,6 +22,12 @@ if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
     puts "Problem loading '#{gemfile}': #{ex.message}"
     puts "Try running:\nbundle install --gemfile=#{gemfile}" if ex.is_a?(Bundler::GemNotFound)
     exit 78 # EX_CONFIG
+  rescue Gem::LoadError => ex
+    # Handle case where user is executing overcommit without `bundle exec` and
+    # whose local Gemfile has a gem requirement that does not match a gem
+    # requirement of the installed version of Overcommit.
+    raise unless ex.message =~ /already activated/i
+    exec('bundle', 'exec', $0, *ARGV)
   end
 end
 # rubocop:enable Style/RescueModifier
