@@ -6,6 +6,7 @@
 * Add [`hadolint`](https://github.com/lukasmartinelli/hadolint) pre-commit hook
 * Add [`license_finder`](https://github.com/pivotal/LicenseFinder) pre-commit hook
 * Use the `core.hooksPath` Git configuration option when installing hooks
+* Gracefully handle binary files in `LineEndings` pre-commit hook
 
 ## 0.39.1
 

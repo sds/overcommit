@@ -60,4 +60,10 @@ describe Overcommit::Hook::PreCommit::LineEndings do
       it { should fail_hook }
     end
   end
+
+  context 'when attempting to check a binary file' do
+    let(:contents) { "\xFF\xD8\xFF\xE0\u0000\u0010JFIF" }
+
+    it { should warn }
+  end
 end

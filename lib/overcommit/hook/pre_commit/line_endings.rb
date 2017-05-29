@@ -8,18 +8,16 @@ module Overcommit::Hook::PreCommit
 
       offending_files.map do |file_name|
         file = File.open(file_name)
-        file.each_line do |line|
-          # remove configured line-ending
-          line.gsub!(/#{config['eol']}/, '')
-
-          # detect any left over line-ending characters
-          next unless line.end_with?("\n", "\r")
-
+        begin
+          messages += check_file(file, file_name)
+        rescue ArgumentError => ex
+          # File is likely a binary file which this check should ignore, but
+          # print a warning just in case
           messages << Overcommit::Hook::Message.new(
-            :error,
+            :warning,
             file_name,
             file.lineno,
-            "#{file_name}:#{file.lineno}:#{line.inspect}"
+            "#{file_name}:#{file.lineno}:#{ex.message}"
           )
         end
       end
@@ -28,6 +26,27 @@ module Overcommit::Hook::PreCommit
     end
 
     private
+
+    def check_file(file, file_name)
+      messages_for_file = []
+
+      file.each_line do |line|
+        # Remove configured line-ending
+        line.gsub!(/#{config['eol']}/, '')
+
+        # Detect any left over line-ending characters
+        next unless line.end_with?("\n", "\r")
+
+        messages_for_file << Overcommit::Hook::Message.new(
+          :error,
+          file_name,
+          file.lineno,
+          "#{file_name}:#{file.lineno}:#{line.inspect}"
+        )
+      end
+
+      messages_for_file
+    end
 
     def offending_files
       result = execute(%w[git ls-files --eol -z --], args: applicable_files)
