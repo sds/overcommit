@@ -117,6 +117,10 @@ Style/PercentLiteralDelimiters:
 Style/PredicateName:
   Enabled: false
 
+Style/RescueModifier:
+  Exclude:
+    - 'bin/overcommit'
+
 Style/SignalException:
   Enabled: false
 
