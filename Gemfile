@@ -7,7 +7,7 @@ gemspec
 gem 'rspec', '~> 3.0'
 
 # Generate coverage information in Travis builds
-gem 'coveralls'
+gem 'coveralls', '~> 0.8'
 
 # Pin RuboCop for Travis builds.
 gem 'rubocop', '0.48.1'
