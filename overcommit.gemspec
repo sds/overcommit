@@ -1,6 +1,5 @@
-$LOAD_PATH << File.expand_path('../lib', __FILE__)
-require 'overcommit/constants'
-require 'overcommit/version'
+require_relative './lib/overcommit/constants'
+require_relative './lib/overcommit/version'
 
 Gem::Specification.new do |s|
   s.name                  = 'overcommit'
