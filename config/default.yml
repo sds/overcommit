@@ -431,14 +431,14 @@ PreCommit:
     flags: ['-t']
     include: '**/nginx.conf'
 
-  Pep257:
+  Pep257:  # Deprecated – use Pydocstyle instead.
     enabled: false
     description: 'Analyze docstrings with pep257'
     required_executable: 'pep257'
     install_command: 'pip install pep257'
     include: '**/*.py'
 
-  Pep8:
+  Pep8:  # Deprecated – use Pycodestyle instead.
     enabled: false
     description: 'Analyze with pep8'
     required_executable: 'pep8'
@@ -462,6 +462,20 @@ PreCommit:
       - '--fail-on-warnings'
       - '--error-level=all'
     include: '**/*.pp'
+
+  Pycodestyle:
+    enabled: false
+    description: 'Analyze with pycodestyle'
+    required_executable: 'pycodestyle'
+    install_command: 'pip install pycodestyle'
+    include: '**/*.py'
+
+  Pydocstyle:
+    enabled: false
+    description: 'Analyze docstrings with pydocstyle'
+    required_executable: 'pydocstyle'
+    install_command: 'pip install pydocstyle'
+    include: '**/*.py'
 
   Pyflakes:
     enabled: false
