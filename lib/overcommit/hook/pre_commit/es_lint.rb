@@ -24,6 +24,8 @@ module Overcommit::Hook::PreCommit
       return [:fail, result.stderr] if messages.empty? && !result.success?
       return :pass if result.success? && output.empty?
 
+      return [:fail, result.stderr] unless result.stderr.empty?
+
       # example message:
       #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
       extract_messages(
