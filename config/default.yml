@@ -623,6 +623,14 @@ PreCommit:
     install_command: 'npm install -g standard'
     include: '**/*.js'
 
+  SwiftLint:
+    enabled: false
+    description: 'Analyze with SwiftLint'
+    required_executable: 'swiftlint'
+    flags: ['lint', '--path']
+    install_command: 'brew install swiftlint'
+    include: '**/*.swift'
+
   TsLint:
       enabled: false
       description: 'Analyze with TSLint'
