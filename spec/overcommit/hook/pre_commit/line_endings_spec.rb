@@ -61,9 +61,11 @@ describe Overcommit::Hook::PreCommit::LineEndings do
     end
   end
 
-  context 'when attempting to check a binary file' do
-    let(:contents) { "\xFF\xD8\xFF\xE0\u0000\u0010JFIF" }
+  unless Overcommit::OS.windows?
+    context 'when attempting to check a binary file' do
+      let(:contents) { "\xFF\xD8\xFF\xE0\u0000\u0010JFIF" }
 
-    it { should warn }
+      it { should warn }
+    end
   end
 end
