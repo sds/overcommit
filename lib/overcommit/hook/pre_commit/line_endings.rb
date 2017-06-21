@@ -54,8 +54,8 @@ module Overcommit::Hook::PreCommit
 
       result.stdout.split("\0").map do |file_info|
         i, _w, _attr, path = file_info.split
-        next if i == 'l/-text' # ignore binary files
-        next if i == "l/#{eol}"
+        next if i.match(/\A[li]\/-text\z/) # ignore binary files
+        next if i.match(/\A[li]\/#{eol}\z/)
         path
       end.compact
     end
