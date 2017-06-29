@@ -304,6 +304,9 @@ PreCommit:
     quiet: true
     required_executable: 'grep'
     flags: ['-IHn', "\t"]
+    exclude:
+      - '**/Makefile'
+      - '**/*.go'
 
   Hlint:
     enabled: false
