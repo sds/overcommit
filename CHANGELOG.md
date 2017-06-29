@@ -11,6 +11,7 @@
 * Gracefully handle gem loading errors when invoking Overcommit in a repo where
   the `gemfile` specified by the local `.overcommit.yml` references a gem
   version incompatible with the already-loaded Overcommit
+* Ignore `Makefile` and `*.go` files in `HardTabs` pre-commit hook by default
 
 ## 0.39.1
 
