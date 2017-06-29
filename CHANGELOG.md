@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master
+## 0.40.0
 
 * Add [`Pronto`](https://github.com/mmozuras/pronto) pre-commit hook
 * Add [`hadolint`](https://github.com/lukasmartinelli/hadolint) pre-commit hook
