@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master
+
+* Fix binary files detection in `LineEndings` pre-commit hook
+
 ## 0.40.0
 
 * Add [`Pronto`](https://github.com/mmozuras/pronto) pre-commit hook
