@@ -1,5 +1,6 @@
 require 'digest'
 require 'json'
+require 'English'
 
 module Overcommit
   # Stores configuration for Overcommit and the hooks it runs.
@@ -264,8 +265,10 @@ module Overcommit
     def built_in_hook?(hook_context, hook_name)
       hook_name = Overcommit::Utils.snake_case(hook_name)
 
-      File.exist?(File.join(Overcommit::HOME, 'lib', 'overcommit', 'hook',
-                            hook_context.hook_type_name, "#{hook_name}.rb"))
+      $LOAD_PATH.any? do |dir|
+        File.exist?(File.join(dir, 'overcommit', 'hook',
+                              hook_context.hook_type_name, "#{hook_name}.rb"))
+      end
     end
 
     def hook_exists?(hook_context, hook_name)
