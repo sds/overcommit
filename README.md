@@ -609,10 +609,6 @@ PreCommit:
     include: '**/*_spec.rb'
 ```
 
-You can see a great example of writing custom Overcommit hooks from the
-following blog post: [How to Write a Custom Overcommit PreCommit
-Git Hook in 4 Steps](http://www.guoxiang.me/posts/28-how-to-write-a-custom-overcommit-precommit-git-hook-in-4-steps)
-
 ### Adding Existing Git Hooks
 
 You might already have hook scripts written which you'd like to integrate with
