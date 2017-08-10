@@ -35,6 +35,8 @@ describe Overcommit::HookSigner do
     before do
       context.stub(:hook_class_name).and_return('PreCommit')
       config.stub(:for_hook).and_return(hook_config)
+      config.stub(:signature_directory).and_return('.git/overcommit-signatures')
+      config.stub(:signature_history).and_return(2)
       signer.stub(:hook_contents).and_return(hook_contents)
 
       signer.update_signature!
