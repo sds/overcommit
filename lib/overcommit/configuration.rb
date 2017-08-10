@@ -17,6 +17,8 @@ module Overcommit
       unless options[:validate] == false
         @hash = Overcommit::ConfigurationValidator.new.validate(self, hash, options)
       end
+
+      @signer = MasterConfigSigner.new(self)
     end
 
     def ==(other)
@@ -38,14 +40,19 @@ module Overcommit
     end
 
     # Returns absolute path to directoy for the history of signatures
-    def hook_signature_directory
+    # @return [String] - Absolute path to the signature directory
+    def signature_directory
       File.join(Overcommit::Utils.repo_root,
                 '.git',
-                @hash['signature_directory'] || '.overcommit-signatures')
+                @hash['signature_directory'] || 'overcommit-signatures')
     end
 
     def signature_history
-      @hash['signature_directory'].to_i || 1000
+      if @hash['signature_directory']
+        @hash['signature_history'].to_i
+      else
+        1000
+      end
     end
 
     def concurrency
@@ -204,7 +211,7 @@ module Overcommit
     #
     # @return [true,false]
     def signature_changed?
-      signature != stored_signature
+      @signer.signature_changed?
     end
 
     # Return whether a previous signature has been recorded for this
@@ -212,7 +219,7 @@ module Overcommit
     #
     # @return [true,false]
     def previous_signature?
-      !stored_signature.empty?
+      @signer.previous_signature?
     end
 
     # Returns whether this configuration should verify itself by checking the
@@ -241,12 +248,10 @@ module Overcommit
 
     # Update the currently stored signature for this hook.
     def update_signature!
-      result = Overcommit::Utils.execute(
-        %w[git config --local] + [signature_config_key, signature]
-      )
+      @signer.update_signature!
 
       verify_signature_value = @hash['verify_signatures'] ? 1 : 0
-      result &&= Overcommit::Utils.execute(
+      result = Overcommit::Utils.execute(
         %W[git config --local #{verify_signature_config_key} #{verify_signature_value}]
       )
 
@@ -254,6 +259,11 @@ module Overcommit
         raise Overcommit::Exceptions::GitConfigError,
               "Unable to write to local repo git config: #{result.stderr}"
       end
+    end
+
+    # Get the current configuration as json, suitable for signing
+    def signature_json
+      @hash.to_json
     end
 
     protected
@@ -320,40 +330,23 @@ module Overcommit
       end
     end
 
-    # Returns the unique signature of this configuration.
-    #
-    # @return [String]
-    def signature
-      Digest::SHA256.hexdigest(@hash.to_json)
-    end
-
-    # Returns the stored signature of this repo's Overcommit configuration.
-    #
-    # This is intended to be compared against the current signature of this
-    # configuration object.
-    #
-    # @return [String]
-    def stored_signature
-      result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return ''
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
-      end
-
-      result.stdout.chomp
-    end
-
-    def signature_config_key
-      'overcommit.configuration.signature'
-    end
-
     def verify_signature_config_key
       'overcommit.configuration.verifysignatures'
+    end
+
+    # Implementation of Signer for the overcommit configuration (.overcommit.yml)
+    class MasterConfigSigner < Signer
+      def initialize(config)
+        @config = config
+        @key = 'overcommit.configuration.signature'
+      end
+
+      # Returns the unique signature of this configuration.
+      #
+      # @return [String]
+      def signature
+        Digest::SHA256.hexdigest(@config.signature_json)
+      end
     end
   end
 end
