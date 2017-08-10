@@ -37,6 +37,17 @@ module Overcommit
       File.join(Overcommit::Utils.repo_root, @hash['plugin_directory'] || '.git-hooks')
     end
 
+    # Returns absolute path to directoy for the history of signatures
+    def hook_signature_directory
+      File.join(Overcommit::Utils.repo_root,
+                '.git',
+                @hash['signature_directory'] || '.overcommit-signatures')
+    end
+
+    def signature_history
+      @hash['signature_directory'].to_i || 1000
+    end
+
     def concurrency
       @concurrency ||=
         begin
