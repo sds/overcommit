@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.41.0
 
 * Add [`PhpCs`](http://pear.php.net/package/PHP_CodeSniffer) pre-commit hook
 * Add [`PhpLint`](http://php.net/manual/en/features.commandline.options.php)
