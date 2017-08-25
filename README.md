@@ -113,7 +113,7 @@ If you want to use `overcommit` for all repositories you create/clone going
 forward, add the following to automatically run in your shell environment:
 
 ```bash
-export GIT_TEMPLATE_DIR=`overcommit --template-dir`
+export GIT_TEMPLATE_DIR="$(overcommit --template-dir)"
 ```
 
 The `GIT_TEMPLATE_DIR` provides a directory for Git to use as a template
