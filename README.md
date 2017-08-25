@@ -510,6 +510,8 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [Mdl](lib/overcommit/hook/pre_commit/mdl.rb)
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
 * [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
+* [PhpCs](lib/overcommit/hook/pre_commit/php_cs.rb)
+* [PhpLint](lib/overcommit/hook/pre_commit/php_lint.rb)
 * [PuppetLint](lib/overcommit/hook/pre_commit/puppet_lint.rb)
 * [Pycodestyle](lib/overcommit/hook/pre_commit/pycodestyle.rb)
 * [Pydocstyle](lib/overcommit/hook/pre_commit/pydocstyle.rb)
