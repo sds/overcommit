@@ -68,6 +68,19 @@ describe Overcommit::Logger do
         subject
         output.should end_with "[0m\n"
       end
+
+      context 'and colorization is disabled' do
+        around do |example|
+          Overcommit::Utils.with_environment 'OVERCOMMIT_COLOR' => '0' do
+            example.run
+          end
+        end
+
+        it 'omits the color escape sequence' do
+          subject
+          output.should_not include "\033"
+        end
+      end
     end
 
     context 'when the output stream is not a TTY' do
@@ -79,22 +92,23 @@ describe Overcommit::Logger do
         subject
         output.should_not include "\033"
       end
-    end
 
-    context 'when colorization is disabled' do
-      before do
-        io.stub(:tty?).and_return(true)
-      end
-
-      around do |example|
-        Overcommit::Utils.with_environment 'OVERCOMMIT_COLOR' => '0' do
-          example.run
+      context 'and colorization is enabled' do
+        around do |example|
+          Overcommit::Utils.with_environment 'OVERCOMMIT_COLOR' => '1' do
+            example.run
+          end
         end
-      end
 
-      it 'omits the color escape sequence' do
-        subject
-        output.should_not include "\033"
+        it 'includes the color escape sequence' do
+          subject
+          output.should include "\033[#{color_code}m"
+        end
+
+        it 'ends with the color reset sequence' do
+          subject
+          output.should end_with "[0m\n"
+        end
       end
     end
   end

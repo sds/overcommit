@@ -11,6 +11,12 @@ module Overcommit
     # @param out [IO]
     def initialize(out)
       @out = out
+      @colorize =
+        if ENV.key?('OVERCOMMIT_COLOR')
+          !%w[0 false no].include?(ENV['OVERCOMMIT_COLOR'])
+        else
+          @out.tty?
+        end
     end
 
     # Write output without a trailing newline.
@@ -78,11 +84,7 @@ module Overcommit
     # @param partial [true,false] whether to omit a newline
     def color(code, str, partial = false)
       send(partial ? :partial : :log,
-           colorize? ? "\033[#{code}m#{str}\033[0m" : str)
-    end
-
-    def colorize?
-      @out.tty? && ENV.fetch('OVERCOMMIT_COLOR', '1') != '0'
+           @colorize ? "\033[#{code}m#{str}\033[0m" : str)
     end
   end
 end
