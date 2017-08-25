@@ -80,6 +80,23 @@ describe Overcommit::Logger do
         output.should_not include "\033"
       end
     end
+
+    context 'when colorization is disabled' do
+      before do
+        io.stub(:tty?).and_return(true)
+      end
+
+      around do |example|
+        Overcommit::Utils.with_environment 'OVERCOMMIT_COLOR' => '0' do
+          example.run
+        end
+      end
+
+      it 'omits the color escape sequence' do
+        subject
+        output.should_not include "\033"
+      end
+    end
   end
 
   describe '#debug' do

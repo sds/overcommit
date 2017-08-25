@@ -78,7 +78,11 @@ module Overcommit
     # @param partial [true,false] whether to omit a newline
     def color(code, str, partial = false)
       send(partial ? :partial : :log,
-           @out.tty? ? "\033[#{code}m#{str}\033[0m" : str)
+           colorize? ? "\033[#{code}m#{str}\033[0m" : str)
+    end
+
+    def colorize?
+      @out.tty? && ENV.fetch('OVERCOMMIT_COLOR', '1') != '0'
     end
   end
 end
