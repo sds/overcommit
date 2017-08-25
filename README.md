@@ -172,6 +172,16 @@ hooks to run, you can disable Overcommit entirely by setting the
 OVERCOMMIT_DISABLE=1 ./my-custom-script
 ```
 
+### Disabling Colorized Output
+
+Overcommit automatically colorizes its output based on whether it is outputting
+to a TTY. However, you can manually enable/disable color by setting the
+`OVERCOMMIT_COLOR` environment variable.
+
+```bash
+OVERCOMMIT_COLOR=0 git commit
+```
+
 ## Continuous Integration
 
 You can run the same set of hooks that would be executed in a pre-commit hook
