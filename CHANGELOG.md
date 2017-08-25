@@ -1,5 +1,12 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add [`PhpCs`](http://pear.php.net/package/PHP_CodeSniffer) pre-commit hook
+* Add [`PhpLint`](http://php.net/manual/en/features.commandline.options.php)
+  pre-commit hook
+* Allow toggling colorize output via `OVERCOMMIT_COLOR` environment variable
+
 ## 0.40.0
 
 * Add [`Pronto`](https://github.com/mmozuras/pronto) pre-commit hook
