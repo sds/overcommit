@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `LineEndings` pre-commit hook handling of file paths with spaces
+
 ## 0.41.0
 
 * Add [`PhpCs`](http://pear.php.net/package/PHP_CodeSniffer) pre-commit hook

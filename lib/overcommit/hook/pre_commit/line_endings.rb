@@ -53,7 +53,8 @@ module Overcommit::Hook::PreCommit
       raise 'Unable to access git tree' unless result.success?
 
       result.stdout.split("\0").map do |file_info|
-        i, _w, _attr, path = file_info.split
+        info, path = file_info.split("\t")
+        i = info.split.first
         next if i == 'l/-text' # ignore binary files
         next if i == "l/#{eol}"
         path

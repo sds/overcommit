@@ -26,9 +26,16 @@ describe Overcommit::Hook::PreCommit::LineEndings do
   around do |example|
     repo do
       File.open(staged_file, 'w') { |f| f.write(contents) }
-      `git add #{staged_file} > #{File::NULL} 2>&1`
+      `git add "#{staged_file}" > #{File::NULL} 2>&1`
       example.run
     end
+  end
+
+  context 'when file path contains spaces' do
+    let!(:staged_file) { 'a file with spaces.txt' }
+    let(:contents) { "test\n" }
+
+    it { should_not fail_hook }
   end
 
   context 'when enforcing \n' do
