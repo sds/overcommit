@@ -785,6 +785,14 @@ PostCheckout:
     quiet: true
     recursive: false
 
+  MessageTemplate:
+    enabled: false
+    description: 'Write commit template message based on the new branch name'
+    quiet: true
+    recursive: false
+    branch_pattern: '\A.*\w+[-_](\d+).*\z'
+    replacement_text: '[#\1] [ci skip]'
+
 # Hooks that run after a commit is created.
 PostCommit:
   ALL:
