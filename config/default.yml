@@ -427,14 +427,13 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
-  MetadataJsonLint:
+  PuppetMetadataJsonLint:
     enabled: false
-    strict_license: true
-    strict_dependencies: false
-    fail_on_warning: true
-    description: 'Checking Puppet module metadata'
+    description: 'Checking module metadata'
+    flags: ['--strict-license', '--strict-dependencies', '--fail-on-warning']
+    include: 'metadata.json'
     required_executable: 'metadata-json-lint'
-    install_command: 'gem install metadata-json-lint semantic_puppet'
+    install_command: 'gem install metadata-json-lint'
 
   NginxTest:
     enabled: false
