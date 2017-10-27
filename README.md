@@ -16,10 +16,10 @@
 ![Demonstration](https://brigade.github.io/overcommit/overcommit.gif)
 
 In addition to supporting a wide variety of hooks that can be used across
-multiple repositories, you can also define hooks specific to a
-repository, but unlike regular Git hooks are stored in source control. You can
-also easily [add your existing hook scripts](#adding-existing-git-hooks) without
-writing any Ruby code.
+multiple repositories, you can also define hooks specific to a repository which
+are stored in source control. You can also easily
+[add your existing hook scripts](#adding-existing-git-hooks) without writing
+any Ruby code.
 
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
