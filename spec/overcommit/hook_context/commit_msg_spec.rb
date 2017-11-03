@@ -85,4 +85,12 @@ describe Overcommit::HookContext::CommitMsg do
       it { should == false }
     end
   end
+
+  describe '#post_fail_message' do
+    subject { context.post_fail_message }
+
+    it 'returns printable log of commit message' do
+      subject.should == "Failed commit message:\nSome commit message\n"
+    end
+  end
 end

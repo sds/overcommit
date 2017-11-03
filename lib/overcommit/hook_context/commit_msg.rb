@@ -31,6 +31,10 @@ module Overcommit::HookContext
       @args[0]
     end
 
+    def post_fail_message
+      "Failed commit message:\n" + commit_message_lines.join
+    end
+
     private
 
     def raw_commit_message_lines
