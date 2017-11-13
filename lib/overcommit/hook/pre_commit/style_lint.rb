@@ -3,7 +3,10 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/stylelint/stylelint
   class StyleLint < Base
-    MESSAGE_REGEX = /(?<type>✖|⚠)/
+    MESSAGE_REGEX = /(?<type>✖|⚠)
+      ((?<file>(\/\D+)*\D+\.\D+))
+      ((?<line>\d+):)
+    /x
 
     def run
       result = execute(command, args: applicable_files)
