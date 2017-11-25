@@ -417,6 +417,7 @@ any time your `HEAD` changes or a file is explicitly checked out.
 * [IndexTags](lib/overcommit/hook/post_checkout/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_checkout/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_checkout/submodule_status.rb)
+* [YarnInstall](lib/overcommit/hook/post_checkout/yarn_install.rb)
 
 ### PostCommit
 
@@ -431,6 +432,7 @@ however, it can be used to alert the user to some issue.
 * [IndexTags](lib/overcommit/hook/post_commit/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_commit/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_commit/submodule_status.rb)
+* [YarnInstall](lib/overcommit/hook/post_commit/yarn_install.rb)
 
 ### PostMerge
 
@@ -443,6 +445,7 @@ already occurred; however, it can be used to alert the user to some issue.
 * [IndexTags](lib/overcommit/hook/post_merge/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_merge/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_merge/submodule_status.rb)
+* [YarnInstall](lib/overcommit/hook/post_merge/yarn_install.rb)
 
 ### PostRewrite
 
@@ -456,6 +459,7 @@ issue.
 * [IndexTags](lib/overcommit/hook/post_rewrite/index_tags.rb)
 * [NpmInstall](lib/overcommit/hook/post_rewrite/npm_install.rb)
 * [SubmoduleStatus](lib/overcommit/hook/post_rewrite/submodule_status.rb)
+* [YarnInstall](lib/overcommit/hook/post_rewrite/yarn_install.rb)
 
 ### PreCommit
 

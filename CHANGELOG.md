@@ -2,6 +2,7 @@
 
 ## master (unreleased)
 
+* Add `YarnInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add [`metadata-json-lint`](https://voxpupuli.org/blog/2014/11/06/linting-metadata-json/) pre-commit hook
 * Fix `LineEndings` pre-commit hook handling of file paths with spaces
 
