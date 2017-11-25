@@ -225,6 +225,27 @@ describe Overcommit::Installer do
           end
         end
       end
+
+      context 'which has an external git dir' do
+        let(:submodule) { File.join(target, 'submodule') }
+        before do
+          system 'git', 'submodule', 'add', target, 'submodule',
+                 chdir: target, out: :close, err: :close
+        end
+        let(:submodule_git_file) { File.join(submodule, '.git') }
+        let(:submodule_git_dir) do
+          File.expand_path(File.read(submodule_git_file)[/gitdir: (.*)/, 1], submodule)
+        end
+        let(:submodule_hooks_dir) { File.join(submodule_git_dir, 'hooks') }
+
+        subject { installer.run(submodule, options) }
+
+        it 'installs hooks into the correct external directory' do
+          expect { subject }.to change {
+            hook_files_installed?(submodule_hooks_dir)
+          }.from(false).to(true)
+        end
+      end
     end
   end
 end
