@@ -566,6 +566,13 @@ PreCommit:
       - '**/Gemfile'
       - '**/Rakefile'
 
+  RstLint:
+    enabled: false
+    description: 'Analyze reStructuredText files with rst-lint'
+    required_executable: 'rst-lint'
+    install_command: 'pip install restructuredtext_lint'
+    include: '**/*.rst'
+
   RuboCop:
     enabled: false
     description: 'Analyze with RuboCop'
