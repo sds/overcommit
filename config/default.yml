@@ -415,7 +415,7 @@ PreCommit:
 
   Mdl:
     enabled: false
-    description: 'Analyze with mdl'
+    description: 'Analyze markdown files with mdl'
     required_executable: 'mdl'
     install_command: 'gem install mdl'
     include: '**/*.md'

@@ -3,7 +3,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/mivok/markdownlint
   class Mdl < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):\s(?<msg>.+)/
 
     def run
       result = execute(command, args: applicable_files)
