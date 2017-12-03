@@ -4,8 +4,17 @@ module Overcommit::Hook::PreCommit
   # @see https://github.com/golang/lint
   class GoLint < Base
     def run
-      result = execute(command, args: applicable_files)
-      output = result.stdout + result.stderr
+      output = ''
+      success = true
+
+      # golint doesn't accept multiple file arguments if
+      # they belong to different packages
+      applicable_files.each do |gofile|
+        result = execute(command, args: Array(gofile))
+        output += result.stdout
+        success &&= result.success?
+      end
+      
       # Unfortunately the exit code is always 0
       return :pass if output.empty?
 
