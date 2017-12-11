@@ -27,7 +27,7 @@ describe Overcommit::Hook::PreCommit::BundleAudit do
     end
 
     before do
-      subject.stub(:execute).with(%w[git ls-files -o -i --exclude-standard]).
+      subject.stub(:execute).with(%w[git ls-files -o -i --exclude-standard -- Gemfile.lock]).
         and_return(double(stdout: ''))
       subject.stub(:execute).with(%w[bundle-audit]).and_return(result)
     end
