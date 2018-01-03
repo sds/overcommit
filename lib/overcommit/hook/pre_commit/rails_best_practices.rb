@@ -8,7 +8,7 @@ module Overcommit
         ERROR_REGEXP = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)\s-\s(?<type>.+)/
 
         def run
-          result = execute(command)
+          result = execute(command, args: applicable_files)
 
           return :pass if result.success?
           return [:fail, result.stderr] unless result.stderr.empty?
