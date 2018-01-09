@@ -800,6 +800,16 @@ PostCheckout:
     quiet: true
     recursive: false
 
+  YarnInstall:
+    enabled: false
+    description: 'Install Yarn dependencies'
+    requires_files: true
+    required_executable: 'yarn'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'yarn.lock'
+
 # Hooks that run after a commit is created.
 PostCommit:
   ALL:
@@ -865,6 +875,16 @@ PostCommit:
     quiet: true
     recursive: false
 
+  YarnInstall:
+    enabled: false
+    description: 'Install Yarn dependencies'
+    requires_files: true
+    required_executable: 'yarn'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'yarn.lock'
+
 # Hooks that run after `git merge` executes successfully (no merge conflicts).
 PostMerge:
   ALL:
@@ -914,6 +934,16 @@ PostMerge:
     quiet: true
     recursive: false
 
+  YarnInstall:
+    enabled: false
+    description: 'Install Yarn dependencies'
+    requires_files: true
+    required_executable: 'yarn'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'yarn.lock'
+
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
   ALL:
@@ -962,6 +992,16 @@ PostRewrite:
     description: 'Check submodule status'
     quiet: true
     recursive: false
+
+  YarnInstall:
+    enabled: false
+    description: 'Install Yarn dependencies'
+    requires_files: true
+    required_executable: 'yarn'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'yarn.lock'
 
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
