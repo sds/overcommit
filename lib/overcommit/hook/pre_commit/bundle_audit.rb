@@ -7,7 +7,8 @@ module Overcommit::Hook::PreCommit
 
     def run
       # Ignore if Gemfile.lock is not tracked by git
-      ignored_files = execute(%w[git ls-files -o -i --exclude-standard]).stdout.split("\n")
+      ignored_files = execute(%W[git ls-files -o -i --exclude-standard -- #{LOCK_FILE}]).
+                      stdout.split("\n")
       return :pass if ignored_files.include?(LOCK_FILE)
 
       result = execute(command)
