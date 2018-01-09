@@ -5,6 +5,10 @@ describe Overcommit::Hook::PreCommit::RailsBestPractices do
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
+  before do
+    subject.stub(:applicable_files).and_return(%w[file1.rb file2.rb])
+  end
+
   context 'when rails_best_practices exits successfully' do
     before do
       result = double('result')
