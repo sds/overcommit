@@ -44,6 +44,90 @@ describe Overcommit::HookContext::PrePush do
     end
   end
 
+  describe '#modified_files' do
+    subject { context.modified_files }
+
+    let(:remote_repo) do
+      repo do
+        touch 'update-me'
+        echo 'update', 'update-me'
+        touch 'delete-me'
+        echo 'delete', 'delete-me'
+        `git add . 2>&1 > #{File::NULL}`
+        `git commit -m "Initial commit" 2>&1 > #{File::NULL}`
+      end
+    end
+
+    context 'when current branch has tracking branch' do
+      let(:local_ref) { 'refs/heads/project-branch' }
+      let(:local_sha1) { get_sha1(local_ref) }
+      let(:remote_ref) { 'refs/remotes/origin/master' }
+      let(:remote_sha1) { get_sha1(remote_ref) }
+      let(:input) do
+        double('input', read: "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+      end
+
+      it 'has modified files based on tracking branch' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+
+          touch 'added-1'
+          echo 'add', 'added-1'
+          echo 'append', 'update-me'
+          FileUtils.rm 'delete-me'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          touch 'added-2'
+          echo 'add', 'added-2'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+
+          should include(*%w[added-1 update-me added-2].map { |file| File.expand_path(file) })
+          should_not include(*%w[delete-me].map { |file| File.expand_path(file) })
+        end
+      end
+    end
+
+    context 'when current branch has no tracking branch' do
+      let(:local_ref) { 'refs/heads/project-branch' }
+      let(:local_sha1) { get_sha1(local_ref) }
+      let(:remote_ref) { 'refs/heads/master' }
+      let(:remote_sha1) { get_sha1(remote_ref) }
+      let(:input) do
+        double('input', read: "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+      end
+
+      it 'has modified files based on parent branch' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch 2>&1 > #{File::NULL}`
+
+          touch 'added-1'
+          echo 'add', 'added-1'
+          echo 'append', 'update-me'
+          FileUtils.rm 'delete-me'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          touch 'added-2'
+          echo 'add', 'added-2'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+
+          should include(*%w[added-1 update-me added-2].map { |file| File.expand_path(file) })
+          should_not include(*%w[delete-me].map { |file| File.expand_path(file) })
+        end
+      end
+    end
+  end
+
   describe Overcommit::HookContext::PrePush::PushedRef do
     let(:local_ref) { 'refs/heads/master' }
     let(:remote_ref) { 'refs/heads/master' }

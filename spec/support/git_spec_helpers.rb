@@ -23,6 +23,14 @@ module GitSpecHelpers
     end
   end
 
+  # Retrieve sha1 based on git ref
+  #
+  # @param ref [String] git ref
+  # @return [String] ref's sha1
+  def get_sha1(ref)
+    `git rev-parse #{ref}`.chomp
+  end
+
   # Creates a directory (with an optional specific name) in a temporary
   # directory which will automatically be destroyed.
   #
