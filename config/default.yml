@@ -191,8 +191,14 @@ PreCommit:
     flags: ['secure', '--files']
     install_command: 'gem install chamber'
     include:
-      - 'config/settings.yml'
+      - 'config/settings*.yml'
+      - 'config/settings*.yml.erb'
       - 'config/settings/**/*.yml'
+      - 'config/settings/**/*.yml.erb'
+      - 'settings*.yml'
+      - 'settings*.yml.erb'
+      - 'settings/**/*.yml'
+      - 'settings/**/*.yml.erb'
 
   CoffeeLint:
     enabled: false
