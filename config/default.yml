@@ -184,13 +184,18 @@ PreCommit:
     description: 'Check for case-insensitivity conflicts'
     quiet: true
 
-  ChamberSecurity:
+  ChamberCompare:
     enabled: false
-    description: 'Check that settings have been secured with Chamber'
+    description: 'Check that settings are equivalent between namespaces'
     required_executable: 'chamber'
-    flags: ['secure', '--files']
+    flags: ['compare']
     install_command: 'gem install chamber'
-    include:
+    namespaces:
+      - ['development']
+      - ['test']
+      - ['production']
+    exclusions: []
+    include: &chamber_settings_files
       - 'config/settings*.yml'
       - 'config/settings*.yml.erb'
       - 'config/settings/**/*.yml'
@@ -199,6 +204,14 @@ PreCommit:
       - 'settings*.yml.erb'
       - 'settings/**/*.yml'
       - 'settings/**/*.yml.erb'
+
+  ChamberSecurity:
+    enabled: false
+    description: 'Check that settings have been secured with Chamber'
+    required_executable: 'chamber'
+    flags: ['secure', '--files']
+    install_command: 'gem install chamber'
+    include: *chamber_settings_files
 
   CoffeeLint:
     enabled: false
