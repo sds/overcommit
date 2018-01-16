@@ -21,7 +21,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def prohibited_keywords
-      @prohibited_keywords ||= Array(config[:keywords])
+      @prohibited_keywords ||= Array(config['keywords'])
     end
   end
 end

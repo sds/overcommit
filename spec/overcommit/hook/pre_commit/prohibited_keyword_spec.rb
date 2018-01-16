@@ -3,13 +3,7 @@ require 'overcommit/hook_context/pre_push'
 
 describe Overcommit::Hook::PreCommit::ProhibitedKeyword do
   let(:hook_config) { { keywords: ['console.log(', 'eval('] } }
-  let(:config) do
-    Overcommit::ConfigurationLoader.default_configuration.merge(
-      Overcommit::Configuration.new(
-        'PreCommit' => { 'ProhibitedKeyword' => hook_config }
-      )
-    )
-  end
+  let(:config) { Overcommit::ConfigurationLoader.default_configuration }
   subject { described_class.new(config, context) }
 
   context 'with blacklisted keyword' do
