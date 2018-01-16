@@ -10,24 +10,19 @@ describe Overcommit::Hook::PreCommit::ProhibitedKeyword do
       )
     )
   end
-  let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
   context 'with blacklisted keyword' do
     let(:file) { create_file('console.log("hello")') }
 
     context 'with matching file' do
-      before do
-        subject.stub(:applicable_files).and_return([file.path])
-      end
+      let(:context) { double('context', modified_files: [file.path]) }
 
       it { should fail_hook /contains prohibited keyword./ }
     end
 
     context 'without matching file' do
-      before do
-        subject.stub(:applicable_files).and_return([])
-      end
+      let(:context) { double('context', modified_files: []) }
 
       it { should pass }
     end
@@ -35,22 +30,15 @@ describe Overcommit::Hook::PreCommit::ProhibitedKeyword do
 
   context 'without blacklisted keyword' do
     let(:file) { create_file('alert("hello")') }
-    before do
-      subject.stub(:applicable_files).and_return([file.path])
-    end
 
     context 'with matching file' do
-      before do
-        subject.stub(:applicable_files).and_return([file.path])
-      end
+      let(:context) { double('context', modified_files: [file.path]) }
 
       it { should pass }
     end
 
     context 'without matching file' do
-      before do
-        subject.stub(:applicable_files).and_return([])
-      end
+      let(:context) { double('context', modified_files: []) }
 
       it { should pass }
     end
