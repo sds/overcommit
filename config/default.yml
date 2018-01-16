@@ -1017,6 +1017,14 @@ PrePush:
     required: false
     quiet: false
 
+  ProhibitedKeyword:
+    enabled: false
+    description: 'Check for prohibited keywords'
+    keywords:
+      - console.log(
+      - binding.pry
+      - eval(
+
   ProtectedBranches:
     enabled: false
     description: 'Check for illegal pushes to protected branches'
