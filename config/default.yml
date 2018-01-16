@@ -477,13 +477,6 @@ PreCommit:
     flags: ['--standard=PSR2', '--report=csv']
     include: '**/*.php'
 
-  Pronto:
-    enabled: false
-    description: 'Analyzing with pronto'
-    required_executable: 'pronto'
-    install_command: 'gem install pronto'
-    flags: ['run', '--staged', '--exit-code']
-
   ProhibitedKeyword:
     enabled: false
     description: 'Check for prohibited keywords'
@@ -491,6 +484,13 @@ PreCommit:
       - console.log(
       - binding.pry
       - eval(
+
+  Pronto:
+    enabled: false
+    description: 'Analyzing with pronto'
+    required_executable: 'pronto'
+    install_command: 'gem install pronto'
+    flags: ['run', '--staged', '--exit-code']
 
   PuppetLint:
     enabled: false
