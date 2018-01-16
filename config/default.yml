@@ -477,6 +477,14 @@ PreCommit:
     flags: ['--standard=PSR2', '--report=csv']
     include: '**/*.php'
 
+  ProhibitedKeyword:
+    enabled: false
+    description: 'Check for prohibited keywords'
+    keywords:
+      - console.log(
+      - binding.pry
+      - eval(
+
   Pronto:
     enabled: false
     description: 'Analyzing with pronto'
