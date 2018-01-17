@@ -797,6 +797,15 @@ PostCheckout:
       - 'Gemfile.lock'
       - '*.gemspec'
 
+  ComposerInstall:
+    enabled: false
+    description: 'Install composer dependencies'
+    requires_files: true
+    required_executable: 'composer'
+    install_command: 'curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer'
+    flags: ['install']
+    include: 'composer.json'
+
   IndexTags:
     enabled: false
     description: 'Generate tags file from source'
@@ -863,6 +872,15 @@ PostCommit:
     required_executable: './node_modules/.bin/commitplease'
     install_command: 'npm install --save-dev commitplease'
     flags: ['-1']
+
+  ComposerInstall:
+    enabled: false
+    description: 'Install composer dependencies'
+    requires_files: true
+    required_executable: 'composer'
+    install_command: 'curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer'
+    flags: ['install']
+    include: 'composer.json'
 
   GitGuilt:
     enabled: false
@@ -931,6 +949,15 @@ PostMerge:
       - 'Gemfile.lock'
       - '*.gemspec'
 
+  ComposerInstall:
+    enabled: false
+    description: 'Install composer dependencies'
+    requires_files: true
+    required_executable: 'composer'
+    install_command: 'curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer'
+    flags: ['install']
+    include: 'composer.json'
+
   IndexTags:
     enabled: false
     description: 'Generate tags file from source'
@@ -989,6 +1016,15 @@ PostRewrite:
       - 'Gemfile'
       - 'Gemfile.lock'
       - '*.gemspec'
+
+  ComposerInstall:
+    enabled: false
+    description: 'Install composer dependencies'
+    requires_files: true
+    required_executable: 'composer'
+    install_command: 'curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer'
+    flags: ['install']
+    include: 'composer.json'
 
   IndexTags:
     enabled: false
