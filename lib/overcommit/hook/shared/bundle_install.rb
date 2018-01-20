@@ -1,13 +1,15 @@
+require 'overcommit/hook/shared/simple_install'
+
 module Overcommit::Hook::Shared
   # Shared code used by all BundleInstall hooks. Runs `bundle install` when a
   # change is detected in the repository's dependencies.
   #
   # @see http://bundler.io/
   module BundleInstall
-    def run
-      result = execute(command)
-      return :fail, result.stdout unless result.success?
-      :pass
+    include SimpleInstall
+
+    def fail_output
+      @result.stdout
     end
   end
 end
