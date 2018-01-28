@@ -33,8 +33,12 @@ describe Overcommit::HookSigner do
     end
 
     before do
+      Overcommit::GitRepo.stub(:tracked?).and_return(true)
       context.stub(:hook_class_name).and_return('PreCommit')
+      context.stub(:hook_type_name).and_return('pre-commit')
+      config.stub(:verify_signatures?).and_return(true)
       config.stub(:for_hook).and_return(hook_config)
+      config.stub(:plugin_directory).and_return(Dir.pwd)
       signer.stub(:hook_contents).and_return(hook_contents)
 
       signer.update_signature!

@@ -32,25 +32,27 @@ module Overcommit
           # Otherwise this is an ad hoc hook using an existing hook script
           hook_config = @config.for_hook(@hook_name, @context.hook_class_name)
 
-          command = Array(hook_config['command'] ||
-                          hook_config['required_executable'])
+          command = Array(hook_config['command'] || hook_config['required_executable'])
 
-          unless !@config.verify_signatures? || signable_file?(command.first)
+          if @config.verify_signatures? &&
+            signable_file?(command.first) &&
+            !Overcommit::GitRepo.tracked?(command.first)
             raise Overcommit::Exceptions::InvalidHookDefinition,
-                  'Hook must specify a `required_executable` or `command` that ' \
-                  'is tracked by git (i.e. is a path relative to the root ' \
-                  'of the repository) so that it can be signed'
+                  'Hook specified a `required_executable` or `command` that ' \
+                  'is a path relative to the root of the repository, and so ' \
+                  'must be tracked by Git in order to be signed'
           end
 
-          File.join(Overcommit::Utils.repo_root, command.first)
+          File.join(Overcommit::Utils.repo_root, command.first.to_s)
         end
       end
     end
 
     def signable_file?(file)
+      return unless file
       sep = Overcommit::OS.windows? ? '\\' : File::SEPARATOR
-      file.start_with?(".#{sep}") &&
-        Overcommit::GitRepo.tracked?(file)
+      file.start_with?(".#{sep}") ||
+        file.start_with?(Overcommit::Utils.repo_root)
     end
 
     # Return whether the signature for this hook has changed since it was last
@@ -85,7 +87,12 @@ module Overcommit
                             dup.
                             tap { |config| IGNORED_CONFIG_KEYS.each { |k| config.delete(k) } }
 
-      Digest::SHA256.hexdigest(hook_contents + hook_config.to_s)
+      content_to_sign =
+        if signable_file?(hook_path) && Overcommit::GitRepo.tracked?(hook_path)
+          hook_contents
+        end
+
+      Digest::SHA256.hexdigest(content_to_sign.to_s + hook_config.to_s)
     end
 
     def hook_contents
