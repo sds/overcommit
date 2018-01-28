@@ -156,7 +156,7 @@ module Overcommit
       rescue Overcommit::Exceptions::MessageProcessingError => ex
         status = :fail
         output = ex.message
-      rescue => ex
+      rescue StandardError => ex
         status = :fail
         output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
       end

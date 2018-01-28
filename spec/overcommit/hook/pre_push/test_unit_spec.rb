@@ -27,12 +27,12 @@ describe Overcommit::Hook::PrePush::TestUnit do
 
     context 'with a runtime error' do
       before do
-        result.stub(stdout: '', stderr: <<-EOS)
+        result.stub(stdout: '', stderr: <<-MSG)
           1) Error:
           FooTest#test_: foo should bar. :
           RuntimeError:
           test/model/foo_test.rb:1:in `block (2 levels) in <class:FooTest>'
-        EOS
+        MSG
       end
 
       it { should fail_hook }

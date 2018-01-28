@@ -42,10 +42,10 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
           double(
             success?: false,
             stderr: '',
-            stdout: <<-EOF,
+            stdout: <<-MSG,
             FC023: Prefer conditional attributes: recipes/default.rb:11
             FC065: Ensure source_url is set in metadata: metadata.rb:1
-            EOF
+            MSG
           )
         end
 
@@ -104,10 +104,10 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
           double(
             success?: false,
             stderr: '',
-            stdout: <<-EOF,
+            stdout: <<-MSG,
             FC023: Prefer conditional attributes: cookbooks/cookbook_a/recipes/default.rb:11
             FC065: Ensure source_url is set in metadata: cookbooks/cookbook_b/metadata.rb:1
-            EOF
+            MSG
           )
         end
 

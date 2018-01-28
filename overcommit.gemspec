@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative './lib/overcommit/constants'
 require_relative './lib/overcommit/version'
 
@@ -23,7 +25,7 @@ Gem::Specification.new do |s|
                             Dir['libexec/**/*'] +
                             Dir['template-dir/**/*']
 
-  s.required_ruby_version = '>= 2'
+  s.required_ruby_version = '>= 2.1'
 
   s.add_dependency          'childprocess', '~> 0.6', '>= 0.6.3'
   s.add_dependency          'iniparse', '~> 1.4'

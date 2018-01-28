@@ -95,7 +95,7 @@ module Overcommit
       errors = []
 
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash.fetch(hook_type, {}).each do |hook_name, _|
+        hash.fetch(hook_type, {}).each_key do |hook_name|
           next if hook_name == 'ALL'
 
           unless hook_name =~ /\A[A-Za-z0-9]+\z/
@@ -175,3 +175,4 @@ module Overcommit
     end
   end
 end
+# rubocop:enable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/LineLength

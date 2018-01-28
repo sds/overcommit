@@ -51,6 +51,6 @@ module GitSpecHelpers
   #
   # @return [String]
   def random_hash
-    Array.new(40) { (65 + rand(26)).chr }.join
+    Array.new(40) { rand(65..90).chr }.join
   end
 end

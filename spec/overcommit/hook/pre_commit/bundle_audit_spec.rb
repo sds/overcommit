@@ -36,7 +36,7 @@ describe Overcommit::Hook::PreCommit::BundleAudit do
       let(:result) do
         double(
           success?: false,
-          stdout: <<-EOF
+          stdout: <<-MSG
 Name: rest-client
 Version: 1.6.9
 Advisory: CVE-2015-1820
@@ -44,7 +44,6 @@ Criticality: Unknown
 URL: https://github.com/rest-client/rest-client/issues/369
 Title: rubygem-rest-client: session fixation vulnerability via Set-Cookie headers in 30x redirection responses
 Solution: upgrade to >= 1.8.0
-
 Name: rest-client
 Version: 1.6.9
 Advisory: CVE-2015-3448
@@ -52,9 +51,8 @@ Criticality: Unknown
 URL: http://www.osvdb.org/show/osvdb/117461
 Title: Rest-Client Gem for Ruby logs password information in plaintext
 Solution: upgrade to >= 1.7.3
-
 Vulnerabilities found!
-EOF
+MSG
         )
       end
 
@@ -64,10 +62,10 @@ EOF
     let(:result) do
       double(
         success?: false,
-        stdout: <<-EOF
+        stdout: <<-MSG
 Insecure Source URI found: git://github.com/xxx/overcommit.git
 Vulnerabilities found!
-EOF
+MSG
       )
     end
 

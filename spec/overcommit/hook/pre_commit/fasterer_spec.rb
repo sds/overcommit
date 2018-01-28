@@ -24,20 +24,17 @@ describe Overcommit::Hook::PreCommit::Fasterer do
     let(:result) do
       double(
         success?: false,
-        stdout: <<-EOF
+        stdout: <<-MSG
 spec/models/product_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 52.
-
 1 files inspected, 1 offense detected
 spec/models/book_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 32.
-
 1 files inspected, 1 offense detected
 spec/models/blog_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 12.
-
 2 files inspected, 0 offense detected
-      EOF
+      MSG
       )
     end
 
@@ -48,12 +45,11 @@ Using each_with_index is slower than while loop. Occurred at lines: 12.
     let(:result) do
       double(
         success?: false,
-        stdout: <<-EOF
+        stdout: <<-MSG
 spec/models/product_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 52.
-
 1 files inspected, 1 offense detected
-      EOF
+      MSG
       )
     end
 

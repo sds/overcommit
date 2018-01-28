@@ -25,10 +25,10 @@ describe Overcommit::Hook::PreCommit::YamlLint do
     let(:result) do
       double(
         success?: false,
-        stdout: <<-EOF
+        stdout: <<-MSG
 file1.yaml:3:81: [error] line too long (253 > 80 characters) (line-length)
 file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
-      EOF
+      MSG
       )
     end
 
@@ -39,9 +39,9 @@ file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
     let(:result) do
       double(
         success?: false,
-        stdout: <<-EOF
+        stdout: <<-MSG
 file1.yaml:1:1: [warning] missing document start "---" (document-start)
-      EOF
+      MSG
       )
     end
 

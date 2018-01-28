@@ -1,3 +1,6 @@
+AllCops:
+  TargetRubyVersion: 2.1
+
 Layout/ClosingParenthesisIndentation:
   Enabled: false
 
@@ -54,6 +57,22 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+Naming/FileName:
+  Exclude:
+    - 'template-dir/hooks/*'
+    - 'Gemfile'
+    - 'Rakefile'
+    - '*.gemspec'
+
+# Renaming `has_something?` to `something?` obfuscates whether it is a "is-a" or
+# a "has-a" relationship.
+Naming/PredicateName:
+  Enabled: false
+
+# commit_sha1 is indeed how we want to write such a variable, so ignore this cop
+Naming/VariableNumber:
+  Enabled: false
+
 # Enforcing this results in a lot of unnecessary indentation.
 Style/ClassAndModuleChildren:
   Enabled: false
@@ -61,16 +80,6 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Exclude:
     - 'spec/overcommit/**/*'
-
-Style/Encoding:
-  EnforcedStyle: when_needed
-
-Style/FileName:
-  Exclude:
-    - 'template-dir/hooks/*'
-    - 'Gemfile'
-    - 'Rakefile'
-    - '*.gemspec'
 
 Style/FormatString:
   Enabled: false
@@ -112,11 +121,6 @@ Style/PercentLiteralDelimiters:
     '%W': '[]'
     '%x': '{}'
 
-# Renaming `has_something?` to `something?` obfuscates whether it is a "is-a" or
-# a "has-a" relationship.
-Style/PredicateName:
-  Enabled: false
-
 Style/RescueModifier:
   Exclude:
     - 'bin/overcommit'
@@ -139,8 +143,4 @@ Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/TrailingCommaInLiteral:
-  Enabled: false
-
-# commit_sha1 is indeed how we want to write such a variable, so ignore this cop
-Style/VariableNumber:
   Enabled: false

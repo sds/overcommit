@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe Overcommit::Hook::CommitMsg::CapitalizedSubject do

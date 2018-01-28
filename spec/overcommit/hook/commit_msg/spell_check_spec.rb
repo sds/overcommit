@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe Overcommit::Hook::CommitMsg::SpellCheck do
@@ -21,12 +19,12 @@ describe Overcommit::Hook::CommitMsg::SpellCheck do
 
     context 'with no misspellings' do
       before do
-        result.stub(:stdout).and_return(<<-EOS)
+        result.stub(:stdout).and_return(<<-MSG)
 @(#) International Ispell Version 3.2.06 (but really Hunspell 1.3.3)
 *
 *
 *
-        EOS
+        MSG
       end
 
       it { should pass }
@@ -35,12 +33,12 @@ describe Overcommit::Hook::CommitMsg::SpellCheck do
     context 'with misspellings' do
       context 'with suggestions' do
         before do
-          result.stub(:stdout).and_return(<<-EOS)
+          result.stub(:stdout).and_return(<<-MSG)
 @(#) International Ispell Version 3.2.06 (but really Hunspell 1.3.3)
 *
 & msg 10 4: MSG, mag, ms, mg, meg, mtg, mug, mpg, mfg, ms g
 *
-          EOS
+          MSG
         end
 
         it { should warn(/^Potential misspelling: \w+. Suggestions: .+$/) }
@@ -48,12 +46,12 @@ describe Overcommit::Hook::CommitMsg::SpellCheck do
 
       context 'with no suggestions' do
         before do
-          result.stub(:stdout).and_return(<<-EOS)
+          result.stub(:stdout).and_return(<<-MSG)
 @(#) International Ispell Version 3.2.06 (but really Hunspell 1.3.3)
 *
 # supercalifragilisticexpialidocious 4
 *
-          EOS
+          MSG
         end
 
         it { should warn(/^Potential misspelling: \w+.$/) }
@@ -65,9 +63,9 @@ describe Overcommit::Hook::CommitMsg::SpellCheck do
     let(:result) { double('result') }
 
     before do
-      result.stub(success?: false, stderr: <<-EOS)
+      result.stub(success?: false, stderr: <<-MSG)
 Can't open affix or dictionary files for dictionary named "foo".
-      EOS
+      MSG
     end
 
     it { should fail_hook }

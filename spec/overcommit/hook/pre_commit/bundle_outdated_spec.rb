@@ -35,9 +35,8 @@ describe Overcommit::Hook::PreCommit::BundleOutdated do
 
     context 'and it reports some outdated gems' do
       let(:result) do
-        double(stdout: <<-EOF
+        double(stdout: <<-MSG
 Warning: the running version of Bundler is older than the version that created the lockfile. We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
-
 airbrake (newest 5.3.0, installed 5.2.3, requested ~> 5.0)
 aws-sdk (newest 2.3.3, installed 2.3.1, requested ~> 2)
 font-awesome-rails (newest 4.6.2.0, installed 4.6.1.0)
@@ -48,7 +47,7 @@ aws-sdk-core (newest 2.3.3, installed 2.3.1)
 aws-sdk-resources (newest 2.3.3, installed 2.3.1)
 config (newest 1.1.1, installed 1.1.0)
 ruby_parser (newest 3.8.2, installed 3.8.1)
-EOF
+MSG
         )
       end
 
@@ -57,10 +56,9 @@ EOF
 
     context 'and it reports bundle up to date' do
       let(:result) do
-        double(stdout: <<-EOF
+        double(stdout: <<-MSG
 Warning: the running version of Bundler is older than the version that created the lockfile. We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
-
-EOF
+MSG
         )
       end
 
