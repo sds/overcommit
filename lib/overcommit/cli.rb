@@ -27,6 +27,9 @@ module Overcommit
       when :run_all
         run_all
       end
+    rescue Overcommit::Exceptions::ConfigurationSignatureChanged => ex
+      puts ex
+      exit 78 # EX_CONFIG
     rescue Overcommit::Exceptions::HookContextLoadError => ex
       puts ex
       exit 64 # EX_USAGE

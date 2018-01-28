@@ -68,6 +68,8 @@ module Overcommit
       end
 
       config
+    rescue Overcommit::Exceptions::ConfigurationSignatureChanged
+      raise
     rescue => error
       raise Overcommit::Exceptions::ConfigurationError,
             "Unable to load configuration from '#{file}': #{error}",
