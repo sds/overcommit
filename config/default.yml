@@ -498,6 +498,14 @@ PreCommit:
     flags: ['--standard=PSR2', '--report=csv']
     include: '**/*.php'
 
+  PhpStan:
+    description: 'Analyze with phpstan'
+    enabled: false
+    command: 'phpstan'
+    flags: ['analyze', '--errorFormat=raw']
+    include:
+      - '**/*.php'
+
   Pronto:
     enabled: false
     description: 'Analyzing with pronto'

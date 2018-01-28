@@ -530,6 +530,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
 * [PhpCs](lib/overcommit/hook/pre_commit/php_cs.rb)
 * [PhpLint](lib/overcommit/hook/pre_commit/php_lint.rb)
+* [PhpStan](lib/overcommit/hook/pre_commit/php_stan.rb)
 * [Pronto](lib/overcommit/hook/pre_commit/pronto.rb)
 * [PuppetLint](lib/overcommit/hook/pre_commit/puppet_lint.rb)
 * [PuppetMetadataJsonLint](lib/overcommit/hook/pre_commit/puppet_metadata_json_lint.rb)
