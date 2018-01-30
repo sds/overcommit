@@ -2,25 +2,33 @@
 
 ## master (unreleased)
 
+### New Features
+
 * Add `YarnInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add [`metadata-json-lint`](https://voxpupuli.org/blog/2014/11/06/linting-metadata-json/) pre-commit hook
-* Fix `LineEndings` pre-commit hook handling of file paths with spaces
 * Add [`RstLint`](https://github.com/twolfson/restructuredtext-lint) pre-commit
   hook
-* Fix `Mdl` pre-commit hook message parsing regex
-* Run `GoLint` pre-commit hook against each file individually
-* Fix `RailsBestPractices` hook to only run against changed files
 * Add `YarnInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
-* Improve performance of `BundleAudit` checking of `Gemfile.lock` file
-* Fix Overcommit installation in submodules
 * Add additional file patterns for `ChamberSecurity` pre-commit hook
 * Add `ChamberCompare` and `ChamberVerification` pre-commit hooks
 * Add `ComposerInstall` post-checkout, post-commit, post-merge, and post-rewrite hooks
 * Add ability to `pre-push` hooks to inspect modified files for pushed refs
-* Allow ad hoc hooks to run executables not tracked by Git
-* Don't print backtrace of signature change for `overcommit --run`
-* Drop support for Ruby 2.0
 * Add [`PhpStan`](https://github.com/phpstan/phpstan) pre-commit hook
+
+### Changes
+
+* Run `GoLint` pre-commit hook against each file individually
+* Improve performance of `BundleAudit` checking of `Gemfile.lock` file
+* Allow ad hoc hooks to run executables not tracked by Git
+* Drop support for Ruby 2.0
+
+### Bug Fixes
+
+* Fix `LineEndings` pre-commit hook handling of file paths with spaces
+* Fix `Mdl` pre-commit hook message parsing regex
+* Fix `RailsBestPractices` hook to only run against changed files
+* Fix Overcommit installation in submodules
+* Don't print backtrace of signature change for `overcommit --run`
 
 ## 0.41.0
 
