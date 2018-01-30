@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.42.0
 
 ### New Features
 
