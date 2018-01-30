@@ -4,8 +4,6 @@ clone_depth: 1
 
 environment:
   matrix:
-    - RUBY_FOLDER_VERSION: "200"
-    - RUBY_FOLDER_VERSION: "200-x64"
     - RUBY_FOLDER_VERSION: "21"
     - RUBY_FOLDER_VERSION: "21-x64"
     - RUBY_FOLDER_VERSION: "22"
