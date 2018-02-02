@@ -51,7 +51,7 @@ module Overcommit
 
     attr_reader :log
 
-    def run_hooks
+    def run_hooks # rubocop:disable Metrics/MethodLength
       if @hooks.any?(&:enabled?)
         @printer.start_run
 
@@ -78,7 +78,7 @@ module Overcommit
 
         if hook_failed
           message = @context.post_fail_message
-          @printer.after(message) unless message.nil?
+          @printer.hook_run_failed(message) unless message.nil?
         end
 
         !hook_failed

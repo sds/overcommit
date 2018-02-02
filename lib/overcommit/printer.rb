@@ -75,7 +75,7 @@ module Overcommit
       end
     end
 
-    def after(message)
+    def hook_run_failed(message)
       log.newline
       log.log message
       log.newline
@@ -131,9 +131,7 @@ module Overcommit
         self.class.__send__(:alias_method, old_method, method_name)
 
         self.class.send(:define_method, new_method) do |*args|
-          @lock.synchronize do
-            __send__(old_method, *args)
-          end
+          @lock.synchronize { __send__(old_method, *args) }
         end
 
         self.class.__send__(:alias_method, method_name, new_method)
