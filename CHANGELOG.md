@@ -2,7 +2,9 @@
 
 ## master (unreleased)
 
-* Add [`GitLfs`](https://git-lfs.github.com/) post-checkout, post-commit and post-merge hooks
+* Add [`GitLfs`](https://git-lfs.github.com/) `post-checkout`, `post-commit`
+  and `post-merge` hooks
+* Display commit message when `commit-msg` hooks fail
 
 ## 0.42.0
 
