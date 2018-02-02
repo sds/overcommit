@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add [`GitLfs`](https://git-lfs.github.com/) post-checkout, post-commit and post-merge hooks
+
 ## 0.42.0
 
 ### New Features
