@@ -56,7 +56,6 @@ any Ruby code.
 This project aims to support the following Ruby runtimes on both \*nix and Windows:
 
 * MRI 2.x
-* JRuby 9+ (partial&mdash;seeking maintainers who actively develop on JRuby)
 
 ## Limitations
 

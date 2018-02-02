@@ -9,11 +9,6 @@ rvm:
   - 2.2
   - 2.3.6
   - 2.4.3
-  - jruby-9.1.15.0
-
-matrix:
-  allow_failures:
-    - rvm: jruby-9.1.15.0
 
 before_script:
   - git config --global user.email "travis@travis.ci"
