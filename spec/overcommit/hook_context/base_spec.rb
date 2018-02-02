@@ -23,4 +23,10 @@ describe Overcommit::HookContext::Base do
 
     it { should == ['line 1', 'line 2'] }
   end
+
+  describe '#post_fail_message' do
+    subject { context.post_fail_message }
+
+    it { should be_nil }
+  end
 end
