@@ -102,6 +102,13 @@ module Overcommit::HookContext
       @input_lines ||= input_string.split("\n")
     end
 
+    # Returns a message to display on failure.
+    #
+    # @return [String]
+    def post_fail_message
+      nil
+    end
+
     private
 
     def filter_modified_files(modified_files)

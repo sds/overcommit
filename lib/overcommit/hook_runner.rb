@@ -76,8 +76,9 @@ module Overcommit
 
         hook_failed = @failed || @interrupted
 
-        if hook_failed && @context.respond_to?(:post_fail_message)
-          puts @context.post_fail_message
+        if hook_failed
+          message = @context.post_fail_message
+          @printer.after(message) unless message.nil?
         end
 
         !hook_failed

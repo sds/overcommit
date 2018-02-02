@@ -75,6 +75,12 @@ module Overcommit
       end
     end
 
+    def after(message)
+      log.newline
+      log.log message
+      log.newline
+    end
+
     private
 
     def print_header(hook)
