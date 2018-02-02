@@ -822,6 +822,12 @@ PostCheckout:
     flags: ['install']
     include: 'composer.json'
 
+  GitLfs:
+    enabled: false
+    description: 'Check status of lockable files tracked by Git LFS'
+    required_executable: 'git-lfs'
+    install_command: 'brew install git-lfs'
+
   IndexTags:
     enabled: false
     description: 'Generate tags file from source'
@@ -906,6 +912,12 @@ PostCommit:
     flags: ['HEAD~', 'HEAD']
     install_command: 'npm install -g git-guilt'
 
+  GitLfs:
+    enabled: false
+    description: 'Check status of lockable files tracked by Git LFS'
+    required_executable: 'git-lfs'
+    install_command: 'brew install git-lfs'
+
   IndexTags:
     enabled: false
     description: 'Generate tags file from source'
@@ -973,6 +985,12 @@ PostMerge:
     install_command: 'curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer'
     flags: ['install']
     include: 'composer.json'
+
+  GitLfs:
+    enabled: false
+    description: 'Check status of lockable files tracked by Git LFS'
+    required_executable: 'git-lfs'
+    install_command: 'brew install git-lfs'
 
   IndexTags:
     enabled: false
@@ -1082,6 +1100,25 @@ PrePush:
     required: false
     quiet: false
 
+  Brakeman:
+    enabled: false
+    description: 'Check for security vulnerabilities'
+    required_executable: 'brakeman'
+    flags: ['--exit-on-warn', '--quiet', '--summary']
+    install_command: 'gem install brakeman'
+
+  GitLfs:
+    enabled: false
+    description: 'Upload files tracked by Git LFS'
+    required_executable: 'git-lfs'
+    install_command: 'brew install git-lfs'
+
+  Minitest:
+    enabled: false
+    description: 'Run Minitest test suite'
+    command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
+    include: 'test/**/*_test.rb'
+
   ProtectedBranches:
     enabled: false
     description: 'Check for illegal pushes to protected branches'
@@ -1115,27 +1152,10 @@ PrePush:
     required_executable: 'rake'
     install_command: 'gem install rake'
 
-  Minitest:
-    enabled: false
-    description: 'Run Minitest test suite'
-    command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
-    include: 'test/**/*_test.rb'
-
   TestUnit:
     enabled: false
     description: 'Run Test::Unit test suite'
     command: ['ruby', '-Ilib:test', '-rtest/unit', "-e 'exit! Test::Unit::AutoRunner.run'"]
-
-  Brakeman:
-    enabled: false
-    description: 'Check for security vulnerabilities'
-    required_executable: 'brakeman'
-    flags: ['--exit-on-warn', '--quiet', '--summary']
-    install_command: 'gem install brakeman'
-
-  GitLfs:
-    enabled: false
-    description: 'Upload files tracked by Git LFS'
 
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.
