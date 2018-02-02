@@ -74,7 +74,14 @@ module Overcommit
 
         print_results
 
-        !(@failed || @interrupted)
+        hook_failed = @failed || @interrupted
+
+        if hook_failed
+          message = @context.post_fail_message
+          @printer.after(message) unless message.nil?
+        end
+
+        !hook_failed
       else
         @printer.nothing_to_run
         true # Run was successful
