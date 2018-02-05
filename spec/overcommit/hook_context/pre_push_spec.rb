@@ -128,6 +128,100 @@ describe Overcommit::HookContext::PrePush do
     end
   end
 
+  describe '#modified_lines_in_file' do
+    subject { context.modified_lines_in_file(file) }
+    let(:local_ref) { 'refs/heads/project-branch' }
+    let(:local_sha1) { get_sha1(local_ref) }
+    let(:remote_ref) { 'refs/remotes/origin/master' }
+    let(:remote_sha1) { get_sha1(remote_ref) }
+    let(:input) do
+      double('input', read: "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+    end
+    let(:remote_repo) do
+      repo do
+        touch 'initial_file'
+        echo 'initial', 'initial_file'
+        `git add . 2>&1 > #{File::NULL}`
+        `git commit -m "Initial commit" 2>&1 > #{File::NULL}`
+      end
+    end
+
+    context 'when updating a file' do
+      let(:file) { File.expand_path('initial_file') }
+
+      it 'has modified lines in file' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+
+          echo 'append-1', 'initial_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          echo 'append-2', 'initial_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+
+          should == [2, 3].to_set
+        end
+      end
+    end
+
+    context 'when adding a file' do
+      let(:file) { File.expand_path('new_file') }
+
+      it 'has modified lines in file' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+
+          touch 'new_file'
+
+          echo 'append-1', 'new_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          echo 'append-2', 'new_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+
+          should == [1, 2].to_set
+        end
+      end
+    end
+
+    context 'when deleting a file' do
+      let(:file) { File.expand_path('initial_file') }
+
+      it 'has modified lines in file' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+
+          FileUtils.rm 'initial_file'
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          should == [].to_set
+        end
+      end
+    end
+  end
+
   describe Overcommit::HookContext::PrePush::PushedRef do
     let(:local_ref) { 'refs/heads/master' }
     let(:remote_ref) { 'refs/heads/master' }
