@@ -18,9 +18,17 @@ module Overcommit::HookContext
     end
 
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.modified_files(
-        refs: "#{pushed_refs[0].remote_sha1}..#{pushed_refs[0].local_sha1}"
-      )
+      @modified_files ||= Overcommit::GitRepo.modified_files(refs: ref_range)
+    end
+
+    def modified_lines_in_file(file)
+      @modified_lines ||= {}
+      @modified_lines[file] =
+        Overcommit::GitRepo.extract_modified_lines(file, refs: ref_range)
+    end
+
+    def ref_range
+      "#{pushed_refs[0].remote_sha1}..#{pushed_refs[0].local_sha1}"
     end
 
     PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
