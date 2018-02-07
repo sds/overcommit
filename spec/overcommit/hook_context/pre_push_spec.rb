@@ -87,7 +87,55 @@ describe Overcommit::HookContext::PrePush do
           `git add . 2>&1 > #{File::NULL}`
           `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
 
-          should include(*%w[added-1 update-me added-2].map { |file| File.expand_path(file) })
+          should == %w[added-1 added-2 update-me].map { |file| File.expand_path(file) }
+          should_not include(*%w[delete-me].map { |file| File.expand_path(file) })
+        end
+      end
+    end
+
+    context 'when pushing multiple branches at once' do
+      let(:local_ref_1) { 'refs/heads/project-branch-1' }
+      let(:local_sha1_1) { get_sha1(local_ref_1) }
+      let(:local_ref_2) { 'refs/heads/project-branch-2' }
+      let(:local_sha1_2) { get_sha1(local_ref_2) }
+      let(:remote_ref) { 'refs/remotes/origin/master' }
+      let(:remote_sha1) { get_sha1(remote_ref) }
+      let(:input) do
+        double('input', read: ref_ranges)
+      end
+      let(:ref_ranges) do
+        [
+          "#{local_ref_1} #{local_sha1_1} #{remote_ref} #{remote_sha1}\n",
+          "#{local_ref_2} #{local_sha1_2} #{remote_ref} #{remote_sha1}\n"
+        ].join
+      end
+
+      it 'has modified files based on multiple tracking branches' do
+        repo do
+          `git remote add origin file://#{remote_repo}`
+          `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
+
+          `git checkout -b project-branch-1 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-1 2>&1 > #{File::NULL}`
+
+          touch 'added-1'
+          echo 'add', 'added-1'
+          echo 'append', 'update-me'
+          FileUtils.rm 'delete-me'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+
+          `git checkout master 2>&1 > #{File::NULL}`
+          `git checkout -b project-branch-2 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-2 2>&1 > #{File::NULL}`
+
+          echo 'append', 'update-me'
+          touch 'added-2'
+          echo 'add', 'added-2'
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+
+          should == %w[added-1 update-me added-2].map { |file| File.expand_path(file) }
           should_not include(*%w[delete-me].map { |file| File.expand_path(file) })
         end
       end
@@ -121,7 +169,7 @@ describe Overcommit::HookContext::PrePush do
           `git add . 2>&1 > #{File::NULL}`
           `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
 
-          should include(*%w[added-1 update-me added-2].map { |file| File.expand_path(file) })
+          should == %w[added-1 added-2 update-me].map { |file| File.expand_path(file) }
           should_not include(*%w[delete-me].map { |file| File.expand_path(file) })
         end
       end
@@ -130,12 +178,20 @@ describe Overcommit::HookContext::PrePush do
 
   describe '#modified_lines_in_file' do
     subject { context.modified_lines_in_file(file) }
-    let(:local_ref) { 'refs/heads/project-branch' }
-    let(:local_sha1) { get_sha1(local_ref) }
+    let(:local_ref_1) { 'refs/heads/project-branch-1' }
+    let(:local_sha1_1) { get_sha1(local_ref_1) }
+    let(:local_ref_2) { 'refs/heads/project-branch-2' }
+    let(:local_sha1_2) { get_sha1(local_ref_2) }
     let(:remote_ref) { 'refs/remotes/origin/master' }
     let(:remote_sha1) { get_sha1(remote_ref) }
     let(:input) do
-      double('input', read: "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+      double('input', read: ref_ranges)
+    end
+    let(:ref_ranges) do
+      [
+        "#{local_ref_1} #{local_sha1_1} #{remote_ref} #{remote_sha1}\n",
+        "#{local_ref_2} #{local_sha1_2} #{remote_ref} #{remote_sha1}\n"
+      ].join
     end
     let(:remote_repo) do
       repo do
@@ -154,20 +210,28 @@ describe Overcommit::HookContext::PrePush do
           `git remote add origin file://#{remote_repo}`
           `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
 
-          `git checkout -b project-branch 2>&1 > #{File::NULL}`
-          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+          `git checkout -b project-branch-1 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-1 2>&1 > #{File::NULL}`
 
           echo 'append-1', 'initial_file', append: true
 
           `git add . 2>&1 > #{File::NULL}`
-          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1 Commit 1" 2>&1 > #{File::NULL}`
 
           echo 'append-2', 'initial_file', append: true
 
           `git add . 2>&1 > #{File::NULL}`
-          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1 Commit 2" 2>&1 > #{File::NULL}`
 
-          should == [2, 3].to_set
+          `git checkout -b project-branch-2 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-2 2>&1 > #{File::NULL}`
+
+          echo 'append-3', 'initial_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2 Commit 1" 2>&1 > #{File::NULL}`
+
+          should == [2, 3, 4].to_set
         end
       end
     end
@@ -180,36 +244,47 @@ describe Overcommit::HookContext::PrePush do
           `git remote add origin file://#{remote_repo}`
           `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
 
-          `git checkout -b project-branch 2>&1 > #{File::NULL}`
-          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+          `git checkout -b project-branch-1 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-1 2>&1 > #{File::NULL}`
 
           touch 'new_file'
 
           echo 'append-1', 'new_file', append: true
 
           `git add . 2>&1 > #{File::NULL}`
-          `git commit -m "Update Branch 1" 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1 Commit 1" 2>&1 > #{File::NULL}`
 
           echo 'append-2', 'new_file', append: true
 
           `git add . 2>&1 > #{File::NULL}`
-          `git commit -m "Update Branch 2" 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 1 Commit 2" 2>&1 > #{File::NULL}`
 
-          should == [1, 2].to_set
+          `git checkout -b project-branch-2 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-2 2>&1 > #{File::NULL}`
+
+          echo 'append-3', 'new_file', append: true
+
+          `git add . 2>&1 > #{File::NULL}`
+          `git commit -m "Update Branch 2 Commit 1" 2>&1 > #{File::NULL}`
+
+          should == [1, 2, 3].to_set
         end
       end
     end
 
     context 'when deleting a file' do
       let(:file) { File.expand_path('initial_file') }
+      let(:ref_ranges) do
+        "#{local_ref_1} #{local_sha1_1} #{remote_ref} #{remote_sha1}\n"
+      end
 
       it 'has modified lines in file' do
         repo do
           `git remote add origin file://#{remote_repo}`
           `git fetch origin 2>&1 > #{File::NULL} && git reset --hard origin/master`
 
-          `git checkout -b project-branch 2>&1 > #{File::NULL}`
-          `git push -u origin project-branch 2>&1 > #{File::NULL}`
+          `git checkout -b project-branch-1 2>&1 > #{File::NULL}`
+          `git push -u origin project-branch-1 2>&1 > #{File::NULL}`
 
           FileUtils.rm 'initial_file'
 

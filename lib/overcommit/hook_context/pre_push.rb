@@ -18,17 +18,14 @@ module Overcommit::HookContext
     end
 
     def modified_files
-      @modified_files ||= Overcommit::GitRepo.modified_files(refs: ref_range)
+      @modified_files ||= pushed_refs.map(&:modified_files).flatten.uniq
     end
 
     def modified_lines_in_file(file)
       @modified_lines ||= {}
-      @modified_lines[file] =
-        Overcommit::GitRepo.extract_modified_lines(file, refs: ref_range)
-    end
-
-    def ref_range
-      "#{pushed_refs[0].remote_sha1}..#{pushed_refs[0].local_sha1}"
+      @modified_lines[file] = pushed_refs.each_with_object(Set.new) do |pushed_ref, set|
+        set.merge(pushed_ref.modified_lines_in_file(file))
+      end
     end
 
     PushedRef = Struct.new(:local_ref, :local_sha1, :remote_ref, :remote_sha1) do
@@ -48,11 +45,23 @@ module Overcommit::HookContext
         deleted? || forced?
       end
 
+      def modified_files
+        Overcommit::GitRepo.modified_files(refs: ref_range)
+      end
+
+      def modified_lines_in_file(file)
+        Overcommit::GitRepo.extract_modified_lines(file, refs: ref_range)
+      end
+
       def to_s
         "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}"
       end
 
       private
+
+      def ref_range
+        "#{remote_sha1}..#{local_sha1}"
+      end
 
       def overwritten_commits
         return @overwritten_commits if defined? @overwritten_commits
