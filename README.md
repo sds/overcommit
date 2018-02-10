@@ -562,6 +562,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [XmlSyntax](lib/overcommit/hook/pre_commit/xml_syntax.rb)
 * [YamlLint](lib/overcommit/hook/pre_commit/yaml_lint.rb)
 * [YamlSyntax](lib/overcommit/hook/pre_commit/yaml_syntax.rb)
+* [YarnCheck](lib/overcommit/hook/pre_commit/yarn_check.rb)
 
 ### PrePush
 
