@@ -1129,6 +1129,13 @@ PrePush:
     command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
     include: 'test/**/*_test.rb'
 
+  PhpUnit:
+    enabled: false
+    description: 'Run PhpUnit test suite'
+    command: 'vendor/bin/phpunit'
+    flags: ['--bootstrap', 'vendor/autoload.php', 'tests']
+    install_command: 'composer require --dev phpunit/phpunit'
+
   ProtectedBranches:
     enabled: false
     description: 'Check for illegal pushes to protected branches'
