@@ -785,6 +785,16 @@ PreCommit:
       - '**/*.yaml'
       - '**/*.yml'
 
+  YarnCheck:
+    enabled: false
+    description: 'Check yarn.lock dependencies'
+    required_executable: 'yarn'
+    flags: ['check', '--silent', '--no-progress', '--non-interactive']
+    install_command: 'npm install --global yarn'
+    include:
+      - 'package.json'
+      - 'yarn.lock'
+
 # Hooks that run after HEAD changes or a file is explicitly checked out.
 PostCheckout:
   ALL:

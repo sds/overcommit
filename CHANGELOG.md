@@ -6,6 +6,7 @@
   and `post-merge` hooks
 * Display commit message when `commit-msg` hooks fail
 * Drop support for JRuby
+* Add `YarnCheck` pre-commit hook which checks if `yarn.lock` matches `package.json`
 
 ## 0.42.0
 
