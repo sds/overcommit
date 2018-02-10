@@ -6,7 +6,10 @@
   and `post-merge` hooks
 * Display commit message when `commit-msg` hooks fail
 * Drop support for JRuby
+* Enhance `pre-push` hooks to expose `modified_lines_in_file`, similar to
+  `pre-commit` hooks
 * Add `YarnCheck` pre-commit hook which checks if `yarn.lock` matches `package.json`
+* Add [`PhpUnit`](https://phpunit.de/) `pre-push` hook
 
 ## 0.42.0
 
