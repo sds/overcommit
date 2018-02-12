@@ -691,6 +691,15 @@ PreCommit:
     install_command: 'npm install -g standard'
     include: '**/*.js'
 
+  StyleLint:
+    enabled: false
+    description: 'Analyze with Stylelint'
+    required_executable: 'stylelint'
+    install_command: 'npm install -g stylelint'
+    include:
+      - '**/*.scss'
+      - '**/*.css'
+
   TsLint:
       enabled: false
       description: 'Analyze with TSLint'
