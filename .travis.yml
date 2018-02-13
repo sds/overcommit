@@ -9,13 +9,14 @@ rvm:
   - 2.2
   - 2.3.6
   - 2.4.3
+  - 2.5.0
 
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
 
 before_install:
-  - '[[ "$TRAVIS_RUBY_VERSION" =~ "^jruby|^ruby 2.3|^ruby 2.4" ]] && gem update --system || true'
+  - '[[ "$TRAVIS_RUBY_VERSION" =~ "^jruby|^ruby 2.3|^ruby 2.4|^ruby 2.5" ]] && gem update --system || true'
 
 script:
   - bundle exec rspec
