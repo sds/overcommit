@@ -138,8 +138,8 @@ module Overcommit
           FileUtils.mv(hook_file, old_hooks_path)
         end
       end
-      # Remove old-hooks directory if empty
-      FileUtils.rmdir(old_hooks_path)
+      # Remove old-hooks directory if empty (i.e. no old hooks were preserved)
+      FileUtils.rmdir(old_hooks_path) if Dir.entries(old_hooks_path).size <= 2
     end
 
     def restore_old_hooks
