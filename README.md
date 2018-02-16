@@ -57,13 +57,6 @@ This project aims to support the following Ruby runtimes on both \*nix and Windo
 
 * MRI 2.x
 
-## Limitations
-
-Overcommit does not currently support
-[`git-worktree`](https://git-scm.com/docs/git-worktree) (introduced in Git 2.5),
-but there is an [open issue](https://github.com/brigade/overcommit/issues/336)
-tracking progress on adding support.
-
 ### Dependencies
 
 Some of the hooks have third-party dependencies. For example, to lint your

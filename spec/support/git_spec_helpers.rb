@@ -11,7 +11,12 @@ module GitSpecHelpers
   # @return [String] path of the repository
   def repo(options = {})
     directory('some-repo') do
-      `git init --template="#{options[:template_dir]}"`
+      create_cmd = %w[git init]
+      create_cmd += ['--template', options[:template_dir]] if options[:template_dir]
+      create_cmd += ['--separate-git-dir', options[:git_dir]] if options[:git_dir]
+
+      result = Overcommit::Utils.execute(create_cmd)
+      raise "Unable to create repo: #{result.stderr}" unless result.success?
 
       # Need to define user info since some CI contexts don't have defaults set
       `git config --local user.name "Overcommit Tester"`
