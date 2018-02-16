@@ -52,27 +52,13 @@ describe Overcommit::Utils do
       end
     end
 
-    context 'when .git is a file' do
-      before do
-        FileUtils.rm_rf('.git', secure: true)
-        echo("gitdir: #{git_dir_path}", '.git')
-      end
+    context 'when .git directory is not located in the repository' do
+      let(:git_dir) { Dir.mktmpdir }
+      let(:repo_dir) { repo(git_dir: git_dir) }
 
-      context 'and is a relative path' do
-        let(:git_dir_path) { '../.git' }
-
-        it 'returns the path contained in the file' do
-          # realpath is so spec passes on Mac OS X
-          subject.should == File.join(File.realpath(File.dirname(repo_dir)), '.git')
-        end
-      end
-
-      context 'and is an absolute path' do
-        let(:git_dir_path) { '/some/arbitrary/path/.git' }
-
-        it 'returns the path contained in the file' do
-          subject.should == git_dir_path
-        end
+      it 'returns the path of the external Git directory' do
+        # realpath is so spec passes on Mac OS X
+        subject.should == File.realpath(git_dir)
       end
     end
   end
