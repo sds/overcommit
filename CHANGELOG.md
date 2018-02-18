@@ -2,6 +2,9 @@
 
 ## master (unreleased)
 
+* Fix installer to not attempt to remove old hooks directory if non-empty
+* Add support for [worktrees](https://git-scm.com/docs/git-worktree)
+
 ## 0.43.0
 
 ### Changes
