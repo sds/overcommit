@@ -4,6 +4,8 @@
 
 * Fix installer to not attempt to remove old hooks directory if non-empty
 * Add support for [worktrees](https://git-scm.com/docs/git-worktree)
+* Fix erroneous `fatal` error message from a pre-commit hook run when adding
+  the first submodule to a repo
 
 ## 0.43.0
 
