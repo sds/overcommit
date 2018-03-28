@@ -46,6 +46,7 @@ module Overcommit::Hook::PreCommit
 
     def schema
       @schema ||= schema_files.map { |file| File.read(file) }.join
+      @schema.tr('_', '')
     end
 
     def non_zero_schema_version?
