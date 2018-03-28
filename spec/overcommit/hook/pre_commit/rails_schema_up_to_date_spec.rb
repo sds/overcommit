@@ -94,6 +94,30 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     it { should pass }
   end
 
+  context 'when a Ruby schema file with the latest version in Rails 5.2 format and migrations are added' do
+    before do
+      subject.stub(:applicable_files).and_return(migration_files << ruby_schema_file)
+    end
+
+    around do |example|
+      repo do
+        FileUtils.mkdir_p('db/migrate')
+
+        File.open(ruby_schema_file, 'w') { |f| f.write('2014_03_05_123456') }
+        `git add #{ruby_schema_file}`
+
+        migration_files.each do |migration_file|
+          File.open(migration_file, 'w') { |f| f.write('migration') }
+          `git add #{migration_file}`
+        end
+
+        example.run
+      end
+    end
+
+    it { should pass }
+  end
+
   context 'when a Ruby schema file which is not at the latest version and migrations are added' do
     before do
       subject.stub(:applicable_files).and_return(migration_files << ruby_schema_file)
