@@ -1117,6 +1117,13 @@ PrePush:
     flags: ['--exit-on-warn', '--quiet', '--summary']
     install_command: 'gem install brakeman'
 
+  CargoTest:
+    enabled: false
+    description: 'Run tests with cargo'
+    required_executable: 'cargo'
+    flags: ['test']
+    include: 'src/**/*.rs'
+
   GitLfs:
     enabled: false
     description: 'Upload files tracked by Git LFS'
