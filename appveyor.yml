@@ -38,8 +38,8 @@ install:
   - gem --version
   - where gem
 
-  # Print version and location for pre-installed bundler
-  - bundler --version
+  # Install latest Bundler to work around version issues
+  - gem install bundler
   - where bundler
 
   # Install ruby dependencies
