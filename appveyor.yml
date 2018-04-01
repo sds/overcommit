@@ -39,7 +39,7 @@ install:
   - where gem
 
   # Install latest Bundler to work around version issues
-  - gem install bundler
+  - gem install bundler --force
   - where bundler
 
   # Install ruby dependencies
