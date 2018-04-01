@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `CargoTest` pre-push hook for running `cargo test`
+* Drop support for Ruby 2.1
+
 ## 0.44.0
 
 ### New Features
