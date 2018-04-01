@@ -27,7 +27,7 @@ module Overcommit
       private
 
       def host_os
-        @os ||= ::RbConfig::CONFIG['host_os'].freeze
+        @host_os ||= ::RbConfig::CONFIG['host_os'].freeze
       end
     end
 

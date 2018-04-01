@@ -12,7 +12,7 @@ module Overcommit
       #
       # @return [Overcommit::Configuration]
       def default_configuration
-        @default_config ||= load_from_file(DEFAULT_CONFIG_PATH, default: true, verify: false)
+        @default_configuration ||= load_from_file(DEFAULT_CONFIG_PATH, default: true, verify: false)
       end
 
       # Loads configuration from file.

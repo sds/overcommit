@@ -37,7 +37,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def license_lines
-      @license_regex ||= begin
+      @license_lines ||= begin
         file_root = Overcommit::Utils.convert_glob_to_absolute(license_file)
         File.read(file_root).split("\n")
       end
