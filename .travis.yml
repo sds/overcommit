@@ -5,7 +5,6 @@ sudo: false
 cache: bundler
 
 rvm:
-  - 2.1
   - 2.2
   - 2.3.7
   - 2.4.4
