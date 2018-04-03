@@ -59,7 +59,7 @@ module Overcommit
       def git_dir
         @git_dir ||=
           begin
-            result = execute(%w[git rev-parse --git-common-dir])
+            result = execute(%w[git rev-parse --git-dir])
             unless result.success?
               raise Overcommit::Exceptions::InvalidGitRepo,
                     'Unable to determine location of GIT_DIR. ' \
