@@ -4,6 +4,7 @@
 
 * Add `CargoTest` pre-push hook for running `cargo test`
 * Drop support for Ruby 2.1
+* Fix detection of `.git` directory location on Git < 2.5
 
 ## 0.44.0
 
