@@ -24,7 +24,8 @@ module Overcommit::Hook::CommitMsg
       min_subject_width = config['min_subject_width']
       return unless subject.length > max_subject_width || subject.length < min_subject_width
 
-      @errors << "Please keep the subject <= #{max_subject_width} characters and >= #{min_subject_width}"
+      @errors << "Please keep the subject <= #{max_subject_width} and >= " \
+                 "#{min_subject_width} characters"
     end
 
     def find_errors_in_body(lines)
