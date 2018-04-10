@@ -108,6 +108,7 @@ CommitMsg:
     enabled: true
     description: 'Check text width'
     max_subject_width: 60
+    min_subject_width: 0
     max_body_width: 72
 
   TrailingPeriod:
