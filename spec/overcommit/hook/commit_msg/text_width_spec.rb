@@ -99,6 +99,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
         'CommitMsg' => {
           'TextWidth' => {
             'max_subject_width' => 70,
+            'min_subject_width' => 4,
             'max_body_width' => 80
           }
         }
@@ -107,6 +108,12 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
 
     context 'when subject is longer than 70 characters' do
       let(:commit_msg) { 'A' * 71 }
+
+      it { should warn /subject/ }
+    end
+
+    context 'when subject is less than 4 characters' do
+      let(:commit_msg) { 'A' * 3 }
 
       it { should warn /subject/ }
     end
