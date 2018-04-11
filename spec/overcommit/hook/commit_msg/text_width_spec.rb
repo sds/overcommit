@@ -90,7 +90,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
       A message line that is way too long. A message line that is way too long.
     MSG
 
-    it { should warn /keep.*subject <= 60.*\n.*line 3.*> 72.*/im }
+    it { should warn /subject.*<= 60.*\n.*line 3.*> 72.*/im }
   end
 
   context 'when custom lengths are specified' do
@@ -109,13 +109,13 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     context 'when subject is longer than 70 characters' do
       let(:commit_msg) { 'A' * 71 }
 
-      it { should warn /subject/ }
+      it { should warn /subject must be <= 70/ }
     end
 
     context 'when subject is less than 4 characters' do
       let(:commit_msg) { 'A' * 3 }
 
-      it { should warn /subject/ }
+      it { should warn /subject must be >= 4/ }
     end
 
     context 'when subject is 70 characters or fewer' do
@@ -153,7 +153,7 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
         This line is longer than #{'A' * 80} characters.
       MSG
 
-      it { should warn /keep.*subject <= 70.*\n.*line 3.*> 80.*/im }
+      it { should warn /subject.*<= 70.*\n.*line 3.*> 80/im }
     end
   end
 end
