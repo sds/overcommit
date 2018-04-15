@@ -1,11 +1,19 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.45.0
+
+### New Features
 
 * Add `CargoTest` pre-push hook for running `cargo test`
-* Drop support for Ruby 2.1
-* Fix detection of `.git` directory location on Git < 2.5
 * Add `min_subject_width` option to `TextWidth` `commit-msg` hook
+
+### Changes
+
+* Drop support for Ruby versions 2.1 and older
+
+### Bug Fixes
+
+* Fix detection of `.git` directory location on Git versions before 2.5
 
 ## 0.44.0
 
