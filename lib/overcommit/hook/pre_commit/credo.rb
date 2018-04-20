@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
     # lib/file2.ex:12:81: R: Line is too long (max is 80, was 81).
 
     def run
-      result = execute command
+      result = execute(command, args: applicable_files)
       return :pass if result.success?
 
       result.stdout.split("\n").map(&:strip).reject(&:empty?).
