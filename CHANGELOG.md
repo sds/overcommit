@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `Credo` pre-commit hook to lint applicable files only rather than
+  all files
+
 ## 0.45.0
 
 ### New Features
