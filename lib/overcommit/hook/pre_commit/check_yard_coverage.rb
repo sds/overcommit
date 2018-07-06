@@ -80,9 +80,7 @@ module Overcommit::Hook::PreCommit
           )
         end
       end
-
       messages
     end
-
   end
 end
