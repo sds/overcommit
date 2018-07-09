@@ -55,5 +55,4 @@ MSG
 
     it { should pass }
   end
-
 end
