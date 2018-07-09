@@ -23,11 +23,11 @@ module Overcommit::Hook::PreCommit
       applicable_files.each do |file|
         result = execute(command, args: [file])
         results = result.stdout.split("\n\n")
-        if results.length.positive?
+        if results.length > 0
           results.shift
           error_message = results.join("\n").gsub(/^\d+\)\s*/, '')
           message = Overcommit::Hook::Message.new(:error, nil, nil, error_message)
-          messages << message if results.length.positive?
+          messages << message if results.length > 0
         end
       end
       messages
