@@ -225,8 +225,8 @@ PreCommit:
   CheckYardCoverage:
     enabled: false
     description: 'Checking for yard coverage'
-    command: 'yard'
-    flags: ['--private', 'protected']
+    command: ['yard', 'stats', '--list-undoc', '--compact']
+    flags: ['--private', '--protected']
     required_executable: 'yard'
     install_command: 'gem install yard'
     min_coverage_percentage: 100
