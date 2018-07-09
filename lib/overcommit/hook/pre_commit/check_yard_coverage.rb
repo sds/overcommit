@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
   class CheckYardCoverage < Base
     def run
       # Run a no-stats yard command to get the coverage
-      args = %w[-n --no-save --list-undoc --compact] + flags + applicable_files
+      args = flags + applicable_files
       result = execute(command, args: args)
 
       warnings_and_stats_text, undocumented_objects_text =
@@ -17,10 +17,10 @@ module Overcommit::Hook::PreCommit
       warnings_and_stats = warnings_and_stats_text.strip.split("\n")
 
       # Stats are the last 7 lines before the undocumented objects
-      stats = warnings_and_stats[-7..100]
+      stats = warnings_and_stats.slice(-7, 7)
 
       # If no stats present (shouldn't happen), warn the user and end
-      unless stats
+      if stats.class != Array || stats.length != 7
         return [:warn, 'Impossible to read the yard stats. Please, check your yard installation.']
       end
 
@@ -36,6 +36,8 @@ module Overcommit::Hook::PreCommit
 
       error_messages(yard_coverage, undocumented_objects_text)
     end
+
+    private
 
     # Check the yard coverage
     #
