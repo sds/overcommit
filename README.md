@@ -487,7 +487,6 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [BundleOutdated](lib/overcommit/hook/pre_commit/bundle_outdated.rb)
 * [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)
 * [ChamberSecurity](lib/overcommit/hook/pre_commit/chamber_security.rb)
-* [CheckYardCoverage](lib/overcommit/hook/pre_commit/check_yard_coverage.rb)
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
 * [Credo](lib/overcommit/hook/pre_commit/credo.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
@@ -556,6 +555,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [XmlSyntax](lib/overcommit/hook/pre_commit/xml_syntax.rb)
 * [YamlLint](lib/overcommit/hook/pre_commit/yaml_lint.rb)
 * [YamlSyntax](lib/overcommit/hook/pre_commit/yaml_syntax.rb)
+* [YardCoverage](lib/overcommit/hook/pre_commit/yard_coverage.rb)
 * [YarnCheck](lib/overcommit/hook/pre_commit/yarn_check.rb)
 
 ### PrePush

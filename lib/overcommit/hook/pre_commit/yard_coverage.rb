@@ -2,10 +2,10 @@
 module Overcommit::Hook::PreCommit
   # Class to check yard documentation coverage.
   #
-  # Use option "min_coverage_percentage" in your CheckYardCoverage configuration
+  # Use option "min_coverage_percentage" in your YardCoverage configuration
   # to set your desired documentation coverage percentage.
   #
-  class CheckYardCoverage < Base
+  class YardCoverage < Base
     def run
       # Run a no-stats yard command to get the coverage
       args = flags + applicable_files

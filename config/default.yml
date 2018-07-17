@@ -222,17 +222,6 @@ PreCommit:
     install_command: 'gem install chamber'
     include: *chamber_settings_files
 
-  CheckYardCoverage:
-    enabled: false
-    description: 'Checking for yard coverage'
-    command: ['yard', 'stats', '--list-undoc', '--compact']
-    flags: ['--private', '--protected']
-    required_executable: 'yard'
-    install_command: 'gem install yard'
-    min_coverage_percentage: 100
-    include:
-      - '/**/*.rb'
-
   CoffeeLint:
     enabled: false
     description: 'Analyze with coffeelint'
@@ -815,6 +804,17 @@ PreCommit:
     include:
       - '**/*.yaml'
       - '**/*.yml'
+
+  YardCoverage:
+    enabled: false
+    description: 'Checking for yard coverage'
+    command: ['yard', 'stats', '--list-undoc', '--compact']
+    flags: ['--private', '--protected']
+    required_executable: 'yard'
+    install_command: 'gem install yard'
+    min_coverage_percentage: 100
+    include:
+      - '/**/*.rb'
 
   YarnCheck:
     enabled: false

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overcommit::Hook::PreCommit::CheckYardCoverage do
+describe Overcommit::Hook::PreCommit::YardCoverage do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
