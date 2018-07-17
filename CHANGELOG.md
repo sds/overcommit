@@ -4,6 +4,8 @@
 
 * Fix `Credo` pre-commit hook to lint applicable files only rather than
   all files
+* Add `PhpCsFixer` pre-commit hook
+* Add `Flay` pre-commit hook
 
 ## 0.45.0
 
