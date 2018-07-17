@@ -497,6 +497,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [ExecutePermissions](lib/overcommit/hook/pre_commit/execute_permissions.rb)
 * [Fasterer](lib/overcommit/hook/pre_commit/fasterer.rb)
 * [FixMe](lib/overcommit/hook/pre_commit/fix_me.rb)
+* [Flay](lib/overcommit/hook/pre_commit/flay.rb)
 * [Foodcritic](lib/overcommit/hook/pre_commit/foodcritic.rb)
 * [ForbiddenBranches](lib/overcommit/hook/pre_commit/forbidden_branches.rb)
 * [GoLint](lib/overcommit/hook/pre_commit/go_lint.rb)

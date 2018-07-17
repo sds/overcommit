@@ -294,6 +294,16 @@ PreCommit:
     flags: ['-IEHnw']
     keywords: ['BROKEN', 'BUG', 'ERROR', 'FIXME', 'HACK', 'NOTE', 'OPTIMIZE', 'REVIEW', 'TODO', 'WTF', 'XXX']
 
+  Flay:
+    enabled: false
+    description: 'Analyze ruby code for structural similarities with Flay'
+    required_executable: 'flay'
+    install_command: 'gem install flay'
+    mass_threshold: 16
+    fuzzy: 1
+    liberal: false
+    include: '**/*.rb'
+
   Foodcritic:
     enabled: false
     description: 'Analyze with Foodcritic'
