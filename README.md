@@ -521,6 +521,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
 * [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
 * [PhpCs](lib/overcommit/hook/pre_commit/php_cs.rb)
+* [PhpCsFixer](lib/overcommit/hook/pre_commit/php_cs_fixer.rb)
 * [PhpLint](lib/overcommit/hook/pre_commit/php_lint.rb)
 * [PhpStan](lib/overcommit/hook/pre_commit/php_stan.rb)
 * [Pronto](lib/overcommit/hook/pre_commit/pronto.rb)
