@@ -499,6 +499,15 @@ PreCommit:
     flags: ['--standard=PSR2', '--report=csv']
     include: '**/*.php'
 
+  PhpCsFixer:
+    enabled: false
+    description: 'Fix non compliant PHP files'
+    required_executable: 'php-cs-fixer'
+    command: 'vendor/bin/php-cs-fixer'
+    flags: ['fix', '-v', '--path-mode=intersection']
+    install_command: 'composer global require friendsofphp/php-cs-fixer'
+    include: '**/*.php'
+
   PhpStan:
     description: 'Analyze with phpstan'
     enabled: false
