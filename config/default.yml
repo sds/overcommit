@@ -711,11 +711,11 @@ PreCommit:
     install_command: 'npm install -g standard'
     include: '**/*.js'
 
-  StyleLint:
-    enabled: true
+  Stylelint:
+    enabled: false
     description: 'Check styles with Stylelint'
     require_executable: 'stylelint'
-    flags: ['-f compact']
+    flags: ['-f', 'compact']
     install_command: 'npm install -g stylelint'
     include:
       - '**/*.scss'

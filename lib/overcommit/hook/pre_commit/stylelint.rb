@@ -2,7 +2,7 @@ module Overcommit::Hook::PreCommit
   # Runs `stylelint` against any modified CSS file.
   #
   # @see https://github.com/stylelint/stylelint
-  class StyleLint < Base
+  class Stylelint < Base
     # example of output:
     # index.css: line 4, col 4, error - Expected indentation of 2 spaces (indentation)
 
