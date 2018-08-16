@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
       # src/file/anotherfile.ts[298, 1]: exceeds maximum line length of 140
       extract_messages(
           output.split("\n"),
-          /^(?<file>.+?(?=\[))[^\d]+(?<line>\d+).*?/
+          /^ERROR: (?<file>.+?(?=\[))[^\d]+(?<line>\d+).*?/
       )
     end
   end
