@@ -727,7 +727,6 @@ PreCommit:
       description: 'Analyze with TSLint'
       required_executable: 'tslint'
       install_command: 'npm install -g tslint typescript'
-      flags: ['--t=prose']
       include: '**/*.ts'
 
   TrailingWhitespace:
