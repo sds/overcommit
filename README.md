@@ -546,7 +546,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [SlimLint](lib/overcommit/hook/pre_commit/slim_lint.rb)
 * [Sqlint](lib/overcommit/hook/pre_commit/sqlint.rb)
 * [Standard](lib/overcommit/hook/pre_commit/standard.rb)
-* [StyleLint](lib/overcommit/hook/pre_commit/stylelint.rb)
+* [Stylelint](lib/overcommit/hook/pre_commit/stylelint.rb)
 * [TrailingWhitespace](lib/overcommit/hook/pre_commit/trailing_whitespace.rb)
 * [TravisLint](lib/overcommit/hook/pre_commit/travis_lint.rb)
 * [TsLint](lib/overcommit/hook/pre_commit/ts_lint.rb)

@@ -7,6 +7,8 @@
 * Add `PhpCsFixer` pre-commit hook
 * Add `YardCoverage` pre-commit hook
 * Add `Flay` pre-commit hook
+* Add `Stylelint` pre-commit hook
+* Fix `TsLint` default flags to work with `tslint` 5.11+
 
 ## 0.45.0
 
