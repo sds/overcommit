@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.46.0
 
 * Fix `Credo` pre-commit hook to lint applicable files only rather than
   all files
