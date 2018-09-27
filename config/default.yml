@@ -769,7 +769,7 @@ PreCommit:
     description: 'Analyze with W3C HTML validation service'
     required_library: 'w3c_validators'
     install_command: 'gem install w3c_validators'
-    validator_uri: 'http://validator.w3.org/check'
+    validator_uri: 'https://validator.w3.org/nu'
     charset: 'utf-8'
     doctype: 'HTML5'
     include:
