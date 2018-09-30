@@ -3,7 +3,7 @@ module Overcommit::HookContext
   # hooks.
   class PrepareCommitMsg < Base
     # Returns the name of the file that contains the commit log message
-    def commit_msg_filename
+    def commit_message_filename
       @args[0]
     end
 
@@ -13,14 +13,18 @@ module Overcommit::HookContext
     # merge or a .git/MERGE_MSG file exists); squash (if a .git/SQUASH_MSG file
     # exists); or commit, followed by a commit SHA-1 (if a -c, -C or --amend
     # option was given)
-    def commit_msg_source
-      (@args[1] || 'commit').to_sym
+    def commit_message_source
+      @args[1].to_sym if @args[1]
     end
 
     # Returns the commit's SHA-1.
-    # If commit_msg_source is :commit, it's passed through the command-line.
-    def commit
+    # If commit_message_source is :commit, it's passed through the command-line.
+    def commit_message_source_ref
       @args[2] || `git rev-parse HEAD`
+    end
+
+    def lock
+      @lock ||= Monitor.new
     end
   end
 end
