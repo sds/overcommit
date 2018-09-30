@@ -9,14 +9,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
     )
   end
 
-  let(:prepare_commit_message_file) do
-    basename = 'prepare_commit_message_file.txt'
-    if Overcommit::OS.windows?
-      ENV.fetch('APPVEYOR_BUILD_FOLDER', '.') + Overcommit::OS::SEPARATOR + basename
-    else
-      basename
-    end
-  end
+  let(:prepare_commit_message_file) { 'prepare_commit_message_file.txt' }
 
   subject(:hook) { described_class.new(config, context) }
 
@@ -27,7 +20,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   end
 
   after do
-    File.delete(prepare_commit_message_file)
+    File.delete(prepare_commit_message_file) unless ENV['APPVEYOR']
   end
 
   let(:new_head) { 'userbeforeid-12345-branch-description' }
