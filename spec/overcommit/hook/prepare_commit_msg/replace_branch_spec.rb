@@ -9,7 +9,14 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
     )
   end
 
-  let(:prepare_commit_message_file) { 'prepare_commit_message_file' }
+  let(:prepare_commit_message_file) do
+    basename = 'prepare_commit_message_file.txt'
+    if Overcommit::OS.windows?
+      ENV.fetch('APPVEYOR_BUILD_FOLDER', '.') + Overcommit::OS::SEPARATOR + basename
+    else
+      basename
+    end
+  end
 
   subject(:hook) { described_class.new(config, context) }
 
