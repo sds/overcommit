@@ -4,23 +4,19 @@ module Overcommit::Hook::PrepareCommitMsg
   # the `branch_pattern` regex.
   class ReplaceBranch < Base
     def run
-      return :pass unless commit_msg_source == :commit
+      return :pass unless commit_message_source.empty? ||
+        commit_message_source == :commit # NOTE: avoid 'merge' and 'rebase'
       Overcommit::Utils.log.debug(
         "Checking if '#{Overcommit::GitRepo.current_branch}' matches #{branch_pattern}"
       )
       if branch_pattern.match(Overcommit::GitRepo.current_branch)
-        prepend_commit_message
+        Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
+        modify_commit_message do |old_contents|
+          "#{new_template}\n#{old_contents}"
+        end
         :pass
       else
         :warn
-      end
-    end
-
-    def prepend_commit_message
-      Overcommit::Utils.log.debug("Writing #{commit_msg_filename} with #{new_template}")
-      old_contents = File.read(commit_msg_filename)
-      File.open(commit_msg_filename, 'w') do |commit_file|
-        commit_file.write "#{new_template}\n#{old_contents}"
       end
     end
 

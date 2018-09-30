@@ -23,6 +23,8 @@ module Overcommit::HookContext
       @args[2] || `git rev-parse HEAD`
     end
 
+    # Lock for the pre_commit_message file. Should be shared by all
+    # prepare-commit-message hooks
     def lock
       @lock ||= Monitor.new
     end

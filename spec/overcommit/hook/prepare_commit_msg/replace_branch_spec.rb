@@ -1,18 +1,26 @@
 require 'spec_helper'
+require 'overcommit/hook_context/prepare_commit_msg'
 
 describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   let(:config) { Overcommit::ConfigurationLoader.default_configuration }
-  let(:context) { double('context') }
+  let(:context) do
+    Overcommit::HookContext::PrepareCommitMsg.new(
+      config, [prepare_commit_message_file, 'commit'], StringIO.new
+    )
+  end
+
+  let(:prepare_commit_message_file) { 'prepare_commit_message_file' }
 
   subject(:hook) { described_class.new(config, context) }
 
   before do
-    # stubbing this so we don't litter this repo with useless template files /
-    # configurations
-    hook.stub(:prepend_commit_message)
-    context.stub(:commit_msg_source).and_return(:commit)
+    File.open(prepare_commit_message_file, 'w')
     allow(Overcommit::Utils).to receive_message_chain(:log, :debug)
     allow(Overcommit::GitRepo).to receive(:current_branch).and_return(new_head)
+  end
+
+  after do
+    File.delete(prepare_commit_message_file)
   end
 
   let(:new_head) { 'userbeforeid-12345-branch-description' }
