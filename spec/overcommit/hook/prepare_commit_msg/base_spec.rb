@@ -25,7 +25,7 @@ describe Overcommit::Hook::PrepareCommitMsg::Base do
     end
 
     it 'works well with concurrency' do
-      allow(context).to receive(:commit_msg_filename).and_return(tempfile)
+      allow(context).to receive(:commit_message_filename).and_return(tempfile)
       allow(hook_1).to receive(:run) do
         hook_1.modify_commit_message do |contents|
           "alpha\n" + contents

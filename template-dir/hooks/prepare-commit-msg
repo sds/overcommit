@@ -107,7 +107,7 @@ rescue Overcommit::Exceptions::ConfigurationSignatureChanged => error
   exit 1
 rescue Overcommit::Exceptions::InvalidHookSignature
   exit 1
-rescue => error
+rescue StandardError => error
   puts error.message
   puts error.backtrace
   puts "Report this bug at #{Overcommit::BUG_REPORT_URL}"
