@@ -4,7 +4,7 @@ module Overcommit::Hook::PrepareCommitMsg
   # the `branch_pattern` regex.
   class ReplaceBranch < Base
     def run
-      return :pass unless commit_message_source.empty? ||
+      return :pass unless !commit_message_source ||
         commit_message_source == :commit # NOTE: avoid 'merge' and 'rebase'
       Overcommit::Utils.log.debug(
         "Checking if '#{Overcommit::GitRepo.current_branch}' matches #{branch_pattern}"
