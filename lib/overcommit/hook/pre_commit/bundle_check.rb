@@ -22,7 +22,8 @@ module Overcommit::Hook::PreCommit
 
       new_lockfile = File.read(LOCK_FILE) if File.exist?(LOCK_FILE)
       if previous_lockfile != new_lockfile
-        return :fail, "#{LOCK_FILE} is not up-to-date -- run `#{command.join(' ')}`"
+        return :fail, "#{LOCK_FILE} is not up-to-date -- run \
+        `#{command.join(' ')}` or add the Gemfile and/or Gemfile.lock".squeeze
       end
 
       :pass
