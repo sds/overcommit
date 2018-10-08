@@ -1143,6 +1143,20 @@ PostRewrite:
       - 'package.json'
       - 'yarn.lock'
 
+# Hooks that run during the `prepare-commit-msg` hook.
+PrepareCommitMsg:
+  ALL:
+    requires_files: false
+    required: false
+    quiet: false
+
+  ReplaceBranch:
+    enabled: false
+    description: 'Prepends the commit message with text based on the branch name'
+    branch_pattern: '\A.*\w+[-_](\d+).*\z'
+    replacement_text: '[#\1]'
+    on_fail: warn
+
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
 PrePush:

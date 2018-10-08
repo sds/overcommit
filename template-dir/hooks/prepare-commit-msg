@@ -1,0 +1,115 @@
+#!/usr/bin/env ruby
+
+# Entrypoint for Overcommit hook integration. Installing Overcommit will result
+# in all of your git hooks being copied from this file, allowing the framework
+# to manage your hooks for you.
+
+# Prevent a Ruby stack trace from appearing when we interrupt the hook.
+# Note that this will be overridden when Overcommit is loaded, since the
+# InterruptHandler will redefine the trap at that time.
+Signal.trap('INT') do
+  puts 'Hook run interrupted'
+  exit 130
+end
+
+# Allow hooks to be disabled via environment variable so git commands can be run
+# in scripts without Overcommit running hooks
+if ENV['OVERCOMMIT_DISABLE'].to_i != 0 || ENV['OVERCOMMIT_DISABLED'].to_i != 0
+  exit
+end
+
+hook_type = File.basename($0)
+if hook_type == 'overcommit-hook'
+  puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " \
+       "by each hook in a repository's .git/hooks directory."
+  exit 64 # EX_USAGE
+end
+
+# Check if Overcommit should invoke a Bundler context for loading gems
+require 'yaml'
+# rubocop:disable Style/RescueModifier
+if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
+  ENV['BUNDLE_GEMFILE'] = gemfile
+  require 'bundler'
+
+  begin
+    Bundler.setup
+  rescue Bundler::BundlerError => ex
+    puts "Problem loading '#{gemfile}': #{ex.message}"
+    puts "Try running:\nbundle install --gemfile=#{gemfile}" if ex.is_a?(Bundler::GemNotFound)
+    exit 78 # EX_CONFIG
+  end
+end
+# rubocop:enable Style/RescueModifier
+
+begin
+  require 'overcommit'
+rescue LoadError
+  if gemfile
+    puts 'You have specified the `gemfile` option in your Overcommit ' \
+         'configuration but have not added the `overcommit` gem to ' \
+         "#{gemfile}."
+  else
+    puts 'This repository contains hooks installed by Overcommit, but the ' \
+         "`overcommit` gem is not installed.\n" \
+         'Install it with `gem install overcommit`.'
+  end
+
+  exit 64 # EX_USAGE
+end
+
+begin
+  logger = Overcommit::Logger.new(STDOUT)
+  Overcommit::Utils.log = logger
+
+  # Ensure master hook is up-to-date
+  installer = Overcommit::Installer.new(logger)
+  if installer.run(Overcommit::Utils.repo_root, action: :update)
+    exec($0, *ARGV) # Execute the updated hook with all original arguments
+  end
+
+  config = Overcommit::ConfigurationLoader.new(logger).load_repo_config
+
+  context = Overcommit::HookContext.create(hook_type, config, ARGV, STDIN)
+  config.apply_environment!(context, ENV)
+
+  printer = Overcommit::Printer.new(config, logger, context)
+  runner = Overcommit::HookRunner.new(config, logger, context, printer)
+
+  status = runner.run
+
+  exit(status ? 0 : 65) # 65 = EX_DATAERR
+rescue Overcommit::Exceptions::ConfigurationError => error
+  puts error
+  exit 78 # EX_CONFIG
+rescue Overcommit::Exceptions::HookContextLoadError => error
+  puts error
+  puts 'Are you running an old version of Overcommit?'
+  exit 69 # EX_UNAVAILABLE
+rescue Overcommit::Exceptions::HookLoadError,
+       Overcommit::Exceptions::InvalidHookDefinition => error
+  puts error.message
+  puts error.backtrace
+  exit 78 # EX_CONFIG
+rescue Overcommit::Exceptions::HookSetupFailed,
+       Overcommit::Exceptions::HookCleanupFailed => error
+  puts error.message
+  exit 74 # EX_IOERR
+rescue Overcommit::Exceptions::HookCancelled
+  puts 'You cancelled the hook run'
+  exit 130 # Ctrl-C cancel
+rescue Overcommit::Exceptions::InvalidGitRepo => error
+  puts error
+  exit 64 # EX_USAGE
+rescue Overcommit::Exceptions::ConfigurationSignatureChanged => error
+  puts error
+  puts "For more information, see #{Overcommit::REPO_URL}#security"
+  exit 1
+rescue Overcommit::Exceptions::InvalidHookSignature
+  exit 1
+rescue StandardError => error
+  puts error.message
+  puts error.backtrace
+  puts "Report this bug at #{Overcommit::BUG_REPORT_URL}"
+  exit 70 # EX_SOFTWARE
+end
