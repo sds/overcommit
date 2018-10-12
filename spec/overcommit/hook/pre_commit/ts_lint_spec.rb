@@ -36,12 +36,32 @@ describe Overcommit::Hook::PreCommit::TsLint do
 
     context 'and it reports an error' do
       before do
-        result.stub(:stdout).and_return([
+        result.stub(:stdout).and_return(
           'src/file/anotherfile.ts[298, 1]: exceeds maximum line length of 140'
-        ].join("\n"))
+        )
       end
 
       it { should fail_hook }
+    end
+
+    context 'and it reports an error with an "ERROR" severity' do
+      before do
+        result.stub(:stdout).and_return(
+          'ERROR: src/AccountController.ts[4, 28]: expected call-signature to have a typedef'
+        )
+      end
+
+      it { should fail_hook }
+    end
+
+    context 'and it reports an warning' do
+      before do
+        result.stub(:stdout).and_return(
+          'WARNING: src/AccountController.ts[4, 28]: expected call-signature to have a typedef'
+        )
+      end
+
+      it { should warn }
     end
   end
 end
