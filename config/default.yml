@@ -722,6 +722,14 @@ PreCommit:
       - '**/*.css'
       - '**/*.less'
 
+  SwiftLint:
+    enabled: false
+    description: 'Analyze with SwiftLint'
+    required_executable: 'swiftlint'
+    flags: ['lint', '--strict']
+    install_command: 'brew install swiftlint'
+    include: '**/*.swift'
+
   TsLint:
       enabled: false
       description: 'Analyze with TSLint'
