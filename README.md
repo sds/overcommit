@@ -514,6 +514,7 @@ issue](https://github.com/brigade/overcommit/issues/238) for more details.
 * [JsLint](lib/overcommit/hook/pre_commit/js_lint.rb)
 * [Jsl](lib/overcommit/hook/pre_commit/jsl.rb)
 * [JsonSyntax](lib/overcommit/hook/pre_commit/json_syntax.rb)
+* [KtLint](lib/overcommit/hook/pre_commit/kt_lint.rb)
 * [LicenseHeader](lib/overcommit/hook/pre_commit/license_header.rb)
 * [LineEndings](lib/overcommit/hook/pre_commit/line_endings.rb)
 * [LocalPathsInGemfile](lib/overcommit/hook/pre_commit/local_paths_in_gemfile.rb)
