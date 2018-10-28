@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'overcommit/hook_context/prepare_commit_msg'
 

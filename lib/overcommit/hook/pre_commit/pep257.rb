@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `pep257` against any modified Python files.
   #

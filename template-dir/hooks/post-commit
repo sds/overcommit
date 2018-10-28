@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Entrypoint for Overcommit hook integration. Installing Overcommit will result
 # in all of your git hooks being copied from this file, allowing the framework

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `slim-lint` against any modified Slim templates.
   #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Ensures the commit message follows a specific format.
   class MessageFormat < Base

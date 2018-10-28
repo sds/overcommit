@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookLoader
   # Responsible for loading hooks that ship with Overcommit.
   class BuiltInHookLoader < Base

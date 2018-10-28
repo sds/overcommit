@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   # Contains helpers related to contextual information used by commit-msg hooks.
   class CommitMsg < Base

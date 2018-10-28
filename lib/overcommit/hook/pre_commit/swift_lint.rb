@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `swiftlint lint` against modified Swift files.
   # @see https://github.com/realm/SwiftLint

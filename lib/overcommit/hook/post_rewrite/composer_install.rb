@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/composer_install'
 
 module Overcommit::Hook::PostRewrite

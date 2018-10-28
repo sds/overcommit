@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `foodcritic` against any modified Ruby files from Chef directory structure.
   #

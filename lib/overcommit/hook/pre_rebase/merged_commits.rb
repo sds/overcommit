@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreRebase
   # Prevents rebasing commits that have already been merged into one of
   # a specified set of branches.

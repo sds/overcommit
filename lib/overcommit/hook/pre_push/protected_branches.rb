@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PrePush
   # Prevents destructive updates to specified branches.
   class ProtectedBranches < Base

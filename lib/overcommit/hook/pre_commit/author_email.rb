@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks the format of an author's email address.
   class AuthorEmail < Base

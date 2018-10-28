@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PrePush
   # Runs `cargo test` before push if Rust files changed
   class CargoTest < Base

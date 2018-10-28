@@ -1,4 +1,6 @@
 
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Class to check yard documentation coverage.
   #

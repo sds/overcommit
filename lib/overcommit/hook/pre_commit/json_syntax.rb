@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks the syntax of any modified JSON files.
   class JsonSyntax < Base

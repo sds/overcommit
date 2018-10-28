@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Strips off excess leading indentation from each line so we can use Heredocs
 # for writing code without having the leading indentation count.
 module IndentNormalizer

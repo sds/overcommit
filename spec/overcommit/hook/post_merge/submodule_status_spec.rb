@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Overcommit::Hook::PostMerge::SubmoduleStatus do

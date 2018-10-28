@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'set'
 
@@ -19,7 +21,8 @@ module Overcommit::HookContext
       # containing unicode characters, we replace the offending characters,
       # since the pattern we're looking for will consist of ASCII characters
       unless cmd.valid_encoding?
-        cmd.encode!('UTF-16be', invalid: :replace, replace: '?').encode!('UTF-8')
+        cmd = Overcommit::Utils.parent_command.encode('UTF-16be', invalid: :replace, replace: '?')
+                               .encode('UTF-8')
       end
 
       return @amendment if

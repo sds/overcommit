@@ -1,4 +1,6 @@
-# rubocop:disable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/LineLength
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/ClassLength, Metrics/MethodLength, Metrics/LineLength
 module Overcommit
   # Validates and normalizes a configuration.
   class ConfigurationValidator
@@ -82,8 +84,8 @@ module Overcommit
       end
 
       if errors.any?
-        @log.error errors.join("\n") if @log
-        @log.newline if @log
+        @log&.error errors.join("\n")
+        @log&.newline
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had an invalid `env` configuration option'
       end
@@ -107,8 +109,8 @@ module Overcommit
       end
 
       if errors.any?
-        @log.error errors.join("\n") if @log
-        @log.newline if @log
+        @log&.error errors.join("\n")
+        @log&.newline
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had invalid names'
       end
@@ -154,8 +156,8 @@ module Overcommit
       end
 
       if errors.any?
-        @log.error errors.join("\n") if @log
-        @log.newline if @log
+        @log&.error errors.join("\n")
+        @log&.newline
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had invalid `processor` value configured'
       end

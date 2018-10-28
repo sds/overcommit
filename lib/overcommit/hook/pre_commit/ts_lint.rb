@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `tslint` against modified TypeScript files.
   # @see http://palantir.github.io/tslint/

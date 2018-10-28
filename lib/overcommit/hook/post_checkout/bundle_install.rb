@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/bundle_install'
 
 module Overcommit::Hook::PostCheckout

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/submodule_status'
 
 module Overcommit::Hook::PostCheckout

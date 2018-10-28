@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Utils
   # Utility to process messages
   module MessagesUtils

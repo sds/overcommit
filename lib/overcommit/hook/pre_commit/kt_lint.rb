@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `ktlint` against modified Kotlin files.
   # @see https://github.com/shyiko/ktlint

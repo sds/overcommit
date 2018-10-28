@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   # Contains helpers related to contextual information used by prepare-commit-msg
   # hooks.
@@ -14,7 +16,7 @@ module Overcommit::HookContext
     # exists); or commit, followed by a commit SHA-1 (if a -c, -C or --amend
     # option was given)
     def commit_message_source
-      @args[1].to_sym if @args[1]
+      @args[1]&.to_sym
     end
 
     # Returns the commit's SHA-1.

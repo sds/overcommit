@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit
   # Distributes a list of arguments over multiple invocations of a command.
   #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns the version of the available git binary.
 #
 # This is intended to be used to conveniently execute code based on a specific

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `phpstan` against any modified PHP files.
   # For running `phpstan` with Laravel, it requires setup with `ide_helper`.

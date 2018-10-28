@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PostCommit
   # Calculates the change in blame since the last revision.
   #

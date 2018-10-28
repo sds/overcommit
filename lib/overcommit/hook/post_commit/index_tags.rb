@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/index_tags'
 
 module Overcommit::Hook::PostCommit

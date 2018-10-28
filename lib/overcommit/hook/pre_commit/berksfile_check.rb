@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://berkshelf.com/
   class BerksfileCheck < Base
-    LOCK_FILE = 'Berksfile.lock'.freeze
+    LOCK_FILE = 'Berksfile.lock'
 
     def run
       # Ignore if Berksfile.lock is not tracked by git
