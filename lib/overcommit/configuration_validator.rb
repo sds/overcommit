@@ -59,8 +59,8 @@ module Overcommit
       errors = []
 
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash.fetch(hook_type, {}).each do |hook_name, hook_config|
-          hook_env = hook_config.fetch('env', {})
+        hash.fetch(hook_type) { {} }.each do |hook_name, hook_config|
+          hook_env = hook_config.fetch('env') { {} }
 
           unless hook_env.is_a?(Hash)
             errors << "#{hook_type}::#{hook_name} has an invalid `env` specified: " \
@@ -99,7 +99,7 @@ module Overcommit
       errors = []
 
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash.fetch(hook_type, {}).each_key do |hook_name|
+        hash.fetch(hook_type) { {} }.each_key do |hook_name|
           next if hook_name == 'ALL'
 
           unless hook_name =~ /\A[A-Za-z0-9]+\z/
@@ -128,7 +128,7 @@ module Overcommit
       any_warnings = false
 
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash.fetch(hook_type, {}).each do |hook_name, hook_config|
+        hash.fetch(hook_type) { {} }.each do |hook_name, hook_config|
           next if hook_name == 'ALL'
 
           if hook_config['enabled'].nil?
@@ -149,8 +149,8 @@ module Overcommit
 
       errors = []
       Overcommit::Utils.supported_hook_type_classes.each do |hook_type|
-        hash.fetch(hook_type, {}).each do |hook_name, hook_config|
-          processors = hook_config.fetch('processors', 1)
+        hash.fetch(hook_type) { {} }.each do |hook_name, hook_config|
+          processors = hook_config.fetch('processors') { 1 }
           if processors > concurrency
             errors << "#{hook_type}::#{hook_name} `processors` value " \
                       "(#{processors}) is larger than the global `concurrency` " \

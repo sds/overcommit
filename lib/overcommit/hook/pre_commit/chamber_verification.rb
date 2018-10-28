@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   class ChamberVerification < Base
     def run
-      approver_name  = config.fetch('approver_name', 'your approver')
+      approver_name  = config.fetch('approver_name') { 'your approver' }
       approver_email = config['approver_email'] ? " (#{config['approver_email']})" : nil
 
       result = execute(command)

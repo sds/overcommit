@@ -40,7 +40,7 @@ module Overcommit
 
     # Write a line of output if debug mode is enabled.
     def debug(*args)
-      color('35', *args) unless ENV.fetch('OVERCOMMIT_DEBUG', '').empty?
+      color('35', *args) unless ENV.fetch('OVERCOMMIT_DEBUG') { '' }.empty?
     end
 
     # Write a line of output that is intended to be emphasized.

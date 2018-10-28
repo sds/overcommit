@@ -43,7 +43,7 @@ module Overcommit
       @concurrency ||=
         begin
           cores = Overcommit::Utils.processor_count
-          content = @hash.fetch('concurrency', '%<processors>d')
+          content = @hash.fetch('concurrency') { '%<processors>d' }
           if content.is_a?(String)
             concurrency_expr = content % { processors: cores }
 
@@ -156,7 +156,7 @@ module Overcommit
     # environment variables.
     def apply_environment!(hook_context, env)
       skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(/[:, ]/)
-      only_hooks = env.fetch('ONLY', '').split(/[:, ]/)
+      only_hooks = env.fetch('ONLY') { '' }.split(/[:, ]/)
       hook_type = hook_context.hook_class_name
 
       if only_hooks.any? || skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
@@ -254,7 +254,7 @@ module Overcommit
     private
 
     def ad_hoc_hook?(hook_context, hook_name)
-      ad_hoc_conf = @hash.fetch(hook_context.hook_class_name, {}).fetch(hook_name, {})
+      ad_hoc_conf = @hash.fetch(hook_context.hook_class_name) { {} }.fetch(hook_name) { {} }
 
       # Ad hoc hooks are neither built-in nor have a plugin file written but
       # still have a `command` specified to be run
@@ -284,7 +284,7 @@ module Overcommit
           hook_context_or_type.hook_class_name
         end
 
-      individual_enabled = @hash[hook_type].fetch(hook_name, {})['enabled']
+      individual_enabled = @hash[hook_type].fetch(hook_name) { {} }['enabled']
       return individual_enabled unless individual_enabled.nil?
 
       all_enabled = @hash[hook_type]['ALL']['enabled']
