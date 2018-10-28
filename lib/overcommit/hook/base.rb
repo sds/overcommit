@@ -42,7 +42,7 @@ module Overcommit::Hook
       if output = check_for_requirements
         status = :fail
       else
-        result = Overcommit::Utils.with_environment(@config.fetch('env', {})) { run }
+        result = Overcommit::Utils.with_environment(@config.fetch('env') { {} }) { run }
         status, output = process_hook_return_value(result)
       end
 
@@ -66,7 +66,7 @@ module Overcommit::Hook
     end
 
     def processors
-      @config.fetch('processors', 1)
+      @config.fetch('processors') { 1 }
     end
 
     def quiet?
@@ -270,9 +270,9 @@ module Overcommit::Hook
     def transform_status(status)
       case status
       when :fail
-        @config.fetch('on_fail', :fail).to_sym
+        @config.fetch('on_fail') { :fail }.to_sym
       when :warn
-        @config.fetch('on_warn', :warn).to_sym
+        @config.fetch('on_warn') { :warn }.to_sym
       else
         status
       end

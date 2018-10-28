@@ -65,7 +65,7 @@ module Overcommit
       config = self.class.load_from_file(file, default: false, logger: @log)
       config = self.class.default_configuration.merge(config)
 
-      if @options.fetch(:verify, config.verify_signatures?)
+      if @options.fetch(:verify) { config.verify_signatures? }
         verify_signatures(config)
       end
 
