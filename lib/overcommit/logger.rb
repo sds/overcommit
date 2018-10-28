@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit
   # Encapsulates all communication to an output source.
   class Logger

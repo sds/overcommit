@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `php-cs-fixer` against any modified PHP files.
   class PhpCsFixer < Base

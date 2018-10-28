@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for files that would conflict in case-insensitive filesystems
   # Adapted from https://github.com/pre-commit/pre-commit-hooks

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Utility module which manages the creation of {HookContext}s.
 module Overcommit::HookContext
   def self.create(hook_type, config, args, input)

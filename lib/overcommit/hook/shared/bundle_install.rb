@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::Shared
   # Shared code used by all BundleInstall hooks. Runs `bundle install` when a
   # change is detected in the repository's dependencies.

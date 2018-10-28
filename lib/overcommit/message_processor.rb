@@ -8,12 +8,12 @@ module Overcommit
   # output tuple from an array of {Overcommit::Hook::Message}s, respecting the
   # configuration settings for the given hook.
   class MessageProcessor
-    ERRORS_MODIFIED_HEADER = 'Errors on modified lines:'.freeze
-    WARNINGS_MODIFIED_HEADER = 'Warnings on modified lines:'.freeze
-    ERRORS_UNMODIFIED_HEADER = "Errors on lines you didn't modify:".freeze
-    WARNINGS_UNMODIFIED_HEADER = "Warnings on lines you didn't modify:".freeze
-    ERRORS_GENERIC_HEADER = 'Errors:'.freeze
-    WARNINGS_GENERIC_HEADER = 'Warnings:'.freeze
+    ERRORS_MODIFIED_HEADER = 'Errors on modified lines:'
+    WARNINGS_MODIFIED_HEADER = 'Warnings on modified lines:'
+    ERRORS_UNMODIFIED_HEADER = "Errors on lines you didn't modify:"
+    WARNINGS_UNMODIFIED_HEADER = "Warnings on lines you didn't modify:"
+    ERRORS_GENERIC_HEADER = 'Errors:'
+    WARNINGS_GENERIC_HEADER = 'Warnings:'
 
     # @param hook [Overcommit::Hook::Base]
     # @param unmodified_lines_setting [String] how to treat messages on

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::Shared
   # Shared code used by all `SubmoduleStatus` hooks to notify the user if any
   # submodules are uninitialized, out of date with the current index, or contain

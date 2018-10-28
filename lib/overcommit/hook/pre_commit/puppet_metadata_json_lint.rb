@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   #
   # Run's the Puppet metadata linter. It has support for adding options

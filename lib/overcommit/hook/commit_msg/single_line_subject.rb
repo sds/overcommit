@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Ensures commit message subject lines are followed by a blank line.
   class SingleLineSubject < Base

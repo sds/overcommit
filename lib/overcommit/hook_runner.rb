@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit
   # Responsible for loading the hooks the repository has configured and running
   # them, collecting and displaying the results.

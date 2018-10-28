@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for files with execute permissions, which are usually not necessary
   # in source code files (and are typically caused by a misconfigured editor

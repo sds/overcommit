@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Checks for hard tabs in commit messages.
   class HardTabs < Base

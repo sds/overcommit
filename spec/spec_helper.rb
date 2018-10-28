@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV['TRAVIS']
   # When running in Travis, report coverage stats to Coveralls.
   require 'coveralls'

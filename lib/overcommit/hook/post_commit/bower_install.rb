@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/bower_install'
 
 module Overcommit::Hook::PostCommit

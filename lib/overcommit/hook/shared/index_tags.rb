@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::Shared
   # Shared code used by all IndexTags hooks. It runs ctags in the background so
   # your tag definitions are up-to-date.

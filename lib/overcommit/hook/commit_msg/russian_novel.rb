@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Checks for long commit messages (not good or bad--just fun to point out)
   class RussianNovel < Base

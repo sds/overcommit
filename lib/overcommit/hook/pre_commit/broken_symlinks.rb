@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for broken symlinks.
   class BrokenSymlinks < Base

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookLoader
   # Responsible for loading hooks from a file.
   class Base

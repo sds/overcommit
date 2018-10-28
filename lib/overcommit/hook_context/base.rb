@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   # Contains helpers related to the context with which a hook is being run.
   #

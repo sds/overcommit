@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `php -l` against any modified PHP files.
   class PhpLint < Base

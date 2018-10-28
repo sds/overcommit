@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PostCommit
   # Check that a commit message conforms to a certain style
   #

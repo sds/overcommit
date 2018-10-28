@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   # Contains helpers for contextual information used by post-rewrite hooks.
   class PostRewrite < Base

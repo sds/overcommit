@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for trailing whitespace in files.
   class TrailingWhitespace < Base

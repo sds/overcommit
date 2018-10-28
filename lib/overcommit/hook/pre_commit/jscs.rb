@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `jscs` (JavaScript Code Style Checker) against any modified JavaScript
   # files.

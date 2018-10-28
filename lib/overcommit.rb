@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/os'
 require 'overcommit/constants'
 require 'overcommit/exceptions'

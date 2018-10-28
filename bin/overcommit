@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Check if Overcommit should invoke a Bundler context for loading gems
 require 'yaml'

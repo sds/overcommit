@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tmpdir'
 
 # Helpers for creating temporary repositories and directories for testing.

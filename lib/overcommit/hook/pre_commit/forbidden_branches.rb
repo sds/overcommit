@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Prevents commits to branches matching one of the configured patterns.
   class ForbiddenBranches < Base

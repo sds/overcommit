@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PrePush
   # Runs `rspec` test suite before push
   #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for local paths in files and issues a warning
   class LocalPathsInGemfile < Base

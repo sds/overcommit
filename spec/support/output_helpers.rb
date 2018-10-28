@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Helpers for capturing output streams in tests.
 module OutputHelpers
   module_function

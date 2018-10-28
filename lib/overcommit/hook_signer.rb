@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit
   # Calculates, stores, and retrieves stored signatures of hook plugins.
   class HookSigner

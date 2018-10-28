@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::Shared
   # runs specified rake targets. It fails on the first non-
   # successfull exit.

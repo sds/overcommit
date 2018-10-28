@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Ensures the number of columns the subject and commit message lines occupy is
   # under the preferred limits.

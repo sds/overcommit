@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Checks that the commit message is not empty
   class EmptyMessage < Base

@@ -6,13 +6,13 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://yarnpkg.com/en/docs/cli/check
   class YarnCheck < Base
-    LOCK_FILE = 'yarn.lock'.freeze
+    LOCK_FILE = 'yarn.lock'
 
     # A lot of the errors returned by `yarn check` are outside the developer's control
     # (are caused by bad package specification, in the hands of the upstream maintainer)
     # So limit reporting to errors the developer can do something about
     ACTIONABLE_ERRORS = [
-      'Lockfile does not contain pattern'.freeze,
+      'Lockfile does not contain pattern',
     ].freeze
 
     def run

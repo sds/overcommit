@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Checks for vulnerable versions of gems in Gemfile.lock.
   #
   # @see https://github.com/rubysec/bundler-audit
   class BundleAudit < Base
-    LOCK_FILE = 'Gemfile.lock'.freeze
+    LOCK_FILE = 'Gemfile.lock'
 
     def run
       # Ignore if Gemfile.lock is not tracked by git

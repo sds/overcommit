@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Ensures that a commit author has a name with at least first and last names.
   class AuthorName < Base

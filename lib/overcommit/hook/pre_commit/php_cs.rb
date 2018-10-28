@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `phpcs` against any modified PHP files.
   class PhpCs < Base

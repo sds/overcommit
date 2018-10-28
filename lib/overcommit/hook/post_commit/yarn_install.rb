@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/yarn_install'
 
 module Overcommit::Hook::PostCommit

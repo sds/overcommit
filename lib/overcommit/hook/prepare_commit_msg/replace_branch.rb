@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PrepareCommitMsg
   # Prepends the commit message with a message based on the branch name.
   # It's possible to reference parts of the branch name through the captures in

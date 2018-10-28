@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::CommitMsg
   # Ensures commit message subject lines do not have a trailing period
   class TrailingPeriod < Base

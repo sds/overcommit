@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Exceptions
   # Raised when a {Configuration} could not be loaded from a file.
   class ConfigurationError < StandardError; end

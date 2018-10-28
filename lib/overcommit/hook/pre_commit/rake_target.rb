@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'overcommit/hook/shared/rake_target'
 
 module Overcommit::Hook::PreCommit

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # General spec matcher logic for checking hook status and output.
 class HookMatcher
   def initialize(status, args)

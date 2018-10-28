@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Check to see whether the schema file is in line with the migrations. When a
   # schema file is present but a migration file is not, this is usually a

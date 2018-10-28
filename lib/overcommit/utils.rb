@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'overcommit/os'
 require 'overcommit/subprocess'
@@ -295,7 +297,7 @@ module Overcommit
       #
       # @param args [Array<String>]
       def debug(*args)
-        log.debug(*args) if log
+        log&.debug(*args)
       end
     end
   end

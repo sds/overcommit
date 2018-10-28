@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PrePush
   # Runs `brakeman` whenever Ruby/Rails files change.
   #
