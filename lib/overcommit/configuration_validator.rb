@@ -84,8 +84,10 @@ module Overcommit
       end
 
       if errors.any?
-        @log&.error errors.join("\n")
-        @log&.newline
+        if @log
+          @log.error errors.join("\n")
+          @log.newline
+        end
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had an invalid `env` configuration option'
       end
@@ -109,8 +111,10 @@ module Overcommit
       end
 
       if errors.any?
-        @log&.error errors.join("\n")
-        @log&.newline
+        if @log
+          @log.error errors.join("\n")
+          @log.newline
+        end
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had invalid names'
       end
@@ -156,8 +160,10 @@ module Overcommit
       end
 
       if errors.any?
-        @log&.error errors.join("\n")
-        @log&.newline
+        if @log
+          @log.error errors.join("\n")
+          @log.newline
+        end
         raise Overcommit::Exceptions::ConfigurationError,
               'One or more hooks had invalid `processor` value configured'
       end
