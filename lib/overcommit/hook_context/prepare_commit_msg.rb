@@ -16,7 +16,7 @@ module Overcommit::HookContext
     # exists); or commit, followed by a commit SHA-1 (if a -c, -C or --amend
     # option was given)
     def commit_message_source
-      @args[1]&.to_sym
+      @args[1].to_sym if @args[1]
     end
 
     # Returns the commit's SHA-1.
