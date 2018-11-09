@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength, Metrics/MethodLength, Metrics/LineLength
+# rubocop:disable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
 module Overcommit
   # Validates and normalizes a configuration.
   class ConfigurationValidator
@@ -183,4 +183,4 @@ module Overcommit
     end
   end
 end
-# rubocop:enable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/LineLength
+# rubocop:enable Metrics/ClassLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
