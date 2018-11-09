@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/rubysec/bundler-audit
   class BundleAudit < Base
-    LOCK_FILE = 'Gemfile.lock'
+    LOCK_FILE = 'Gemfile.lock'.freeze
 
     def run
       # Ignore if Gemfile.lock is not tracked by git

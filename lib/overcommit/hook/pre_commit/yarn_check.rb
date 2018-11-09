@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://yarnpkg.com/en/docs/cli/check
   class YarnCheck < Base
-    LOCK_FILE = 'yarn.lock'
+    LOCK_FILE = 'yarn.lock'.freeze
 
     # A lot of the errors returned by `yarn check` are outside the developer's control
     # (are caused by bad package specification, in the hands of the upstream maintainer)
