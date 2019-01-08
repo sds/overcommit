@@ -619,7 +619,7 @@ PreCommit:
     enabled: false
     description: 'Analyze with Reek'
     required_executable: 'reek'
-    flags: ['--single-line', '--no-color']
+    flags: ['--single-line', '--no-color', '--force-exclusion']
     install_command: 'gem install reek'
     include:
       - '**/*.gemspec'
