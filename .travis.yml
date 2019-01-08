@@ -16,7 +16,13 @@ before_script:
   - git config --global user.name "Travis CI"
 
 before_install:
-  - gem update --system
+  - |
+    export RVM_CURRENT=`rvm current`
+    if [ "${RVM_CURRENT}" != "ruby-2.2.7" ]; then
+      gem --version
+    else
+      gem update --system
+    fi
   - gem install bundler:'< 2'
 
 script:
