@@ -18,7 +18,7 @@ before_script:
 before_install:
   - |
     export RVM_CURRENT=`rvm current`
-    if [ "${RVM_CURRENT}" != "ruby-2.2.7" ]; then
+    if [ "${RVM_CURRENT}" == "ruby-2.2.7" ]; then
       gem --version
     else
       gem update --system
