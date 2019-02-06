@@ -737,6 +737,13 @@ PreCommit:
     install_command: 'brew install swiftlint'
     include: '**/*.swift'
 
+  TerraformFormat:
+    enabled: false
+    description: 'Analyze with Terraform'
+    required_executable: 'terraform'
+    flags: ['fmt', '-check=true', '-diff=false']
+    include: '**/*.tf'
+
   TsLint:
     enabled: false
     description: 'Analyze with TSLint'
