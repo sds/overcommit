@@ -738,11 +738,11 @@ PreCommit:
     include: '**/*.swift'
 
   TsLint:
-      enabled: false
-      description: 'Analyze with TSLint'
-      required_executable: 'tslint'
-      install_command: 'npm install -g tslint typescript'
-      include: '**/*.ts'
+    enabled: false
+    description: 'Analyze with TSLint'
+    required_executable: 'tslint'
+    install_command: 'npm install -g tslint typescript'
+    include: '**/*.ts'
 
   TrailingWhitespace:
     enabled: false
