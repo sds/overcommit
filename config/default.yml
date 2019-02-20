@@ -230,7 +230,7 @@ PreCommit:
     install_command: 'npm install -g coffeelint'
     include: '**/*.coffee'
 
-   CookStyle:
+  CookStyle:
     enabled: false
     description: 'Analyze with CookStyle'
     required_executable: 'cookstyle'
@@ -240,7 +240,7 @@ PreCommit:
       - '**/*.rb'
       - '**/*.erb'
 
-   Credo:
+  Credo:
     enabled: false
     description: 'Analyze with credo'
     required_executable: 'mix'
