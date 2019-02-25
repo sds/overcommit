@@ -20,6 +20,18 @@ describe Overcommit::Hook::PreCommit::CookStyle do
     end
 
     it { should pass }
+
+    context 'and it printed warnings to stderr' do
+      before do
+        result.stub(:stderr).and_return(normalize_indent(<<-MSG))
+          warning: parser/current is loading parser/ruby21, which recognizes
+          warning: 2.1.8-compliant syntax, but you are running 2.1.1.
+          warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+        MSG
+      end
+
+      it { should pass }
+    end
   end
 
   context 'when cookstyle exits unsucessfully' do
@@ -30,6 +42,61 @@ describe Overcommit::Hook::PreCommit::CookStyle do
       subject.stub(:execute).and_return(result)
     end
 
-    it { should fail_hook }
+    context 'and it reports a warning' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.rb:1:1: W: Useless assignment to variable - my_var.',
+        ].join("\n"))
+        result.stub(:stderr).and_return('')
+      end
+
+      it { should warn }
+
+      context 'and it printed warnings to stderr' do
+        before do
+          result.stub(:stderr).and_return(normalize_indent(<<-MSG))
+            warning: parser/current is loading parser/ruby21, which recognizes
+            warning: 2.1.8-compliant syntax, but you are running 2.1.1.
+            warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+          MSG
+        end
+
+        it { should warn }
+      end
+    end
+
+    context 'and it reports an error' do
+      before do
+        result.stub(:stdout).and_return([
+          'file1.rb:1:1: C: Missing top-level class documentation',
+        ].join("\n"))
+        result.stub(:stderr).and_return('')
+      end
+
+      it { should fail_hook }
+
+      context 'and it printed warnings to stderr' do
+        before do
+          result.stub(:stderr).and_return(normalize_indent(<<-MSG))
+            warning: parser/current is loading parser/ruby21, which recognizes
+            warning: 2.1.8-compliant syntax, but you are running 2.1.1.
+            warning: please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+          MSG
+        end
+
+        it { should fail_hook }
+      end
+    end
+
+    context 'when a generic error message is written to stderr' do
+      before do
+        result.stub(:stdout).and_return('')
+        result.stub(:stderr).and_return([
+          'Could not find cookstyle in any of the sources'
+        ].join("\n"))
+      end
+
+      it { should fail_hook }
+    end
   end
 end
