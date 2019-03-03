@@ -39,7 +39,7 @@ install:
   - where ruby
 
   # Install latest version of RubyGems
-  - gem update --system --no-ri --no-rdoc
+  - gem update --system --no-rdoc
   - gem --version
   - where gem
 
