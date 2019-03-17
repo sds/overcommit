@@ -1,6 +1,10 @@
 gemfile: Gemfile
 
 PreCommit:
+  # Disabled since this causes spurious failures on AppVeyor builds
+  BrokenSymlinks:
+    enabled: false
+
   BundleCheck:
     enabled: true
 
