@@ -1,5 +1,26 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+### New Features
+
+* Add support for `prepare-commit-message` hooks
+* Add [`SwiftLint`](https://github.com/realm/SwiftLint) pre-commit hook
+* Add [`KtLint`](https://github.com/shyiko/ktlint) pre-commit hook
+* Add `TerraformFormat` pre-commit hook
+* Add [`CookStyle`](https://docs.chef.io/cookstyle.html) pre-commit hook
+
+### Changes
+
+* Update `validator_uri` for `W3cHtml` pre-commit hook
+* Update `TsLint` pre-commit hook to support new output format
+* Update `BundleCheck` error message with additional instructions
+
+### Bug Fixes
+
+* Add `--force-exclusion` flag to `Reek` pre-commit hook configuration to
+  ensure excluded files are excluded
+
 ## 0.46.0
 
 * Fix `Credo` pre-commit hook to lint applicable files only rather than
