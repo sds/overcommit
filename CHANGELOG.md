@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Drop support for Ruby 2.2
+
 ## 0.47.0
 
 ### New Features
