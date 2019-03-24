@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://bundler.io/bundle_outdated.html
   class BundleOutdated < Base
-    LOCK_FILE = 'Gemfile.lock'.freeze
+    LOCK_FILE = 'Gemfile.lock'
 
     def run
       # Ignore if Gemfile.lock is not tracked by git
