@@ -3,25 +3,18 @@ language: ruby
 cache: bundler
 
 rvm:
-  - 2.2
-  - 2.3.7
-  - 2.4.4
-  - 2.5.1
-  - 2.6
+  - 2.3.8
+  - 2.4.5
+  - 2.5.5
+  - 2.6.2
 
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
 
 before_install:
-  - |
-    export RVM_CURRENT=`rvm current|cut -c6-8`
-    if [ "${RVM_CURRENT}" == "2.2" ]; then
-      gem --version
-    else
-      gem update --system
-    fi
-  - gem install bundler:'< 2'
+  - gem update --system
+  - gem install bundler
 
 script:
   - bundle exec rspec

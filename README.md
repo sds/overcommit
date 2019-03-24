@@ -54,7 +54,7 @@ any Ruby code.
 
 This project aims to support the following Ruby runtimes on both \*nix and Windows:
 
-* MRI 2.2+
+* MRI 2.3+
 
 ### Dependencies
 
