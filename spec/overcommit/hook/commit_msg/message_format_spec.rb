@@ -39,4 +39,20 @@ describe Overcommit::Hook::CommitMsg::MessageFormat do
 
     it { should fail_hook expected_message }
   end
+
+  context 'when multiline message matches the pattern' do
+    let(:config) do
+      super().merge(Overcommit::Configuration.new(
+        'CommitMsg' => {
+          'MessageFormat' => {
+            'pattern' => '^Some .* Message$'
+          }
+        }
+      ))
+    end
+
+    let(:commit_msg) { "Some \n multiline \n Message" }
+
+    it { should pass }
+  end
 end
