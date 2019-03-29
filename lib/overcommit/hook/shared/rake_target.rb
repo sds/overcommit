@@ -2,7 +2,7 @@
 
 module Overcommit::Hook::Shared
   # runs specified rake targets. It fails on the first non-
-  # successfull exit.
+  # successful exit.
   #
   module RakeTarget
     def run
