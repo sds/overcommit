@@ -24,7 +24,7 @@ describe Overcommit::Hook::PreCommit::Jscs do
     it { should fail_hook }
   end
 
-  context 'when jscs exits unsucessfully with status code 2' do
+  context 'when jscs exits unsuccessfully with status code 2' do
     let(:result) { double('result') }
 
     before do

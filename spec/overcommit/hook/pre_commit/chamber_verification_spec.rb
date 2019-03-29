@@ -33,7 +33,7 @@ describe Overcommit::Hook::PreCommit::ChamberVerification do
     it { should pass }
   end
 
-  context 'when chamber exits unsucessfully via standard out' do
+  context 'when chamber exits unsuccessfully via standard out' do
     before do
       result = double('result')
       result.stub(:stdout).and_return('Some error message')
@@ -44,7 +44,7 @@ describe Overcommit::Hook::PreCommit::ChamberVerification do
     it { should warn }
   end
 
-  context 'when chamber exits unsucessfully via standard error' do
+  context 'when chamber exits unsuccessfully via standard error' do
     before do
       result = double('result')
       result.stub(:stdout).and_return('')
