@@ -6,7 +6,7 @@ module Overcommit::Hook::PostRewrite
   # Runs `yarn install` when a change is detected in the repository's
   # dependencies.
   #
-  # @see {Overcommit::Hook::Shared::YarnInstall}
+  # @see Overcommit::Hook::Shared::YarnInstall
   class YarnInstall < Base
     include Overcommit::Hook::Shared::YarnInstall
   end
