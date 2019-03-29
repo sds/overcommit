@@ -6,7 +6,7 @@ module Overcommit::Hook::PostMerge
   # Runs `npm install` when a change is detected in the repository's
   # dependencies.
   #
-  # @see {Overcommit::Hook::Shared::NpmInstall}
+  # @see Overcommit::Hook::Shared::NpmInstall
   class NpmInstall < Base
     include Overcommit::Hook::Shared::NpmInstall
   end
