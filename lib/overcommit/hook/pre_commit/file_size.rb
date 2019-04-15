@@ -18,7 +18,7 @@ module Overcommit::Hook::PreCommit
 
       def build_oversized_file_list
         applicable_files.select do |file|
-          File.size(file) > size_limit_bytes
+          file_size(file) > size_limit_bytes
         end
       end
 
@@ -36,7 +36,11 @@ module Overcommit::Hook::PreCommit
       end
 
       def error_text_for(file)
-        "#{relative_path_for(file)} is over the size limit."
+        "#{relative_path_for(file)} is over the file size limit of #{size_limit_bytes} bytes (is #{file_size(file)} bytes)"
+      end
+
+      def file_size(file)
+        File.size(file)
       end
 
       def relative_path_for(file)
