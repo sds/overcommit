@@ -293,6 +293,10 @@ PreCommit:
     flags: ['-IEHnw']
     keywords: ['BROKEN', 'BUG', 'ERROR', 'FIXME', 'HACK', 'NOTE', 'OPTIMIZE', 'REVIEW', 'TODO', 'WTF', 'XXX']
 
+  FileSize:
+    enabled: false
+    description: 'Check for oversized files'
+
   Flay:
     enabled: false
     description: 'Analyze ruby code for structural similarities with Flay'
