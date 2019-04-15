@@ -295,6 +295,7 @@ PreCommit:
 
   FileSize:
     enabled: false
+    description: 'Check for oversized files'
     size_limit_bytes: 1_000_000
 
   Flay:
