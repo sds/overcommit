@@ -11,6 +11,10 @@ module Overcommit::Hook::PreCommit
       end
     end
 
+    def description
+      "Check for files over #{size_limit_bytes} bytes"
+    end
+
     private
 
     def oversized_files
