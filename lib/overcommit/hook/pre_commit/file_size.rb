@@ -23,7 +23,7 @@ module Overcommit::Hook::PreCommit
 
     def build_oversized_file_list
       applicable_files.select do |file|
-        file_size(file) > size_limit_bytes
+        File.exist?(file) && file_size(file) > size_limit_bytes
       end
     end
 
