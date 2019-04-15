@@ -3,8 +3,6 @@
 module Overcommit::Hook::PreCommit
   # Checks for oversized files before committing.
   class FileSize < Base
-    DEFAULT_SIZE_LIMIT_BYTES = 1_000_000 # 1MB
-
     def run
       return :pass if oversized_files.empty?
 
@@ -26,7 +24,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def size_limit_bytes
-      config.fetch('size_limit_bytes', DEFAULT_SIZE_LIMIT_BYTES)
+      config.fetch('size_limit_bytes')
     end
 
     def error_message_for(file)
