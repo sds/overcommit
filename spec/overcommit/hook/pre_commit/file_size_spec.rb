@@ -42,4 +42,16 @@ describe Overcommit::Hook::PreCommit::FileSize do
 
     it { should_not fail_hook }
   end
+
+  context 'when a file is removed' do
+    let(:contents) { 'anything' }
+    before do
+      `git commit -m "Add file"`
+      `git rm "#{staged_file}"`
+    end
+
+    it 'should not raise an exception' do
+      lambda { should pass }.should_not raise_error
+    end
+  end
 end
