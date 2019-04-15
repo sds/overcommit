@@ -36,32 +36,12 @@ module Overcommit::Hook::PreCommit
         :error,
         file,
         nil,
-        error_text_for(file)
+        "#{file} is #{file_size(file)} bytes"
       )
-    end
-
-    def error_text_for(file)
-      error_text_format % {
-        path: relative_path_for(file),
-        limit: size_limit_bytes,
-        size: file_size(file)
-      }
-    end
-
-    def error_text_format
-      '%<path>s is over the file size limit of %<limit>s bytes (is %<size>s bytes)'
     end
 
     def file_size(file)
       File.size(file)
-    end
-
-    def relative_path_for(file)
-      Pathname.new(file).relative_path_from(repo_root_path)
-    end
-
-    def repo_root_path
-      @repo_root_path ||= Pathname.new(Overcommit::Utils.repo_root)
     end
   end
 end
