@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Drop support for Ruby 2.2
+* Add `FileSize` pre-commit hook
 
 ## 0.47.0
 
