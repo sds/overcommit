@@ -40,7 +40,7 @@ describe Overcommit::Hook::PreCommit::FileSize do
   context 'when a small file is committed' do
     let(:contents) { 'short' }
 
-    it { should_not fail_hook }
+    it { should pass }
   end
 
   context 'when a file is removed' do
