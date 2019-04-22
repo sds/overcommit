@@ -204,11 +204,8 @@ module Overcommit::Hook
     def check_for_executable
       return unless required_executable && !in_path?(required_executable)
 
-      output = "'#{required_executable}' is not installed, not in your PATH, " \
-               'or does not have execute permissions'
-      output << install_command_prompt
-
-      output
+      "'#{required_executable}' is not installed, not in your PATH, " \
+      "or does not have execute permissions#{install_command_prompt}"
     end
 
     def install_command_prompt
