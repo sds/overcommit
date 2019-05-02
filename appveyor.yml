@@ -4,13 +4,8 @@ clone_depth: 1
 
 environment:
   matrix:
-    - RUBY_FOLDER_VERSION: "23"
-    - RUBY_FOLDER_VERSION: "23-x64"
-    - RUBY_FOLDER_VERSION: "24"
     - RUBY_FOLDER_VERSION: "24-x64"
-    - RUBY_FOLDER_VERSION: "25"
     - RUBY_FOLDER_VERSION: "25-x64"
-    - RUBY_FOLDER_VERSION: "26"
     - RUBY_FOLDER_VERSION: "26-x64"
 matrix:
   fast_finish: true

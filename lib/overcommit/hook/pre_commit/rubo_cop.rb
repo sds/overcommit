@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   # @see http://batsov.com/rubocop/
   class RuboCop < Base
     GENERIC_MESSAGE_TYPE_CATEGORIZER = lambda do |type|
-      type =~ /^warn/ ? :warning : :error
+      type.match?(/^warn/) ? :warning : :error
     end
 
     COP_MESSAGE_TYPE_CATEGORIZER = lambda do |type|

@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
     MESSAGE_REGEX = /(?<file>(?:\w:)?.+)\((?<line>\d+)\):(?<type>[^:]+)/
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
-      type =~ /warning/ ? :warning : :error
+      type.match?(/warning/) ? :warning : :error
     end
 
     def run

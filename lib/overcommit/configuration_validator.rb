@@ -102,7 +102,7 @@ module Overcommit
         hash.fetch(hook_type) { {} }.each_key do |hook_name|
           next if hook_name == 'ALL'
 
-          unless hook_name =~ /\A[A-Za-z0-9]+\z/
+          unless hook_name.match?(/\A[A-Za-z0-9]+\z/)
             errors << "#{hook_type}::#{hook_name} has an invalid name " \
                       "#{hook_name}. It must contain only alphanumeric " \
                       'characters (no underscores or dashes, etc.)'

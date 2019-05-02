@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
           result.stdout.chomp
         end
 
-      unless email =~ /#{config['pattern']}/
+      unless email.match?(/#{config['pattern']}/)
         return :fail,
                "Author has an invalid email address: '#{email}'\n" \
                'Set your email with ' \

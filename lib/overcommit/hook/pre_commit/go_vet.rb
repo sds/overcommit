@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       result = execute(command, args: applicable_files)
       return :pass if result.success?
 
-      if result.stderr =~ /no such tool "vet"/
+      if result.stderr.match?(/no such tool "vet"/)
         return :fail, "`go tool vet` is not installed#{install_command_prompt}"
       end
 
