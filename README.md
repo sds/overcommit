@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/sds/overcommit.svg?branch=master)](https://travis-ci.org/sds/overcommit)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/umui038jlm597ryf?svg=true)](https://ci.appveyor.com/project/sds/overcommit)
 [![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=master)](https://coveralls.io/github/sds/overcommit?branch=master)
-[![Code Climate](https://codeclimate.com/github/sds/overcommit.svg)](https://codeclimate.com/github/sds/overcommit)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5da42f7f365e5fef6b4c/maintainability)](https://codeclimate.com/github/sds/overcommit/maintainability)
 [![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=master)](http://inch-ci.org/github/sds/overcommit)
 
 <p align="center">
