@@ -73,7 +73,7 @@ The reasoning for this perhaps odd naming scheme is to strike a balance between
 consistency, familiarity for those who already know the tool, and Overcommit's
 ability to deduce the name of a hook from its filename and vice versa.
 
-[1]: https://github.com/brigade/overcommit/issues
+[1]: https://github.com/sds/overcommit/issues
 [2]: https://medium.com/brigade-engineering/the-secrets-to-great-commit-messages-106fc0a92a25
 [3]: https://travis-ci.org/
 
@@ -82,4 +82,4 @@ ability to deduce the name of a hook from its filename and vice versa.
 This project adheres to the [Open Code of Conduct][code-of-conduct]. By
 participating, you are expected to honor this code.
 
-[code-of-conduct]: https://github.com/brigade/code-of-conduct
+[code-of-conduct]: https://github.com/civiccc/code-of-conduct

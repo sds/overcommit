@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.license               = 'MIT'
   s.summary               = 'Git hook manager'
   s.description           = 'Utility to install, configure, and extend Git hooks'
-  s.authors               = ['Brigade Engineering', 'Shane da Silva']
-  s.email                 = ['eng@brigade.com', 'shane.dasilva@brigade.com']
+  s.authors               = ['Shane da Silva']
+  s.email                 = ['shane@dasilva.io']
   s.homepage              = Overcommit::REPO_URL
   s.post_install_message  =
     'Install hooks by running `overcommit --install` in your Git repository'

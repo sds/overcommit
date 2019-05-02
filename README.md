@@ -1,18 +1,18 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
-[![Build Status](https://travis-ci.org/brigade/overcommit.svg?branch=master)](https://travis-ci.org/brigade/overcommit)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/iqsr6jtrq6y0jhqq/branch/master?svg=true)](https://ci.appveyor.com/project/brigade/overcommit/branch/master)
-[![Coverage Status](https://coveralls.io/repos/github/brigade/overcommit/badge.svg?branch=master)](https://coveralls.io/github/brigade/overcommit?branch=master)
-[![Code Climate](https://codeclimate.com/github/brigade/overcommit.svg)](https://codeclimate.com/github/brigade/overcommit)
-[![Inline docs](http://inch-ci.org/github/brigade/overcommit.svg?branch=master)](http://inch-ci.org/github/brigade/overcommit)
+[![Build Status](https://travis-ci.org/sds/overcommit.svg?branch=master)](https://travis-ci.org/sds/overcommit)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/iqsr6jtrq6y0jhqq/branch/master?svg=true)](https://ci.appveyor.com/project/sds/overcommit/branch/master)
+[![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=master)](https://coveralls.io/github/sds/overcommit?branch=master)
+[![Code Climate](https://codeclimate.com/github/sds/overcommit.svg)](https://codeclimate.com/github/sds/overcommit)
+[![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=master)](http://inch-ci.org/github/sds/overcommit)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/brigade/overcommit/master/logo/horizontal.png" width="65%" alt="Overcommit Logo"/>
+  <img src="https://raw.githubusercontent.com/sds/overcommit/master/logo/horizontal.png" width="65%" alt="Overcommit Logo"/>
 </p>
 
 `overcommit` is a tool to manage and configure
 [Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
-![Demonstration](https://brigade.github.io/overcommit/overcommit.gif)
+![Demonstration](https://sds.github.io/overcommit/overcommit.gif)
 
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
@@ -60,7 +60,7 @@ This project aims to support the following Ruby runtimes on both \*nix and Windo
 
 Some of the hooks have third-party dependencies. For example, to lint your
 [SCSS](http://sass-lang.com/) files, you're going to need our
-[scss_lint gem](https://github.com/brigade/scss-lint).
+[scss_lint gem](https://github.com/sds/scss-lint).
 
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
@@ -476,7 +476,7 @@ instead of whatever contents are in your working tree (as you don't want
 unstaged changes to taint your results). Overcommit takes care
 of this for you, but to do it in a generalized way introduces this
 limitation. See the [thread tracking this
-issue](https://github.com/brigade/overcommit/issues/238) for more details.
+issue](https://github.com/sds/overcommit/issues/238) for more details.
 
 * [`*`AuthorEmail](lib/overcommit/hook/pre_commit/author_email.rb)
 * [`*`AuthorName](lib/overcommit/hook/pre_commit/author_name.rb)
@@ -592,9 +592,9 @@ Out of the box, `overcommit` comes with a set of hooks that enforce a variety of
 styles and lints. However, some hooks only make sense in the context of a
 specific repository.
 
-At Brigade, for example, we have a number of simple checks that we run
-against our code to catch common errors. For example, since we use
-[RSpec](http://rspec.info/), we want to make sure all spec files contain the
+For example, you can have a number of simple checks that run
+against your code to catch common errors. For example, if you use
+[RSpec](http://rspec.info/), you can make sure all spec files contain the
 line `require 'spec_helper'`.
 
 Inside our repository, we can add the file
@@ -704,7 +704,7 @@ ensure your thoughts, ideas, or code get merged.
 ## Community
 
 All major discussion surrounding Overcommit happens on the
-[GitHub issues list](https://github.com/brigade/overcommit/issues).
+[GitHub issues list](https://github.com/sds/overcommit/issues).
 
 You can also follow [@git_overcommit on Twitter](https://twitter.com/git_overcommit).
 

@@ -3,7 +3,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `scss-lint` against any modified SCSS files.
   #
-  # @see https://github.com/brigade/scss-lint
+  # @see https://github.com/sds/scss-lint
   class ScssLint < Base
     def run
       result = execute(command, args: applicable_files)

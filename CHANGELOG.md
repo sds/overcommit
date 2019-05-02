@@ -503,7 +503,7 @@
 * Disable almost all hooks by default. You will now need to explicitly enable
   almost all hooks yourself in your `.overcommit.yml`. If you are migrating from
   `overcommit` 0.23.0 and want to use the default configuration that shipped
-  with that version, copy the [default configuration from 0.23.0](https://github.com/brigade/overcommit/blob/9f03e9c82b385d375a836ca7146b117dbde5c822/config/default.yml)
+  with that version, copy the [default configuration from 0.23.0](https://github.com/sds/overcommit/blob/9f03e9c82b385d375a836ca7146b117dbde5c822/config/default.yml)
 * Update `ScssLint` pre-commit hook to properly handle special exit code that
   signals all files were filtered by exclusions (new as of `scss-lint` 0.36.0)
 * Update `childprocess` dependency to minimum 0.5.6
@@ -861,7 +861,7 @@
 ## 0.2.6
 
 * Added check for linting HAML files with
-  [haml-lint](https://github.com/brigade/haml-lint)
+  [haml-lint](https://github.com/sds/haml-lint)
 
 ## 0.2.5
 
