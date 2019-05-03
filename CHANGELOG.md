@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Drop support for Ruby 2.3 or older
+* Support multi-line matches in `MessageFormat` `commit-msg` hook
 * Add `FileSize` pre-commit hook
 
 ## 0.47.0
