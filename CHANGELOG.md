@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.48.0
 
 * Drop support for Ruby 2.3 or older
 * Support multi-line matches in `MessageFormat` `commit-msg` hook
