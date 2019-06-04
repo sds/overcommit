@@ -39,6 +39,10 @@ describe Overcommit::Hook::PreCommit::Stylelint do
       end
 
       it { should fail_hook }
+
+      it 'extracts lines numbers correctly from output' do
+        expect(subject.run.map(&:line)).to eq([4, 10])
+      end
     end
   end
 end
