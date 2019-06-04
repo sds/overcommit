@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `Stylelint` hook regex to extract line numbers with more than one digit
+* Fix `CaseConflicts` hook to work with file paths containing double quotes
+
 ## 0.48.0
 
 * Drop support for Ruby 2.3 or older
