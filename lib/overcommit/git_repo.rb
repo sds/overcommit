@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'iniparse'
+require 'shellwords'
 
 module Overcommit
   # Provide a set of utilities for certain interactions with `git`.
@@ -108,8 +109,7 @@ module Overcommit
     # @return [Array<String>] list of absolute file paths
     def list_files(paths = [], options = {})
       ref = options[:ref] || 'HEAD'
-      path_list = paths.empty? ? '' : "\"#{paths.join('" "')}\""
-      `git ls-tree --name-only #{ref} #{path_list}`.
+      `git ls-tree --name-only #{ref} #{paths.shelljoin}`.
         split(/\n/).
         map { |relative_file| File.expand_path(relative_file) }.
         reject { |file| File.directory?(file) } # Exclude submodule directories
