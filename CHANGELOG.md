@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.48.1
 
 * Fix `Stylelint` hook regex to extract line numbers with more than one digit
 * Fix `CaseConflicts` hook to work with file paths containing double quotes
