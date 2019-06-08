@@ -6,20 +6,21 @@ module Overcommit::Hook::PrepareCommitMsg
   # the `branch_pattern` regex.
   class ReplaceBranch < Base
     def run
-      return :pass unless !commit_message_source ||
-        commit_message_source == :commit # NOTE: avoid 'merge' and 'rebase'
+      return :pass if skipped_commit_types.include? commit_message_source
+
       Overcommit::Utils.log.debug(
         "Checking if '#{Overcommit::GitRepo.current_branch}' matches #{branch_pattern}"
       )
-      if branch_pattern.match?(Overcommit::GitRepo.current_branch)
-        Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
-        modify_commit_message do |old_contents|
-          "#{new_template}\n#{old_contents}"
-        end
-        :pass
-      else
-        :warn
+
+      return :warn unless branch_pattern.match?(Overcommit::GitRepo.current_branch)
+
+      Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
+
+      modify_commit_message do |old_contents|
+        "#{new_template}\n#{old_contents}"
       end
+
+      :pass
     end
 
     def new_template
@@ -47,6 +48,10 @@ module Overcommit::Hook::PrepareCommitMsg
 
     def replacement_text_config
       @replacement_text_config ||= config['replacement_text']
+    end
+
+    def skipped_commit_types
+      @skipped_commit_types ||= config['skipped_commit_types'].map(&:to_sym)
     end
   end
 end

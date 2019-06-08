@@ -45,7 +45,19 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
     context 'when the checked out branch does not match the pattern' do
       let(:new_head) { "this shouldn't match the default pattern" }
 
-      it { is_expected.to warn }
+      context 'when the commit type is in `skipped_commit_types`' do
+        let(:context) do
+          Overcommit::HookContext::PrepareCommitMsg.new(
+            config, [prepare_commit_message_file, 'template'], StringIO.new
+          )
+        end
+
+        it { is_expected.to pass }
+      end
+
+      context 'when the commit type is not in `skipped_commit_types`' do
+        it { is_expected.to warn }
+      end
     end
   end
 
