@@ -674,6 +674,14 @@ PreCommit:
       - '**/*.gemspec'
       - '**/*.rb'
 
+  RubySyntax:
+    enabled: false
+    description: 'Check ruby syntax'
+    required_executable: 'ruby'
+    include:
+      - '**/*.gemspec'
+      - '**/*.rb'
+
   Scalariform:
     enabled: false
     description: 'Check formatting with Scalariform'
