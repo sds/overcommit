@@ -678,7 +678,11 @@ PreCommit:
     enabled: false
     description: 'Check ruby syntax'
     required_executable: 'ruby'
-    command: ['bash', '-c', 'find . -name "*.rb" -exec ruby -c {} \; | grep -q "Syntax OK"']
+    command: [
+      'ruby',
+      '-e',
+      'ARGV.each { |applicable_file| ruby_c_output = `ruby -c #{applicable_file}`; puts ruby_c_output if ruby_c_output != "Syntax OK" }'
+    ]
     include:
       - '**/*.gemspec'
       - '**/*.rb'
