@@ -9,8 +9,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def run
-      cmd = ['bash', '-c', 'find . -name "*.rb" -exec ruby -c {} \; | grep -q "Syntax OK"']
-      result = execute(cmd, args: applicable_files)
+      result = execute(command, args: applicable_files)
 
       result_lines = result.stderr.split("\n")
 
