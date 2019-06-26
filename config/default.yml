@@ -674,6 +674,19 @@ PreCommit:
       - '**/*.gemspec'
       - '**/*.rb'
 
+  RubySyntax:
+    enabled: false
+    description: 'Check ruby syntax'
+    required_executable: 'ruby'
+    command: [
+      'ruby',
+      '-e',
+      'ARGV.each { |applicable_file| ruby_c_output = `ruby -c #{applicable_file}`; puts ruby_c_output unless $?.success? }'
+    ]
+    include:
+      - '**/*.gemspec'
+      - '**/*.rb'
+
   Scalariform:
     enabled: false
     description: 'Check formatting with Scalariform'

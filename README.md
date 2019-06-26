@@ -540,6 +540,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [Reek](lib/overcommit/hook/pre_commit/reek.rb)
 * [RuboCop](lib/overcommit/hook/pre_commit/rubo_cop.rb)
 * [RubyLint](lib/overcommit/hook/pre_commit/ruby_lint.rb)
+* [RubySyntax](lib/overcommit/hook/pre_commit/ruby_syntax.rb)
 * [SwiftLint](lib/overcommit/hook/pre_commit/swift_lint.rb)
 * [Scalariform](lib/overcommit/hook/pre_commit/scalariform.rb)
 * [Scalastyle](lib/overcommit/hook/pre_commit/scalastyle.rb)
