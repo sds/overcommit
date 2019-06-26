@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `skipped_commit_types` option to `ReplaceBranch` prepare-commit-msg hook
+* Add `RubySyntax` pre-commit hook
+
 ## 0.48.1
 
 * Fix `Stylelint` hook regex to extract line numbers with more than one digit
