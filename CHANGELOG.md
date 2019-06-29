@@ -4,6 +4,7 @@
 
 * Add `skipped_commit_types` option to `ReplaceBranch` prepare-commit-msg hook
 * Add `RubySyntax` pre-commit hook
+* Relax `childprocess` dependency to allow version 1.x
 
 ## 0.48.1
 
