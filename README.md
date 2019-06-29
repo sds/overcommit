@@ -56,6 +56,12 @@ This project aims to support the following Ruby runtimes on both \*nix and Windo
 
 * Ruby 2.4+
 
+### Windows
+
+If you are using Overcommit on **Windows**, make sure you include the `ffi` gem in your
+list of dependencies. Overcommit does not include the `ffi` gem by default since it
+significantly increases the install time for non-Windows platforms.
+
 ### Dependencies
 
 Some of the hooks have third-party dependencies. For example, to lint your
