@@ -13,6 +13,7 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
 
     gem 'overcommit', path: '#{repo_root}'
     gem 'my_fake_gem', path: '#{fake_gem_path}'
+    gem 'ffi' if Gem.win_platform? # Necessary for test to pass on Windows
   RUBY
 
   let(:gemspec) { normalize_indent(<<-RUBY) }
