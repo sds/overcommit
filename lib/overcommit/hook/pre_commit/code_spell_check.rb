@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       # Create default file config if it does not exist
 
       # Run spell-check
-      result = execute('bundle exec alfonsox', args: applicable_files)
+      result = execute(command, args: applicable_files)
       spellchecking_errors = result.split('\n')
 
       # Check the if there are spelling errors
