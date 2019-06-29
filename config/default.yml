@@ -225,7 +225,7 @@ PreCommit:
   CodeSpellCheck:
     enabled: false
     description: 'Check if all your code is spell-checked correctly'
-    command: 'bundle exec alfonsox'
+    command: 'alfonsox'
     install_command: 'gem install alfonsox'
     include:
       - '**/*.rb'
