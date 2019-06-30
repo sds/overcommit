@@ -10,10 +10,10 @@ module Overcommit::Hook::PreCommit
 
       # Run spell-check
       result = execute(command, args: applicable_files)
-      spellchecking_errors = result.split('\n')
+      return :pass if result.success?
 
-      # Check the if there are spelling errors
-      return :pass if spellchecking_errors.length.zero?
+      spellchecking_errors = result.stderr.split("\n")
+      spellchecking_errors.pop
 
       error_messages(spellchecking_errors)
     end
