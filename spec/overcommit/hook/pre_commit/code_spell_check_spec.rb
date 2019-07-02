@@ -28,7 +28,9 @@ describe Overcommit::Hook::PreCommit::CodeSpellCheck do
       result = double('result')
       result.stub(:success?).and_return(false)
       result.stub(:stdout).and_return('')
-      result.stub(:stderr).and_return("file1.rb:35: inkorrectspelling\n✗ Errors in code spellchecking")
+      result.stub(:stderr).and_return(
+        "file1.rb:35: inkorrectspelling\n✗ Errors in code spellchecking"
+      )
       subject.stub(:execute).and_return(result)
     end
 
