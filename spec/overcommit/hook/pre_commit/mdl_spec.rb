@@ -27,11 +27,10 @@ describe Overcommit::Hook::PreCommit::Mdl do
     let(:success) { false }
 
     context 'and it reports an error' do
-      let(:stdout) { <<-STDOUT }
-      file1.md:1: MD013 Line length
-
-      A detailed description of the rules is available at https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
-      STDOUT
+      let(:stdout) do
+        '[{"filename":"file1.md","line":1,"rule":"MD013","aliases":["line-length"],'\
+        '"description":"Line length"}]'
+      end
       let(:stderr) { '' }
 
       it { should fail_hook }
