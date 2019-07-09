@@ -6,6 +6,7 @@
 * Add `RubySyntax` pre-commit hook
 * Relax `childprocess` dependency to allow version 1.x
 * Add `CodeSpellCheck` pre-commit hook
+* Fix deadlock which was more likely to occur when setting `parallelize` on a hook to `false`
 
 ## 0.48.1
 

@@ -7,10 +7,16 @@ describe 'running a hook with parallelism disabled' do
   subject { shell(%w[git commit --allow-empty -m Test]) }
 
   let(:config) { <<-YML }
+    concurrency: 20
     CommitMsg:
       TrailingPeriod:
         enabled: true
         parallelize: false
+        command: ['ruby', '-e', 'sleep 1']
+      TextWidth:
+        enabled: true
+        parallelize: true
+        processors: 1
   YML
 
   around do |example|
@@ -22,6 +28,7 @@ describe 'running a hook with parallelism disabled' do
   end
 
   it 'does not hang' do
-    Timeout.timeout(5) { subject }
+    result = Timeout.timeout(5) { subject }
+    result.stderr.should_not include 'No live threads left. Deadlock?'
   end
 end
