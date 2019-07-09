@@ -129,12 +129,9 @@ module Overcommit
         slots_released = processors_for_hook(hook)
         @slots_available += slots_released
 
-        if @hooks_left.any?
-          # Signal once. `wait_for_slot` will perform additional signals if
-          # there are still slots available. This prevents us from sending out
-          # useless signals
-          @resource.signal
-        end
+        # Signal every time in case there are threads that are already waiting for
+        # these slots to be released
+        @resource.signal
       end
     end
 
