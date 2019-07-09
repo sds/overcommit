@@ -222,6 +222,15 @@ PreCommit:
     install_command: 'gem install chamber'
     include: *chamber_settings_files
 
+  CodeSpellCheck:
+    enabled: false
+    description: 'Check if all your code is spell-checked correctly'
+    command: 'alfonsox'
+    install_command: 'gem install alfonsox'
+    include:
+      - '**/*.rb'
+      - '**/*.erb'
+
   CoffeeLint:
     enabled: false
     description: 'Analyze with coffeelint'
