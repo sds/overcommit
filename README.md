@@ -493,6 +493,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [BundleOutdated](lib/overcommit/hook/pre_commit/bundle_outdated.rb)
 * [`*`CaseConflicts](lib/overcommit/hook/pre_commit/case_conflicts.rb)
 * [ChamberSecurity](lib/overcommit/hook/pre_commit/chamber_security.rb)
+* [CodeSpellCheck](lib/overcommit/hook/pre_commit/code_spell_check.rb)
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
 * [Credo](lib/overcommit/hook/pre_commit/credo.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
