@@ -5,8 +5,6 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/mivok/markdownlint
   class Mdl < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):\s(?<msg>.+)/
-
     def run
       result = execute(command, args: applicable_files)
       output = result.stdout.chomp
@@ -15,11 +13,17 @@ module Overcommit::Hook::PreCommit
       return [:fail, result.stderr] unless result.stderr.empty?
 
       # example message:
-      #   path/to/file.md:1: MD001 Error message
-      extract_messages(
-        output.split("\n"),
-        MESSAGE_REGEX
-      )
+      #   [{"filename":"file1.md","line":1,"rule":"MD013","aliases":["line-length"],
+      #   "description":"Line length"}]
+      json_messages = JSON.parse(output)
+      json_messages.map do |message|
+        Overcommit::Hook::Message.new(
+          :error,
+          message[:filename],
+          message[:line],
+          message[:description]
+        )
+      end
     end
   end
 end

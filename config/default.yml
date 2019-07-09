@@ -486,6 +486,7 @@ PreCommit:
     enabled: false
     description: 'Analyze markdown files with mdl'
     required_executable: 'mdl'
+    flags: ['--json']
     install_command: 'gem install mdl'
     include: '**/*.md'
 

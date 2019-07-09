@@ -27,7 +27,10 @@ describe Overcommit::Hook::PreCommit::Mdl do
     let(:success) { false }
 
     context 'and it reports an error' do
-      let(:stdout) { 'file1.md:1: MD013 Line length' }
+      let(:stdout) do
+        '[{"filename":"file1.md","line":1,"rule":"MD013","aliases":["line-length"],'\
+        '"description":"Line length"}]'
+      end
       let(:stderr) { '' }
 
       it { should fail_hook }
