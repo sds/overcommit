@@ -1,11 +1,18 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.49.0
+
+### New Features
 
 * Add `skipped_commit_types` option to `ReplaceBranch` prepare-commit-msg hook
 * Add `RubySyntax` pre-commit hook
-* Relax `childprocess` dependency to allow version 1.x
 * Add `CodeSpellCheck` pre-commit hook
+
+### Changes
+
+* Relax `childprocess` dependency to allow version 1.x
+
+### Bug Fixes
 * Fix deadlock which was more likely to occur when setting `parallelize` on a hook to `false`
 * Fix `Mdl` hook to use JSON output and not fail on unexpected output
 
