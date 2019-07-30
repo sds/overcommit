@@ -759,7 +759,7 @@ PreCommit:
   Stylelint:
     enabled: false
     description: 'Check styles with Stylelint'
-    require_executable: 'stylelint'
+    required_executable: 'stylelint'
     flags: ['-f', 'compact']
     install_command: 'npm install -g stylelint'
     include:
