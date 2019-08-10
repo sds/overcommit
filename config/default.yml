@@ -332,7 +332,7 @@ PreCommit:
 
   GinkgoFocus:
     enabled: false
-    description: 'Check for "token" strings'
+    description: 'Check for "focused" tests'
     required_executable: 'grep'
     flags: ['-IEHnw']
     keywords: ['FContext','FDescribe','FIt','FMeasure','FSpecify','FWhen']
