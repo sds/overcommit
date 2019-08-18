@@ -220,7 +220,7 @@ module Overcommit
       else
         # We don't cast since we want to allow anything to count as "true" except
         # a literal zero
-        result.stdout.strip != '0'
+        verify.strip != '0'
       end
     end
 
