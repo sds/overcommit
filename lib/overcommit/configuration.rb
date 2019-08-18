@@ -198,6 +198,13 @@ module Overcommit
       signature != stored_signature
     end
 
+    # Return whether the signature for this configuration has been verified.
+    #
+    # @return [true,false]
+    def signature_verified?
+      !signature_changed? || Overcommit::Signature.verified?(object_signature)
+    end
+
     # Return whether a previous signature has been recorded for this
     # configuration.
     #
@@ -214,37 +221,22 @@ module Overcommit
       return false if ENV['OVERCOMMIT_NO_VERIFY']
       return true if @hash['verify_signatures'] != false
 
-      result = Overcommit::Utils.execute(
-        %W[git config --local --get #{verify_signature_config_key}]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return true
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
+      verify = Overcommit::GitRepo.get_local_config(verify_signature_config_key)
+      if verify.nil?
+        true
+      else
+        # We don't cast since we want to allow anything to count as "true" except
+        # a literal zero
+        result.stdout.strip != '0'
       end
-
-      # We don't cast since we want to allow anything to count as "true" except
-      # a literal zero
-      result.stdout.strip != '0'
     end
 
     # Update the currently stored signature for this hook.
     def update_signature!
-      result = Overcommit::Utils.execute(
-        %w[git config --local] + [signature_config_key, signature]
-      )
-
+      Overcommit::Signature.verify(object_signature)
+      Overcommit::GitRepo.set_local_config(signature_config_key, signature)
       verify_signature_value = @hash['verify_signatures'] ? 1 : 0
-      result &&= Overcommit::Utils.execute(
-        %W[git config --local #{verify_signature_config_key} #{verify_signature_value}]
-      )
-
-      unless result.success?
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to write to local repo git config: #{result.stderr}"
-      end
+      Overcommit::GitRepo.set_local_config(verify_signature_config_key, verify_signature_value)
     end
 
     protected
@@ -315,28 +307,32 @@ module Overcommit
     #
     # @return [String]
     def signature
-      Digest::SHA256.hexdigest(@hash.to_json)
+      Overcommit::Signature.sign(@hash.to_json)
     end
 
-    # Returns the stored signature of this repo's Overcommit configuration.
+    # Returns the git object ID of this configuration.
+    #
+    # @return [String]
+    def git_object_id
+      Overcommit::GitRepo.blob_id(@hash.to_json)
+    end
+
+    # Returns the object signature of this configuration.
+    #
+    # @return [Hash]
+    def object_signature
+      { git_object_id => signature }
+    end
+
+    # Returns the last stored signature of this repo's Overcommit configuration.
     #
     # This is intended to be compared against the current signature of this
     # configuration object.
     #
     # @return [String]
     def stored_signature
-      result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return ''
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
-      end
-
-      result.stdout.chomp
+      signature = Overcommit::GitRepo.get_local_config(signature_config_key)
+      signature || ''
     end
 
     def signature_config_key
