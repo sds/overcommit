@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.49.1
 
 * Fix Overcommit to run when executed with no parent process
 
