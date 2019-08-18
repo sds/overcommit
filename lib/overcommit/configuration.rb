@@ -190,19 +190,12 @@ module Overcommit
       File.exist?(File.join(plugin_directory, hook_type_name, "#{hook_name}.rb"))
     end
 
-    # Return whether the signature for this configuration has changed since it
-    # was last calculated.
-    #
-    # @return [true,false]
-    def signature_changed?
-      signature != stored_signature
-    end
-
     # Return whether the signature for this configuration has been verified.
     #
     # @return [true,false]
     def signature_verified?
-      !signature_changed? || Overcommit::Signature.verified?(object_signature)
+      signature_unchanged = signature == stored_signature
+      signature_unchanged || Overcommit::Signature.verified?(object_signature)
     end
 
     # Return whether a previous signature has been recorded for this
@@ -321,7 +314,7 @@ module Overcommit
     #
     # @return [Hash]
     def object_signature
-      { git_object_id => signature }
+      Overcommit::Signature.object_signature(@hash.to_json)
     end
 
     # Returns the last stored signature of this repo's Overcommit configuration.

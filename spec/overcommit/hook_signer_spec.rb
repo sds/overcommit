@@ -26,7 +26,7 @@ describe Overcommit::HookSigner do
 
     let(:modified_hook_contents) { hook_contents }
 
-    subject { signer.signature_changed? }
+    subject { signer.signature_verified? }
 
     around do |example|
       repo do

@@ -5,7 +5,7 @@ require 'digest'
 module Overcommit
   # Calculates, stores, and retrieves stored signatures of git objects.
   module Signature
-    # Calculates the signature of some _string_.
+    # Calculates the signature of some _String_.
     #
     # @param arg [String]
     # @return [String]
@@ -13,10 +13,25 @@ module Overcommit
       Digest::SHA256.hexdigest(arg)
     end
 
+    # Calculates the signature of some _Hash_.
+    #
+    # @param arg [Hash]
+    # @return [String]
+    def self.sign_signatures(arg)
+      sign(to_blob(arg))
+    end
+
+    # Returns the object signature for some blob.
+    #
+    # @return [Hash]
+    def self.object_signature(blob)
+      { Overcommit::GitRepo.blob_id(blob) => sign(blob) }
+    end
+
     # Stores the object signatures as verified.
     #
     # @param object_signatures [Hash] a hash of git object hashes to their signatures
-    def verify(object_signatures)
+    def self.verify(object_signatures)
       blob = to_blob(object_signatures)
       Overcommit::GitRepo.blob_id(blob, write: true)
     end
@@ -25,7 +40,7 @@ module Overcommit
     #
     # @param object_signatures [Hash] a hash of git object hashes to their signatures
     # @return [true,false]
-    def verified?(object_signatures)
+    def self.verified?(object_signatures)
       blob = to_blob(object_signatures)
       object_signatures_id = Overcommit::GitRepo.blob_id(blob)
       existing_blob = Overcommit::GitRepo.blob_contents(object_signatures_id)
@@ -53,7 +68,7 @@ module Overcommit
     #
     # @param object_signatures [Hash]
     # @return [String]
-    def to_blob(object_signatures)
+    def self.to_blob(object_signatures)
       lines = object_signatures.map do |git_object_hash, signature|
         "#{git_object_hash} #{signature}"
       end
@@ -78,7 +93,7 @@ module Overcommit
     #
     # @param blob [String]
     # @return [Hash]
-    def to_hash(blob)
+    def self.to_hash(blob)
       Hash[blob.split('\n').each_slice.map { |line| line.split(' ') }]
     end
   end
