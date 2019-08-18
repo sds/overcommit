@@ -140,6 +140,14 @@ describe Overcommit::Utils do
     end
 
     it { should =~ /rspec/ }
+
+    context 'when there is no parent' do
+      before do
+        Process.stub(:ppid) { 0 }
+      end
+
+      it { should be_nil }
+    end
   end
 
   describe '.execute' do

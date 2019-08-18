@@ -15,6 +15,7 @@ module Overcommit::HookContext
       return @amendment unless @amendment.nil?
 
       cmd = Overcommit::Utils.parent_command
+      return unless cmd
       amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
 
       # Since the ps command can return invalid byte sequences for commands

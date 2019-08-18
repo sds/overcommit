@@ -133,7 +133,12 @@ module Overcommit
       end
 
       # Return the parent command that triggered this hook run
+      #
+      # @return [String,nil] the command as a string, if a parent exists.
       def parent_command
+        # When run in Docker containers, there may be no parent process.
+        return if Process.ppid.zero?
+
         if OS.windows?
           `wmic process where ProcessId=#{Process.ppid} get CommandLine /FORMAT:VALUE`.
             strip.
