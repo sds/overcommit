@@ -307,7 +307,7 @@ module Overcommit
     # @param value [String] the value to set
     def set_local_config(name, value)
       result = Overcommit::Utils.execute(
-        %w[git config --local] + [name, value]
+        %W[git config --local #{name} #{value}]
       )
       unless result.success?
         raise Overcommit::Exceptions::GitConfigError,
@@ -341,7 +341,7 @@ module Overcommit
     # @return [String, nil] the contents of the blob or _nil_ if it does not exist
     def blob_contents(blob_id)
       result = Overcommit::Utils.execute(
-        %w[git cat-file -p] << "#{blob_id}^{blob}"
+        %W[git cat-file -p #{blob_id}^{blob}]
       )
       if result.success?
         result.stdout
