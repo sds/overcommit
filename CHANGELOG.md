@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix Overcommit to display helpful error message when a hook does not inherit
+  from the base class
+
 ## 0.49.1
 
 * Fix Overcommit to run when executed with no parent process
