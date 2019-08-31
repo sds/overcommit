@@ -5,3 +5,4 @@ pkg/
 .idea
 .history/
 .vscode/
+/spec_example_status
