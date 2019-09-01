@@ -344,7 +344,7 @@ module Overcommit
         %W[git cat-file -p #{blob_id}^{blob}]
       )
       if result.success?
-        result.stdout
+        result.stdout.chomp
       elsif result.status == 128 # 128 is returned when the blob does not exist.
         nil
       else
