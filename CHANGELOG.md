@@ -8,6 +8,7 @@
 ## 0.49.1
 
 * Fix Overcommit to run when executed with no parent process
+* Fix `Stylelint` pre-commit hook `required_executable`
 
 ## 0.49.0
 
