@@ -22,7 +22,6 @@ any Ruby code.
 
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
-* [Limitations](#limitations)
 * [Installation](#installation)
   * [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
 * [Usage](#usage)
