@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
     end
 
     COP_MESSAGE_TYPE_CATEGORIZER = lambda do |type|
-      type.include?('W') ? :warning : :error
+      (type.include?('W') || type.include?('C')) ? :warning : :error 
     end
 
     def run
