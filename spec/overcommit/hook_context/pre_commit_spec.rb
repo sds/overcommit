@@ -158,6 +158,23 @@ describe Overcommit::HookContext::PreCommit do
       end
     end
 
+    context 'when all changes have been staged' do
+      around do |example|
+        repo do
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
+          `git add tracked-file other-tracked-file`
+          example.run
+        end
+      end
+
+      it 'does not add a stash' do
+        subject
+        "a stash".should == "not have been created"
+      end
+
+    end
+
     context 'when renaming a file during an amendment' do
       around do |example|
         repo do
@@ -316,6 +333,23 @@ describe Overcommit::HookContext::PreCommit do
             File.mtime('untracked-file')
           ]
         }
+      end
+    end
+
+    context 'when all changes were staged' do
+      around do |example|
+        repo do
+          echo('Bad Stash', 'tracked-file')
+          echo('Hello Other Bad Stash', 'other-tracked-file')
+          `git add tracked-file other-tracked-file`
+          `git stash`
+          echo('Hello World', 'tracked-file')
+          echo('Hello Other World', 'other-tracked-file')
+          `git add tracked-file other-tracked-file`
+        end
+      end
+      it 'should not have applied any stash' do
+        File.open('tracked-file', 'r').read.should == "Hello World"
       end
     end
 
