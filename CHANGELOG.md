@@ -4,7 +4,7 @@
 
 * Fix Overcommit to display helpful error message when a hook does not inherit
   from the base class
-* Relax `childprocess` gem constraint to allow version 2.x
+* Relax `childprocess` gem constraint to allow up to version 3.x
 
 ## 0.49.1
 
