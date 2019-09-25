@@ -5,6 +5,8 @@
 * Fix Overcommit to display helpful error message when a hook does not inherit
   from the base class
 * Relax `childprocess` gem constraint to allow up to version 3.x
+* Display a helpful message if hooks do not inherit from the correct base class
+* Fix Overcommit to work with emacs/magit by [disabling literal pathspecs](https://magit.vc/manual/magit/My-Git-hooks-work-on-the-command_002dline-but-not-inside-Magit.html)
 
 ## 0.49.1
 
