@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.50.0
 
 * Fix Overcommit to display helpful error message when a hook does not inherit
   from the base class
