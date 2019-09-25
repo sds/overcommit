@@ -53,9 +53,11 @@ module Overcommit::HookContext
         @stash_attempted = true
 
         stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
-        result = Overcommit::Utils.execute(
-          %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
-        )
+        result = Overcommit::Utils.with_environment('GIT_LITERAL_PATHSPECS' => '0') do
+          Overcommit::Utils.execute(
+            %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
+          )
+        end
 
         unless result.success?
           # Failure to stash in this case is likely due to a configuration
