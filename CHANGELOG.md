@@ -4,6 +4,8 @@
 
 * Stop stashing in pre-commit hooks when all changes are already staged,
   avoiding unnecessary file modification
+* Improve instructions for recovering commit message when a `commit-msg` hook
+  fails
 
 ## 0.50.0
 
