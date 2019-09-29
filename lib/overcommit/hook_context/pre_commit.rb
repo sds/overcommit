@@ -49,29 +49,15 @@ module Overcommit::HookContext
       Overcommit::GitRepo.store_merge_state
       Overcommit::GitRepo.store_cherry_pick_state
 
-      if !initial_commit? && any_changes?
-        @stash_attempted = true
+      # Don't attempt to stash changes if all changes are staged, as this
+      # prevents us from modifying files at all, which plays better with
+      # editors/tools which watch for file changes.
+      if !initial_commit? && unstaged_changes?
+        stash_changes
 
-        stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
-        result = Overcommit::Utils.with_environment('GIT_LITERAL_PATHSPECS' => '0') do
-          Overcommit::Utils.execute(
-            %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
-          )
-        end
-
-        unless result.success?
-          # Failure to stash in this case is likely due to a configuration
-          # issue (e.g. author/email not set or GPG signing key incorrect)
-          raise Overcommit::Exceptions::HookSetupFailed,
-                "Unable to setup environment for #{hook_script_name} hook run:" \
-                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
-        end
-
-        @changes_stashed = `git stash list -1`.include?(stash_message)
+        # While running hooks make it appear as if nothing changed
+        restore_modified_times
       end
-
-      # While running the hooks make it appear as if nothing changed
-      restore_modified_times
     end
 
     # Restore unstaged changes and reset file modification times so it appears
@@ -82,19 +68,14 @@ module Overcommit::HookContext
     # modification time on the file was newer. This helps us play more nicely
     # with file watchers.
     def cleanup_environment
-      unless initial_commit? || (@stash_attempted && !@changes_stashed)
-        clear_working_tree # Ensure working tree is clean before restoring it
-        restore_modified_times
-      end
-
       if @changes_stashed
+        clear_working_tree
         restore_working_tree
         restore_modified_times
       end
 
       Overcommit::GitRepo.restore_merge_state
       Overcommit::GitRepo.restore_cherry_pick_state
-      restore_modified_times
     end
 
     # Get a list of added, copied, or modified files that have been staged.
@@ -140,6 +121,27 @@ module Overcommit::HookContext
 
     private
 
+    def stash_changes
+      @stash_attempted = true
+
+      stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
+      result = Overcommit::Utils.with_environment('GIT_LITERAL_PATHSPECS' => '0') do
+        Overcommit::Utils.execute(
+          %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
+        )
+      end
+
+      unless result.success?
+        # Failure to stash in this case is likely due to a configuration
+        # issue (e.g. author/email not set or GPG signing key incorrect)
+        raise Overcommit::Exceptions::HookSetupFailed,
+              "Unable to setup environment for #{hook_script_name} hook run:" \
+              "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+      end
+
+      @changes_stashed = `git stash list -1`.include?(stash_message)
+    end
+
     # Clears the working tree so that the stash can be applied.
     def clear_working_tree
       removed_submodules = Overcommit::GitRepo.staged_submodule_removals
@@ -172,14 +174,11 @@ module Overcommit::HookContext
       end
     end
 
-    # Returns whether there are any changes to the working tree, staged or
-    # otherwise.
-    def any_changes?
-      modified_files = `git status -z --untracked-files=no`.
-        split("\0").
-        map { |line| line.gsub(/[^\s]+\s+(.+)/, '\\1') }
-
-      modified_files.any?
+    # Returns whether there are any changes to tracked files which have not yet
+    # been staged.
+    def unstaged_changes?
+      result = Overcommit::Utils.execute(%w[git --no-pager diff --quiet])
+      !result.success?
     end
 
     # Stores the modification times for all modified files to make it appear like

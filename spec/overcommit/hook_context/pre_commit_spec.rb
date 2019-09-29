@@ -158,6 +158,25 @@ describe Overcommit::HookContext::PreCommit do
       end
     end
 
+    context 'when all changes have been staged' do
+      around do |example|
+        repo do
+          echo('Hello World', 'tracked-file')
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          echo('Hello Other World', 'other-tracked-file')
+          `git add other-tracked-file`
+          example.run
+        end
+      end
+
+      it 'does not stash changes' do
+        expect(context.private_methods).to include :stash_changes
+        expect(context).not_to receive(:stash_changes)
+        subject
+      end
+    end
+
     context 'when renaming a file during an amendment' do
       around do |example|
         repo do
@@ -316,6 +335,27 @@ describe Overcommit::HookContext::PreCommit do
             File.mtime('untracked-file')
           ]
         }
+      end
+    end
+
+    context 'when all changes were staged' do
+      around do |example|
+        repo do
+          echo('Hello World', 'tracked-file')
+          `git add tracked-file`
+          `git commit -m "Add tracked-file"`
+          echo('Hello Other World', 'other-tracked-file')
+          `git add other-tracked-file`
+          example.run
+        end
+      end
+
+      it 'does not touch the working tree' do
+        expect(context.private_methods).to include :clear_working_tree
+        expect(context.private_methods).to include :restore_working_tree
+        expect(context).not_to receive(:clear_working_tree)
+        expect(context).not_to receive(:restore_working_tree)
+        subject
       end
     end
 
