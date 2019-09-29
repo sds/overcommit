@@ -92,7 +92,11 @@ describe Overcommit::HookContext::CommitMsg do
     subject { context.post_fail_message }
 
     it 'returns printable log of commit message' do
-      subject.should == "Failed commit message:\nSome commit message\n"
+      subject.should start_with "Failed commit message:\nSome commit message\n"
+    end
+
+    it 'returns the command to run to restore the commit message' do
+      subject.should end_with "git commit --edit --file=#{commit_message_file}"
     end
   end
 end

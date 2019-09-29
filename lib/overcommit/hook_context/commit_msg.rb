@@ -34,7 +34,9 @@ module Overcommit::HookContext
     end
 
     def post_fail_message
-      "Failed commit message:\n" + commit_message_lines.join
+      "Failed commit message:\n#{commit_message_lines.join.chomp}\n\n" \
+      "Try again with your existing commit message by running:\n" \
+      "git commit --edit --file=#{commit_message_file}"
     end
 
     private
