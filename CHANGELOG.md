@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Stop stashing in pre-commit hooks when all changes are already staged,
+  avoiding unnecessary file modification
+
 ## 0.50.0
 
 * Fix Overcommit to display helpful error message when a hook does not inherit
