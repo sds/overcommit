@@ -51,6 +51,7 @@ before_test:
   - git config --global user.name "Appveyor CI"
 
   # Ignore CRLF conversion warnings
+  - git config --global core.autocrlf true
   - git config --global core.safecrlf false
 
 test_script:
