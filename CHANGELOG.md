@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.51.0
 
 * Stop stashing in pre-commit hooks when all changes are already staged,
   avoiding unnecessary file modification
