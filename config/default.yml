@@ -1253,6 +1253,12 @@ PrePush:
     required_executable: 'git-lfs'
     install_command: 'brew install git-lfs'
 
+  GoTest:
+    enabled: false
+    description: 'Run go test suite'
+    required_executable: 'go'
+    command: ['go', 'test', './...']
+
   Minitest:
     enabled: false
     description: 'Run Minitest test suite'
