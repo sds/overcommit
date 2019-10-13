@@ -25,6 +25,7 @@ describe Overcommit::Hook::PreCommit::Mdl do
 
   context 'when mdl exits unsuccessfully' do
     let(:success) { false }
+    let(:message) { subject.run.last }
 
     context 'and it reports an error' do
       let(:stdout) do
@@ -34,6 +35,9 @@ describe Overcommit::Hook::PreCommit::Mdl do
       let(:stderr) { '' }
 
       it { should fail_hook }
+      it { expect(message.file).to eq 'file1.md' }
+      it { expect(message.line).to eq 1 }
+      it { expect(message.content).to eq 'file1.md:1 MD013 Line length' }
     end
 
     context 'when there is an error running mdl' do
@@ -41,6 +45,7 @@ describe Overcommit::Hook::PreCommit::Mdl do
       let(:stderr) { 'Some runtime error' }
 
       it { should fail_hook }
+      it { expect(message).to eq 'Some runtime error' }
     end
   end
 end
