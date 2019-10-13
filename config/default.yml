@@ -337,6 +337,14 @@ PreCommit:
     flags: ['-IEHnw']
     keywords: ['FContext','FDescribe','FIt','FMeasure','FSpecify','FWhen']
 
+  GoFmt:
+    enabled: true
+    description: 'Fix with go fmt'
+    required_executable: 'go'
+    command: ['go', 'fmt']
+    parallelize: false
+    include: '**/*.go'
+
   GolangciLint:
     enabled: false
     description: 'Analyze with golangci-lint'
