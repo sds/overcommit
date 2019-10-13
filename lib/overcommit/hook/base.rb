@@ -286,6 +286,10 @@ module Overcommit::Hook
       @config['exclude_branch_patterns'] || []
     end
 
+    def exclude_remote_names
+      @config['exclude_remote_names'] || []
+    end
+
     def current_branch
       @current_branch ||= Overcommit::GitRepo.current_branch
     end

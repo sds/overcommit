@@ -8,5 +8,9 @@ module Overcommit::Hook::PrePush
     extend Forwardable
 
     def_delegators :@context, :remote_name, :remote_url, :pushed_refs
+
+    def skip?
+      super || exclude_remote_names.include?(remote_name)
+    end
   end
 end
