@@ -79,12 +79,17 @@ module Overcommit::Hook
       @config['enabled'] != false
     end
 
+    def excluded?
+      exclude_branch_patterns.any? { |p| File.fnmatch(p, current_branch) }
+    end
+
     def skip?
       @config['skip']
     end
 
     def run?
       enabled? &&
+      !excluded? &&
         !(@config['requires_files'] && applicable_files.empty?)
     end
 
@@ -275,6 +280,14 @@ module Overcommit::Hook
       else
         status
       end
+    end
+
+    def exclude_branch_patterns
+      @config['exclude_branch_patterns'] || []
+    end
+
+    def current_branch
+      @current_branch ||= Overcommit::GitRepo.current_branch
     end
   end
 end
