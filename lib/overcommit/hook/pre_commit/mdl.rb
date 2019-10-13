@@ -19,9 +19,9 @@ module Overcommit::Hook::PreCommit
       json_messages.map do |message|
         Overcommit::Hook::Message.new(
           :error,
-          message[:filename],
-          message[:line],
-          message[:description]
+          message['filename'],
+          message['line'],
+          "#{message['filename']}:#{message['line']} #{message['rule']} #{message['description']}"
         )
       end
     end
