@@ -1270,6 +1270,12 @@ PrePush:
     flags: ['--out-format=line-number', '--print-issued-lines=false']
     command: ['golangci-lint', 'run']
 
+  GoTest:
+    enabled: false
+    description: 'Run go test suite'
+    required_executable: 'go'
+    command: ['go', 'test', './...']
+
   Minitest:
     enabled: false
     description: 'Run Minitest test suite'
