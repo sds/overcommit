@@ -28,7 +28,7 @@ describe Overcommit::Hook::PrePush::GoTest do
       subject.stub(:execute).and_return(result)
     end
 
-    context 'when golangci-lint returns an error' do
+    context 'when go test returns an error' do
       let(:error_message) { "--- FAIL: Test1 (0.00s)\nFAIL" }
 
       before do
