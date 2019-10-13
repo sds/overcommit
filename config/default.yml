@@ -337,6 +337,15 @@ PreCommit:
     flags: ['-IEHnw']
     keywords: ['FContext','FDescribe','FIt','FMeasure','FSpecify','FWhen']
 
+  GolangciLint:
+    enabled: false
+    description: 'Analyze with golangci-lint'
+    required_executable: 'golangci-lint'
+    install_command: 'go get github.com/golangci/golangci-lint/cmd/golangci-lint'
+    flags: ['--out-format=line-number', '--print-issued-lines=false']
+    command: ['golangci-lint', 'run']
+    include: '**/*.go'
+
   GoLint:
     enabled: false
     description: 'Analyze with golint'
@@ -1252,6 +1261,14 @@ PrePush:
     description: 'Upload files tracked by Git LFS'
     required_executable: 'git-lfs'
     install_command: 'brew install git-lfs'
+
+  GolangciLint:
+    enabled: false
+    description: 'Analyze with golangci-lint'
+    required_executable: 'golangci-lint'
+    install_command: 'go get github.com/golangci/golangci-lint/cmd/golangci-lint'
+    flags: ['--out-format=line-number', '--print-issued-lines=false']
+    command: ['golangci-lint', 'run']
 
   Minitest:
     enabled: false
