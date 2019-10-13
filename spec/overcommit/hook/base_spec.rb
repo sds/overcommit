@@ -80,5 +80,46 @@ describe Overcommit::Hook::Base do
 
       it { subject.should == true }
     end
+
+    context 'with exclude_branch_patterns specified' do
+      let(:current_branch) { 'test-branch' }
+      let(:hook_config) do
+        {
+          'enabled' => true,
+          'requires_files' => false,
+          'exclude_branch_patterns' => exclude_branch_patterns
+        }
+      end
+
+      before do
+        allow(Overcommit::GitRepo).
+          to receive(:current_branch).
+          and_return(current_branch)
+      end
+
+      context 'exclude_branch_patterns is nil' do
+        let(:exclude_branch_patterns) { nil }
+
+        it { subject.should == true }
+      end
+
+      context 'exact match between exclude_branch_patterns and current_branch' do
+        let(:exclude_branch_patterns) { ['test-branch'] }
+
+        it { subject.should == false }
+      end
+
+      context 'partial match between exclude_branch_patterns and current_branch' do
+        let(:exclude_branch_patterns) { ['test-*'] }
+
+        it { subject.should == false }
+      end
+
+      context 'non-match between exclude_branch_patterns and current_branch' do
+        let(:exclude_branch_patterns) { ['no-test-*'] }
+
+        it { subject.should == true }
+      end
+    end
   end
 end
