@@ -1,5 +1,13 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `Mdl` to properly parse JSON output from `mdl`
+* Add `GolangciLint` pre-commit and pre-push hooks
+* Add `GoTest` pre-push hook
+* Add `GoFmt` pre-commit hook
+* Add `excluded_branch_patterns` hook option to disable hooks running on specific branches
+
 ## 0.51.0
 
 * Stop stashing in pre-commit hooks when all changes are already staged,
