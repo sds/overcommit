@@ -23,6 +23,41 @@ describe Overcommit::HookContext::PrePush do
     it { should == remote_url }
   end
 
+  describe '#remote_branch_deletion?' do
+    subject { context.remote_branch_deletion? }
+
+    before do
+      input.stub(:read).and_return("#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+    end
+
+    context 'when pushing new branch to remote ref' do
+      let(:local_ref) { 'refs/heads/test' }
+      let(:local_sha1) { '' }
+      let(:remote_ref) { 'refs/heads/test' }
+      let(:remote_sha1) { '0' * 40 }
+
+      it { should == false }
+    end
+
+    context 'when pushing update to remote ref' do
+      let(:local_ref) { 'refs/heads/test' }
+      let(:local_sha1) { '' }
+      let(:remote_ref) { 'refs/heads/test' }
+      let(:remote_sha1) { random_hash }
+
+      it { should == false }
+    end
+
+    context 'when deleting remote ref' do
+      let(:local_ref) { '(deleted)' }
+      let(:local_sha1) { '' }
+      let(:remote_ref) { 'refs/heads/test' }
+      let(:remote_sha1) { random_hash }
+
+      it { should == true }
+    end
+  end
+
   describe '#pushed_refs' do
     subject(:pushed_refs) { context.pushed_refs }
 

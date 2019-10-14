@@ -13,6 +13,15 @@ module Overcommit::HookContext
       @args[1]
     end
 
+    def remote_branch_deletion?
+      return @remote_branch_deletion if defined? @remote_branch_deletion
+
+      @remote_branch_deletion ||= input_lines.
+                                  first.
+                                  split(' ').
+                                  first == '(deleted)'
+    end
+
     def pushed_refs
       input_lines.map do |line|
         PushedRef.new(*line.split(' '))
