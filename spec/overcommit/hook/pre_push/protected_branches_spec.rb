@@ -15,13 +15,15 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
 
-  let(:protected_branch_patterns) { ['master', 'release/*'] }
+  let(:branch_configurations) do
+    ['master', 'release/*', { 'destructive_only_branch' => nil, 'destructive_only' => true }]
+  end
   let(:pushed_ref) do
     instance_double(Overcommit::HookContext::PrePush::PushedRef)
   end
 
   before do
-    subject.stub(protected_branch_patterns: protected_branch_patterns)
+    subject.stub(branch_configurations: branch_configurations)
     pushed_ref.stub(:remote_ref).and_return("refs/heads/#{pushed_ref_name}")
     context.stub(:pushed_refs).and_return([pushed_ref])
   end
@@ -93,6 +95,16 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
     context 'when branch name matches a protected branch glob pattern' do
       let(:pushed_ref_name) { 'release/0.1.0' }
       include_examples 'protected branch'
+    end
+
+    context 'when branch overwrites global destructive_only' do
+      before do
+        pushed_ref.stub(:destructive?).and_return(true)
+      end
+      let(:pushed_ref_name) { 'destructive_only_branch' }
+      let(:hook_config) { { 'destructive_only' => false } }
+
+      it { should fail_hook }
     end
   end
 
