@@ -24,6 +24,8 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
         enabled: true
         branches:
           - protected
+          - protected_for_destructive_only:
+            destructive_only: true
   YML
 
   around do |example|
