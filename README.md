@@ -714,8 +714,6 @@ ensure your thoughts, ideas, or code get merged.
 All major discussion surrounding Overcommit happens on the
 [GitHub issues list](https://github.com/sds/overcommit/issues).
 
-You can also follow [@git_overcommit on Twitter](https://twitter.com/git_overcommit).
-
 ## Changelog
 
 If you're interested in seeing the changes and bug fixes between each version
