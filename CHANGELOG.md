@@ -11,6 +11,7 @@
 * Change default behavior of pre-push hooks to **not** run against deleted remote refs
 * Add `include_remote_ref_deletions` pre-push hook option to allow running for a remote branch deletion
 * Rename `remote_branch_deletion?` pre-push hook helper to `remote_ref_deletion?`
+* Add per-branch `destructive_only` setting to `ProtectedBranches` pre-push hook
 
 ## 0.51.0
 
