@@ -21,6 +21,10 @@ module Overcommit::Hook::PrePush
       ignore_branch_deletions? && @context.remote_branch_deletion?
     end
 
+    def exclude_remote_names
+      @config['exclude_remote_names'] || []
+    end
+
     def ignore_branch_deletions?
       @config['ignore_branch_deletions'] != false
     end
