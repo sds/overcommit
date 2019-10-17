@@ -81,13 +81,13 @@ describe Overcommit::Hook::Base do
       it { subject.should == true }
     end
 
-    context 'with exclude_branch_patterns specified' do
+    context 'with exclude_branches specified' do
       let(:current_branch) { 'test-branch' }
       let(:hook_config) do
         {
           'enabled' => true,
           'requires_files' => false,
-          'exclude_branch_patterns' => exclude_branch_patterns
+          'exclude_branches' => exclude_branches
         }
       end
 
@@ -97,26 +97,26 @@ describe Overcommit::Hook::Base do
           and_return(current_branch)
       end
 
-      context 'exclude_branch_patterns is nil' do
-        let(:exclude_branch_patterns) { nil }
+      context 'exclude_branches is nil' do
+        let(:exclude_branches) { nil }
 
         it { subject.should == true }
       end
 
-      context 'exact match between exclude_branch_patterns and current_branch' do
-        let(:exclude_branch_patterns) { ['test-branch'] }
+      context 'exact match between exclude_branches and current_branch' do
+        let(:exclude_branches) { ['test-branch'] }
 
         it { subject.should == false }
       end
 
-      context 'partial match between exclude_branch_patterns and current_branch' do
-        let(:exclude_branch_patterns) { ['test-*'] }
+      context 'partial match between exclude_branches and current_branch' do
+        let(:exclude_branches) { ['test-*'] }
 
         it { subject.should == false }
       end
 
-      context 'non-match between exclude_branch_patterns and current_branch' do
-        let(:exclude_branch_patterns) { ['no-test-*'] }
+      context 'non-match between exclude_branches and current_branch' do
+        let(:exclude_branches) { ['no-test-*'] }
 
         it { subject.should == true }
       end

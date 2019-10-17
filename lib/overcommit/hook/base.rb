@@ -80,7 +80,7 @@ module Overcommit::Hook
     end
 
     def excluded?
-      exclude_branch_patterns.any? { |p| File.fnmatch(p, current_branch) }
+      exclude_branches.any? { |p| File.fnmatch(p, current_branch) }
     end
 
     def skip?
@@ -282,8 +282,8 @@ module Overcommit::Hook
       end
     end
 
-    def exclude_branch_patterns
-      @config['exclude_branch_patterns'] || []
+    def exclude_branches
+      @config['exclude_branches'] || []
     end
 
     def current_branch
