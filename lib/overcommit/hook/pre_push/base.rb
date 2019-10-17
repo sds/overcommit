@@ -12,7 +12,7 @@ module Overcommit::Hook::PrePush
     def run?
       super &&
         !exclude_remotes.include?(remote_name) &&
-        (include_branch_deletions? || !@context.remote_branch_deletion?)
+        (include_remote_ref_deletions? || !@context.remote_ref_deletion?)
     end
 
     private
@@ -21,8 +21,8 @@ module Overcommit::Hook::PrePush
       @config['exclude_remotes'] || []
     end
 
-    def include_branch_deletions?
-      @config['include_branch_deletions']
+    def include_remote_ref_deletions?
+      @config['include_remote_ref_deletions']
     end
   end
 end

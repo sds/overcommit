@@ -23,8 +23,8 @@ describe Overcommit::HookContext::PrePush do
     it { should == remote_url }
   end
 
-  describe '#remote_branch_deletion?' do
-    subject { context.remote_branch_deletion? }
+  describe '#remote_ref_deletion?' do
+    subject { context.remote_ref_deletion? }
 
     before do
       input.stub(:read).and_return("#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
@@ -70,7 +70,7 @@ describe Overcommit::HookContext::PrePush do
       input.stub(:read).and_return("#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
     end
 
-    it 'should parse commit info from the input' do
+    it 'parses commit info from the input' do
       pushed_refs.length.should == 1
       pushed_refs.each do |pushed_ref|
         pushed_ref.local_ref.should == local_ref

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Overcommit::Hook::PrePush::Base do
   let(:remote_name) { 'origin' }
-  let(:remote_branch_deletion?) { false }
+  let(:remote_ref_deletion?) { false }
   let(:config) { double('config') }
   let(:context) { double('context') }
   let(:hook) { described_class.new(config, context) }
@@ -14,7 +14,7 @@ describe Overcommit::Hook::PrePush::Base do
 
     before do
       allow(context).to receive(:remote_name).and_return(remote_name)
-      allow(context).to receive(:remote_branch_deletion?).and_return(remote_branch_deletion?)
+      allow(context).to receive(:remote_ref_deletion?).and_return(remote_ref_deletion?)
       allow(config).to receive(:for_hook).and_return(hook_config)
     end
 
@@ -44,52 +44,52 @@ describe Overcommit::Hook::PrePush::Base do
       end
     end
 
-    context 'with include_branch_deletions specified' do
+    context 'with include_remote_ref_deletions specified' do
       let(:hook_config) do
-        { 'include_branch_deletions' => include_branch_deletions }
+        { 'include_remote_ref_deletions' => include_remote_ref_deletions }
       end
-      let(:remote_branch_deletion?) { false }
-      let(:include_branch_deletions) { false }
+      let(:remote_ref_deletion?) { false }
+      let(:include_remote_ref_deletions) { false }
 
       context 'when remote branch is not being deleted' do
-        let(:remote_branch_deletion?) { false }
+        let(:remote_ref_deletion?) { false }
 
-        context 'when include_branch_deletions is not specified' do
-          let(:include_branch_deletions) { nil }
-
-          it { subject.should == true }
-        end
-
-        context 'when include_branch_deletions is false' do
-          let(:include_branch_deletions) { false }
+        context 'when include_remote_ref_deletions is not specified' do
+          let(:include_remote_ref_deletions) { nil }
 
           it { subject.should == true }
         end
 
-        context 'when include_branch_deletions is true' do
-          let(:include_branch_deletions) { true }
+        context 'when include_remote_ref_deletions is false' do
+          let(:include_remote_ref_deletions) { false }
+
+          it { subject.should == true }
+        end
+
+        context 'when include_remote_ref_deletions is true' do
+          let(:include_remote_ref_deletions) { true }
 
           it { subject.should == true }
         end
       end
 
       context 'when remote branch is being deleted' do
-        let(:remote_branch_deletion?) { true }
+        let(:remote_ref_deletion?) { true }
 
-        context 'when include_branch_deletions is not specified' do
-          let(:include_branch_deletions) { nil }
-
-          it { subject.should == false }
-        end
-
-        context 'when include_branch_deletions is false' do
-          let(:include_branch_deletions) { false }
+        context 'when include_remote_ref_deletions is not specified' do
+          let(:include_remote_ref_deletions) { nil }
 
           it { subject.should == false }
         end
 
-        context 'when include_branch_deletions is true' do
-          let(:include_branch_deletions) { true }
+        context 'when include_remote_ref_deletions is false' do
+          let(:include_remote_ref_deletions) { false }
+
+          it { subject.should == false }
+        end
+
+        context 'when include_remote_ref_deletions is true' do
+          let(:include_remote_ref_deletions) { true }
 
           it { subject.should == true }
         end
