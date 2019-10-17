@@ -11,7 +11,7 @@ module Overcommit::Hook::PrePush
 
     def skip?
       super ||
-        exclude_remote_names.include?(remote_name) ||
+        exclude_remotes.include?(remote_name) ||
         skip_for_remote_branch_deletion?
     end
 
@@ -21,8 +21,8 @@ module Overcommit::Hook::PrePush
       ignore_branch_deletions? && @context.remote_branch_deletion?
     end
 
-    def exclude_remote_names
-      @config['exclude_remote_names'] || []
+    def exclude_remotes
+      @config['exclude_remotes'] || []
     end
 
     def ignore_branch_deletions?

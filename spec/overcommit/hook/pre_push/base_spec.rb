@@ -33,46 +33,46 @@ describe Overcommit::Hook::PrePush::Base do
       it { subject.should == false }
     end
 
-    context 'with exclude_remote_names specified' do
+    context 'with exclude_remotes specified' do
       let(:hook_config) do
-        { 'skip' => skip, 'exclude_remote_names' => exclude_remote_names }
+        { 'skip' => skip, 'exclude_remotes' => exclude_remotes }
       end
-      let(:exclude_remote_names) { nil }
+      let(:exclude_remotes) { nil }
 
-      context 'skip is true and exclude_remote_names is nil' do
+      context 'skip is true and exclude_remotes is nil' do
         let(:skip) { true }
-        let(:exclude_remote_names) { nil }
+        let(:exclude_remotes) { nil }
 
         it { subject.should == true }
       end
 
-      context 'skip is false and exclude_remote_names is nil' do
+      context 'skip is false and exclude_remotes is nil' do
         let(:skip) { false }
-        let(:exclude_remote_names) { nil }
+        let(:exclude_remotes) { nil }
       end
 
-      context 'skip is true and matching exclude_remote_names is nil' do
+      context 'skip is true and matching exclude_remotes is nil' do
         let(:skip) { true }
-        let(:exclude_remote_names) { ['origin'] }
+        let(:exclude_remotes) { ['origin'] }
 
         it { subject.should == true }
       end
 
-      context 'skip is false and matching exclude_remote_names is nil' do
+      context 'skip is false and matching exclude_remotes is nil' do
         let(:skip) { false }
-        let(:exclude_remote_names) { ['origin'] }
+        let(:exclude_remotes) { ['origin'] }
       end
 
-      context 'skip is true and non-matching exclude_remote_names is nil' do
+      context 'skip is true and non-matching exclude_remotes is nil' do
         let(:skip) { true }
-        let(:exclude_remote_names) { ['heroku'] }
+        let(:exclude_remotes) { ['heroku'] }
 
         it { subject.should == true }
       end
 
-      context 'skip is false and non-matching exclude_remote_names is nil' do
+      context 'skip is false and non-matching exclude_remotes is nil' do
         let(:skip) { false }
-        let(:exclude_remote_names) { ['heroku'] }
+        let(:exclude_remotes) { ['heroku'] }
 
         it { subject.should == false }
       end
