@@ -9,24 +9,20 @@ module Overcommit::Hook::PrePush
 
     def_delegators :@context, :remote_name, :remote_url, :pushed_refs
 
-    def skip?
-      super ||
-        exclude_remotes.include?(remote_name) ||
-        skip_for_remote_branch_deletion?
+    def run?
+      super &&
+        !exclude_remotes.include?(remote_name) &&
+        (include_branch_deletions? || !@context.remote_branch_deletion?)
     end
 
     private
-
-    def skip_for_remote_branch_deletion?
-      ignore_branch_deletions? && @context.remote_branch_deletion?
-    end
 
     def exclude_remotes
       @config['exclude_remotes'] || []
     end
 
-    def ignore_branch_deletions?
-      @config['ignore_branch_deletions'] != false
+    def include_branch_deletions?
+      @config['include_branch_deletions']
     end
   end
 end
