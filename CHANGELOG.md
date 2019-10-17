@@ -6,7 +6,10 @@
 * Add `GolangciLint` pre-commit and pre-push hooks
 * Add `GoTest` pre-push hook
 * Add `GoFmt` pre-commit hook
-* Add `excluded_branch_patterns` hook option to disable hooks running on specific branches
+* Add `exclude_branches` hook option to disable hooks running on specific branches
+* Add `exclude_remotes` pre-push hook option to disable pre-push hooks running against specific remotes
+* Change default behavior of pre-push hooks to **not** run against deleted remote branches
+* Add `include_branch_deletions` pre-push hook option to allow running for a remote branch deletion
 
 ## 0.51.0
 
