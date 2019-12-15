@@ -661,6 +661,12 @@ executes the command and appends any arguments and standard input stream that
 would have been passed to the regular hook. The hook passes or fails based
 on the exit status of the command.
 
+The script is executed as if Git were calling the hook directly. If you want
+to understand which arguments are passed to the script depending on the type
+of hook, see the [git-hooks documentation][GHD].
+
+[GHD]: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+
 ## Security
 
 While Overcommit can make managing Git hooks easier and more convenient,
