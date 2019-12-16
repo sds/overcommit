@@ -23,14 +23,13 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
       ProtectedBranches:
         enabled: true
         branches:
-          - protected
-          - protected_for_destructive_only:
-            destructive_only: true
+          - protected_for_destructive_only
+
   YML
 
   around do |example|
     remote_repo = repo do
-      `git checkout -b protected > #{File::NULL} 2>&1`
+      `git checkout -b protected_for_destructive_only > #{File::NULL} 2>&1`
       `git commit --allow-empty -m "Remote commit"`
       `git checkout -b unprotected > #{File::NULL} 2>&1`
       `git checkout -b dummy > #{File::NULL} 2>&1`
@@ -152,8 +151,8 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
     end
   end
 
-  context 'when pushing to a protected branch' do
-    let(:remote_ref) { 'protected' }
+  context 'when pushing to a protected for destructive only branch' do
+    let(:remote_ref) { 'protected_for_destructive_only' }
 
     context 'when force-pushing' do
       include_context 'force-pushing'
