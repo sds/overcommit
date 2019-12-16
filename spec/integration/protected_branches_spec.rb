@@ -157,10 +157,6 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
   context 'when pushing to a protected branch' do
     let(:remote_ref) { 'protected' }
 
-    subject do
-      shell("git push #{flags} origin HEAD".split)
-    end
-
     context 'when pushing' do
       context 'with ProtectedBranches enabled' do
         include_context 'ProtectedBranches enabled'
