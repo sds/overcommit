@@ -24,6 +24,8 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
         enabled: true
         branches:
           - protected_for_destructive_only
+          - protected:
+            destructive_only: false
 
   YML
 
@@ -31,6 +33,7 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
     remote_repo = repo do
       `git checkout -b protected_for_destructive_only > #{File::NULL} 2>&1`
       `git commit --allow-empty -m "Remote commit"`
+      `git checkout -b protected > #{File::NULL} 2>&1`
       `git checkout -b unprotected > #{File::NULL} 2>&1`
       `git checkout -b dummy > #{File::NULL} 2>&1`
     end
@@ -148,6 +151,21 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
 
     context 'when remote does not exist locally' do
       include_examples 'push succeeds'
+    end
+  end
+
+  context "when pushing to a protected branch" do
+    let(:remote_ref) { 'protected' }
+
+    subject do
+      shell("git push #{flags} origin HEAD".split)
+    end
+
+    context 'when pushing' do
+      context 'with ProtectedBranches enabled' do
+        include_context 'ProtectedBranches enabled'
+        include_examples 'push fails'
+      end
     end
   end
 
