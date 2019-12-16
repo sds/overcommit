@@ -154,7 +154,7 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
     end
   end
 
-  context "when pushing to a protected branch" do
+  context 'when pushing to a protected branch' do
     let(:remote_ref) { 'protected' }
 
     subject do
