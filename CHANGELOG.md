@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.52.1
 
 * Fix case where no standard input is provided to `pre-push` hooks
 
