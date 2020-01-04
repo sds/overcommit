@@ -17,8 +17,8 @@ module Overcommit::HookContext
       return @remote_ref_deletion if defined?(@remote_ref_deletion)
 
       @remote_ref_deletion ||= input_lines.
-                               first.
-                               split(' ').
+                               first&.
+                               split(' ')&.
                                first == '(deleted)'
     end
 

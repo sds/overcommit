@@ -26,8 +26,10 @@ describe Overcommit::HookContext::PrePush do
   describe '#remote_ref_deletion?' do
     subject { context.remote_ref_deletion? }
 
+    let(:standard_input) { "#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n" }
+
     before do
-      input.stub(:read).and_return("#{local_ref} #{local_sha1} #{remote_ref} #{remote_sha1}\n")
+      input.stub(:read).and_return(standard_input)
     end
 
     context 'when pushing new branch to remote ref' do
@@ -55,6 +57,12 @@ describe Overcommit::HookContext::PrePush do
       let(:remote_sha1) { random_hash }
 
       it { should == true }
+    end
+
+    context 'when no standard input is provided' do
+      let(:standard_input) { '' }
+
+      it { should == false }
     end
   end
 

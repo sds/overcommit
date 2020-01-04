@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix case where no standard input is provided to `pre-push` hooks
+
 ## 0.52.0
 
 * Fix `Mdl` to properly parse JSON output from `mdl`
