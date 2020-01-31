@@ -12,21 +12,14 @@ module Overcommit::Hook::PreCommit
     def run
       messages = []
 
-      applicable_files.each do |file|
-        result = execute(command, args: [file])
-        if result.status
-          rows = result.stdout.split("\n")
-
-          # Discard the csv header
-          rows.shift
-
-          # Push each of the errors in the particular file into the array
-          rows.map do |row|
-            messages << row
-          end
-        end
+      result = execute(command, args: applicable_files)
+      if result.status
+        messages = result.stdout.split("\n")
+        # Discard the csv header
+        messages.shift
       end
 
+      return :fail if messages.empty? && !result.success?
       return :pass if messages.empty?
 
       parse_messages(messages)
