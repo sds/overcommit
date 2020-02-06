@@ -16,6 +16,12 @@ module Overcommit::Exceptions
   # Raised when there was a problem reading git revision information with `rev-list`.
   class GitRevListError < StandardError; end
 
+  # Raised when there was a problem computing the ID of git repository objects.
+  class GitHashObjectError < StandardError; end
+
+  # Raised when there was a problem retrieving information from git repository objects.
+  class GitCatFileError < StandardError; end
+
   # Raised when a {HookContext} is unable to setup the environment before a run.
   class HookSetupFailed < StandardError; end
 

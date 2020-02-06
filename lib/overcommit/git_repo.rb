@@ -282,5 +282,75 @@ module Overcommit
     def current_branch
       `git symbolic-ref --short -q HEAD`.chomp
     end
+
+    # Get the value of a local configuration option.
+    #
+    # @param name [String] the name of the option
+    # @return [String, nil] the value of the option or _nil_ if the option does not exist
+    def get_local_config(name)
+      result = Overcommit::Utils.execute(
+        %w[git config --local --get] << name
+      )
+      if result.status == 1 # Key doesn't exist
+        return nil
+      elsif result.status != 0
+        raise Overcommit::Exceptions::GitConfigError,
+              "Unable to read from local repo git config: #{result.stderr}"
+      end
+
+      result.stdout.chomp
+    end
+
+    # Sets the value of a local configuration option.
+    #
+    # @param name [String] the name of the option
+    # @param value [String] the value to set
+    def set_local_config(name, value)
+      result = Overcommit::Utils.execute(
+        %W[git config --local #{name} #{value}]
+      )
+      unless result.success?
+        raise Overcommit::Exceptions::GitConfigError,
+              "Unable to write to local repo git config: #{result.stderr}"
+      end
+    end
+
+    # Computes the git object ID for the given blob contents and optionally writes that blob to the
+    # git repository.
+    #
+    # @param blob [String] the blob contents
+    # @param write [Boolean] true if this blob should be written to the git repository
+    # @return [String] the git object ID
+    def blob_id(blob, write = false)
+      write_args = write ? %w[-w] : []
+      result = Overcommit::Utils.execute(
+        %w[git hash-object] + write_args + %w[--stdin],
+        input: blob
+      )
+      if result.success?
+        result.stdout.chomp
+      else
+        raise Overcommit::Exceptions::GitHashObjectError,
+              "Failed to compute blob ID: #{result.stderr}"
+      end
+    end
+
+    # Retrieves the contents of a blob from the git repository.
+    #
+    # @param blob_id [String] the blob ID
+    # @return [String, nil] the contents of the blob or _nil_ if it does not exist
+    def blob_contents(blob_id)
+      result = Overcommit::Utils.execute(
+        %W[git cat-file -p #{blob_id}^{blob}]
+      )
+      if result.success?
+        result.stdout.chomp
+      elsif result.status == 128 # 128 is returned when the blob does not exist.
+        nil
+      else
+        raise Overcommit::Exceptions::GitCatFileError,
+              "Failed to get blob contents: #{result.stderr}"
+      end
+    end
   end
 end

@@ -3,3 +3,4 @@ coverage/
 pkg/
 .bundle
 .idea
+/spec_example_status

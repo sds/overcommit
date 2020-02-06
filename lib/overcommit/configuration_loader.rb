@@ -86,7 +86,7 @@ module Overcommit
               "No previously recorded signature for configuration file.\n" \
               'Run `overcommit --sign` if you trust the hooks in this repository.'
 
-      elsif config.signature_changed?
+      elsif !config.signature_verified?
         raise Overcommit::Exceptions::ConfigurationSignatureChanged,
               "Signature of configuration file has changed!\n" \
               "Run `overcommit --sign` once you've verified the configuration changes."
