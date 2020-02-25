@@ -3,3 +3,5 @@ coverage/
 pkg/
 .bundle
 .idea
+.history/
+.vscode/

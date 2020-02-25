@@ -582,6 +582,7 @@ aborted.
 * [Brakeman](lib/overcommit/hook/pre_push/brakeman.rb)
 * [Minitest](lib/overcommit/hook/pre_push/minitest.rb)
 * [PhpUnit](lib/overcommit/hook/pre_push/php_unit.rb)
+* [Pronto](lib/overcommit/hook/pre_push/pronto.rb)
 * [ProtectedBranches](lib/overcommit/hook/pre_push/protected_branches.rb)
 * [Pytest](lib/overcommit/hook/pre_push/pytest.rb)
 * [PythonNose](lib/overcommit/hook/pre_push/python_nose.rb)
