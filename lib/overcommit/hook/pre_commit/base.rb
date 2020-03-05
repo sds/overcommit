@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
 
     def_delegators :@context, :modified_lines_in_file, :amendment?, :initial_commit?
 
-    protected
+    private
 
     def extract_messages(*args)
       Overcommit::Utils::MessagesUtils.extract_messages(*args)

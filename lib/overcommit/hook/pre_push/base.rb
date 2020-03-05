@@ -16,13 +16,11 @@ module Overcommit::Hook::PrePush
         (include_remote_ref_deletions? || !@context.remote_ref_deletion?)
     end
 
-    protected
+    private
 
     def extract_messages(*args)
       Overcommit::Utils::MessagesUtils.extract_messages(*args)
     end
-
-    private
 
     def exclude_remotes
       @config['exclude_remotes'] || []
