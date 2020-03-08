@@ -2,7 +2,7 @@
 
 require 'overcommit/hook/shared/pronto'
 
-module Overcommit::Hook::PreCommit
+module Overcommit::Hook::PrePush
   # Runs `pronto`
   #
   # @see https://github.com/mmozuras/pronto

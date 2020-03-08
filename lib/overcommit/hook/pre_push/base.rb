@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+require 'overcommit/utils/messages_utils'
 
 module Overcommit::Hook::PrePush
   # Functionality common to all pre-push hooks.
@@ -16,6 +17,10 @@ module Overcommit::Hook::PrePush
     end
 
     private
+
+    def extract_messages(*args)
+      Overcommit::Utils::MessagesUtils.extract_messages(*args)
+    end
 
     def exclude_remotes
       @config['exclude_remotes'] || []
