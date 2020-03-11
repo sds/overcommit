@@ -17,7 +17,7 @@ module Overcommit::Hook::PrepareCommitMsg
       Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
 
       modify_commit_message do |old_contents|
-        "#{new_template}\n#{old_contents}"
+        "#{new_template} #{old_contents}"
       end
 
       :pass
