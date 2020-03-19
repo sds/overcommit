@@ -31,7 +31,7 @@ module Overcommit
 
         process = ChildProcess.build(*args)
 
-        out, err = assign_output_streams(process)
+        out, err = assign_output_streams(process, options)
 
         process.duplex = true if options[:input] # Make stdin available if needed
         process.start
@@ -48,10 +48,7 @@ module Overcommit
         end
         process.wait
 
-        err.rewind
-        out.rewind
-
-        Result.new(process.exit_code, out.read, err.read)
+        build_result(process, out, err, options)
       end
 
       # Spawns a new process in the background using the given array of
@@ -85,13 +82,27 @@ module Overcommit
 
       # @param process [ChildProcess]
       # @return [Array<IO>]
-      def assign_output_streams(process)
+      def assign_output_streams(process, options = {})
+        if options[:live_output]
+          process.io.inherit!
+          return []
+        end
+
         %w[out err].map do |stream_name|
           ::Tempfile.new(stream_name).tap do |stream|
             stream.sync = true
             process.io.send("std#{stream_name}=", stream)
           end
         end
+      end
+
+      def build_result(process, out, err, options = {})
+        return Result.new(process.exit_code, '', '') if options[:live_output]
+
+        err.rewind
+        out.rewind
+
+        Result.new(process.exit_code, out.read, err.read)
       end
     end
   end

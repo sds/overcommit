@@ -77,4 +77,47 @@ describe Overcommit::Hook::PrePush::RSpec do
       it { should fail_hook }
     end
   end
+
+  context 'when live_output option is true' do
+    let(:config) do
+      Overcommit::ConfigurationLoader.default_configuration.merge(
+        Overcommit::Configuration.new(
+          'PrePush' => {
+            'RSpec' => {
+              'live_output' => true
+            }
+          }
+        )
+      )
+    end
+    let(:result) { double('result') }
+
+    before do
+      result.stub(:success?).and_return(true)
+    end
+
+    it 'calls execute with the live_output flag set' do
+      expect(subject).to receive(:execute).with(['rspec'], live_output: true).and_return(result)
+      expect(subject).to pass
+    end
+
+    context do
+      let(:child_process) { double('child process') }
+      let(:io) { double('io') }
+
+      it 'the child process inherits the io' do
+        io.stub(:inherit!)
+        child_process.stub(io: io, start: nil, wait: nil, exit_code: 0)
+        expect(ChildProcess).to receive(:build).with('rspec').and_return(child_process)
+        expect(subject).to pass
+      end
+
+      it 'the child process inherits the io' do
+        io.stub(:inherit!)
+        child_process.stub(io: io, start: nil, wait: nil, exit_code: 1)
+        expect(ChildProcess).to receive(:build).with('rspec').and_return(child_process)
+        expect(subject).to fail_hook
+      end
+    end
+  end
 end

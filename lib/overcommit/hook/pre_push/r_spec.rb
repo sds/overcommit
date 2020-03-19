@@ -6,7 +6,7 @@ module Overcommit::Hook::PrePush
   # @see http://rspec.info/
   class RSpec < Base
     def run
-      result = execute(command)
+      result = execute(command, live_output: config['live_output'])
       return :pass if result.success?
 
       output = result.stdout + result.stderr
