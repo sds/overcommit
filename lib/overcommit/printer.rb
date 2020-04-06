@@ -51,6 +51,7 @@ module Overcommit
     def run_interrupted
       log.newline
       log.warning '⚠  Hook run interrupted by user'
+      log.warning '⚠  If files appear modified/missing, check your stash to recover them'
       log.newline
     end
 
