@@ -81,6 +81,34 @@ describe Overcommit::Hook::Base do
       it { subject.should == true }
     end
 
+    context 'with optional_executable specified' do
+      let(:hook_config) do
+        {
+          'enabled' => true,
+          'requires_files' => false,
+          'optional_executable' => './node_modules/.bin/eslint'
+        }
+      end
+
+      before do
+        allow(Overcommit::Utils).
+          to receive(:in_path?).
+          and_return(in_path)
+      end
+
+      context 'not in path' do
+        let(:in_path) { false }
+
+        it { subject.should == false }
+      end
+
+      context 'in path' do
+        let(:in_path) { true }
+
+        it { subject.should == true }
+      end
+    end
+
     context 'with exclude_branches specified' do
       let(:current_branch) { 'test-branch' }
       let(:hook_config) do

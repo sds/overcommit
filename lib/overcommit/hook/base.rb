@@ -90,7 +90,8 @@ module Overcommit::Hook
     def run?
       enabled? &&
       !excluded? &&
-        !(@config['requires_files'] && applicable_files.empty?)
+        !(@config['requires_files'] && applicable_files.empty?) &&
+        (!optional_executable || in_path?(optional_executable))
     end
 
     def in_path?(cmd)
@@ -121,6 +122,10 @@ module Overcommit::Hook
 
     def required_executable
       @config['required_executable']
+    end
+
+    def optional_executable
+      @config['optional_executable']
     end
 
     def required_libraries
