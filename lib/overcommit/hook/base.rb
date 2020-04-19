@@ -84,14 +84,14 @@ module Overcommit::Hook
     end
 
     def skip?
-      @config['skip']
+      @config['skip'] ||
+        (@config['skip_if'] ? execute(@config['skip_if']).success? : false)
     end
 
     def run?
       enabled? &&
       !excluded? &&
-        !(@config['requires_files'] && applicable_files.empty?) &&
-        (!optional_executable || in_path?(optional_executable))
+        !(@config['requires_files'] && applicable_files.empty?)
     end
 
     def in_path?(cmd)
@@ -122,10 +122,6 @@ module Overcommit::Hook
 
     def required_executable
       @config['required_executable']
-    end
-
-    def optional_executable
-      @config['optional_executable']
     end
 
     def required_libraries
