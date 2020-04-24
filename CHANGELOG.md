@@ -1,5 +1,13 @@
 # Overcommit Changelog
 
+## 0.53.0
+
+* Improve performance in `PhpCs` pre-commit hook
+* Add `Pronto` pre-push hook
+* Remove erroneous extra newline in replacement string for `ReplaceBranch` prepare-commit-msg hook
+* Add note about potentially checking your stash when hook is interrupted
+* Add support for skipping hooks based on command result using the `skip_if` option
+
 ## 0.52.1
 
 * Fix case where no standard input is provided to `pre-push` hooks
