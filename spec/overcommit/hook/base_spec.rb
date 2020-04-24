@@ -122,4 +122,69 @@ describe Overcommit::Hook::Base do
       end
     end
   end
+
+  context '#skip?' do
+    before do
+      config.stub(:for_hook).and_return(hook_config)
+    end
+
+    subject { hook.skip? }
+
+    context 'with skip_if not specified' do
+      let(:hook_config) do
+        { 'skip' => skip }
+      end
+
+      context 'with skip true' do
+        let(:skip) { true }
+
+        it { subject.should == true }
+      end
+
+      context 'with skip false' do
+        let(:skip) { false }
+
+        it { subject.should == false }
+      end
+    end
+
+    context 'with skip_if specified' do
+      before do
+        result = Overcommit::Subprocess::Result.new(success ? 0 : 1, '', '')
+        allow(Overcommit::Utils).to receive(:execute).and_return(result)
+      end
+
+      let(:hook_config) do
+        { 'skip' => skip, 'skip_if' => ['bash', '-c', '! which my-executable'] }
+      end
+
+      context 'with skip true and skip_if returning true' do
+        let(:skip) { true }
+        let(:success) { true }
+
+        it { subject.should == true }
+      end
+
+      context 'with skip true and skip_if returning false' do
+        let(:skip) { true }
+        let(:success) { false }
+
+        it { subject.should == true }
+      end
+
+      context 'with skip false and skip_if returning true' do
+        let(:skip) { false }
+        let(:success) { true }
+
+        it { subject.should == true }
+      end
+
+      context 'with skip false and skip_if returning false' do
+        let(:skip) { false }
+        let(:success) { false }
+
+        it { subject.should == false }
+      end
+    end
+  end
 end

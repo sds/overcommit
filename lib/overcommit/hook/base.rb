@@ -84,7 +84,8 @@ module Overcommit::Hook
     end
 
     def skip?
-      @config['skip']
+      @config['skip'] ||
+        (@config['skip_if'] ? execute(@config['skip_if']).success? : false)
     end
 
     def run?
