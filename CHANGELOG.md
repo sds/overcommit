@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master
+
+* Fix `YamlLint` pre-commit hook
+
 ## 0.53.0
 
 * Improve performance in `PhpCs` pre-commit hook
