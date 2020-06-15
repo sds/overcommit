@@ -19,7 +19,7 @@ describe Overcommit::Hook::PreCommit::YamlLint do
   end
 
   before do
-    subject.stub(:execute).with(%w[yamllint --format=parsable], args: applicable_files).
+    subject.stub(:execute).with(%w[yamllint --format=parsable --strict], args: applicable_files).
       and_return(result)
   end
 

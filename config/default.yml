@@ -885,7 +885,7 @@ PreCommit:
     enabled: false
     description: 'Analyze with YAMLlint'
     required_executable: 'yamllint'
-    flags: ['--format=parsable']
+    flags: ['--format=parsable', '--strict']
     install_command: 'pip install yamllint'
     include:
       - '**/*.yaml'
