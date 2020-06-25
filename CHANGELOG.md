@@ -1,8 +1,9 @@
 # Overcommit Changelog
 
-## master
+## master (unreleased)
 
 * Fix `YamlLint` pre-commit hook
+* Relax `childprocess` gem version constraint to allow version 4.x
 
 ## 0.53.0
 
