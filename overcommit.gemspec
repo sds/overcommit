@@ -27,6 +27,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.4'
 
-  s.add_dependency          'childprocess', '>= 0.6.3', '< 4'
+  s.add_dependency          'childprocess', '>= 0.6.3', '< 5'
   s.add_dependency          'iniparse', '~> 1.4'
 end
