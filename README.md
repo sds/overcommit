@@ -12,8 +12,6 @@
 `overcommit` is a tool to manage and configure
 [Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
-![Demonstration](https://sds.github.io/overcommit/overcommit.gif)
-
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
 are stored in source control. You can also easily
@@ -63,8 +61,8 @@ significantly increases the install time for non-Windows platforms.
 
 ### Dependencies
 
-Some of the hooks have third-party dependencies. For example, to lint your
-[SCSS](http://sass-lang.com/) files, you're going to need our
+Some hooks have third-party dependencies. For example, to lint your
+[SCSS](http://sass-lang.com/) files, you're going to need the
 [scss_lint gem](https://github.com/sds/scss-lint).
 
 Depending on the hooks you enable/disable for your repository, you'll need to
@@ -79,9 +77,9 @@ available during your hook runs.
 
 `overcommit` is installed via [RubyGems](https://rubygems.org/). It is strongly
 recommended that your environment support running `gem install` without
-requiring `sudo` privileges. Using a Ruby version manager like
-[`rbenv`](https://github.com/rbenv/rbenv/) or [`rvm`](https://rvm.io/) can help
-here.
+requiring root user privileges via `sudo` or otherwise. Using a Ruby version
+manager like [`rbenv`](https://github.com/rbenv/rbenv/) or
+[`rvm`](https://rvm.io/) is recommended.
 
 Once you have an environment that allows you to install gems without `sudo`,
 run:
