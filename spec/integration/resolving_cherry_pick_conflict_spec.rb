@@ -39,15 +39,18 @@ describe 'resolving cherry-pick conflicts' do
   end
 
   it 'exits with a non-zero status' do
+    skip 'Skipping flakey test on AppVeyor Windows builds' if ENV['APPVEYOR']
     subject.status.should_not == 0
   end
 
   it 'does not remove the CHERRY_PICK_HEAD file' do
+    skip 'Skipping flakey test on AppVeyor Windows builds' if ENV['APPVEYOR']
     subject
     Dir['.git/*'].should include '.git/CHERRY_PICK_HEAD'
   end
 
   it 'keeps the commit message from the cherry-picked commit' do
+    skip 'Skipping flakey test on AppVeyor Windows builds' if ENV['APPVEYOR']
     subject
     File.read(File.join('.git', 'MERGE_MSG')).should include 'Add Branch 2 addition'
   end
