@@ -109,15 +109,16 @@ module Overcommit
     # @return [Array<String>] list of absolute file paths
     def list_files(paths = [], options = {})
       ref = options[:ref] || 'HEAD'
-      path_list =
-        if OS.windows?
-          paths = paths.map { |path| path.gsub('"', '""') }
-          paths.empty? ? '' : "\"#{paths.join('" "')}\""
-        else
-          paths.shelljoin
-        end
-      `git ls-tree --name-only #{ref} #{path_list}`.
-        split(/\n/).
+
+      result = Overcommit::Utils.execute(%W[git ls-tree --name-only #{ref}], args: paths)
+      unless result.success?
+        raise Overcommit::Exceptions::Error,
+              "Error listing files. EXIT STATUS(es): #{result.statuses}.\n" \
+              "STDOUT(s): #{result.stdouts}.\n" \
+              "STDERR(s): #{result.stderrs}."
+      end
+
+      result.stdout.split(/\n/).
         map { |relative_file| File.expand_path(relative_file) }.
         reject { |file| File.directory?(file) } # Exclude submodule directories
     end

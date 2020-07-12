@@ -217,6 +217,20 @@ describe Overcommit::GitRepo do
         end
       end
     end
+
+    context 'when the git ls-tree command fails for whatever reason' do
+      before do
+        result = double('result', success?: false, statuses: [1], stdouts: '', stderrs: '')
+        allow(Overcommit::Utils).
+          to receive(:execute).
+          with(%w[git ls-tree --name-only HEAD], args: []).
+          and_return(result)
+      end
+
+      it 'raises' do
+        expect { subject }.to raise_error Overcommit::Exceptions::Error
+      end
+    end
   end
 
   describe '.tracked?' do
