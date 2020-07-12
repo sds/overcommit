@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `Overcommit::GitRepo.list_files` helper to work with arbitrarily large lists of files.
+
 ## 0.54.0
 
 * Fix `YamlLint` pre-commit hook
