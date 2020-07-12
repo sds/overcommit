@@ -21,6 +21,8 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
       s.name = 'my_fake_gem'
       s.version = '1.0.0'
       s.author = 'John Doe'
+      s.license = 'MIT'
+      s.homepage = 'https://example.com'
       s.email = 'john.doe@example.com'
       s.summary = 'A fake gem'
       s.files = [File.join('lib', 'my_fake_gem.rb')]
