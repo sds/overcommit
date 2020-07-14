@@ -18,7 +18,7 @@ describe Overcommit::Hook::PreCommit::AuthorName do
     context 'when user has only a first name' do
       let(:name) { 'John' }
 
-      it { should fail_hook }
+      it { should pass }
     end
 
     context 'when user has first and last name' do

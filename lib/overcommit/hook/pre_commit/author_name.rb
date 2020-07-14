@@ -12,9 +12,9 @@ module Overcommit::Hook::PreCommit
           result.stdout.chomp
         end
 
-      unless name.split(' ').count >= 2
+      if name.empty?
         return :fail,
-               "Author must have at least first and last name, but was: #{name}.\n" \
+               "Author name must be non-0 in length.\n" \
                'Set your name with `git config --global user.name "Your Name"` ' \
                'or via the GIT_AUTHOR_NAME environment variable'
       end

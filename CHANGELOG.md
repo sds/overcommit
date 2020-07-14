@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Fix `Overcommit::GitRepo.list_files` helper to work with arbitrarily large lists of files.
+* `AuthorName` allows for non-0 length to be more inclusive of names.
 
 ## 0.54.0
 

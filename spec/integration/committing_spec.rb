@@ -26,11 +26,21 @@ describe 'commiting' do
 
   context 'when a hook fails' do
     before do
-      `git config --local user.name "John"`
+      `git config --local user.name ""`
     end
 
     it 'exits with a non-zero status' do
       subject.status.should_not == 0
+    end
+  end
+
+  context 'when no hooks fail on single author name' do
+    before do
+      `git config --local user.name "John"`
+    end
+
+    it 'exits successfully' do
+      subject.status.should == 0
     end
   end
 
