@@ -1,9 +1,9 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.54.1
 
 * Fix `Overcommit::GitRepo.list_files` helper to work with arbitrarily large lists of files.
-* `AuthorName` allows for non-0 length to be more inclusive of names.
+* Fix `AuthorName` to allow mononyms to be more inclusive of names.
 
 ## 0.54.0
 
