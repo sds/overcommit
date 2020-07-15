@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.55.0
 
 * Fix `GoFmt` to not be enabled by default. This was enabled by mistake when introduced in Overcommit `0.52.0`.
 
