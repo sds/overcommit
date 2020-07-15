@@ -338,7 +338,7 @@ PreCommit:
     keywords: ['FContext','FDescribe','FIt','FMeasure','FSpecify','FWhen']
 
   GoFmt:
-    enabled: true
+    enabled: false
     description: 'Fix with go fmt'
     required_executable: 'go'
     command: ['go', 'fmt']
