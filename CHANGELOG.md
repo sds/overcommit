@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Fix `GoFmt` to not be enabled by default. This was enabled by mistake when introduced in Overcommit `0.52.0`.
+
 ## 0.54.1
 
 * Fix `Overcommit::GitRepo.list_files` helper to work with arbitrarily large lists of files.
