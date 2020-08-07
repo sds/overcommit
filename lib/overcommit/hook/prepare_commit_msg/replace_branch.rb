@@ -2,8 +2,32 @@
 
 module Overcommit::Hook::PrepareCommitMsg
   # Prepends the commit message with a message based on the branch name.
+  #
+  # === What to prepend
+  #
   # It's possible to reference parts of the branch name through the captures in
   # the `branch_pattern` regex.
+  #
+  # For instance, if your current branch is `123-topic` then this config
+  #
+  #    branch_pattern: '(\d+)-(\w+)'
+  #    replacement_text: '[#\1]'
+  #
+  # would make this hook prepend commit messages with `[#123]`.
+  #
+  # Similarly, a replacement text of `[\1][\2]` would result in `[123][topic]`.
+  #
+  # == When to run this hook
+  #
+  # You can configure this to run only for specific types of commits by setting
+  # the `skipped_commit_types`. The allowed types are
+  #
+  # - 'message'  - if message is given via `-m`, `-F`
+  # - 'template' - if `-t` is given or `commit.template` is set
+  # - 'commit'   - if `-c`, `-C`, or `--amend` is given
+  # - 'merge'    - if merging
+  # - 'squash'   - if squashing
+  #
   class ReplaceBranch < Base
     DEFAULT_BRANCH_PATTERN = /\A(\d+)-(\w+).*\z/
 
