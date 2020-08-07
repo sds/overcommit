@@ -35,10 +35,10 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
         subject(:template) { hook.new_template }
 
         before do
-          hook.stub(:replacement_text).and_return('Id is: \1')
+          hook.stub(:replacement_text).and_return('[#\1]')
         end
 
-        it { is_expected.to eq('Id is: 123') }
+        it { is_expected.to eq('[#123]') }
       end
     end
 
@@ -64,7 +64,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   describe '#replacement_text' do
     subject(:replacement_text) { hook.replacement_text }
     let(:replacement_template_file) { 'valid_filename.txt' }
-    let(:replacement) { 'Id is: \1' }
+    let(:replacement) { '[#\1]' }
 
     context 'when the replacement text points to a valid filename' do
       before do
