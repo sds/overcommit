@@ -5,6 +5,8 @@ module Overcommit::Hook::PrepareCommitMsg
   # It's possible to reference parts of the branch name through the captures in
   # the `branch_pattern` regex.
   class ReplaceBranch < Base
+    DEFAULT_BRANCH_PATTERN = /\A(\d+)-(\w+).*\z/
+
     def run
       return :pass if skipped_commit_types.include? commit_message_source
 
@@ -31,7 +33,7 @@ module Overcommit::Hook::PrepareCommitMsg
       @branch_pattern ||=
         begin
           pattern = config['branch_pattern']
-          Regexp.new((pattern || '').empty? ? '\A.*\w+[-_](\d+).*\z' : pattern)
+          Regexp.new((pattern || '').empty? ? DEFAULT_BRANCH_PATTERN : pattern)
         end
     end
 

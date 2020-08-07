@@ -1237,7 +1237,7 @@ PrepareCommitMsg:
   ReplaceBranch:
     enabled: false
     description: 'Prepends the commit message with text based on the branch name'
-    branch_pattern: '\A.*\w+[-_](\d+).*\z'
+    branch_pattern: '\A(\d+)-(\w+).*\z'
     replacement_text: '[#\1]'
     skipped_commit_types: ['message', 'template', 'merge', 'squash']
     on_fail: warn

@@ -25,7 +25,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
     File.delete(prepare_commit_message_file) unless ENV['APPVEYOR']
   end
 
-  let(:new_head) { 'userbeforeid-12345-branch-description' }
+  let(:new_head) { '123-topic' }
 
   describe '#run' do
     context 'when the checked out branch matches the pattern' do
@@ -38,7 +38,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
           hook.stub(:replacement_text).and_return('Id is: \1')
         end
 
-        it { is_expected.to eq('Id is: 12345') }
+        it { is_expected.to eq('Id is: 123') }
       end
     end
 
