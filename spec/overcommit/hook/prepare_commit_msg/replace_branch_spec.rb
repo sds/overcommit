@@ -4,77 +4,85 @@ require 'spec_helper'
 require 'overcommit/hook_context/prepare_commit_msg'
 
 describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
-  let(:config) { Overcommit::ConfigurationLoader.default_configuration }
-  let(:context) do
-    Overcommit::HookContext::PrepareCommitMsg.new(
-      config, [prepare_commit_message_file], StringIO.new
+  def checkout_branch(branch)
+    allow(Overcommit::GitRepo).to receive(:current_branch).and_return(branch)
+  end
+
+  def new_config(opts = {})
+    default = Overcommit::ConfigurationLoader.default_configuration
+
+    return default if opts.empty?
+
+    default.merge(
+      Overcommit::Configuration.new(
+        'PrepareCommitMsg' => {
+          'ReplaceBranch' => opts.merge('enabled' => true)
+        }
+      )
     )
   end
 
-  let(:prepare_commit_message_file) { 'prepare_commit_message_file.txt' }
-
-  subject(:hook) { described_class.new(config, context) }
-
-  before do
-    File.open(prepare_commit_message_file, 'w')
-    allow(Overcommit::Utils).to receive_message_chain(:log, :debug)
-    allow(Overcommit::GitRepo).to receive(:current_branch).and_return(new_head)
+  def new_context(config, argv)
+    Overcommit::HookContext::PrepareCommitMsg.new(config, argv, StringIO.new)
   end
 
-  after do
-    File.delete(prepare_commit_message_file) unless ENV['APPVEYOR']
+  def hook_for(config, context)
+    described_class.new(config, context)
   end
 
-  let(:new_head) { '123-topic' }
+  def add_file(name, contents)
+    File.open(name, 'w') { |f| f.puts contents }
+  end
+
+  def remove_file(name)
+    File.delete(name)
+  end
+
+  before { allow(Overcommit::Utils).to receive_message_chain(:log, :debug) }
+
+  let(:config)           { new_config }
+  let(:normal_context)   { new_context(config, ['COMMIT_EDITMSG']) }
+  subject(:hook)         { hook_for(config, normal_context) }
 
   describe '#run' do
+    before { add_file    'COMMIT_EDITMSG', '' }
+    after  { remove_file 'COMMIT_EDITMSG' }
+
     context 'when the checked out branch matches the pattern' do
+      before { checkout_branch '123-topic' }
+      before { hook.run }
+
       it { is_expected.to pass }
 
-      context 'template contents' do
-        subject(:template) { hook.new_template }
-
-        before do
-          hook.stub(:replacement_text).and_return('[#\1]')
-        end
-
-        it { is_expected.to eq('[#123]') }
+      it 'prepends the replacement text' do
+        expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
       end
     end
 
-    context 'when the checked out branch does not match the pattern' do
-      let(:new_head) { "this shouldn't match the default pattern" }
+    context "when the checked out branch doesn't matches the pattern" do
+      before { checkout_branch 'topic-123' }
+      before { hook.run }
 
-      context 'when the commit type is in `skipped_commit_types`' do
-        let(:context) do
-          Overcommit::HookContext::PrepareCommitMsg.new(
-            config, [prepare_commit_message_file, 'template'], StringIO.new
-          )
-        end
-
-        it { is_expected.to pass }
-      end
-
-      context 'when the commit type is not in `skipped_commit_types`' do
-        it { is_expected.to warn }
-      end
+      it { is_expected.to warn }
     end
-  end
-
-  describe '#replacement_text' do
-    subject(:replacement_text) { hook.replacement_text }
-    let(:replacement_template_file) { 'valid_filename.txt' }
-    let(:replacement) { '[#\1]' }
 
     context 'when the replacement text points to a valid filename' do
-      before do
-        hook.stub(:replacement_text_config).and_return(replacement_template_file)
-        File.stub(:exist?).and_return(true)
-        File.stub(:read).with(replacement_template_file).and_return(replacement)
-      end
+      before { checkout_branch '123-topic' }
+      before { add_file    'replacement_text.txt', 'FOO' }
+      after  { remove_file 'replacement_text.txt' }
 
-      describe 'it reads it as the replacement template' do
-        it { is_expected.to eq(replacement) }
+      let(:config) { new_config('replacement_text' => 'replacement_text.txt') }
+      let(:normal_context) { new_context(config, ['COMMIT_EDITMSG']) }
+      subject(:hook)       { hook_for(config, normal_context) }
+
+      before { hook.run }
+
+      it { is_expected.to pass }
+
+      let(:commit_msg) { File.read('COMMIT_EDITMSG') }
+
+      it 'uses the file contents as the replacement text' do
+        expect(commit_msg).to eq(File.read('replacement_text.txt'))
       end
     end
   end
