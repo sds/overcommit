@@ -32,7 +32,7 @@ module Overcommit::Hook::PrepareCommitMsg
     DEFAULT_BRANCH_PATTERN = /\A(\d+)-(\w+).*\z/
 
     def run
-      return :pass if skipped_commit_types.include? commit_message_source
+      return :pass if skip?
 
       Overcommit::Utils.log.debug(
         "Checking if '#{Overcommit::GitRepo.current_branch}' matches #{branch_pattern}"
@@ -43,14 +43,14 @@ module Overcommit::Hook::PrepareCommitMsg
       Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
 
       modify_commit_message do |old_contents|
-        "#{new_template} #{old_contents}"
+        "#{new_template}#{old_contents}"
       end
 
       :pass
     end
 
     def new_template
-      @new_template ||= Overcommit::GitRepo.current_branch.gsub(branch_pattern, replacement_text)
+      @new_template ||= Overcommit::GitRepo.current_branch.gsub(branch_pattern, replacement_text).strip
     end
 
     def branch_pattern
@@ -78,6 +78,10 @@ module Overcommit::Hook::PrepareCommitMsg
 
     def skipped_commit_types
       @skipped_commit_types ||= config['skipped_commit_types'].map(&:to_sym)
+    end
+
+    def skip?
+      skipped_commit_types.include?(commit_message_source)
     end
   end
 end
