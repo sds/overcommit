@@ -42,6 +42,11 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
 
   let(:config)           { new_config }
   let(:normal_context)   { new_context(config, ['COMMIT_EDITMSG']) }
+  let(:message_context)  { new_context(config, %w[COMMIT_EDITMSG message]) }
+  let(:commit_context)   { new_context(config, %w[COMMIT_EDITMSG commit HEAD]) }
+  let(:merge_context)    { new_context(config, %w[MERGE_MSG merge]) }
+  let(:squash_context)   { new_context(config, %w[SQUASH_MSG squash]) }
+  let(:template_context) { new_context(config, ['template.txt', 'template']) }
   subject(:hook)         { hook_for(config, normal_context) }
 
   describe '#run' do
@@ -63,7 +68,44 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
       before { checkout_branch 'topic-123' }
       before { hook.run }
 
-      it { is_expected.to warn }
+      context 'with the default `skipped_commit_types`' do
+        it { is_expected.to warn }
+      end
+
+      context 'when merging, and `skipped_commit_types` includes `merge`' do
+        let(:config)   { new_config('skipped_commit_types' => ['merge']) }
+        subject(:hook) { hook_for(config, merge_context) }
+
+        it { is_expected.to pass }
+      end
+
+      context 'when merging, and `skipped_commit_types` includes `template`' do
+        let(:config)   { new_config('skipped_commit_types' => ['template']) }
+        subject(:hook) { hook_for(config, template_context) }
+
+        it { is_expected.to pass }
+      end
+
+      context 'when merging, and `skipped_commit_types` includes `message`' do
+        let(:config)   { new_config('skipped_commit_types' => ['message']) }
+        subject(:hook) { hook_for(config, message_context) }
+
+        it { is_expected.to pass }
+      end
+
+      context 'when merging, and `skipped_commit_types` includes `commit`' do
+        let(:config)   { new_config('skipped_commit_types' => ['commit']) }
+        subject(:hook) { hook_for(config, commit_context) }
+
+        it { is_expected.to pass }
+      end
+
+      context 'when merging, and `skipped_commit_types` includes `squash`' do
+        let(:config)   { new_config('skipped_commit_types' => ['squash']) }
+        subject(:hook) { hook_for(config, squash_context) }
+
+        it { is_expected.to pass }
+      end
     end
 
     context 'when the replacement text points to a valid filename' do
