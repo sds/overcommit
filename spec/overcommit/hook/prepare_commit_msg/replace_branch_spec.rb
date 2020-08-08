@@ -7,7 +7,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   let(:config) { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) do
     Overcommit::HookContext::PrepareCommitMsg.new(
-      config, [prepare_commit_message_file, 'commit'], StringIO.new
+      config, [prepare_commit_message_file], StringIO.new
     )
   end
 
