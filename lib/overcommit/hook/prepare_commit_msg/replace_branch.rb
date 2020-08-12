@@ -50,7 +50,11 @@ module Overcommit::Hook::PrepareCommitMsg
     end
 
     def new_template
-      @new_template ||= Overcommit::GitRepo.current_branch.gsub(branch_pattern, replacement_text).strip
+      @new_template ||=
+        begin
+          curr_branch = Overcommit::GitRepo.current_branch
+          curr_branch.gsub(branch_pattern, replacement_text).strip
+        end
     end
 
     def branch_pattern
