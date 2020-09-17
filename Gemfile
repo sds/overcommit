@@ -14,4 +14,7 @@ gem 'coveralls', '~> 0.8'
 # Pin RuboCop for Travis builds.
 gem 'rubocop', '0.54.0'
 
+gem 'pry'
+gem 'pry-byebug'
+
 gem 'ffi' if Gem.win_platform?
