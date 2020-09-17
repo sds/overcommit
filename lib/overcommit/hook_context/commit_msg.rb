@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
+require_relative 'pre_commit'
+require_relative 'helpers/stash_unstaged_changes'
+require_relative 'helpers/file_modifications'
+
 module Overcommit::HookContext
   # Contains helpers related to contextual information used by commit-msg hooks.
   class CommitMsg < Base
+    include Overcommit::HookContext::Helpers::StashUnstagedChanges
+    include Overcommit::HookContext::Helpers::FileModifications
+
     def empty_message?
       commit_message.strip.empty?
     end
