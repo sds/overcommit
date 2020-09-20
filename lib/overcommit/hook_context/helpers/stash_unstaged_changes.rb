@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   module Helpers
+    # This module contains behavior for stashing unstaged changes before hooks are ran and restoring
+    # them afterwards
     module StashUnstagedChanges
       # Stash unstaged contents of files so hooks don't see changes that aren't
       # about to be committed.

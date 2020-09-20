@@ -11,7 +11,7 @@ module Overcommit::HookContext
   # This includes staged files, which lines of those files have been modified,
   # etc. It is also responsible for saving/restoring the state of the repo so
   # hooks only inspect staged changes.
-  class PreCommit < Base # rubocop:disable ClassLength
+  class PreCommit < Base
     include Overcommit::HookContext::Helpers::StashUnstagedChanges
     include Overcommit::HookContext::Helpers::FileModifications
   end

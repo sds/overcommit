@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 module Overcommit::HookContext
   module Helpers
+    # This module contains methods for determining what files were changed and on what unique line
+    # numbers did the change occur.
     module FileModifications
       # Returns whether this hook run was triggered by `git commit --amend`
       def amendment?
@@ -13,8 +17,10 @@ module Overcommit::HookContext
         # containing unicode characters, we replace the offending characters,
         # since the pattern we're looking for will consist of ASCII characters
         unless cmd.valid_encoding?
-          cmd = Overcommit::Utils.parent_command.encode('UTF-16be', invalid: :replace, replace: '?').
-                                                 encode('UTF-8')
+          cmd = Overcommit::Utils.
+            parent_command.
+            encode('UTF-16be', invalid: :replace, replace: '?').
+            encode('UTF-8')
         end
 
         return @amendment if
