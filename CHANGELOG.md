@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Update `ReplaceBranch` prepare-commit-msg hook to avoid running on `--amend` by default.
+* Add support for `modified_files` and `modified_lines_in_file` in `CommitMsg` hooks.
+
 ## 0.55.0
 
 * Fix `GoFmt` to not be enabled by default. This was enabled by mistake when introduced in Overcommit `0.52.0`.
