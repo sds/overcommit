@@ -23,6 +23,12 @@ module Overcommit::HookContext
         end
       end
 
+      # Returns whether the current git branch is empty (has no commits).
+      def initial_commit?
+        return @initial_commit unless @initial_commit.nil?
+        @initial_commit = Overcommit::GitRepo.initial_commit?
+      end
+
       # Restore unstaged changes and reset file modification times so it appears
       # as if nothing ever changed.
       #
@@ -59,12 +65,6 @@ module Overcommit::HookContext
           next unless File.exist?(file) # Ignore renamed files (old file no longer exists)
           @modified_times[file] = File.mtime(file)
         end
-      end
-
-      # Returns whether the current git branch is empty (has no commits).
-      def initial_commit?
-        return @initial_commit unless @initial_commit.nil?
-        @initial_commit = Overcommit::GitRepo.initial_commit?
       end
 
       # Returns whether there are any changes to tracked files which have not yet
