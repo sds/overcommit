@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.56.0
 
 * Update `ReplaceBranch` prepare-commit-msg hook to avoid running on `--amend` by default.
 * Add support for `modified_files` and `modified_lines_in_file` in `CommitMsg` hooks.
