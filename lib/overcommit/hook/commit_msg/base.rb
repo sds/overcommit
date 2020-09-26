@@ -9,6 +9,6 @@ module Overcommit::Hook::CommitMsg
 
     def_delegators :@context, :empty_message?, :commit_message,
                    :update_commit_message, :commit_message_lines,
-                   :commit_message_file
+                   :commit_message_file, :modified_lines_in_file
   end
 end
