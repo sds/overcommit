@@ -275,6 +275,13 @@ PreCommit:
       - '**/*.ex'
       - '**/*.exs'
 
+  ErbLint:
+    enabled: false
+    description: 'Analyze with ERB Lint'
+    required_executable: 'erblint'
+    install_command: 'bundle install erb_lint'
+    include: '**/*.html.erb'
+
   EsLint:
     enabled: false
     description: 'Analyze with ESLint'
