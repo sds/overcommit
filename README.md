@@ -499,6 +499,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [Credo](lib/overcommit/hook/pre_commit/credo.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
 * [Dogma](lib/overcommit/hook/pre_commit/dogma.rb)
+* [ErbLint](lib/overcommit/hook/pre_commit/erb_lint.rb)
 * [EsLint](lib/overcommit/hook/pre_commit/es_lint.rb)
 * [ExecutePermissions](lib/overcommit/hook/pre_commit/execute_permissions.rb)
 * [Fasterer](lib/overcommit/hook/pre_commit/fasterer.rb)
