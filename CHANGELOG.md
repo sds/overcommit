@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.57.0
+
+* Fix `CommitMsg` hooks to be able to call `modified_lines_in_file`.
+* Add `ErbLint` pre-commit hook to lint ERB files.
+
 ## 0.56.0
 
 * Update `ReplaceBranch` prepare-commit-msg hook to avoid running on `--amend` by default.
