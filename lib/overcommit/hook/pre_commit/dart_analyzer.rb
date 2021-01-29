@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Overcommit::Hook::PreCommit
   # Runs `dartanalyzer` against modified Dart files.
   # @see https://dart.dev/tools/dartanalyzer
