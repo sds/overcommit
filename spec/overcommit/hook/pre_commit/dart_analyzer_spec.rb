@@ -33,10 +33,10 @@ describe Overcommit::Hook::PreCommit::DartAnalyzer do
       before do
         result.stub(:stdout).and_return([
           'Analyzing file1.dart...',
-          'lint • message_ommitted • lib/file1.dart:35:3 • rule',
+          'error • message_ommitted • lib/file1.dart:35:3 • rule',
           'Analyzing file2.dart...',
-          'lint • message_ommitted • lib/file2.dart:100:13 • rule',
-          'lint • message_ommitted • lib/file2.dart:113:16 • rule',
+          'hint • message_ommitted • lib/file2.dart:100:13 • rule',
+          'info • message_ommitted • lib/file2.dart:113:16 • rule',
           '3 lints found.'
         ].join("\n"))
       end
