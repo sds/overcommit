@@ -498,6 +498,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [CoffeeLint](lib/overcommit/hook/pre_commit/coffee_lint.rb)
 * [Credo](lib/overcommit/hook/pre_commit/credo.rb)
 * [CssLint](lib/overcommit/hook/pre_commit/css_lint.rb)
+* [DartAnalyzer](lib/overcommit/hook/pre_commit/dart_analyzer.rb)
 * [Dogma](lib/overcommit/hook/pre_commit/dogma.rb)
 * [ErbLint](lib/overcommit/hook/pre_commit/erb_lint.rb)
 * [EsLint](lib/overcommit/hook/pre_commit/es_lint.rb)

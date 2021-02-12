@@ -266,6 +266,14 @@ PreCommit:
     install_command: 'npm install -g csslint'
     include: '**/*.css'
 
+  DartAnalyzer:
+    enabled: false
+    description: 'Analyze with dartanalyzer'
+    required_executable: 'dartanalyzer'
+    flags: []
+    include:
+      - '**/*.dart'
+
   Dogma:
     enabled: false
     description: 'Analyze with dogma'
