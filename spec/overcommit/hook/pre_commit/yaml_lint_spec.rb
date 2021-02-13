@@ -34,7 +34,7 @@ file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
       )
     end
 
-    it { should fail }
+    it { should fail_hook }
   end
 
   context 'and has 1 error and 1 warning' do
@@ -48,7 +48,7 @@ file2.yml:41:81: [warning] missing document start "---" (document-start)
       )
     end
 
-    it { should fail }
+    it { should fail_hook }
   end
   context 'and has single suggestion for missing file header' do
     let(:result) do
