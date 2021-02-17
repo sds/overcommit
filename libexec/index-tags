@@ -10,7 +10,7 @@ dir="`git rev-parse --git-dir`"
 
 trap "rm -f $dir/tags.$$" EXIT
 err_file=$dir/ctags.err
-if git ls-files | ctags --tag-relative -L - -f "$dir/tags.$$" 2>${err_file}; then
+if ctags --tag-relative -Rf$dir/tags.$$ --exclude=.git "$@" 2>${err_file}; then
   mv $dir/tags.$$ $dir/tags
   [ -e ${err_file} ] && rm -f ${err_file}
 else
