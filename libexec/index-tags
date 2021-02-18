@@ -6,10 +6,12 @@
 
 set -e
 
-trap "rm -f $GIT_DIR/tags.$$" EXIT
-err_file=$GIT_DIR/ctags.err
-if ctags --tag-relative -Rf$GIT_DIR/tags.$$ --exclude=.git "$@" 2>${err_file}; then
-  mv $GIT_DIR/tags.$$ $GIT_DIR/tags
+dir="`git rev-parse --git-dir`"
+
+trap "rm -f $dir/tags.$$" EXIT
+err_file=$dir/ctags.err
+if ctags --tag-relative -Rf$dir/tags.$$ --exclude=.git "$@" 2>${err_file}; then
+  mv $dir/tags.$$ $dir/tags
   [ -e ${err_file} ] && rm -f ${err_file}
 else
   # Ignore STDERR unless `ctags` returned a non-zero exit code
