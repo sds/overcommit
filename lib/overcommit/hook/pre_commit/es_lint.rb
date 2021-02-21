@@ -19,20 +19,17 @@ module Overcommit::Hook::PreCommit
   # @see http://eslint.org/
   class EsLint < Base
     def run
+      eslint_regex = /^(?<file>[^\s](?:\w:)?[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/
       result = execute(command, args: applicable_files)
       output = result.stdout.chomp
-      messages = output.split("\n").grep(/Warning|Error/)
+      messages = output.split("\n").grep(eslint_regex)
 
       return [:fail, result.stderr] if messages.empty? && !result.success?
       return :pass if result.success? && output.empty?
 
       # example message:
       #   path/to/file.js: line 1, col 0, Error - Error message (ruleName)
-      extract_messages(
-        messages,
-        /^(?<file>(?:\w:)?[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/,
-        lambda { |type| type.downcase.to_sym }
-      )
+      extract_messages(messages, eslint_regex, lambda { |type| type.downcase.to_sym })
     end
   end
 end
