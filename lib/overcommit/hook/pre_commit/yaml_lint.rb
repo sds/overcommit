@@ -9,8 +9,8 @@ module Overcommit::Hook::PreCommit
       result = execute(command, args: applicable_files)
 
       if result.success?
-        :pass 
-      elsif result.stdout.include?("error")
+        :pass
+      elsif result.stdout.include?('error')
         [:fail, result.stdout]
       else
         [:warn, result.stdout]
