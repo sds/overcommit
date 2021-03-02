@@ -52,6 +52,18 @@ describe Overcommit::Hook::PreCommit::EsLint do
 
       it { should warn }
     end
+
+    context 'and it doesnt count false positives error messages' do
+      before do
+        result.stub(:stdout).and_return([
+          '$ yarn eslint --quiet --format=compact /app/project/Error.ts',
+          '$ /app/project/node_modules/.bin/eslint --quiet --format=compact /app/project/Error.ts',
+          '',
+        ].join("\n"))
+      end
+
+      it { should pass }
+    end
   end
 
   context 'when eslint exits unsucessfully' do
