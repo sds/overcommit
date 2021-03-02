@@ -34,9 +34,22 @@ file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
       )
     end
 
-    it { should warn }
+    it { should fail_hook }
   end
 
+  context 'and has 1 error and 1 warning' do
+    let(:result) do
+      double(
+        success?: false,
+        stdout: <<-MSG
+file1.yaml:3:81: [error] line too long (253 > 80 characters) (line-length)
+file2.yml:41:81: [warning] missing document start "---" (document-start)
+      MSG
+      )
+    end
+
+    it { should fail_hook }
+  end
   context 'and has single suggestion for missing file header' do
     let(:result) do
       double(
