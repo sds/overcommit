@@ -62,9 +62,7 @@ module Overcommit
 
     # Loads a configuration, ensuring it extends the default configuration.
     def load_file(file)
-      config = self.class.load_from_file(file, default: false, logger: @log)
-      config = self.class.default_configuration.merge(config)
-
+      config = load_file_with_inheritance(file)
       if @options.fetch(:verify) { config.verify_signatures? }
         verify_signatures(config)
       end
@@ -79,6 +77,12 @@ module Overcommit
     end
 
     private
+
+    def load_file_with_inheritance(file)
+      config = self.class.load_from_file(file, default: false, logger: @log)
+      base_config = config['inherit_from'] ? load_file_with_inheritance(config['inherit_from']) : self.class.default_configuration
+      base_config.merge(config)
+    end
 
     def verify_signatures(config)
       if !config.previous_signature?
