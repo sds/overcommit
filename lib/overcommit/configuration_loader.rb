@@ -80,7 +80,11 @@ module Overcommit
 
     def load_file_with_inheritance(file)
       config = self.class.load_from_file(file, default: false, logger: @log)
-      base_config = config['inherit_from'] ? load_file_with_inheritance(config['inherit_from']) : self.class.default_configuration
+      base_config = if config['inherit_from']
+                      load_file_with_inheritance(config['inherit_from'])
+                    else
+                      self.class.default_configuration
+                    end
       base_config.merge(config)
     end
 
