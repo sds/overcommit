@@ -19,6 +19,10 @@ if ENV['OVERCOMMIT_DISABLE'].to_i != 0 || ENV['OVERCOMMIT_DISABLED'].to_i != 0
   exit
 end
 
+# Homebrew uses an isolated version of Ruby for installing git repositories
+# Disable Overcommit if the process running is a Homebrew installation.
+exit if ENV['HOMEBREW_SYSTEM']
+
 hook_type = File.basename($0)
 if hook_type == 'overcommit-hook'
   puts "Don't run `overcommit-hook` directly; it is intended to be symlinked " \
