@@ -8,7 +8,10 @@ describe 'disabling Overcommit' do
   around do |example|
     repo do
       `overcommit --install > #{File::NULL}`
-      Overcommit::Utils.with_environment('OVERCOMMIT_DISABLE' => overcommit_disable) do
+      Overcommit::Utils.with_environment(
+        'OVERCOMMIT_DISABLE' => overcommit_disable, '
+        HOMEBREW_SYSTEM' => homebrew_system
+        ) do
         touch 'blah'
         `git add blah`
         example.run
@@ -16,9 +19,21 @@ describe 'disabling Overcommit' do
     end
   end
 
-  context 'when the OVERCOMMIT_DISABLE environment variable is set' do
-    let(:overcommit_disable) { '1' }
+  context 'when the HOMEBREW_SYSTEM environment variable is not set' do
+    let(:overcommit_disable) { '0' }
+    let(:homebrew_system) { nil }
+    it 'exits successfully' do
+      subject.status.should == 0
+    end
 
+    it 'runs the hooks' do
+      subject.stderr.should include 'Running pre-commit hooks'
+    end
+  end
+
+  context 'when the HOMEBREW_SYSTEM environment variable is set' do
+    let(:overcommit_disable) { '0' }
+    let(:homebrew_system) { 'Macintosh' }
     it 'exits successfully' do
       subject.status.should == 0
     end
@@ -31,6 +46,7 @@ describe 'disabling Overcommit' do
 
   context 'when the OVERCOMMIT_DISABLE environment variable is set to zero' do
     let(:overcommit_disable) { '0' }
+    let(:homebrew_system) { nil }
 
     it 'exits successfully' do
       subject.status.should == 0
@@ -43,6 +59,7 @@ describe 'disabling Overcommit' do
 
   context 'when the OVERCOMMIT_DISABLE environment variable is unset' do
     let(:overcommit_disable) { nil }
+    let(:homebrew_system) { nil }
 
     it 'exits successfully' do
       subject.status.should == 0
