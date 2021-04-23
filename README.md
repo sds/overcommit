@@ -41,6 +41,7 @@ any Ruby code.
   * [PreRebase](#prerebase)
 * [Repo-Specific Hooks](#repo-specific-hooks)
   * [Adding Existing Git Hooks](#adding-existing-git-hooks)
+* [Gem-provided Hooks](#gem-provided-hooks)
 * [Security](#security)
 * [Contributing](#contributing)
 * [Community](#community)
@@ -670,6 +671,41 @@ to understand which arguments are passed to the script depending on the type
 of hook, see the [git-hooks documentation][GHD].
 
 [GHD]: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+
+## Gem-provided Hooks
+
+For hooks which should be available from multiple repositories, but which do not
+make sense to contribute back to Overcommit, you can package them as a Ruby gem
+and `overcommit` can use them as if they were repo-specific hooks. This would be
+useful for an organization that has custom hooks they wish to apply to many
+repositories, but manage the hooks in a central way.
+
+To enable gem-provided hooks you need to set the configuration option
+`gem_plugins_enabled` to `true`.
+
+If you are using the [`gemfile`](#gemfile) configuration option or otherwise
+invoking Overcommit via Bundler then you must ensure the gems are listed
+in your Bundler configuration and Bundler will ensure that the gems are in
+Ruby's `$LOAD_PATH` so that Overcommit can find and load them.
+
+If you are not using Bundler (the gems are installed directly in your Ruby
+environment) then you must provide a path that Overcommit can `require` so
+the gem will be added to the `$LOAD_PATH`.
+
+```yaml
+gem_plugins_require: ['overcommit_site_hooks']
+```
+
+The above would result in a `require 'overcommit_site_hooks'`. The file does
+not have to implement any functional code, but merely be a placeholder sufficient
+to allow the `require` to work.
+
+The hooks themselves are implemented similarly to Repo-Specific Hooks, but need
+to be placed in a gem in the normal `overcommit` hook path within the gem. For
+example, to add `MyCustomHook` as a pre_commit hook you would put it here:
+`./lib/overcommit/hooks/pre_commit/my_custom_hook.rb` within the gem file structure.
+
+See [Repo-Specific Hooks](#repo-specific-hooks) for details.
 
 ## Security
 

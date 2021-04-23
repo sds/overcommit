@@ -34,6 +34,19 @@
 # (Generate lock file by running `bundle install --gemfile=.overcommit_gems.rb`)
 gemfile: false
 
+# If enabled, Overcommit will look for plugins provided anywhere in the
+# load path and load them as it would with built-in or repo-specific
+# hooks, allowing plugins to be provided by gems.
+# Note: If you are providing them as system gems (and not using `gemfile`
+# or a Bundler context where they are specified) then you must also set the
+# `gem_plugins_require` option.
+gem_plugins_enabled: true
+
+# If `gem_plugins_enabled` is true and you are using system gems (not via a
+# Bundler context), in order to allow Ruby to find the gems, you must list a
+# valid `require` path for each gem providing custom hooks here:
+# gem_plugins_require: [ 'overcommit_custom_hook' ]
+
 # Where to store hook plugins specific to a repository. These are loaded in
 # addition to the default hooks Overcommit comes with. The location is relative
 # to the root of the repository.

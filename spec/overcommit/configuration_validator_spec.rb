@@ -7,8 +7,9 @@ describe Overcommit::ConfigurationValidator do
   let(:logger) { Overcommit::Logger.new(output) }
   let(:options) { { logger: logger } }
   let(:config) { Overcommit::Configuration.new(config_hash, validate: false) }
+  let(:instance) { described_class.new }
 
-  subject { described_class.new.validate(config, config_hash, options) }
+  subject { instance.validate(config, config_hash, options) }
 
   context 'when hook has an invalid name' do
     let(:config_hash) do
@@ -112,6 +113,65 @@ describe Overcommit::ConfigurationValidator do
 
       it 'is valid' do
         expect { subject }.not_to raise_error
+      end
+    end
+  end
+
+  context 'when gem_plugins_require is set' do
+    let(:plugins_enabled) { true }
+    let(:plugins_require) { nil }
+
+    let(:config_hash) do
+      {
+        'gem_plugins_enabled' => plugins_enabled,
+        'gem_plugins_require' => plugins_require,
+      }
+    end
+
+    context 'when plugins_enabled is true' do
+      let(:plugins_enabled) { true }
+
+      context 'and it is not an array' do
+        let(:plugins_require) { true }
+
+        it 'raises an error' do
+          expect { subject }.to raise_error Overcommit::Exceptions::ConfigurationError
+        end
+      end
+
+      context 'and one does not load' do
+        let(:plugins_require) { %w[mygem missinggem] }
+
+        before do
+          allow(instance).to receive(:require).with('mygem').and_return(true)
+          allow(instance).to receive(:require).with('missinggem').and_raise(LoadError)
+        end
+
+        it 'raises an error' do
+          expect(logger).to receive(:error).with(/installed on the system/)
+
+          expect { subject }.to raise_error Overcommit::Exceptions::ConfigurationError
+        end
+      end
+
+      context 'and the gems load' do
+        let(:plugins_require) { ['mygem'] }
+
+        it 'is valid' do
+          expect(instance).to receive(:require).with('mygem').and_return(true)
+
+          expect { subject }.not_to raise_error
+        end
+      end
+    end
+
+    context 'when plugins_enabled is false' do
+      let(:plugins_enabled) { false }
+      let(:plugins_require) { ['one'] }
+
+      it 'loads nothing' do
+        expect(instance).not_to receive(:require)
+        subject
       end
     end
   end
