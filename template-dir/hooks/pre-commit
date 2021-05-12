@@ -26,6 +26,14 @@ if hook_type == 'overcommit-hook'
   exit 64 # EX_USAGE
 end
 
+# Check if the hook located in .git/hooks/pre-commit.d
+parent_dir = File.basename(File.dirname($0))
+if parent_dir != "hooks"
+  if parent_dir.match?(/.d$/)
+    hook_type = parent_dir[..-3]
+  end
+end
+
 # Check if Overcommit should invoke a Bundler context for loading gems
 require 'yaml'
 # rubocop:disable Style/RescueModifier
