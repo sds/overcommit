@@ -1,5 +1,7 @@
 # Overcommit Changelog
 
+* Add `staged_changes?` check to avoid stashing files if no changes has been staged.
+
 ## 0.57.0
 
 * Fix `CommitMsg` hooks to be able to call `modified_lines_in_file`.

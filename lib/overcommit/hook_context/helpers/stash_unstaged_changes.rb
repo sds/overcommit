@@ -15,7 +15,7 @@ module Overcommit::HookContext
         # Don't attempt to stash changes if all changes are staged, as this
         # prevents us from modifying files at all, which plays better with
         # editors/tools which watch for file changes.
-        if !initial_commit? && unstaged_changes?
+        if !initial_commit? && unstaged_changes? && staged_changes?
           stash_changes
 
           # While running hooks make it appear as if nothing changed
@@ -71,6 +71,13 @@ module Overcommit::HookContext
       # been staged.
       def unstaged_changes?
         result = Overcommit::Utils.execute(%w[git --no-pager diff --quiet])
+        !result.success?
+      end
+
+      # Checks whether there are any staged changes.
+      # https://github.com/sds/overcommit/issues/751
+      def staged_changes?
+        result = Overcommit::Utils.execute(%w[git --no-pager diff --cached --quiet])
         !result.success?
       end
 
