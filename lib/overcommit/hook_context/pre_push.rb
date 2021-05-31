@@ -76,6 +76,7 @@ module Overcommit::HookContext
 
       def overwritten_commits
         return @overwritten_commits if defined? @overwritten_commits
+
         result = Overcommit::Subprocess.spawn(%W[git rev-list #{remote_sha1} ^#{local_sha1}])
         if result.success?
           result.stdout.split("\n")

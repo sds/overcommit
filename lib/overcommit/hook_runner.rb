@@ -94,6 +94,7 @@ module Overcommit
       loop do
         hook = @lock.synchronize { @hooks_left.pop }
         break unless hook
+
         run_hook(hook)
       end
     end
@@ -159,12 +160,12 @@ module Overcommit
         return if should_skip?(hook)
 
         status, output = hook.run_and_transform
-      rescue Overcommit::Exceptions::MessageProcessingError => ex
+      rescue Overcommit::Exceptions::MessageProcessingError => e
         status = :fail
-        output = ex.message
-      rescue StandardError => ex
+        output = e.message
+      rescue StandardError => e
         status = :fail
-        output = "Hook raised unexpected error\n#{ex.message}\n#{ex.backtrace.join("\n")}"
+        output = "Hook raised unexpected error\n#{e.message}\n#{e.backtrace.join("\n")}"
       end
 
       @failed = true if status == :fail
@@ -202,7 +203,7 @@ module Overcommit
 
       # Load plugin hooks after so they can subclass existing hooks
       @hooks += HookLoader::PluginHookLoader.new(@config, @context, @log).load_hooks
-    rescue LoadError => ex
+    rescue LoadError => e
       # Include a more helpful message that will probably save some confusion
       message = 'A load error occurred. ' +
         if @config['gemfile']
@@ -212,8 +213,8 @@ module Overcommit
         end
 
       raise Overcommit::Exceptions::HookLoadError,
-            "#{message}\n#{ex.message}",
-            ex.backtrace
+            "#{message}\n#{e.message}",
+            e.backtrace
     end
   end
 end

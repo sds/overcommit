@@ -15,11 +15,11 @@ describe Overcommit::Hook::CommitMsg::MessageFormat do
   context 'when pattern is empty' do
     let(:config) do
       super().merge(Overcommit::Configuration.new(
-        'CommitMsg' => {
-          'MessageFormat' => {
-            'pattern' => nil
-          }
-        }
+                      'CommitMsg' => {
+                        'MessageFormat' => {
+                          'pattern' => nil
+                        }
+                      }
       ))
     end
 
@@ -43,11 +43,11 @@ describe Overcommit::Hook::CommitMsg::MessageFormat do
   context 'when multiline message matches the pattern' do
     let(:config) do
       super().merge(Overcommit::Configuration.new(
-        'CommitMsg' => {
-          'MessageFormat' => {
-            'pattern' => '^Some .* Message$'
-          }
-        }
+                      'CommitMsg' => {
+                        'MessageFormat' => {
+                          'pattern' => '^Some .* Message$'
+                        }
+                      }
       ))
     end
 

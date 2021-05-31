@@ -36,6 +36,7 @@ module Overcommit::HookContext
 
     def initial_commit?
       return @initial_commit unless @initial_commit.nil?
+
       @initial_commit = Overcommit::GitRepo.initial_commit?
     end
 

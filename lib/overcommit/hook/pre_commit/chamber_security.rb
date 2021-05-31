@@ -9,6 +9,7 @@ module Overcommit::Hook::PreCommit
       result = execute(command, args: applicable_files)
 
       return :pass if result.stdout.empty?
+
       [:fail, "These settings appear to need to be secured but were not: #{result.stdout}"]
     end
   end

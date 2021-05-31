@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://pypi.python.org/pypi/pyflakes
   class Pyflakes < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):/.freeze
 
     def run
       result = execute(command, args: applicable_files)

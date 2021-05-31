@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
     # "src/file/anotherfile.ts[298, 1]: exceeds maximum line length of 140"
     # or
     # "ERROR: src/AccountController.ts[4, 28]: expected call-signature to have a typedef"
-    MESSAGE_REGEX = /^(?<type>.+: )?(?<file>.+?(?=\[))[^\d]+(?<line>\d+).*?/
+    MESSAGE_REGEX = /^(?<type>.+: )?(?<file>.+?(?=\[))[^\d]+(?<line>\d+).*?/.freeze
 
     def run
       result = execute(command, args: applicable_files)
@@ -19,9 +19,9 @@ module Overcommit::Hook::PreCommit
       type_categorizer = ->(type) { type.nil? || type.include?('ERROR') ? :error : :warning }
 
       extract_messages(
-          output_lines,
-          MESSAGE_REGEX,
-          type_categorizer
+        output_lines,
+        MESSAGE_REGEX,
+        type_categorizer
       )
     end
   end

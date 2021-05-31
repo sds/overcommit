@@ -5,7 +5,7 @@ require 'json'
 
 module Overcommit
   # Stores configuration for Overcommit and the hooks it runs.
-  class Configuration # rubocop:disable ClassLength
+  class Configuration # rubocop:disable Metrics/ClassLength
     # Creates a configuration from the given hash.
     #
     # @param hash [Hash] loaded YAML config file as a hash

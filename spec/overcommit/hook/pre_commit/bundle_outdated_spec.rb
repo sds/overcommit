@@ -49,7 +49,7 @@ aws-sdk-core (newest 2.3.3, installed 2.3.1)
 aws-sdk-resources (newest 2.3.3, installed 2.3.1)
 config (newest 1.1.1, installed 1.1.0)
 ruby_parser (newest 3.8.2, installed 3.8.1)
-MSG
+        MSG
         )
       end
 
@@ -60,7 +60,7 @@ MSG
       let(:result) do
         double(stdout: <<-MSG
 Warning: the running version of Bundler is older than the version that created the lockfile. We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
-MSG
+        MSG
         )
       end
 

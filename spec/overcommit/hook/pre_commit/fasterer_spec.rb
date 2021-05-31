@@ -36,7 +36,7 @@ Using each_with_index is slower than while loop. Occurred at lines: 32.
 spec/models/blog_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 12.
 2 files inspected, 0 offense detected
-      MSG
+        MSG
       )
     end
 
@@ -51,7 +51,7 @@ Using each_with_index is slower than while loop. Occurred at lines: 12.
 spec/models/product_spec.rb
 Using each_with_index is slower than while loop. Occurred at lines: 52.
 1 files inspected, 1 offense detected
-      MSG
+        MSG
       )
     end
 

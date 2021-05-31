@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
     # rubocop:disable Metrics/LineLength
     #   PHP Parse error:  syntax error, unexpected 'require_once' (T_REQUIRE_ONCE) in site/sumo.php on line 12
     # rubocop:enable Metrics/LineLength
-    MESSAGE_REGEX = /^(?<type>.+)\:\s+(?<message>.+) in (?<file>.+) on line (?<line>\d+)/
+    MESSAGE_REGEX = /^(?<type>.+)\:\s+(?<message>.+) in (?<file>.+) on line (?<line>\d+)/.freeze
 
     def run
       # A list of error messages

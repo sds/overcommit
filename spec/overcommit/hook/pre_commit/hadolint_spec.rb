@@ -31,7 +31,7 @@ describe Overcommit::Hook::PreCommit::Hadolint do
         success?: false,
         stdout: <<-MSG
 Dockerfile:5 DL3015 Avoid additional packages by specifying `--no-install-recommends`
-      MSG
+        MSG
       )
     end
     let(:result_dockerfile_web) do
@@ -39,7 +39,7 @@ Dockerfile:5 DL3015 Avoid additional packages by specifying `--no-install-recomm
         success?: false,
         stdout: <<-MSG
 Dockerfile.web:13 DL3020 Use COPY instead of ADD for files and folders
-      MSG
+        MSG
       )
     end
 
@@ -52,7 +52,7 @@ Dockerfile.web:13 DL3020 Use COPY instead of ADD for files and folders
         success?: false,
         stdout: <<-MSG
 Dockerfile:11 SC2086 Double quote to prevent globbing and word splitting.
-      MSG
+        MSG
       )
     end
     let(:result_dockerfile_web) do

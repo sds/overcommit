@@ -18,9 +18,9 @@ module Overcommit::Hook::PreCommit
 
       begin
         collect_lint_messages(JSON.parse(result.stdout))
-      rescue JSON::ParserError => ex
-        return :fail, "Unable to parse JSON returned by SCSS-Lint: #{ex.message}\n" \
-                      "STDOUT: #{result.stdout}\nSTDERR: #{result.stderr}"
+      rescue JSON::ParserError => e
+        [:fail, "Unable to parse JSON returned by SCSS-Lint: #{e.message}\n" \
+                      "STDOUT: #{result.stdout}\nSTDERR: #{result.stderr}"]
       end
     end
 

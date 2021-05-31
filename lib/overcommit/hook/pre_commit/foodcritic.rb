@@ -102,7 +102,7 @@ module Overcommit::Hook::PreCommit
       if result.success?
         :pass
       else
-        return [:warn, result.stderr + result.stdout]
+        [:warn, result.stderr + result.stdout]
       end
     end
 
@@ -137,12 +137,14 @@ module Overcommit::Hook::PreCommit
 
     def modified(type)
       return [] if !config["#{type}_directory"] || config["#{type}_directory"].empty?
+
       @modified ||= {}
       @modified[type] ||= directories_changed(full_directory_path("#{type}_directory"))
     end
 
     def full_directory_path(config_option)
       return config[config_option] if config[config_option].start_with?(File::SEPARATOR)
+
       File.absolute_path(File.join(Overcommit::Utils.repo_root, config[config_option]))
     end
   end

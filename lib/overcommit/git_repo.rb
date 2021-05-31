@@ -14,7 +14,7 @@ module Overcommit
       [^\s]+\s           # Ignore old file range
       \+(\d+)(?:,(\d+))? # Extract range of hunk containing start line and number of lines
       \s@@.*$
-    /x
+    /x.freeze
 
     # Regular expression used to extract information from lines of
     # `git submodule status` output
@@ -22,7 +22,7 @@ module Overcommit
       ^\s*(?<prefix>[-+U]?)(?<sha1>\w+)
       \s(?<path>[^\s]+?)
       (?:\s\((?<describe>.+)\))?$
-    /x
+    /x.freeze
 
     # Struct encapsulating submodule information extracted from the
     # output of `git submodule status`
@@ -262,9 +262,9 @@ module Overcommit
       end
 
       modules
-    rescue IniParse::IniParseError => ex
+    rescue IniParse::IniParseError => e
       raise Overcommit::Exceptions::GitSubmoduleError,
-            "Unable to read submodule information from #{ref}:.gitmodules file: #{ex.message}"
+            "Unable to read submodule information from #{ref}:.gitmodules file: #{e.message}"
     end
 
     # Returns the names of all branches containing the given commit.

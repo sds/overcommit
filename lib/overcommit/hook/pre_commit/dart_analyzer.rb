@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # Runs `dartanalyzer` against modified Dart files.
   # @see https://dart.dev/tools/dartanalyzer
   class DartAnalyzer < Base
-    MESSAGE_REGEX = /(?<type>.*)•\ (?<message>[^•]+)•\ (?<file>[^:]+):(?<line>\d+):(\d+)\.*/
+    MESSAGE_REGEX = /(?<type>.*)•\ (?<message>[^•]+)•\ (?<file>[^:]+):(?<line>\d+):(\d+)\.*/.freeze
 
     def run
       result = execute(command, args: applicable_files)

@@ -9,7 +9,7 @@ module Overcommit::Hook::PreCommit
       ^(?<file>(?:\w:)?[^:]+):\s
       (?:line\s(?<line>\d+)[^EW]+)?
       (?<type>Error|Warning)
-    /x
+    /x.freeze
 
     def run
       result = execute(command, args: applicable_files)

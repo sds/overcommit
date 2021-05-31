@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
       file=(?<file>(?:\w:)?.+)\s
       message=.+\s*
       (line=(?<line>\d+))?
-    /x
+    /x.freeze
 
     def run
       result = execute(command, args: applicable_files)

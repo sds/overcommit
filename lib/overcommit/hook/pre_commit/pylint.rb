@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://www.pylint.org/
   class Pylint < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?.+):(?<line>\d+):(?<type>[CEFRW])/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?.+):(?<line>\d+):(?<type>[CEFRW])/.freeze
 
     # Classify 'E' and 'F' message codes as errors,
     # everything else as warnings.

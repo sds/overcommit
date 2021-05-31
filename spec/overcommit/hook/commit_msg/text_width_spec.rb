@@ -98,13 +98,13 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
   context 'when custom lengths are specified' do
     let(:config) do
       super().merge(Overcommit::Configuration.new(
-        'CommitMsg' => {
-          'TextWidth' => {
-            'max_subject_width' => 70,
-            'min_subject_width' => 4,
-            'max_body_width' => 80
-          }
-        }
+                      'CommitMsg' => {
+                        'TextWidth' => {
+                          'max_subject_width' => 70,
+                          'min_subject_width' => 4,
+                          'max_body_width' => 80
+                        }
+                      }
       ))
     end
 

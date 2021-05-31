@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
       line\s(?<line>\d+)\s
       column\s(?<col>\d+)\s-\s
       (?<type>Error|Warning):\s(?<message>.+)$
-    /x
+    /x.freeze
 
     def run
       # example message:

@@ -9,7 +9,7 @@ module Overcommit::Hook::CommitMsg
   class SpellCheck < Base
     Misspelling = Struct.new(:word, :suggestions)
 
-    MISSPELLING_REGEX = /^[&#]\s(?<word>\w+)(?:.+?:\s(?<suggestions>.*))?/
+    MISSPELLING_REGEX = /^[&#]\s(?<word>\w+)(?:.+?:\s(?<suggestions>.*))?/.freeze
 
     def run
       result = execute(command + [uncommented_commit_msg_file])

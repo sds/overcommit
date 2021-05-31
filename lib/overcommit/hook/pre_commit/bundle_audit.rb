@@ -17,7 +17,7 @@ module Overcommit::Hook::PreCommit
       if result.success?
         :pass
       else
-        return [:warn, result.stdout]
+        [:warn, result.stdout]
       end
     end
   end

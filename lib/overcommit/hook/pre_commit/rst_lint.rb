@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
   class RstLint < Base
     MESSAGE_REGEX = /
     ^(?<type>INFO|WARNING|ERROR|SEVERE)(?<file>(?:\w:)?[^:]+):(?<line>\d+)\s(?<msg>.+)
-    /x
+    /x.freeze
 
     def run
       result = execute(command, args: applicable_files)

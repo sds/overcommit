@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   # failure. The exception is if the schema is at version 0 (i.e before any
   # migrations have been run). In this case it is OK if there are no migrations.
   class RailsSchemaUpToDate < Base
-    def run # rubocop:disable CyclomaticComplexity, PerceivedComplexity
+    def run # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       if migration_files.any? && schema_files.none?
         return :fail, "It looks like you're adding a migration, but did not update the schema file"
       elsif migration_files.none? && schema_files.any? && non_zero_schema_version?
@@ -18,7 +18,7 @@ module Overcommit::Hook::PreCommit
         # their username.
         latest_version = migration_files.map do |file|
           File.basename(file)[/\d+/]
-        end.sort.last
+        end.max
 
         up_to_date = schema.include?(latest_version)
 

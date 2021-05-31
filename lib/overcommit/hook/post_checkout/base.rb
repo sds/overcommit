@@ -16,6 +16,7 @@ module Overcommit::Hook::PostCheckout
 
     def enabled?
       return false if file_checkout? && skip_file_checkout?
+
       super
     end
   end

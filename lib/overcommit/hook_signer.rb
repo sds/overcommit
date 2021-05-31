@@ -52,6 +52,7 @@ module Overcommit
 
     def signable_file?(file)
       return unless file
+
       sep = Overcommit::OS.windows? ? '\\' : File::SEPARATOR
       file.start_with?(".#{sep}") ||
         file.start_with?(Overcommit::Utils.repo_root)

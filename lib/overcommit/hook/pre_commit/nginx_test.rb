@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/
   class NginxTest < Base
-    MESSAGE_REGEX = /^nginx: .+ in (?<file>.+):(?<line>\d+)$/
+    MESSAGE_REGEX = /^nginx: .+ in (?<file>.+):(?<line>\d+)$/.freeze
 
     def run
       messages = []

@@ -12,14 +12,14 @@ module Overcommit::Hook::PreCommit
         file = File.open(file_name)
         begin
           messages += check_file(file, file_name)
-        rescue ArgumentError => ex
+        rescue ArgumentError => e
           # File is likely a binary file which this check should ignore, but
           # print a warning just in case
           messages << Overcommit::Hook::Message.new(
             :warning,
             file_name,
             file.lineno,
-            "#{file_name}:#{file.lineno}:#{ex.message}"
+            "#{file_name}:#{file.lineno}:#{e.message}"
           )
         end
       end
@@ -59,6 +59,7 @@ module Overcommit::Hook::PreCommit
         i = info.split.first
         next if i == 'l/-text' # ignore binary files
         next if i == "l/#{eol}"
+
         path
       end.compact
     end

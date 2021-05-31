@@ -7,6 +7,7 @@ module Overcommit::Hook::PreCommit
     def run
       result = execute(command)
       return :pass if result.success?
+
       output = result.stdout + result.stderr
       [:fail, output]
     end

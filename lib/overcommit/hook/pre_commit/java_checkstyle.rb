@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://checkstyle.sourceforge.net/
   class JavaCheckstyle < Base
-    MESSAGE_REGEX = /^(\[(?<type>[^\]]+)\]\s+)?(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+    MESSAGE_REGEX = /^(\[(?<type>[^\]]+)\]\s+)?(?<file>(?:\w:)?[^:]+):(?<line>\d+)/.freeze
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       %w[WARN INFO].include?(type.to_s) ? :warning : :error

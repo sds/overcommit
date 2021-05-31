@@ -6,6 +6,7 @@ module Overcommit::Hook::PrePush
     def run
       result = execute(command)
       return :pass if result.success?
+
       [:fail, result.stdout]
     end
   end

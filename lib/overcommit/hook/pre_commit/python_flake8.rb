@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://pypi.python.org/pypi/flake8
   class PythonFlake8 < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?.+):(?<line>\d+):\d+:\s(?<type>\w\d+)/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?.+):(?<line>\d+):\d+:\s(?<type>\w\d+)/.freeze
 
     # Classify 'Exxx' and 'Fxxx' message codes as errors,
     # everything else as warnings.

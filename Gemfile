@@ -12,6 +12,6 @@ gem 'rspec', '~> 3.0'
 gem 'coveralls', '~> 0.8'
 
 # Pin RuboCop for Travis builds.
-gem 'rubocop', '0.54.0'
+gem 'rubocop', '0.82.0'
 
 gem 'ffi' if Gem.win_platform?

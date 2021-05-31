@@ -36,7 +36,7 @@ Linting 1 files with 14 linters...
 
 erb interpolation with '<%= (...).html_safe %>' in this context is never safe
 In file: app/views/posts/show.html.erb:10
-MSG
+        MSG
       end
 
       it { should fail_hook }

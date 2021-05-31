@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
       if extract_offense_num(output) == 0
         :pass
       else
-        return [:warn, output]
+        [:warn, output]
       end
     end
 

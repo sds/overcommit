@@ -30,7 +30,7 @@ describe Overcommit::Hook::PreCommit::YamlLint do
         stdout: <<-MSG
 file1.yaml:3:81: [error] line too long (253 > 80 characters) (line-length)
 file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
-      MSG
+        MSG
       )
     end
 
@@ -44,7 +44,7 @@ file2.yml:41:81: [error] line too long (261 > 80 characters) (line-length)
         stdout: <<-MSG
 file1.yaml:3:81: [error] line too long (253 > 80 characters) (line-length)
 file2.yml:41:81: [warning] missing document start "---" (document-start)
-      MSG
+        MSG
       )
     end
 
@@ -56,7 +56,7 @@ file2.yml:41:81: [warning] missing document start "---" (document-start)
         success?: false,
         stdout: <<-MSG
 file1.yaml:1:1: [warning] missing document start "---" (document-start)
-      MSG
+        MSG
       )
     end
 

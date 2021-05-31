@@ -6,7 +6,7 @@ require 'optparse'
 module Overcommit
   # Responsible for parsing command-line options and executing appropriate
   # application logic based on those options.
-  class CLI # rubocop:disable ClassLength
+  class CLI # rubocop:disable Metrics/ClassLength
     def initialize(arguments, input, logger)
       @arguments = arguments
       @input     = input
@@ -29,11 +29,11 @@ module Overcommit
       when :run_all
         run_all
       end
-    rescue Overcommit::Exceptions::ConfigurationSignatureChanged => ex
-      puts ex
+    rescue Overcommit::Exceptions::ConfigurationSignatureChanged => e
+      puts e
       exit 78 # EX_CONFIG
-    rescue Overcommit::Exceptions::HookContextLoadError => ex
-      puts ex
+    rescue Overcommit::Exceptions::HookContextLoadError => e
+      puts e
       exit 64 # EX_USAGE
     end
 
@@ -52,8 +52,8 @@ module Overcommit
 
         # Unconsumed arguments are our targets
         @options[:targets] = @arguments
-      rescue OptionParser::InvalidOption => ex
-        print_help @parser.help, ex
+      rescue OptionParser::InvalidOption => e
+        print_help @parser.help, e
       end
     end
 
@@ -125,11 +125,11 @@ module Overcommit
       @options[:targets].each do |target|
         begin
           Installer.new(log).run(target, @options)
-        rescue Overcommit::Exceptions::InvalidGitRepo => error
-          log.warning "Invalid repo #{target}: #{error}"
+        rescue Overcommit::Exceptions::InvalidGitRepo => e
+          log.warning "Invalid repo #{target}: #{e}"
           halt 69 # EX_UNAVAILABLE
-        rescue Overcommit::Exceptions::PreExistingHooks => error
-          log.warning "Unable to install into #{target}: #{error}"
+        rescue Overcommit::Exceptions::PreExistingHooks => e
+          log.warning "Unable to install into #{target}: #{e}"
           halt 73 # EX_CANTCREAT
         end
       end

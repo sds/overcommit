@@ -14,11 +14,14 @@ Layout/EndOfLine:
 Layout/FirstParameterIndentation:
   Enabled: false
 
-Layout/IndentArray:
+Layout/FirstArrayElementIndentation:
   Enabled: false
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
+
+Layout/LineLength:
+  Max: 100
 
 Layout/MultilineMethodCallIndentation:
   Enabled: false
@@ -47,9 +50,6 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Enabled: false
-
-Metrics/LineLength:
-  Max: 100
 
 Metrics/MethodLength:
   Max: 20

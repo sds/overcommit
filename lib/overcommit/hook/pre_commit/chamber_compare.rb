@@ -14,11 +14,11 @@ module Overcommit::Hook::PreCommit
         next unless second
 
         result = execute(
-                   command,
-                   args: [
-                           "--first=#{first.join(' ')}",
-                           "--second=#{second.join(' ')}",
-                         ],
+          command,
+          args: [
+                  "--first=#{first.join(' ')}",
+                  "--second=#{second.join(' ')}",
+                ],
                  )
 
         unless result.stdout.empty?

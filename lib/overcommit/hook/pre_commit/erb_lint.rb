@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/Shopify/erb-lint
   class ErbLint < Base
-    MESSAGE_REGEX = /(?<message>.+)\nIn file: (?<file>.+):(?<line>\d+)/
+    MESSAGE_REGEX = /(?<message>.+)\nIn file: (?<file>.+):(?<line>\d+)/.freeze
 
     def run
       result = execute(command, args: applicable_files)

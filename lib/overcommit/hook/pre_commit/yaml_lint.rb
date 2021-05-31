@@ -11,7 +11,7 @@ module Overcommit::Hook::PreCommit
       :(?<col>\d+)
       :\s\[(?<type>\w+)\]
       \s(?<msg>.+)$
-    /x
+    /x.freeze
 
     def run
       result = execute(command, args: applicable_files)

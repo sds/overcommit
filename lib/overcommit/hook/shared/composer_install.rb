@@ -9,6 +9,7 @@ module Overcommit::Hook::Shared
     def run
       result = execute(command)
       return :fail, result.stdout unless result.success?
+
       :pass
     end
   end

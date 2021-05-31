@@ -54,7 +54,7 @@ URL: http://www.osvdb.org/show/osvdb/117461
 Title: Rest-Client Gem for Ruby logs password information in plaintext
 Solution: upgrade to >= 1.7.3
 Vulnerabilities found!
-MSG
+          MSG
         )
       end
 
@@ -67,7 +67,7 @@ MSG
         stdout: <<-MSG
 Insecure Source URI found: git://github.com/xxx/overcommit.git
 Vulnerabilities found!
-MSG
+        MSG
       )
     end
 

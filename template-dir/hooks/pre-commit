@@ -35,9 +35,9 @@ if gemfile = YAML.load_file('.overcommit.yml')['gemfile'] rescue nil
 
   begin
     Bundler.setup
-  rescue Bundler::BundlerError => ex
-    puts "Problem loading '#{gemfile}': #{ex.message}"
-    puts "Try running:\nbundle install --gemfile=#{gemfile}" if ex.is_a?(Bundler::GemNotFound)
+  rescue Bundler::BundlerError => e
+    puts "Problem loading '#{gemfile}': #{e.message}"
+    puts "Try running:\nbundle install --gemfile=#{gemfile}" if e.is_a?(Bundler::GemNotFound)
     exit 78 # EX_CONFIG
   end
 end
@@ -80,37 +80,37 @@ begin
   status = runner.run
 
   exit(status ? 0 : 65) # 65 = EX_DATAERR
-rescue Overcommit::Exceptions::ConfigurationError => error
-  puts error
+rescue Overcommit::Exceptions::ConfigurationError => e
+  puts e
   exit 78 # EX_CONFIG
-rescue Overcommit::Exceptions::HookContextLoadError => error
-  puts error
+rescue Overcommit::Exceptions::HookContextLoadError => e
+  puts e
   puts 'Are you running an old version of Overcommit?'
   exit 69 # EX_UNAVAILABLE
 rescue Overcommit::Exceptions::HookLoadError,
-       Overcommit::Exceptions::InvalidHookDefinition => error
-  puts error.message
-  puts error.backtrace
+       Overcommit::Exceptions::InvalidHookDefinition => e
+  puts e.message
+  puts e.backtrace
   exit 78 # EX_CONFIG
 rescue Overcommit::Exceptions::HookSetupFailed,
-       Overcommit::Exceptions::HookCleanupFailed => error
-  puts error.message
+       Overcommit::Exceptions::HookCleanupFailed => e
+  puts e.message
   exit 74 # EX_IOERR
 rescue Overcommit::Exceptions::HookCancelled
   puts 'You cancelled the hook run'
   exit 130 # Ctrl-C cancel
-rescue Overcommit::Exceptions::InvalidGitRepo => error
-  puts error
+rescue Overcommit::Exceptions::InvalidGitRepo => e
+  puts e
   exit 64 # EX_USAGE
-rescue Overcommit::Exceptions::ConfigurationSignatureChanged => error
-  puts error
+rescue Overcommit::Exceptions::ConfigurationSignatureChanged => e
+  puts e
   puts "For more information, see #{Overcommit::REPO_URL}#security"
   exit 1
 rescue Overcommit::Exceptions::InvalidHookSignature
   exit 1
-rescue StandardError => error
-  puts error.message
-  puts error.backtrace
+rescue StandardError => e
+  puts e.message
+  puts e.backtrace
   puts "Report this bug at #{Overcommit::BUG_REPORT_URL}"
   exit 70 # EX_SOFTWARE
 end

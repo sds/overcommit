@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # Runs `phpcs` against any modified PHP files.
   class PhpCs < Base
     # Parse `phpcs` csv mode output
-    MESSAGE_REGEX = /^\"(?<file>.+)\",(?<line>\d+),\d+,(?<type>.+),\"(?<msg>.+)\"/
+    MESSAGE_REGEX = /^\"(?<file>.+)\",(?<line>\d+),\d+,(?<type>.+),\"(?<msg>.+)\"/.freeze
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       'error'.include?(type) ? :error : :warning
     end

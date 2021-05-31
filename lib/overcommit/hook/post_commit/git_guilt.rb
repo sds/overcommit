@@ -5,12 +5,13 @@ module Overcommit::Hook::PostCommit
   #
   # @see https://www.npmjs.com/package/git-guilt
   class GitGuilt < Base
-    PLUS_MINUS_REGEX = /^(.*?)(?:(\++)|(-+))$/
+    PLUS_MINUS_REGEX = /^(.*?)(?:(\++)|(-+))$/.freeze
     GREEN = 32
     RED = 31
 
     def run
       return :pass if initial_commit?
+
       result = execute(command)
       return :fail, result.stderr unless result.success?
 

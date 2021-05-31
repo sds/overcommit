@@ -30,11 +30,11 @@ describe Overcommit::Hook::PreCommit::AuthorEmail do
     context 'when a custom pattern is specified' do
       let(:config) do
         super().merge(Overcommit::Configuration.new(
-          'PreCommit' => {
-            'AuthorEmail' => {
-              'pattern' => '^[^@]+@brigade\.com$'
-            }
-          }
+                        'PreCommit' => {
+                          'AuthorEmail' => {
+                            'pattern' => '^[^@]+@brigade\.com$'
+                          }
+                        }
         ))
       end
 

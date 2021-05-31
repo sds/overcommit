@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # Runs `swiftlint lint` against modified Swift files.
   # @see https://github.com/realm/SwiftLint
   class SwiftLint < Base
-    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)[^ ]* (?<type>[^ ]+):(?<message>.*)/
+    MESSAGE_REGEX = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)[^ ]* (?<type>[^ ]+):(?<message>.*)/.freeze
 
     def run
       result = execute(command, args: applicable_files)

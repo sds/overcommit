@@ -26,6 +26,7 @@ module ShellHelpers
     Timeout.timeout(options.fetch(:timeout) { 1 }) do
       loop do
         return if yield
+
         sleep options.fetch(:check_interval) { 0.1 }
       end
     end

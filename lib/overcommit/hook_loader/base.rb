@@ -38,10 +38,10 @@ module Overcommit::HookLoader
         Overcommit::Hook.const_get(@context.hook_class_name).
                          const_get(hook_name).
                          new(@config, @context)
-      rescue LoadError, NameError => error
+      rescue LoadError, NameError => e
         raise Overcommit::Exceptions::HookLoadError,
-              "Unable to load hook '#{hook_name}': #{error}",
-              error.backtrace
+              "Unable to load hook '#{hook_name}': #{e}",
+              e.backtrace
       end
     end
   end

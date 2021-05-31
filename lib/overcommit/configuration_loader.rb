@@ -75,10 +75,10 @@ module Overcommit
       config
     rescue Overcommit::Exceptions::ConfigurationSignatureChanged
       raise
-    rescue StandardError => error
+    rescue StandardError => e
       raise Overcommit::Exceptions::ConfigurationError,
-            "Unable to load configuration from '#{file}': #{error}",
-            error.backtrace
+            "Unable to load configuration from '#{file}': #{e}",
+            e.backtrace
     end
 
     private

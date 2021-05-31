@@ -27,7 +27,7 @@ hook_types.each do |hook_type|
     each { |f| require f }
 end
 
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
+Dir[File.dirname(__FILE__) + '/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.include GitSpecHelpers

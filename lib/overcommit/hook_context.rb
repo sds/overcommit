@@ -9,11 +9,11 @@ module Overcommit::HookContext
     require "overcommit/hook_context/#{underscored_hook_type}"
 
     Overcommit::HookContext.const_get(hook_type_class).new(config, args, input)
-  rescue LoadError, NameError => error
+  rescue LoadError, NameError => e
     # Could happen when a symlink was created for a hook type Overcommit does
     # not yet support.
     raise Overcommit::Exceptions::HookContextLoadError,
-          "Unable to load '#{hook_type}' hook context: '#{error}'",
-          error.backtrace
+          "Unable to load '#{hook_type}' hook context: '#{e}'",
+          e.backtrace
   end
 end

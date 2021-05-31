@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # Runs `ktlint` against modified Kotlin files.
   # @see https://github.com/shyiko/ktlint
   class KtLint < Base
-    MESSAGE_REGEX = /((?<file>[^:]+):(?<line>\d+):(\d+):(?<message>.+))/
+    MESSAGE_REGEX = /((?<file>[^:]+):(?<line>\d+):(\d+):(?<message>.+))/.freeze
 
     def run
       result = execute(command, args: applicable_files)

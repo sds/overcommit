@@ -3,7 +3,7 @@
 module Overcommit::Hook::PreCommit
   # Runs `php-cs-fixer` against any modified PHP files.
   class PhpCsFixer < Base
-    MESSAGE_REGEX = /\s+\d+\)\s+(?<file>.*\.php)(?<violated_rules>\s+\(\w+(?:,\s+)?\))?/
+    MESSAGE_REGEX = /\s+\d+\)\s+(?<file>.*\.php)(?<violated_rules>\s+\(\w+(?:,\s+)?\))?/.freeze
 
     def run
       messages = []

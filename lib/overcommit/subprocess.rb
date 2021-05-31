@@ -38,7 +38,7 @@ module Overcommit
         if options[:input]
           begin
             process.io.stdin.puts(options[:input])
-          rescue StandardError # rubocop:disable Lint/HandleExceptions
+          rescue StandardError
             # Silently ignore if the standard input stream of the spawned
             # process is closed before we get a chance to write to it. This
             # happens on JRuby a lot.

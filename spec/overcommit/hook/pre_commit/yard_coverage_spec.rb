@@ -76,7 +76,7 @@ describe Overcommit::Hook::PreCommit::YardCoverage do
     context 'and it reports an error' do
       before do
         result.stub(:stdout).and_return(
-        <<-HEREDOC
+          <<-HEREDOC
         Files:          72
         Modules:        12 (    3 undocumented)
         Classes:        63 (   15 undocumented)

@@ -8,7 +8,7 @@ module Overcommit::Hook::PreCommit
   # https://github.com/phpstan/phpstan/issues/239
   # https://gist.github.com/edmondscommerce/89695c9cd2584fefdf540fb1c528d2c2
   class PhpStan < Base
-    MESSAGE_REGEX = /^(?<file>.+)\:(?<line>\d+)\:(?<message>.+)/
+    MESSAGE_REGEX = /^(?<file>.+)\:(?<line>\d+)\:(?<message>.+)/.freeze
 
     def run
       messages = []

@@ -42,10 +42,10 @@ module Overcommit::Hook::PreCommit
     def opts
       @opts ||= {
         validator_uri: config['validator_uri'],
-        proxy_server:  config['proxy_server'],
-        proxy_port:    config['proxy_port'],
-        proxy_user:    config['proxy_user'],
-        proxy_pass:    config['proxy_pass']
+        proxy_server: config['proxy_server'],
+        proxy_port: config['proxy_port'],
+        proxy_user: config['proxy_user'],
+        proxy_pass: config['proxy_pass']
       }
     end
 

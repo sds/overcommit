@@ -38,7 +38,7 @@ Total score (lower is better) = 268
   app/whatever21.rb:105
   app/whatever22.rb:76
 
-MSG
+        MSG
       )
     end
 
@@ -51,7 +51,7 @@ MSG
         success?: false,
         stdout: <<-MSG
 Total score (lower is better) = 0
-MSG
+        MSG
       )
     end
 

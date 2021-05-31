@@ -16,6 +16,7 @@ module Overcommit
     def hooks_path
       path = `git config --get core.hooksPath`.chomp
       return File.join(Overcommit::Utils.git_dir, 'hooks') if path.empty?
+
       File.absolute_path(path, Dir.pwd)
     end
   end

@@ -107,8 +107,10 @@ module Overcommit
 
         loop do
           break if index > splittable_args.length - 1
+
           total_bytes += splittable_args[index].bytesize
           break if total_bytes > byte_limit # Not enough room
+
           index += 1
         end
 

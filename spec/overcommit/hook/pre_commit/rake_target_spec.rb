@@ -19,11 +19,11 @@ describe Overcommit::Hook::PreCommit::RakeTarget do
   context 'with targets parameter set' do
     let(:config) do
       super().merge(Overcommit::Configuration.new(
-        'PreCommit' => {
-          'RakeTarget' => {
-            'targets' => ['test'],
-          }
-        }
+                      'PreCommit' => {
+                        'RakeTarget' => {
+                          'targets' => ['test'],
+                        }
+                      }
       ))
     end
     let(:result) { double('result') }

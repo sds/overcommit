@@ -10,7 +10,7 @@ module Overcommit::Hook::PreCommit
       :(?<line>\d+)
       :\d+
       :\s*(?<type>\w+)
-    /x
+    /x.freeze
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.include?('W') ? :warning : :error

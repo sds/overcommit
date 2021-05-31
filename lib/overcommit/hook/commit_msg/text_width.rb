@@ -32,7 +32,7 @@ module Overcommit::Hook::CommitMsg
       min_subject_width = config['min_subject_width']
       if subject.length < min_subject_width
         @errors << "Commit message subject must be >= #{min_subject_width} characters"
-        return
+        nil
       end
     end
 

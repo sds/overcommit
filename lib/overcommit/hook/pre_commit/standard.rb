@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see https://github.com/feross/standard
   class Standard < Base
-    MESSAGE_REGEX = /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)/
+    MESSAGE_REGEX = /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)/.freeze
 
     def run
       result = execute(command, args: applicable_files)

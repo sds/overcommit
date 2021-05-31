@@ -12,6 +12,7 @@ module Overcommit::Hook::PrepareCommitMsg
 
     def modify_commit_message
       raise 'This expects a block!' unless block_given?
+
       # NOTE: this assumes all the hooks of the same type share the context's
       # memory. If that's not the case, this won't work.
       lock.synchronize do

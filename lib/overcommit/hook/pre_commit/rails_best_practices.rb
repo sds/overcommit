@@ -7,7 +7,7 @@ module Overcommit
       #
       # @see https://github.com/railsbp/rails_best_practices
       class RailsBestPractices < Base
-        ERROR_REGEXP = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)\s-\s(?<type>.+)/
+        ERROR_REGEXP = /^(?<file>(?:\w:)?[^:]+):(?<line>\d+)\s-\s(?<type>.+)/.freeze
 
         def run
           result = execute(command, args: applicable_files)

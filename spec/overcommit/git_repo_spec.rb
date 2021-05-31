@@ -377,7 +377,7 @@ describe Overcommit::GitRepo do
 
       it 'returns all submodules that were removed' do
         subject.size.should == 2
-        subject.map(&:path).sort.should == ['sub-repo', 'yet-another-sub-repo']
+        subject.map(&:path).sort.should == %w[sub-repo yet-another-sub-repo]
       end
     end
   end

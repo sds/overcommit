@@ -5,7 +5,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://www.javascriptlint.com/
   class Jsl < Base
-    MESSAGE_REGEX = /(?<file>(?:\w:)?.+)\((?<line>\d+)\):(?<type>[^:]+)/
+    MESSAGE_REGEX = /(?<file>(?:\w:)?.+)\((?<line>\d+)\):(?<type>[^:]+)/.freeze
 
     MESSAGE_TYPE_CATEGORIZER = lambda do |type|
       type.match?(/warning/) ? :warning : :error

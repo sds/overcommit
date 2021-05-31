@@ -27,6 +27,7 @@ module Overcommit::HookContext
     # @return [true,false]
     def initial_commit?
       return @initial_commit unless @initial_commit.nil?
+
       @initial_commit = !Overcommit::Utils.execute(%w[git rev-parse HEAD~]).success?
     end
   end
