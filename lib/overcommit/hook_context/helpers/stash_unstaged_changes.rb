@@ -129,7 +129,7 @@ module Overcommit::HookContext
 
       # Applies the stash to the working tree to restore the user's state.
       def restore_working_tree
-        result = Overcommit::Utils.execute(%w[git stash pop --index --quiet])
+        result = Overcommit::Utils.execute(%w[git stash pop --index])
         unless result.success?
           raise Overcommit::Exceptions::HookCleanupFailed,
                 "Unable to restore working tree after #{hook_script_name} hooks run:" \
