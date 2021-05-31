@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Gracefully handle breaking behavior in upstream Psych gem to support YAML aliases.
+
 ## 0.57.0
 
 * Fix `CommitMsg` hooks to be able to call `modified_lines_in_file`.
