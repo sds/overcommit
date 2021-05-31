@@ -2,6 +2,13 @@
 
 ## master (unreleased)
 
+* Add `rexml` dependency explicitly to support Ruby 3.0.
+* Add `DartAnalyzer` pre-commit hook to analyze Dart files.
+* Add `PubTest` and `FlutterTest` pre-push hooks to run `pub test` and `flutter test` for Dart projects, respectively.
+* Update `index-tags` script to support scanning only files tracked by Git.
+* Fix `EsLint` pre-commit hook to not report certain false positives.
+* Update `YamlLint` to `fail` the run instead of `warn` when errors are detected.
+* Update `YamlLint` parse the line number of output so it is line aware.
 * Gracefully handle breaking behavior in upstream Psych gem to support YAML aliases.
 
 ## 0.57.0
