@@ -10,6 +10,7 @@
 * Update `YamlLint` to `fail` the run instead of `warn` when errors are detected.
 * Update `YamlLint` parse the line number of output so it is line aware.
 * Gracefully handle breaking behavior in upstream Psych gem to support YAML aliases.
+* Fix case where `git` would delete all tracked files when popping stash.
 
 ## 0.57.0
 
