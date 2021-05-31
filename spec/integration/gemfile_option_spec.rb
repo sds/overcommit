@@ -60,7 +60,7 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
     repo do
       # Since RSpec is being run within a Bundler context we need to clear it
       # in order to not taint the test
-      Bundler.with_clean_env do
+      Bundler.with_unbundled_env do
         FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
         echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
         touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
