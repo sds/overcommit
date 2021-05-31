@@ -1,6 +1,6 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.58.0
 
 * Add `rexml` dependency explicitly to support Ruby 3.0.
 * Add `DartAnalyzer` pre-commit hook to analyze Dart files.
