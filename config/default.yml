@@ -703,7 +703,7 @@ PreCommit:
     enabled: false
     description: 'Analyze with RuboCop'
     required_executable: 'rubocop'
-    flags: ['--format=emacs', '--force-exclusion', '--display-cop-names']
+    flags: ['--format=emacs', '--force-exclusion', '--display-cop-names', '--disable-pending-cops']
     install_command: 'gem install rubocop'
     include:
       - '**/*.gemspec'

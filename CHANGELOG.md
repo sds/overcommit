@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## master (unreleased)
+
+* Add `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook to ignore non-existent cops.
+
 ## 0.58.0
 
 * Add `rexml` dependency explicitly to support Ruby 3.0.
