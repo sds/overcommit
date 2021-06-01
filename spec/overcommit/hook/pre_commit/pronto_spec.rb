@@ -41,10 +41,15 @@ describe Overcommit::Hook::PreCommit::Pronto do
 
     context 'and it reports a warning' do
       before do
-        result.stub(:stdout).and_return([
-          'file1.rb:12 W: Line is too long. [107/80]',
-          'file2.rb:14 I: Prefer single-quoted strings'
-        ].join("\n"))
+        result.stub(:stdout).and_return <<~MESSAGE
+          Running Pronto::Rubocop
+          file1.rb:12 W: Line is too long. [107/80]
+          file2.rb:14 I: Prefer single-quoted strings
+
+          ```suggestion
+          x = 'x'
+          ```
+        MESSAGE
       end
 
       it { should warn }
