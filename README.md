@@ -567,6 +567,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [TrailingWhitespace](lib/overcommit/hook/pre_commit/trailing_whitespace.rb)
 * [TravisLint](lib/overcommit/hook/pre_commit/travis_lint.rb)
 * [TsLint](lib/overcommit/hook/pre_commit/ts_lint.rb)
+* Vale
 * [Vint](lib/overcommit/hook/pre_commit/vint.rb)
 * [W3cCss](lib/overcommit/hook/pre_commit/w3c_css.rb)
 * [W3cHtml](lib/overcommit/hook/pre_commit/w3c_html.rb)
