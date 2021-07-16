@@ -683,7 +683,8 @@ with Overcommit without writing any Ruby code in a similar way as
 
 These special line-aware command hooks behave and are configured the same way
 as the Git ones, except only file arguments get passed to them.
-Also they must have the `ad_hoc` option, so that, using the command output:
+Also to enable the feature, they must use at least one of the following options,
+so that, using the command output:
 - differentiating between warnings and errors becomes possible
 - modified lines can be detected and acted upon as defined by
   the `problem_on_unmodified_line`, `requires_files`, `include` and `exclude`
@@ -691,13 +692,17 @@ Also they must have the `ad_hoc` option, so that, using the command output:
 
 **Warning**: Only the command's standard output stream is considered for now,
 *not* its standard error stream.
+If you do not need to change the default values for any other option,
+then the `extract_messages_from` option has to be specified.
+Its value does not matter for now, but it should be set to `stdout`
+to avoid problems in the future.
 
 To differentiate between warning and error messages,
-the `warning_message_type_pattern` suboption may be specified:
+the `warning_message_type_pattern` option may be specified:
 the `type` field of the `message_pattern` regexp below must then include
 the `warning_message_type_pattern` option's text.
 
-The `message_pattern` suboption specifies the format of the command's messages.
+The `message_pattern` option specifies the format of the command's messages.
 It is a optional [(Ruby) regexp][RubyRE], which if present must at least define
 a `file` [named capture group][RubyRENCG].
 The only other allowed ones are `line` and `type`, which when specified
@@ -714,9 +719,8 @@ PreCommit:
   CustomScript:
     enabled: true
     command: './bin/custom-script'
-    ad_hoc:
-      message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):(?<type>[^ ]+)/
-      warning_message_type_pattern: warning
+    message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):(?<type>[^ ]+)/
+    warning_message_type_pattern: warning
 ```
 
 **Tip**: To get the syntax of the regexps right, a Ruby interpreter like `irb`

@@ -73,24 +73,22 @@ describe 'ad-hoc pre-commit hook' do
           FooLint:
             enabled: true
             command: ["foo", "lint"]
-            ad_hoc:
-              message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):(?<type>[^ ]+)/
-              warning_message_type_pattern: warning
+            message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):(?<type>[^ ]+)/
+            warning_message_type_pattern: warning
             flags:
             - "--format=emacs"
             include: '**/*.foo'
           FooLintDefault:
             enabled: true
             command: ["foo", "lint"]
-            ad_hoc:
-              warning_message_type_pattern: warning
+            warning_message_type_pattern: warning
             flags:
             - "--format=emacs"
             include: '**/*.foo'
           FooLintDefaultNoWarnings:
             enabled: true
             command: ["foo", "lint"]
-            ad_hoc:
+            extract_messages_from: stdout
             flags:
             - "--format=emacs"
             include: '**/*.foo'

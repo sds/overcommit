@@ -95,7 +95,7 @@ module Overcommit::HookLoader
 
       hook_config = @config.for_hook(hook_name, @context.hook_class_name)
       hook_class =
-        if hook_config['ad_hoc']
+        if is_hook_line_aware(hook_config)
           create_line_aware_command_hook_class(hook_base)
         else
           create_git_hook_class(hook_base)
