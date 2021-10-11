@@ -15,7 +15,8 @@
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
 are stored in source control. You can also easily
-[add your existing hook scripts](#adding-existing-git-hooks) without writing
+[add your existing hook scripts](#adding-existing-git-hooks) or
+[use some of your existing line-oriented analysis tools](#adding-existing-line-aware-commands) without writing
 any Ruby code.
 
 * [Requirements](#requirements)
@@ -41,6 +42,7 @@ any Ruby code.
   * [PreRebase](#prerebase)
 * [Repo-Specific Hooks](#repo-specific-hooks)
   * [Adding Existing Git Hooks](#adding-existing-git-hooks)
+  * [Adding Existing Line-Aware Commands](#adding-existing-line-aware-commands)
 * [Security](#security)
 * [Contributing](#contributing)
 * [Community](#community)
@@ -240,7 +242,7 @@ Option                                  | Description
 `install_command`                       | Command the user can run to install the `required_executable` (or alternately the specified `required_libraries`). This is intended for documentation purposes, as Overcommit does not install software on your behalf since there are too many edge cases where such behavior would result in incorrectly configured installations (e.g. installing a Python package in the global package space instead of in a virtual environment).
 `skip_file_checkout`                    | Whether to skip this hook for file checkouts (e.g. `git checkout some-ref -- file`). Only applicable to `PostCheckout` hooks.
 `skip_if`                               | Array of arguments to be executed to determine whether or not the hook should run. For example, setting this to a value of `['bash', '-c', '! which my-executable']` would allow you to skip running this hook if `my-executable` was not in the bin path.
-`ad_hoc`                                | *["Ad-hoc" line-aware command hooks](#adding-existing-line-aware-commands) only.*
+[...]`message_`[...]                    | *[Line-aware command hooks](#adding-existing-line-aware-commands) only.*
 
 In addition to the built-in configuration options, each hook can expose its
 own unique configuration options. The `AuthorEmail` hook, for example, allows
