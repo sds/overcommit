@@ -22,14 +22,8 @@ module Overcommit::HookLoader
 
     private
 
-    # GNU/Emacs-style error format:
-    AD_HOC_HOOK_DEFAULT_MESSAGE_PATTERN =
-      /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/.freeze
-
     def is_hook_line_aware(hook_config)
-      hook_config['extract_messages_from'] ||
-        hook_config['message_pattern'] ||
-        hook_config['warning_message_type_pattern']
+      hook_config['message_pattern']
     end
 
     def create_line_aware_command_hook_class(hook_base) # rubocop:disable Metrics/MethodLength
@@ -53,8 +47,7 @@ module Overcommit::HookLoader
           warning_message_type_pattern = line_aware_config[:warning_message_type_pattern]
           Overcommit::Utils::MessagesUtils.extract_messages(
             result.stdout.split("\n"),
-            line_aware_config[:message_pattern] ||
-              AD_HOC_HOOK_DEFAULT_MESSAGE_PATTERN,
+            line_aware_config[:message_pattern],
             Overcommit::Utils::MessagesUtils.create_type_categorizer(
               warning_message_type_pattern
             )

@@ -78,17 +78,18 @@ describe 'ad-hoc pre-commit hook' do
             flags:
             - "--format=emacs"
             include: '**/*.foo'
-          FooLintDefault:
+          FooLintRecommendedPattern:
             enabled: true
             command: ["foo", "lint"]
+            message_pattern: !ruby/regexp /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/
             warning_message_type_pattern: warning
             flags:
             - "--format=emacs"
             include: '**/*.foo'
-          FooLintDefaultNoWarnings:
+          FooLintRecommendedPatternNoWarnings:
             enabled: true
             command: ["foo", "lint"]
-            extract_messages_from: stdout
+            message_pattern: !ruby/regexp /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/
             flags:
             - "--format=emacs"
             include: '**/*.foo'
@@ -143,8 +144,8 @@ describe 'ad-hoc pre-commit hook' do
       it { should fail_hook }
     end
 
-    describe '(using default pattern)' do
-      let(:hook_name) { 'FooLintDefault' }
+    describe '(using recommended pattern)' do
+      let(:hook_name) { 'FooLintRecommendedPattern' }
 
       context 'when command fails with some warning message' do
         let(:result) do
@@ -175,8 +176,8 @@ A:1:80: error
       end
     end
 
-    describe '(using defaults)' do
-      let(:hook_name) { 'FooLintDefaultNoWarnings' }
+    describe '(using recommended pattern w/o warnings)' do
+      let(:hook_name) { 'FooLintRecommendedPatternNoWarnings' }
 
       context 'when command fails with some messages' do
         let(:result) do
