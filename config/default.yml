@@ -845,8 +845,7 @@ PreCommit:
   Vale:
     enabled: false
     command: "vale"
-    ad_hoc:
-      message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):/
+    message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):/
     flags:
       - '--output=line'
     include:
