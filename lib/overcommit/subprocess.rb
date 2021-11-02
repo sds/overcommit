@@ -91,11 +91,10 @@ module Overcommit
       # @param process [String]
       # @return [String]
       def to_utf8(string)
-        ec = Encoding::Converter.new(Encoding.locale_charmap, "UTF-8")
+        ec = Encoding::Converter.new(Encoding.locale_charmap, 'UTF-8')
         # Convert encoding, alternatively simple: string.scrub will suffice
         ec.convert(string)
       end
-      
 
       # @param process [ChildProcess]
       # @return [Array<IO>]
