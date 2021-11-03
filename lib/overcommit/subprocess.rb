@@ -91,6 +91,10 @@ module Overcommit
       # @param process [String]
       # @return [String]
       def to_utf8(string)
+        if Encoding.locale_charmap == 'UTF-8'
+          return string
+        end
+
         ec = Encoding::Converter.new(Encoding.locale_charmap, 'UTF-8')
         # Convert encoding, alternatively simple: string.scrub will suffice
         ec.convert(string)
