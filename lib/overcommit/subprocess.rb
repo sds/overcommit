@@ -51,7 +51,7 @@ module Overcommit
         err.rewind
         out.rewind
 
-        Result.new(process.exit_code, out.read, err.read)
+        Result.new(process.exit_code, to_utf8(out.read), to_utf8(err.read))
       end
 
       # Spawns a new process in the background using the given array of
@@ -81,6 +81,23 @@ module Overcommit
         end
 
         %w[cmd.exe /c] + [args.join(' ')]
+      end
+
+      # Convert string from current locale to utf-8
+      #
+      # When running commands under windows the command output is using
+      # current system locale (depends on system lanuage) not UTF-8
+      #
+      # @param process [String]
+      # @return [String]
+      def to_utf8(string)
+        if Encoding.locale_charmap == 'UTF-8'
+          return string
+        end
+
+        ec = Encoding::Converter.new(Encoding.locale_charmap, 'UTF-8')
+        # Convert encoding, alternatively simple: string.scrub will suffice
+        ec.convert(string)
       end
 
       # @param process [ChildProcess]
