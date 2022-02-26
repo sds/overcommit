@@ -1,6 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
-[![Build Status](https://travis-ci.org/sds/overcommit.svg?branch=master)](https://travis-ci.org/sds/overcommit)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/umui038jlm597ryf?svg=true)](https://ci.appveyor.com/project/sds/overcommit)
+[![Build Status](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=master)](https://coveralls.io/github/sds/overcommit?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5da42f7f365e5fef6b4c/maintainability)](https://codeclimate.com/github/sds/overcommit/maintainability)
 [![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=master)](http://inch-ci.org/github/sds/overcommit)
