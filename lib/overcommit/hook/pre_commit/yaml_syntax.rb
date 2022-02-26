@@ -8,9 +8,13 @@ module Overcommit::Hook::PreCommit
 
       applicable_files.each do |file|
         begin
-          YAML.load_file(file)
-        rescue ArgumentError, Psych::SyntaxError => e
-          messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
+          YAML.load_file(file, aliases: true)
+        rescue ArgumentError
+          begin
+            YAML.load_file(file)
+          rescue ArgumentError, Psych::SyntaxError => e
+            messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
+          end
         end
       end
 
