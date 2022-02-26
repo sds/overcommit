@@ -19,7 +19,6 @@ jobs:
           - '3.1'
         os:
           - ubuntu
-          - windows
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +30,10 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: bundle exec rspec
+        run: |
+          git config --global user.email "gh-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          bundle exec rspec
 
       - name: Code coverage reporting
         uses: coverallsapp/github-action@master

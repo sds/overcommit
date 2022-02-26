@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
-if ENV['TRAVIS']
-  # When running in Travis, report coverage stats to Coveralls.
-  require 'coveralls'
-  Coveralls.wear!
-else
-  # Otherwise render coverage information in coverage/index.html and display
-  # coverage percentage in the console.
-  require 'simplecov'
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'bin/'
+  add_filter 'libexec/'
+  add_filter 'spec/'
+  add_filter 'template-dir/'
+
+  if ENV['CI']
+    require 'simplecov-lcov'
+
+    SimpleCov::Formatter::LcovFormatter.config do |c|
+      c.report_with_single_file = true
+      c.single_report_path = 'coverage/lcov.info'
+    end
+
+    formatter SimpleCov::Formatter::LcovFormatter
+  end
 end
 
 require 'overcommit'
