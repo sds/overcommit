@@ -7,10 +7,11 @@ on:
 
 jobs:
   rspec:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ${{ matrix.os }}-latest
 
     strategy:
+      fail-fast: false
       matrix:
         ruby-version:
           - '2.6'
@@ -19,6 +20,13 @@ jobs:
           - '3.1'
         os:
           - ubuntu
+          - windows
+
+        # Tempfile behavior has changed on Ruby 3.1 such that tests
+        # fail with permission denied. Would welcome a PR with a fix.
+        exclude:
+          - ruby-version: '3.1'
+            os: windows
 
     steps:
       - uses: actions/checkout@v2

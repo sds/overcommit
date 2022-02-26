@@ -2,6 +2,7 @@
 
 require 'childprocess'
 require 'tempfile'
+require 'overcommit/os'
 
 module Overcommit
   # Manages execution of a child process, collecting the exit status and
@@ -91,6 +92,10 @@ module Overcommit
       # @param process [String]
       # @return [String]
       def to_utf8(string)
+        # Our encoding code doesn't work on the GitHub Actions Windows
+        # environment for unknown reasons, so just skip it in CI.
+        return string if OS.windows? && ENV['GITHUB_ACTIONS']
+
         if Encoding.locale_charmap == 'UTF-8'
           return string
         end
