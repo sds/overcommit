@@ -1,0 +1,52 @@
+name: Tests
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  rspec:
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        ruby-version:
+          - '2.6'
+          - '2.7'
+          - '3.0'
+          - '3.1'
+        os:
+          - ubuntu
+          - windows
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run tests
+        run: bundle exec rspec
+
+      - name: Code coverage reporting
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.os }}
+          parallel: true
+
+  finish:
+    needs: rspec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Finalize code coverage report
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true

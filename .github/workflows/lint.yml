@@ -1,0 +1,29 @@
+name: Lint
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  overcommit:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+
+      - name: Prepare environment
+        run: |
+          git config --local user.email "gh-actions@example.com"
+          git config --local user.name "GitHub Actions"
+          bundle exec overcommit --sign
+
+      - name: Run pre-commit checks
+        run: bundle exec overcommit --run
