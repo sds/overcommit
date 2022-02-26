@@ -22,6 +22,7 @@ describe Overcommit::Hook::PreCommit::YamlSyntax do
 
   context 'when YAML file has errors' do
     before do
+      YAML.stub(:load_file).with(staged_file, { aliases: true }).and_raise(ArgumentError)
       YAML.stub(:load_file).with(staged_file).and_raise(ArgumentError)
     end
 
