@@ -21,9 +21,10 @@ jobs:
 
       - name: Prepare environment
         run: |
-          git config --local user.email "gh-actions@example.com"
-          git config --local user.name "GitHub Actions"
+          git config --global user.email "gh-actions@example.com"
+          git config --global user.name "GitHub Actions"
           bundle exec overcommit --sign
+          bundle exec overcommit --sign pre-commit
 
       - name: Run pre-commit checks
         run: bundle exec overcommit --run

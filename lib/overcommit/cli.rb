@@ -94,7 +94,7 @@ module Overcommit
         @options[:force] = true
       end
 
-      opts.on('-r [hook]', '--run [hook]', 'Run specified hook against all git tracked files. Defaults to `pre_commit`.') do |arg|
+      opts.on('-r [hook]', '--run [hook]', 'Run specified hook against all git tracked files. Defaults to `pre_commit`.') do |arg| # rubocop:disable Layout/LineLength
         @options[:action] = :run_all
         @options[:hook_to_run] = arg ? arg.to_s : 'run-all'
       end
@@ -200,7 +200,7 @@ module Overcommit
 
     def run_all
       empty_stdin = File.open(File::NULL) # pre-commit hooks don't take input
-      context = Overcommit::HookContext.create(@options[:hook_to_run], config, @arguments, empty_stdin)
+      context = Overcommit::HookContext.create(@options[:hook_to_run], config, @arguments, empty_stdin) # rubocop:disable Layout/LineLength
       config.apply_environment!(context, ENV)
 
       printer = Overcommit::Printer.new(config, log, context)
