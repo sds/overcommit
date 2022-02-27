@@ -22,6 +22,40 @@ module Overcommit::HookLoader
 
     private
 
+    def is_hook_line_aware(hook_config)
+      hook_config['message_pattern']
+    end
+
+    def create_line_aware_command_hook_class(hook_base) # rubocop:disable Metrics/MethodLength
+      Class.new(hook_base) do
+        def line_aware_config
+          {
+            message_pattern: @config['message_pattern'],
+            warning_message_type_pattern: @config['warning_message_type_pattern']
+          }
+        end
+
+        def run
+          result = execute(command, args: applicable_files)
+
+          return :pass if result.success?
+
+          extract_messages(line_aware_config, result)
+        end
+
+        def extract_messages(line_aware_config, result)
+          warning_message_type_pattern = line_aware_config[:warning_message_type_pattern]
+          Overcommit::Utils::MessagesUtils.extract_messages(
+            result.stdout.split("\n"),
+            line_aware_config[:message_pattern],
+            Overcommit::Utils::MessagesUtils.create_type_categorizer(
+              warning_message_type_pattern
+            )
+          )
+        end
+      end
+    end
+
     attr_reader :log
 
     # Load and return a {Hook} from a CamelCase hook name.
