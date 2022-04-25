@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'bundler'
 require 'simplecov'
 SimpleCov.start do
   add_filter 'bin/'

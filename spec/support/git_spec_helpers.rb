@@ -13,7 +13,7 @@ module GitSpecHelpers
   # @return [String] path of the repository
   def repo(options = {})
     directory('some-repo') do
-      create_cmd = %w[git init]
+      create_cmd = %w[git init --initial-branch=master]
       create_cmd += ['--template', options[:template_dir]] if options[:template_dir]
       create_cmd += ['--separate-git-dir', options[:git_dir]] if options[:git_dir]
 
