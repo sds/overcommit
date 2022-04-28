@@ -43,16 +43,14 @@ module Overcommit
     end
 
     def interrupt_triggered
-      log.newline
-      log.error 'Interrupt signal received. Stopping hooks...'
+      log.error "\nInterrupt signal received. Stopping hooks..."
     end
 
     # Executed when a hook run was interrupted/cancelled by user.
     def run_interrupted
       log.newline
       log.warning '⚠  Hook run interrupted by user'
-      log.warning '⚠  If files appear modified/missing, check your stash to recover them'
-      log.newline
+      log.warning "⚠  If files appear modified/missing, check your stash to recover them\n"
     end
 
     # Executed when one or more hooks by the end of the run.
@@ -91,6 +89,7 @@ module Overcommit
       log.partial hook.description
       log.partial '.' * [70 - hook.description.length - hook_name.length, 0].max
       log.partial hook_name
+      log.flush
     end
 
     def print_result(hook, status, output) # rubocop:disable Metrics/CyclomaticComplexity
