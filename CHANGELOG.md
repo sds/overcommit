@@ -3,6 +3,8 @@
 ## master (unreleased)
 
 * Add `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook to ignore non-existent cops. Requires RuboCop `0.82.0` or newer.
+* Add "ad-hoc" line-aware command hooks.
+* Add `Vale` pre-commit hook to check spelling and style in text and source files.
 
 ## 0.58.0
 
