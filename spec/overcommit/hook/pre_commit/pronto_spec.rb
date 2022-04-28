@@ -31,6 +31,7 @@ describe Overcommit::Hook::PreCommit::Pronto do
 
     context 'and it reports an error' do
       before do
+        result.stub(:stderr).and_return('')
         result.stub(:stdout).and_return([
           'file2.rb:10 E: IDENTICAL code found in :iter.',
         ].join("\n"))
@@ -41,6 +42,7 @@ describe Overcommit::Hook::PreCommit::Pronto do
 
     context 'and it reports a warning' do
       before do
+        result.stub(:stderr).and_return('')
         result.stub(:stdout).and_return <<~MESSAGE
           Running Pronto::Rubocop
           file1.rb:12 W: Line is too long. [107/80]
@@ -53,6 +55,17 @@ describe Overcommit::Hook::PreCommit::Pronto do
       end
 
       it { should warn }
+    end
+
+    context 'and it has a generic error message written to stderr' do
+      before do
+        result.stub(:stdout).and_return('')
+        result.stub(:stderr).and_return([
+          'Could not find pronto in any of the sources'
+        ].join("\n"))
+      end
+
+      it { should fail_hook }
     end
   end
 end
