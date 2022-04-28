@@ -1,8 +1,16 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## 0.59.0
 
 * Add `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook to ignore non-existent cops. Requires RuboCop `0.82.0` or newer.
+* Fix deprecation warning for `Bundler.with_clean_env`.
+* Fix handling of some kinds of pronto errors in the `Pronto` hook.
+* Fix encoding of process output on Windows.
+* Add support for specifying hook type to `--run` flag.
+* Fix message regex parser for Stylelint.
+* Fix configuration loading on Ruby 3.1.
+* Fix `YamlSyntax` to support aliases when parsing.
+* Fix run output to explicitly flush partial logs.
 
 ## 0.58.0
 
