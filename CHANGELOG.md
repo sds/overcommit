@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.59.1
+
+* Remove `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook.
+* Remove special handling of process output on Windows since it broke on Linux.
+
 ## 0.59.0
 
 * Add `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook to ignore non-existent cops. Requires RuboCop `0.82.0` or newer.
