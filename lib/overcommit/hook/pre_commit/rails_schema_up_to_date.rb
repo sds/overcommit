@@ -34,6 +34,10 @@ module Overcommit::Hook::PreCommit
 
     private
 
+    def encoding
+      { encoding: @config['encoding'] }.compact
+    end
+
     def migration_files
       @migration_files ||= applicable_files.select do |file|
         file.match %r{db/migrate/.*\.rb}
@@ -47,7 +51,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def schema
-      @schema ||= schema_files.map { |file| File.read(file) }.join
+      @schema ||= schema_files.map { |file| File.read(file, encoding) }.join
       @schema.tr('_', '')
     end
 

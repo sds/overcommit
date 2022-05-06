@@ -70,6 +70,33 @@ describe Overcommit::Hook::PreCommit::RailsSchemaUpToDate do
     end
 
     it { should fail_hook }
+
+    context 'when non ASCII encoding is required' do
+      let!(:config) do
+        super().merge(Overcommit::Configuration.new(
+                        'PreCommit' => {
+                          'RailsSchemaUpToDate' => {
+                            'encoding' => 'utf-8'
+                          }
+                        }
+                      ))
+      end
+
+      before do
+        subject.stub(:applicable_files).and_return([sql_schema_file])
+      end
+
+      around do |example|
+        repo do
+          FileUtils.mkdir_p('db/migrate')
+          File.open(sql_schema_file, 'w') { |f| f.write("version: 12345678901234\nVALUES ('字')") }
+          `git add #{sql_schema_file}`
+          example.run
+        end
+      end
+
+      it { should fail_hook }
+    end
   end
 
   context 'when a Ruby schema file with the latest version and migrations are added' do
