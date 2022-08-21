@@ -35,6 +35,8 @@ module Overcommit::Hook::PreCommit
     private
 
     def encoding
+      return unless @config.key?('encoding')
+
       { encoding: @config['encoding'] }.compact
     end
 
