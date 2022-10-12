@@ -208,6 +208,10 @@ PreCommit:
     command: ['bundle', 'exec', 'rubocop'] # Invoke within Bundler context
 ```
 
+Additionally, you may wish to have repo-specific configurations that are local to your computer that are not part of the shared repo config.
+Adding a `.local-overcommit.yml` file in the top-level directory of the repository adds another configuration file. This file works the same as `.overcommit.yml`.
+Adding this to ignored files in a git repo will allow you to have a local configuration per repo.
+
 ### Hook Options
 
 Individual hooks expose both built-in configuration options as well as their
