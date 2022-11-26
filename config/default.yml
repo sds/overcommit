@@ -536,6 +536,16 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
+  MixFormat:
+    enabled: false
+    description: 'Check formatting with mix format'
+    required_executable: 'mix'
+    flags: ['format', '--check-formatted']
+    include:
+      - '**/*.ex'
+      - '**/*.heex'
+      - '**/*.exs'
+
   PuppetMetadataJsonLint:
     enabled: false
     description: 'Checking module metadata'
