@@ -62,6 +62,14 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
       it 'prepends the replacement text' do
         expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
       end
+
+      context 'when the replacement text contains a space' do
+        let(:config) { new_config('replacement_text' => '[\1] ') }
+
+        it 'prepends the replacement text, including the space' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("[123] \n")
+        end
+      end
     end
 
     context "when the checked out branch doesn't matches the pattern" do

@@ -11,9 +11,9 @@ module Overcommit::Hook::PrepareCommitMsg
   # For instance, if your current branch is `123-topic` then this config
   #
   #    branch_pattern: '(\d+)-(\w+)'
-  #    replacement_text: '[#\1]'
+  #    replacement_text: '[#\1] '
   #
-  # would make this hook prepend commit messages with `[#123]`.
+  # would make this hook prepend commit messages with `[#123] `.
   #
   # Similarly, a replacement text of `[\1][\2]` would result in `[123][topic]`.
   #
@@ -53,7 +53,7 @@ module Overcommit::Hook::PrepareCommitMsg
       @new_template ||=
         begin
           curr_branch = Overcommit::GitRepo.current_branch
-          curr_branch.gsub(branch_pattern, replacement_text).strip
+          curr_branch.gsub(branch_pattern, replacement_text)
         end
     end
 
@@ -69,7 +69,7 @@ module Overcommit::Hook::PrepareCommitMsg
       @replacement_text ||=
         begin
           if File.exist?(replacement_text_config)
-            File.read(replacement_text_config)
+            File.read(replacement_text_config).chomp
           else
             replacement_text_config
           end
