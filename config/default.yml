@@ -1326,6 +1326,12 @@ PrePush:
     command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
     include: 'test/**/*_test.rb'
 
+  MixTest:
+    enabled: false
+    description: 'Run mix test suite'
+    required_executable: 'mix'
+    flags: ['test']
+
   PhpUnit:
     enabled: false
     description: 'Run PhpUnit test suite'
