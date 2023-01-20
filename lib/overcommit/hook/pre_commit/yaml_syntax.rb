@@ -15,10 +15,19 @@ module Overcommit::Hook::PreCommit
           rescue ArgumentError, Psych::SyntaxError => e
             messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
           end
+        rescue Psych::DisallowedClass => e
+          messages << error_message(file, e)
         end
       end
 
       messages
+    end
+
+    private
+
+    def error_message(file, error)
+      text = "#{file}: #{error.message}"
+      Overcommit::Hook::Message.new(:error, file, nil, text)
     end
   end
 end
