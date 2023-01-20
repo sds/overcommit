@@ -1,5 +1,15 @@
 # Overcommit Changelog
 
+## 0.60.0
+
+* Allow overriding `Gemfile.lock` location for `BundleCheck` pre-commit hook
+* Fix `ReplaceBranch` prepare-commit-msg hook to allow trailing spaces
+* Add `MixFormat` pre-commit hook
+* Add `MixTest` pre-push hook
+* Allow loading custom local configuration from `.local-overcommit.yml`
+* Handle `Psych::DisallowedClass` when running `YamlSyntax` pre-commit hook
+* Add support for specifying custom `encoding` in `RailsSchemaUpToDate` pre-commit hook
+
 ## 0.59.1
 
 * Remove `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook.
