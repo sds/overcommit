@@ -57,5 +57,47 @@ describe Overcommit::ConfigurationLoader do
         end
       end
     end
+
+    context 'when repo contains a local configuration file' do
+      let(:config_contents) { <<-CFG }
+        plugin_directory: 'some-directory'
+      CFG
+
+      let(:local_config_contents) { <<-CFG }
+        plugin_directory: 'some-different-directory'
+      CFG
+
+      around do |example|
+        repo do
+          File.open('.overcommit.yml', 'w') { |f| f.write(config_contents) }
+          File.open('.local-overcommit.yml', 'w') { |f| f.write(local_config_contents) }
+          example.run
+        end
+      end
+
+      it 'loads the file' do
+        Overcommit::ConfigurationLoader.any_instance.
+          should_receive(:load_file).
+          with(File.expand_path('.overcommit.yml'), File.expand_path('.local-overcommit.yml'))
+        subject
+      end
+
+      it 'merges each loaded file with the default configuration' do
+        subject.plugin_directory.should == File.expand_path('some-different-directory')
+      end
+
+      context 'and the configuration file contains a hook with no `enabled` option' do
+        let(:config_contents) { <<-CFG }
+          PreCommit:
+            ScssLint:
+              command: ['bundle', 'exec', 'scss-lint']
+        CFG
+
+        it 'displays a warning' do
+          subject
+          output.string.should =~ /PreCommit::ScssLint.*not.*enabled/i
+        end
+      end
+    end
   end
 end

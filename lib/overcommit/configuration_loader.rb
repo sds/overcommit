@@ -53,10 +53,14 @@ module Overcommit
     #
     # @return [Overcommit::Configuration]
     def load_repo_config
+      overcommit_local_yml = File.join(Overcommit::Utils.repo_root,
+                                       Overcommit::LOCAL_CONFIG_FILE_NAME)
       overcommit_yml = File.join(Overcommit::Utils.repo_root,
                                  Overcommit::CONFIG_FILE_NAME)
 
-      if File.exist?(overcommit_yml)
+      if File.exist?(overcommit_local_yml) && File.exist?(overcommit_yml)
+        load_file(overcommit_yml, overcommit_local_yml)
+      elsif File.exist?(overcommit_yml)
         load_file(overcommit_yml)
       else
         self.class.default_configuration
@@ -64,9 +68,13 @@ module Overcommit
     end
 
     # Loads a configuration, ensuring it extends the default configuration.
-    def load_file(file)
-      config = self.class.load_from_file(file, default: false, logger: @log)
-      config = self.class.default_configuration.merge(config)
+    def load_file(file, local_file = nil)
+      overcommit_config = self.class.load_from_file(file, default: false, logger: @log)
+      if local_file
+        local_config = self.class.load_from_file(local_file, default: false, logger: @log)
+      end
+      config = self.class.default_configuration.merge(overcommit_config)
+      config = self.class.default_configuration.merge(local_config) if local_config
 
       if @options.fetch(:verify) { config.verify_signatures? }
         verify_signatures(config)
