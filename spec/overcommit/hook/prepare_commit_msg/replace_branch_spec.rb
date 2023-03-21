@@ -86,7 +86,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
 
         it { is_expected.to pass }
 
-        it 'does not change the commit message' do
+        it 'does change the commit message' do
           expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
         end
       end
