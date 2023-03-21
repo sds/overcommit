@@ -29,7 +29,6 @@ module Overcommit::Hook::PrepareCommitMsg
   # - 'squash'   - if squashing
   #
   class ReplaceBranch < Base
-
     DEFAULT_BRANCH_PATTERN = /\A(\d+)-(\w+).*\z/.freeze
 
     def run
