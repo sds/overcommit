@@ -72,7 +72,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
       end
 
       context 'when skip_if exits with a zero status' do
-        let(:config) { new_config('skip_if' => ['/bin/sh', '-c', 'exit 0']) }
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 0']) }
 
         it { is_expected.to pass }
 
@@ -82,7 +82,7 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
       end
 
       context 'when skip_if exits with a non-zero status' do
-        let(:config) { new_config('skip_if' => ['/bin/sh', '-c', 'exit 1']) }
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 1']) }
 
         it { is_expected.to pass }
 
