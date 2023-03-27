@@ -70,6 +70,26 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
           expect(File.read('COMMIT_EDITMSG')).to eq("[123] \n")
         end
       end
+
+      context 'when skip_if exits with a zero status' do
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 0']) }
+
+        it { is_expected.to pass }
+
+        it 'does not change the commit message' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("\n")
+        end
+      end
+
+      context 'when skip_if exits with a non-zero status' do
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 1']) }
+
+        it { is_expected.to pass }
+
+        it 'does change the commit message' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
+        end
+      end
     end
 
     context "when the checked out branch doesn't matches the pattern" do
