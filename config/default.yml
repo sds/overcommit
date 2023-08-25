@@ -709,6 +709,11 @@ PreCommit:
     install_command: 'pip install restructuredtext_lint'
     include: '**/*.rst'
 
+  RSpec:
+    enabled: false
+    description: 'Run tests with Rspec'
+    required_executable: 'rspec'
+
   RuboCop:
     enabled: false
     description: 'Analyze with RuboCop'
