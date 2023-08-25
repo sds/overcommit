@@ -6,7 +6,12 @@ module Overcommit::Hook::Shared
   # @see http://rspec.info/
   module RSpec
     def run
-      result = execute(command)
+      result = if @config["include"]
+        execute(command, args: applicable_files)
+      else
+        execute(command)
+      end
+
       return :pass if result.success?
 
       output = result.stdout + result.stderr

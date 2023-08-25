@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Overcommit::Hook::PrePush::RSpec do
+describe Overcommit::Hook::PreCommit::RSpec do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -16,6 +16,42 @@ describe Overcommit::Hook::PrePush::RSpec do
     end
 
     it { should pass }
+
+    it {
+      expect(subject).to receive(:execute).with(['rspec']).and_return(result)
+
+      subject.run
+    }
+
+  end
+
+  context 'with included files set' do
+    let(:result) { double('result') }
+    let(:config) do
+      super().merge(Overcommit::Configuration.new(
+                      'PreCommit' => {
+                        'RSpec' => {
+                          'include' => ['**/*_spec.rb'],
+                        }
+                      }
+      ))
+    end
+
+    let(:context) { double('context') }
+
+    before do
+      result.stub(:success?).and_return(true)
+      subject.stub(:execute).and_return(result)
+      subject.stub(:applicable_files).and_return('spec/test_spec.rb')
+    end
+
+    it { should pass }
+
+    it {
+      expect(subject).to receive(:execute).with(['rspec'], args: 'spec/test_spec.rb').and_return(result)
+
+      subject.run
+    }
   end
 
   context 'when rspec exits unsuccessfully' do
