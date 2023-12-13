@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.61.0
+
+* Allow `ReplaceBranch` to use `skip_if`
+* Fix local Overcommit file merges with existing `.overcommit.yml`
+
 ## 0.60.0
 
 * Allow overriding `Gemfile.lock` location for `BundleCheck` pre-commit hook
