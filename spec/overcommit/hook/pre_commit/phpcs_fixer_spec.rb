@@ -13,7 +13,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
 
   context 'when phpcs fixer exits successfully with fixed file' do
     before do
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       sample_output = [
         'Loaded config default.',
         'Using cache file ".php_cs.cache".',
@@ -24,7 +24,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
         'Fixed all files in 0.001 seconds, 10.000 MB memory used',
         '',
       ].join("\n")
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
 
       result = double('result')
       result.stub(:status).and_return(0)
@@ -38,7 +38,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
 
   context 'when phpcs fixer exits successfully with no file to fix' do
     before do
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       sample_output = [
         'Loaded config default.',
         'Using cache file ".php_cs.cache".',
@@ -46,7 +46,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
         'Legend: ?-unknown, I-invalid file syntax, file ignored, S-Skipped, .-no changes, F-fixed, E-error',
         '',
       ].join("\n")
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
 
       result = double('result')
       result.stub(:status).and_return(0)
@@ -60,7 +60,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
 
   context 'when phpcs exits unsuccessfully' do
     before do
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       sample_output = [
         'Loaded config default.',
         'Using cache file ".php_cs.cache".',
@@ -72,7 +72,7 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
         '   1) /home/damien/Code/Rezdy/php/foo/broken.php',
         '',
       ].join("\n")
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
 
       result = double('result')
       result.stub(:status).and_return(1)
