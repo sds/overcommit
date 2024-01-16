@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.62.0
+
+* Allow version 5 of `childprocess` gem dependency
+
 ## 0.61.0
 
 * Allow `ReplaceBranch` to use `skip_if`
