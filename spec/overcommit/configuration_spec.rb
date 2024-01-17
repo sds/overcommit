@@ -294,4 +294,62 @@ describe Overcommit::Configuration do
       end
     end
   end
+
+  describe '#enabled_gem_hooks' do
+    let(:hash) do
+      {
+        'PreCommit' => {
+          'MyCustomHook' => {
+            'enabled' => true
+          },
+          'MyOtherHook' => {
+            'enabled' => false
+          },
+        }
+      }
+    end
+
+    let(:context) { double('context') }
+    subject { config.enabled_gem_hooks(context) }
+
+    before do
+      context.stub(hook_class_name: 'PreCommit',
+                   hook_type_name: 'pre_commit')
+    end
+
+    it 'excludes hooks that are not found' do
+      subject.should_not include 'MyCustomHook'
+      subject.should_not include 'MyOtherHook'
+    end
+
+    context 'when custom hooks are found' do
+      before do
+        $LOAD_PATH.unshift('/my/custom/path/lib')
+        allow(File).to receive(:exist?).
+          with('/my/custom/path/lib/overcommit/hook/pre_commit/my_custom_hook.rb').
+          and_return(true)
+        allow(File).to receive(:exist?).
+          with(File.join(Overcommit::HOME, 'lib/overcommit/hook/pre_commit/my_custom_hook.rb')).
+          and_return(false)
+        allow(File).to receive(:exist?).
+          with('/my/custom/path/lib/overcommit/hook/pre_commit/my_other_hook.rb').
+          and_return(true)
+        allow(File).to receive(:exist?).
+          with(File.join(Overcommit::HOME, 'lib/overcommit/hook/pre_commit/my_other_hook.rb')).
+          and_return(false)
+      end
+
+      after do
+        $LOAD_PATH.shift
+      end
+
+      it 'includes hooks that are enabled and found' do
+        subject.should include 'MyCustomHook'
+      end
+
+      it 'excludes hooks that are not enable but found' do
+        subject.should_not include 'MyOtherHook'
+      end
+    end
+  end
 end

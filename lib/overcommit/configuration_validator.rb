@@ -23,6 +23,7 @@ module Overcommit
       check_for_missing_enabled_option(hash) unless @options[:default]
       check_for_too_many_processors(config, hash)
       check_for_verify_plugin_signatures_option(hash)
+      check_for_gem_plugins(hash)
 
       hash
     end
@@ -180,6 +181,43 @@ module Overcommit
         @log.warning "See change log at #{REPO_URL}/blob/v0.29.0/CHANGELOG.md for details."
         @log.newline
       end
+    end
+
+    # check for presence of Gems specified in gem_plugins by trying to load them
+    def check_for_gem_plugins(hash)
+      return unless @log
+      return unless hash['gem_plugins_enabled'] == true
+      return unless hash.key?('gem_plugins_require')
+
+      required = hash['gem_plugins_require']
+
+      unless required.is_a?(Array)
+        @log.error 'gem_plugins_require expects a list value to be set'
+        raise Overcommit::Exceptions::ConfigurationError,
+              'gem_plugins_require expects a list value'
+      end
+
+      errors = []
+
+      required.each do |path|
+        begin
+          require path
+        rescue LoadError
+          errors << "Unable to require path '#{path}' listed in gem_plugins_require."
+        end
+        @log.debug "Successfully loaded gem_plugins_require: #{path}"
+      end
+
+      return unless errors.any?
+
+      errors << 'Ensure that the gems providing requested gem_plugins_require are ' \
+                'installed on the system or specify them via the gemfile ' \
+                'configuration option'
+
+      @log.error errors.join("\n")
+      @log.newline
+      raise Overcommit::Exceptions::ConfigurationError,
+            'One or more gems specified in gem_plugins_require could not be loaded'
     end
   end
 end
