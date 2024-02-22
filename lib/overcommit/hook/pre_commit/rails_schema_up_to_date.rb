@@ -35,7 +35,7 @@ module Overcommit::Hook::PreCommit
     private
 
     def encoding
-      return unless @config.key?('encoding')
+      return {} unless @config.key?('encoding')
 
       { encoding: @config['encoding'] }.compact
     end
@@ -53,7 +53,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def schema
-      @schema ||= schema_files.map { |file| File.read(file, encoding) }.join
+      @schema ||= schema_files.map { |file| File.read(file, **encoding) }.join
       @schema.tr('_', '')
     end
 
