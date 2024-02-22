@@ -20,7 +20,7 @@ describe Overcommit::HookContext::PostCommit do
       end
 
       repo do
-        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         `git commit -m "Initial commit"`
         expect(subject).to_not include File.expand_path('test-sub')
       end

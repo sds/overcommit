@@ -67,7 +67,7 @@ describe Overcommit::HookContext::PostCheckout do
 
       repo do
         `git commit --allow-empty -m "Initial commit"`
-        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         `git commit -m "Add submodule"`
         expect(subject).to_not include File.expand_path('test-sub')
       end
