@@ -46,7 +46,8 @@ describe Overcommit::HookContext::RunAll do
         end
 
         repo do
-          `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+          git_config = '-c protocol.file.allow=always'
+          `git #{git_config} submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
           example.run
         end
       end

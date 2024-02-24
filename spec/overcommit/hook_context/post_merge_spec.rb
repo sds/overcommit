@@ -94,7 +94,7 @@ describe Overcommit::HookContext::PostMerge do
       repo do
         `git commit --allow-empty -m "Initial commit"`
         `git checkout -b child > #{File::NULL} 2>&1`
-        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         `git commit -m "Add submodule"`
         `git checkout master > #{File::NULL} 2>&1`
         `git merge --no-ff --no-edit child`
