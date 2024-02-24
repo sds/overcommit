@@ -101,9 +101,8 @@ describe Overcommit::HookContext::PostRewrite do
         end
 
         repo do
-          git_config = '-c protocol.file.allow=always'
           `git commit --allow-empty -m "Initial commit"`
-          `git #{git_config} submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+          `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
           `git commit --amend -m "Add submodule"`
           expect(subject).to_not include File.expand_path('test-sub')
         end
