@@ -12,7 +12,7 @@ module Overcommit::HookContext
         cmd = Overcommit::Utils.parent_command
         return unless cmd
 
-        amend_pattern = /commit(\s.*)?\s--amend/
+        amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
 
         # Since the ps command can return invalid byte sequences for commands
         # containing unicode characters, we replace the offending characters,
@@ -24,11 +24,18 @@ module Overcommit::HookContext
             encode('UTF-8')
         end
 
-        # True if the command is a commit with the --amend flag
-        return @amendment if @amendment = cmd.match?(amend_pattern)
+        return @amendment if
+          # True if the command is a commit with the --amend flag
+          @amendment = !(/\s#{amend_pattern}/ =~ cmd).nil?
 
         # Check for git aliases that call `commit --amend`
-        return @amendment if @amendment = command_is_amend_alias?(cmd, amend_pattern)
+        `git config --get-regexp "^alias\\." "#{amend_pattern}"`.
+          scan(/alias\.([-\w]+)/). # Extract the alias
+          each do |match|
+            return @amendment if
+              # True if the command uses a git alias for `commit --amend`
+              @amendment = !(/git(\.exe)?\s+#{match[0]}/ =~ cmd).nil?
+          end
 
         @amendment
       end
@@ -66,22 +73,6 @@ module Overcommit::HookContext
           end
         end
         @modified_lines[file]
-      end
-
-      private
-
-      def command_is_amend_alias?(cmd, amend_pattern)
-        `git config --get-regexp "^alias"`.split("\n").each do |alias_def|
-          alias_map = alias_def.match /alias\.(?<to>[-\w]+)\s+(?<from>.+)/
-          next unless alias_map
-
-          alias_from_match = alias_map[:from].match? amend_pattern
-          alias_to_match = cmd.match? /git(\.exe)?\s+#{alias_map[:to]}/
-
-          # True if the command uses a git alias for `commit --amend`
-          return true if @amendment = alias_from_match && alias_to_match
-        end
-        false
       end
     end
   end
