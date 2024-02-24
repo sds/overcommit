@@ -21,15 +21,10 @@ jobs:
           - "3.2"
         os:
           - ubuntu
-          - windows
-
-        # Tempfile behavior has changed on Ruby 3.1 such that tests
-        # fail with permission denied. Would welcome a PR with a fix.
-        exclude:
-          - ruby-version: "3.1"
-            os: windows
-          - ruby-version: "3.2"
-            os: windows
+          # At the moment of this commit various specs fail on Windows.
+          # Any contributor is welcome to fix them and enable the Windows build.
+          # Please see Issue #836 for more details.
+          # - windows
 
     steps:
       - uses: actions/checkout@v4
