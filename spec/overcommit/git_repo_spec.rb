@@ -24,12 +24,13 @@ describe Overcommit::GitRepo do
         end
 
         submodule = repo do
-          `git submodule add #{nested_submodule} nested-sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add \
+            #{nested_submodule} nested-sub 2>&1 > #{File::NULL}`
           `git commit -m "Add nested submodule"`
         end
 
         repo do
-          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
           example.run
         end
       end
@@ -150,7 +151,7 @@ describe Overcommit::GitRepo do
         end
 
         before do
-          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
         end
 
         it { should_not include File.expand_path('sub') }
@@ -178,7 +179,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Submodule commit"`
         end
 
-        `git submodule add #{submodule} #{submodule_dir} 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{submodule} #{submodule_dir} 2>&1 > #{File::NULL}`
         `git commit -m "Add submodule"`
       end
 
@@ -282,7 +284,7 @@ describe Overcommit::GitRepo do
         touch 'tracked'
         `git add tracked`
         `git commit -m "Initial commit"`
-        `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
         touch 'staged'
         `git add staged`
         example.run
@@ -327,7 +329,7 @@ describe Overcommit::GitRepo do
       end
 
       repo do
-        `git submodule add #{submodule} sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Initial commit"`
         example.run
       end
@@ -343,7 +345,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} another-sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{another_submodule} another-sub-repo 2>&1 > #{File::NULL}`
       end
 
       it { should be_empty }
@@ -369,7 +372,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} yet-another-sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{another_submodule} yet-another-sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Add yet another submodule"`
         `git rm sub-repo`
         `git rm yet-another-sub-repo`
