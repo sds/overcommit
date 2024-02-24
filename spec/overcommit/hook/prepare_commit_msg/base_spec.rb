@@ -38,9 +38,9 @@ describe Overcommit::Hook::PrepareCommitMsg::Base do
           contents + "bravo\n"
         end
       end
-      Thread.new { hook_1.run }
-      Thread.new { hook_2.run }
-      Thread.list.each { |t| t.join unless t == Thread.current }
+      t1 = Thread.new { hook_1.run }
+      t2 = Thread.new { hook_2.run }
+      [t1, t2].each(&:join)
       expect(File.read(tempfile)).to match(/alpha\n#{initial_content}bravo\n/m)
     end
   end
