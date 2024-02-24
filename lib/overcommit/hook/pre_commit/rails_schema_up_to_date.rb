@@ -53,7 +53,7 @@ module Overcommit::Hook::PreCommit
     end
 
     def schema
-      @schema ||= schema_files.map { |file| File.read(file, encoding) }.join
+      @schema ||= schema_files.map { |file| File.read(file, **(encoding || {})) }.join
       @schema.tr('_', '')
     end
 
