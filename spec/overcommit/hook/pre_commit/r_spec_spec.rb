@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Overcommit::Hook::PrePush::RSpec do
+describe Overcommit::Hook::PreCommit::RSpec do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
@@ -28,7 +28,7 @@ describe Overcommit::Hook::PrePush::RSpec do
     let(:result) { double('result') }
     let(:config) do
       super().merge(Overcommit::Configuration.new(
-                      'PrePush' => {
+                      'PreCommit' => {
                         'RSpec' => {
                           'include' => ['**/*_spec.rb'],
                         }

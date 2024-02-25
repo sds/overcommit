@@ -2,7 +2,7 @@
 
 require 'overcommit/hook/shared/r_spec'
 
-module Overcommit::Hook::PrePush
+module Overcommit::Hook::PreCommit
   # Runs `rspec` test suite
   #
   # @see http://rspec.info/
