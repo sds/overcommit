@@ -41,7 +41,7 @@ module Overcommit::Hook::CommitMsg
 
       max_body_width = config['max_body_width']
 
-      lines[2..-1].each_with_index do |line, index|
+      lines[2..].each_with_index do |line, index|
         if line.chomp.size > max_body_width
           @errors << "Line #{index + 3} of commit message has > " \
                     "#{max_body_width} characters"

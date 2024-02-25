@@ -26,7 +26,7 @@ module Overcommit::Utils
             raise Overcommit::Exceptions::MessageProcessingError,
                   'Unexpected output: unable to determine line number or type ' \
                   "of error/warning for output:\n" \
-                  "#{output_messages[index..-1].join("\n")}"
+                  "#{output_messages[index..].join("\n")}"
           end
 
           file = extract_file(match, message)
