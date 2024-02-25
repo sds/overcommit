@@ -57,15 +57,9 @@ any Ruby code.
 
 ## Requirements
 
-This project aims to support the following Ruby runtimes on both \*nix and Windows:
+This project aims to support the following Ruby runtimes on \*nix (and best effort on Windows):
 
-* Ruby 2.4+
-
-### Windows
-
-If you are using Overcommit on **Windows**, make sure you include the `ffi` gem in your
-list of dependencies. Overcommit does not include the `ffi` gem by default since it
-significantly increases the install time for non-Windows platforms.
+* Ruby 2.6+
 
 ### Dependencies
 
