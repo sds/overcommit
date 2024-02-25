@@ -7,17 +7,15 @@ module Overcommit::Hook::PreCommit
       messages = []
 
       applicable_files.each do |file|
+        YAML.load_file(file, aliases: true)
+      rescue ArgumentError
         begin
-          YAML.load_file(file, aliases: true)
-        rescue ArgumentError
-          begin
-            YAML.load_file(file)
-          rescue ArgumentError, Psych::SyntaxError => e
-            messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
-          end
-        rescue Psych::DisallowedClass => e
-          messages << error_message(file, e)
+          YAML.load_file(file)
+        rescue ArgumentError, Psych::SyntaxError => e
+          messages << Overcommit::Hook::Message.new(:error, file, nil, e.message)
         end
+      rescue Psych::DisallowedClass => e
+        messages << error_message(file, e)
       end
 
       messages
