@@ -22,7 +22,6 @@ describe Overcommit::Hook::PrePush::RSpec do
 
       subject.run
     }
-
   end
 
   context 'with included files set' do
@@ -48,7 +47,8 @@ describe Overcommit::Hook::PrePush::RSpec do
     it { should pass }
 
     it {
-      expect(subject).to receive(:execute).with(['rspec'], args: 'spec/test_spec.rb').and_return(result)
+      expect(subject).to receive(:execute).with(['rspec'],
+                                                args: 'spec/test_spec.rb').and_return(result)
 
       subject.run
     }
