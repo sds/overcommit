@@ -7,12 +7,10 @@ module Overcommit::Hook::PreCommit
       messages = []
 
       applicable_files.each do |file|
-        begin
-          REXML::Document.new(IO.read(file))
-        rescue REXML::ParseException => e
-          error = "Error parsing #{file}: #{e.message}"
-          messages << Overcommit::Hook::Message.new(:error, file, nil, error)
-        end
+        REXML::Document.new(IO.read(file))
+      rescue REXML::ParseException => e
+        error = "Error parsing #{file}: #{e.message}"
+        messages << Overcommit::Hook::Message.new(:error, file, nil, error)
       end
 
       messages

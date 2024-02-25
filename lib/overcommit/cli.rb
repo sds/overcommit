@@ -124,15 +124,13 @@ module Overcommit
       end
 
       @options[:targets].each do |target|
-        begin
-          Installer.new(log).run(target, @options)
-        rescue Overcommit::Exceptions::InvalidGitRepo => e
-          log.warning "Invalid repo #{target}: #{e}"
-          halt 69 # EX_UNAVAILABLE
-        rescue Overcommit::Exceptions::PreExistingHooks => e
-          log.warning "Unable to install into #{target}: #{e}"
-          halt 73 # EX_CANTCREAT
-        end
+        Installer.new(log).run(target, @options)
+      rescue Overcommit::Exceptions::InvalidGitRepo => e
+        log.warning "Invalid repo #{target}: #{e}"
+        halt 69 # EX_UNAVAILABLE
+      rescue Overcommit::Exceptions::PreExistingHooks => e
+        log.warning "Unable to install into #{target}: #{e}"
+        halt 73 # EX_CANTCREAT
       end
     end
 
