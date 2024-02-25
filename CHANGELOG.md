@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.63.0
+
+* Add `Sorbet` pre-commit hook
+* Add `RSpec` pre-commit hook
+
 ## 0.62.0
 
 * Allow version 5 of `childprocess` gem dependency
