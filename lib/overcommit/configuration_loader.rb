@@ -70,11 +70,9 @@ module Overcommit
     # Loads a configuration, ensuring it extends the default configuration.
     def load_file(file, local_file = nil)
       overcommit_config = self.class.load_from_file(file, default: false, logger: @log)
-      if local_file
-        local_config = self.class.load_from_file(local_file, default: false, logger: @log)
-      end
+      l_config = self.class.load_from_file(local_file, default: false, logger: @log) if local_file
       config = self.class.default_configuration.merge(overcommit_config)
-      config = self.class.default_configuration.merge(local_config) if local_config
+      config = config.merge(l_config) if l_config
 
       if @options.fetch(:verify) { config.verify_signatures? }
         verify_signatures(config)

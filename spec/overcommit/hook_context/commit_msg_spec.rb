@@ -298,7 +298,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -474,7 +474,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -500,7 +500,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -532,7 +532,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `git rm sub`
           example.run
@@ -561,7 +561,7 @@ describe Overcommit::HookContext::CommitMsg do
       end
 
       repo do
-        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         expect(subject).to_not include File.expand_path('test-sub')
       end
     end
