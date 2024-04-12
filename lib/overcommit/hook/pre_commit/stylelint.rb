@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
 
     def run
       result = execute(command, args: applicable_files)
-      output = result.stdout.chomp
+      output = result.stdout + result.stderr.chomp
       return :pass if result.success? && output.empty?
 
       extract_messages(
