@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
     'Install hooks by running `overcommit --install` in your Git repository'
 
   s.metadata = {
-    "changelog_uri" => "https://github.com/sds/overcommit/blob/main/CHANGELOG.md"
+    'changelog_uri' => 'https://github.com/sds/overcommit/blob/main/CHANGELOG.md'
   }
 
   s.require_paths         = %w[lib]
