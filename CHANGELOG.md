@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.64.0
+
+* Add support for `stylelint` 16+
+* Add `changelog_uri` to gemspec
+
 ## 0.63.0
 
 * Add `Sorbet` pre-commit hook
