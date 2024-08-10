@@ -78,5 +78,18 @@ describe Overcommit::GitConfig do
         expect(subject).to eq File.expand_path('my-hooks')
       end
     end
+
+    context 'when explicitly set to a path starting with a tilde' do
+      around do |example|
+        repo do
+          `git config --local core.hooksPath ~/my-hooks`
+          example.run
+        end
+      end
+
+      it 'returns the absolute path to the folder in the users home path' do
+        expect(subject).to eq File.expand_path('~/my-hooks')
+      end
+    end
   end
 end
