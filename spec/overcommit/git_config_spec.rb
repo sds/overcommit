@@ -89,6 +89,7 @@ describe Overcommit::GitConfig do
 
       it 'returns the absolute path to the folder in the users home path' do
         expect(subject).to eq File.expand_path('~/my-hooks')
+        expect(subject).not_to include('~')
       end
     end
   end
