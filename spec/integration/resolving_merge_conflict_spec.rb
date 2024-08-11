@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'resolving merge conflicts' do
-  subject { shell(%w[git commit -m "Resolve conflicts" -i some-file]) }
+  subject { shell(%w[git commit -m Test -i some-file]) }
 
   around do |example|
     repo do

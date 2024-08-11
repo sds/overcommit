@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'resolving cherry-pick conflicts' do
-  subject { shell(%w[git commit -m "Resolve conflicts" -i some-file]) }
+  subject { shell(%w[git commit -m Test -i some-file]) }
 
   let(:config) { <<-YML }
     PreCommit:
