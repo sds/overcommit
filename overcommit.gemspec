@@ -33,5 +33,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency          'childprocess', '>= 0.6.3', '< 6'
   s.add_dependency          'iniparse', '~> 1.4'
-  s.add_dependency          'rexml', '~> 3.2'
+  s.add_dependency          'rexml', '>= 3.3.9'
 end
