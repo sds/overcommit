@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.64.1
+
+* Update minimum version of rexml to address [CVE-2024-49761](https://www.ruby-lang.org/en/news/2024/10/28/redos-rexml-cve-2024-49761/)
+
 ## 0.64.0
 
 * Add support for `stylelint` 16+
