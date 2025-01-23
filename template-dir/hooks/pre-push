@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+begin
+  require "bundler/setup"
+rescue LoadError
+end
+
 # Entrypoint for Overcommit hook integration. Installing Overcommit will result
 # in all of your git hooks being copied from this file, allowing the framework
 # to manage your hooks for you.
