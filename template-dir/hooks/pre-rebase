@@ -32,17 +32,10 @@ if hook_type == 'overcommit-hook'
 end
 
 # Check if Overcommit should invoke a Bundler context for loading gems
-require 'yaml'
-# rubocop:disable Style/RescueModifier
-gemfile =
-  begin
-    YAML.load_file('.overcommit.yml', aliases: true)['gemfile']
-  rescue ArgumentError
-    YAML.load_file('.overcommit.yml')['gemfile']
-  end rescue nil
+config = File.read('.overcommit.yml')
 
-if gemfile
-  ENV['BUNDLE_GEMFILE'] = gemfile
+if config =~ /gemfile: "?(.*)"?/
+  ENV['BUNDLE_GEMFILE'] = $1
   require 'bundler'
 
   begin
