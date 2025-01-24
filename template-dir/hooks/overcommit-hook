@@ -30,7 +30,7 @@ end
 config = File.read('.overcommit.yml')
 
 if config =~ /gemfile: "?(.*)"?/
-  ENV['BUNDLE_GEMFILE'] = $1
+  ENV['BUNDLE_GEMFILE'] = Regexp.last_match(1)
   require 'bundler'
 
   begin
