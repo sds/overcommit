@@ -133,6 +133,7 @@ describe Overcommit::CLI do
 
       before do
         cli.stub(:halt)
+        Overcommit::HookRunner.any_instance.stub(:run)
       end
 
       it 'creates a HookRunner with the diff context' do
