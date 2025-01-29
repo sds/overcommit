@@ -9,6 +9,7 @@ module Overcommit
   class CLI # rubocop:disable Metrics/ClassLength
     def initialize(arguments, input, logger)
       @arguments = arguments
+      @cli_options = {}
       @input     = input
       @log       = logger
       @options   = {}
@@ -45,7 +46,7 @@ module Overcommit
       @parser = create_option_parser
 
       begin
-        @parser.parse!(@arguments)
+        @parser.parse!(@arguments, into: @cli_options)
 
         # Default action is to install
         @options[:action] ||= :install

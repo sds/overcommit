@@ -18,10 +18,12 @@ module Overcommit::HookContext
     # @param config [Overcommit::Configuration]
     # @param args [Array<String>]
     # @param input [IO] standard input stream
-    def initialize(config, args, input)
+    # @param options [Hash] cli options
+    def initialize(config, args, input, **options)
       @config = config
       @args = args
       @input = input
+      @options = options
     end
 
     # Executes a command as if it were a regular git hook, passing all
