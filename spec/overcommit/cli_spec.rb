@@ -128,7 +128,7 @@ describe Overcommit::CLI do
     end
 
     context 'with the diff switch specified' do
-      let(:arguments) { ['--diff some-branch'] }
+      let(:arguments) { ['--diff=some-ref'] }
       let(:config) { Overcommit::ConfigurationLoader.default_configuration }
 
       before do
