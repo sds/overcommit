@@ -15,6 +15,7 @@ describe Overcommit::HookContext::Diff do
     context 'when repo contains no files' do
       around do |example|
         repo do
+          `git commit --allow-empty -m "Initial commit"`
           `git checkout -b other-branch 2>&1`
           example.run
         end
@@ -68,6 +69,7 @@ describe Overcommit::HookContext::Diff do
 
         repo do
           `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+          `git commit --allow-empty -m "Initial commit"`
           `git checkout -b other-branch 2>&1`
           example.run
         end
@@ -117,5 +119,25 @@ describe Overcommit::HookContext::Diff do
 
       it { should == Set.new(1..3) }
     end
+  end
+
+  describe '#hook_type_name' do
+    subject { context.hook_type_name }
+
+    it { should == 'pre_commit' }
+  end
+
+  describe '#hook_script_name' do
+    subject { context.hook_script_name }
+
+    it { should == 'pre-commit' }
+  end
+
+  describe '#initial_commit?' do
+    subject { context.initial_commit? }
+
+    before { Overcommit::GitRepo.stub(:initial_commit?).and_return(true) }
+
+    it { should == true }
   end
 end
