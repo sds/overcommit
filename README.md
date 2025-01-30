@@ -131,6 +131,7 @@ Command Line Flag         | Description
 `-f`/`--force`            | Don't bail on install if other hooks already exist--overwrite them
 `-l`/`--list-hooks`       | Display all available hooks in the current repository
 `-r`/`--run`              | Run pre-commit hook against all tracked files in repository
+`--diff <ref>`            | Run pre-commit hook against all changed files relative to `<ref>`
 `-t`/`--template-dir`     | Print location of template directory
 `-h`/`--help`             | Show command-line flag documentation
 `-v`/`--version`          | Show version
