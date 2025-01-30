@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.66.0
+
+* Add `--diff` CLI option for running pre-commit hooks against only changed files
+
 ## 0.65.0
 
 * Load bundled gems on expected version
