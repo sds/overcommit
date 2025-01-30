@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'overcommit/cli'
+require 'overcommit/hook_context/diff'
 require 'overcommit/hook_context/run_all'
 
 describe Overcommit::CLI do
@@ -117,6 +118,31 @@ describe Overcommit::CLI do
                                     instance_of(Overcommit::HookContext::RunAll),
                                     instance_of(Overcommit::Printer)).
                                and_call_original
+        subject
+      end
+
+      it 'runs the HookRunner' do
+        Overcommit::HookRunner.any_instance.should_receive(:run)
+        subject
+      end
+    end
+
+    context 'with the diff switch specified' do
+      let(:arguments) { ['--diff=some-ref'] }
+      let(:config) { Overcommit::ConfigurationLoader.default_configuration }
+
+      before do
+        cli.stub(:halt)
+        Overcommit::HookRunner.any_instance.stub(:run)
+      end
+
+      it 'creates a HookRunner with the diff context' do
+        Overcommit::HookRunner.should_receive(:new).
+          with(config,
+               logger,
+               instance_of(Overcommit::HookContext::Diff),
+               instance_of(Overcommit::Printer)).
+          and_call_original
         subject
       end
 

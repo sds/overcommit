@@ -9,6 +9,7 @@ module Overcommit
   class CLI # rubocop:disable Metrics/ClassLength
     def initialize(arguments, input, logger)
       @arguments = arguments
+      @cli_options = {}
       @input     = input
       @log       = logger
       @options   = {}
@@ -28,6 +29,8 @@ module Overcommit
         sign
       when :run_all
         run_all
+      when :diff
+        diff
       end
     rescue Overcommit::Exceptions::ConfigurationSignatureChanged => e
       puts e
@@ -45,7 +48,7 @@ module Overcommit
       @parser = create_option_parser
 
       begin
-        @parser.parse!(@arguments)
+        @parser.parse!(@arguments, into: @cli_options)
 
         # Default action is to install
         @options[:action] ||= :install
@@ -97,6 +100,11 @@ module Overcommit
       opts.on('-r [hook]', '--run [hook]', 'Run specified hook against all git tracked files. Defaults to `pre_commit`.') do |arg| # rubocop:disable Layout/LineLength
         @options[:action] = :run_all
         @options[:hook_to_run] = arg ? arg.to_s : 'run-all'
+      end
+
+      opts.on('--diff [ref]', 'Run pre_commit hooks against the diff between a given ref. Defaults to `main`.') do |arg| # rubocop:disable Layout/LineLength
+        @options[:action] = :diff
+        arg
       end
     end
 
@@ -199,6 +207,19 @@ module Overcommit
     def run_all
       empty_stdin = File.open(File::NULL) # pre-commit hooks don't take input
       context = Overcommit::HookContext.create(@options[:hook_to_run], config, @arguments, empty_stdin) # rubocop:disable Layout/LineLength
+      config.apply_environment!(context, ENV)
+
+      printer = Overcommit::Printer.new(config, log, context)
+      runner  = Overcommit::HookRunner.new(config, log, context, printer)
+
+      status = runner.run
+
+      halt(status ? 0 : 65)
+    end
+
+    def diff
+      empty_stdin = File.open(File::NULL) # pre-commit hooks don't take input
+      context = Overcommit::HookContext.create('diff', config, @arguments, empty_stdin, **@cli_options) # rubocop:disable Layout/LineLength
       config.apply_environment!(context, ENV)
 
       printer = Overcommit::Printer.new(config, log, context)
