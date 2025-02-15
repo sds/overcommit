@@ -100,4 +100,59 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
       end
     end
   end
+
+  context 'given a project that does not use a Gemfile' do
+    let(:hook) { normalize_indent(<<-RUBY) }
+      module Overcommit::Hook::PreCommit
+        class NoInvalidGemfileHook < Base
+          def run
+            if (gemfile = ENV["BUNDLE_GEMFILE"])
+              raise unless File.exist?(gemfile)
+            end
+
+            :pass
+          end
+        end
+      end
+    RUBY
+
+    let(:config) { normalize_indent(<<-YAML) }
+      verify_signatures: false
+
+      CommitMsg:
+        ALL:
+          enabled: false
+
+      PreCommit:
+        ALL:
+          enabled: false
+        NoInvalidGemfileHook:
+          enabled: true
+          requires_files: false
+    YAML
+
+    around do |example|
+      repo do
+        echo(config, '.overcommit.yml')
+
+        `overcommit --install > #{File::NULL}`
+        FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
+        echo(hook, File.join('.git-hooks', 'pre_commit', 'no_invalid_gemfile_hook.rb'))
+
+        Overcommit::Utils.with_environment 'OVERCOMMIT_NO_VERIFY' => '1' do
+          example.run
+        end
+      end
+    end
+
+    subject { shell(%w[git commit --allow-empty -m Test]) }
+
+    context 'when configuration explicitly sets the gemfile to false' do
+      let(:config) { "gemfile: false\n" + super() }
+
+      it 'runs the hook successfully' do
+        subject.status.should == 0
+      end
+    end
+  end
 end
