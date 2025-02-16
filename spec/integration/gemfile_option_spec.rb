@@ -3,99 +3,156 @@
 require 'spec_helper'
 
 describe 'specifying `gemfile` option in Overcommit configuration' do
-  let(:repo_root) { File.expand_path(File.join('..', '..'), File.dirname(__FILE__)) }
-  let(:fake_gem_path) { File.join('lib', 'my_fake_gem') }
+  context 'given a project that uses a Gemfile' do
+    let(:repo_root) { File.expand_path(File.join('..', '..'), File.dirname(__FILE__)) }
+    let(:fake_gem_path) { File.join('lib', 'my_fake_gem') }
 
-  # We point the overcommit gem back to this repo since we can't assume the gem
-  # has already been installed in a test environment
-  let(:gemfile) { normalize_indent(<<-RUBY) }
-    source 'https://rubygems.org'
+    # We point the overcommit gem back to this repo since we can't assume the gem
+    # has already been installed in a test environment
+    let(:gemfile) { normalize_indent(<<-RUBY) }
+      source 'https://rubygems.org'
 
-    gem 'overcommit', path: '#{repo_root}'
-    gem 'my_fake_gem', path: '#{fake_gem_path}'
-    gem 'ffi' if Gem.win_platform? # Necessary for test to pass on Windows
-  RUBY
+      gem 'overcommit', path: '#{repo_root}'
+      gem 'my_fake_gem', path: '#{fake_gem_path}'
+      gem 'ffi' if Gem.win_platform? # Necessary for test to pass on Windows
+    RUBY
 
-  let(:gemspec) { normalize_indent(<<-RUBY) }
-    Gem::Specification.new do |s|
-      s.name = 'my_fake_gem'
-      s.version = '1.0.0'
-      s.author = 'John Doe'
-      s.license = 'MIT'
-      s.homepage = 'https://example.com'
-      s.email = 'john.doe@example.com'
-      s.summary = 'A fake gem'
-      s.files = [File.join('lib', 'my_fake_gem.rb')]
-    end
-  RUBY
+    let(:gemspec) { normalize_indent(<<-RUBY) }
+      Gem::Specification.new do |s|
+        s.name = 'my_fake_gem'
+        s.version = '1.0.0'
+        s.author = 'John Doe'
+        s.license = 'MIT'
+        s.homepage = 'https://example.com'
+        s.email = 'john.doe@example.com'
+        s.summary = 'A fake gem'
+        s.files = [File.join('lib', 'my_fake_gem.rb')]
+      end
+    RUBY
 
-  # Specify a hook that depends on an external gem to test Gemfile loading
-  let(:hook) { normalize_indent(<<-RUBY) }
-    module Overcommit::Hook::PreCommit
-      class FakeHook < Base
-        def run
-          require 'my_fake_gem'
-          :pass
+    # Specify a hook that depends on an external gem to test Gemfile loading
+    let(:hook) { normalize_indent(<<-RUBY) }
+      module Overcommit::Hook::PreCommit
+        class FakeHook < Base
+          def run
+            require 'my_fake_gem'
+            :pass
+          end
+        end
+      end
+    RUBY
+
+    let(:config) { normalize_indent(<<-YAML) }
+      verify_signatures: false
+
+      CommitMsg:
+        ALL:
+          enabled: false
+
+      PreCommit:
+        ALL:
+          enabled: false
+        FakeHook:
+          enabled: true
+          requires_files: false
+    YAML
+
+    around do |example|
+      repo do
+        # Since RSpec is being run within a Bundler context we need to clear it
+        # in order to not taint the test
+        Bundler.with_unbundled_env do
+          FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
+          echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
+          touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
+
+          echo(gemfile, '.overcommit_gems.rb')
+          `bundle install --gemfile=.overcommit_gems.rb`
+
+          echo(config, '.overcommit.yml')
+
+          # Set BUNDLE_GEMFILE so we load Overcommit from the current repo
+          ENV['BUNDLE_GEMFILE'] = '.overcommit_gems.rb'
+          `bundle exec overcommit --install > #{File::NULL}`
+          FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
+          echo(hook, File.join('.git-hooks', 'pre_commit', 'fake_hook.rb'))
+
+          Overcommit::Utils.with_environment 'OVERCOMMIT_NO_VERIFY' => '1' do
+            example.run
+          end
         end
       end
     end
-  RUBY
 
-  let(:config) { normalize_indent(<<-YAML) }
-    verify_signatures: false
+    subject { shell(%w[git commit --allow-empty -m Test]) }
 
-    CommitMsg:
-      ALL:
-        enabled: false
+    context 'when configuration specifies the gemfile' do
+      let(:config) { "gemfile: .overcommit_gems.rb\n" + super() }
 
-    PreCommit:
-      ALL:
-        enabled: false
-      FakeHook:
-        enabled: true
-        requires_files: false
-  YAML
+      it 'runs the hook successfully' do
+        subject.status.should == 0
+      end
+    end
 
-  around do |example|
-    repo do
-      # Since RSpec is being run within a Bundler context we need to clear it
-      # in order to not taint the test
-      Bundler.with_unbundled_env do
-        FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
-        echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
-        touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
+    context 'when configuration does not specify the gemfile' do
+      it 'fails to run the hook' do
+        subject.status.should_not == 0
+      end
+    end
+  end
 
-        echo(gemfile, '.overcommit_gems.rb')
-        `bundle install --gemfile=.overcommit_gems.rb`
+  context 'given a project that does not use a Gemfile' do
+    let(:hook) { normalize_indent(<<-RUBY) }
+      module Overcommit::Hook::PreCommit
+        class NoInvalidGemfileHook < Base
+          def run
+            if (gemfile = ENV["BUNDLE_GEMFILE"])
+              raise unless File.exist?(gemfile)
+            end
 
+            :pass
+          end
+        end
+      end
+    RUBY
+
+    let(:config) { normalize_indent(<<-YAML) }
+      verify_signatures: false
+
+      CommitMsg:
+        ALL:
+          enabled: false
+
+      PreCommit:
+        ALL:
+          enabled: false
+        NoInvalidGemfileHook:
+          enabled: true
+          requires_files: false
+    YAML
+
+    around do |example|
+      repo do
         echo(config, '.overcommit.yml')
 
-        # Set BUNDLE_GEMFILE so we load Overcommit from the current repo
-        ENV['BUNDLE_GEMFILE'] = '.overcommit_gems.rb'
-        `bundle exec overcommit --install > #{File::NULL}`
+        `overcommit --install > #{File::NULL}`
         FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
-        echo(hook, File.join('.git-hooks', 'pre_commit', 'fake_hook.rb'))
+        echo(hook, File.join('.git-hooks', 'pre_commit', 'no_invalid_gemfile_hook.rb'))
 
         Overcommit::Utils.with_environment 'OVERCOMMIT_NO_VERIFY' => '1' do
           example.run
         end
       end
     end
-  end
 
-  subject { shell(%w[git commit --allow-empty -m Test]) }
+    subject { shell(%w[git commit --allow-empty -m Test]) }
 
-  context 'when configuration specifies the gemfile' do
-    let(:config) { "gemfile: .overcommit_gems.rb\n" + super() }
+    context 'when configuration explicitly sets the gemfile to false' do
+      let(:config) { "gemfile: false\n" + super() }
 
-    it 'runs the hook successfully' do
-      subject.status.should == 0
-    end
-  end
-
-  context 'when configuration does not specify the gemfile' do
-    it 'fails to run the hook' do
-      subject.status.should_not == 0
+      it 'runs the hook successfully' do
+        subject.status.should == 0
+      end
     end
   end
 end
