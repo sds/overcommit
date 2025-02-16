@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.67.0
+
+* Fix bug introduced in 0.65.0 that prevented `gemfile: false` from working correctly
+
 ## 0.66.0
 
 * Add `--diff` CLI option for running pre-commit hooks against only changed files
