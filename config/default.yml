@@ -32,6 +32,10 @@
 # your repository, and then set the `gemfile` option below to the name you gave
 # the file.
 # (Generate lock file by running `bundle install --gemfile=.overcommit_gems.rb`)
+#
+# NOTE: the following line will be parsed by a regexp rather than a proper YAML
+# parser, so avoid any values other than false or a string, and don't use inline
+# comments
 gemfile: false
 
 # Where to store hook plugins specific to a repository. These are loaded in
