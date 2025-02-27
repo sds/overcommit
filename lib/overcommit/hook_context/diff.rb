@@ -2,6 +2,8 @@
 
 require 'overcommit/git_repo'
 
+require 'set'
+
 module Overcommit::HookContext
   # Simulates a pre-commit context based on the diff with another git ref.
   #
