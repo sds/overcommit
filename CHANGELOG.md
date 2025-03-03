@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.67.1
+
+* Fix `set` gem dependency error when running with `--diff` flag
+
 ## 0.67.0
 
 * Fix bug introduced in 0.65.0 that prevented `gemfile: false` from working correctly
