@@ -24,7 +24,7 @@ module Overcommit::Hook::PreCommit
       extract_messages(
         messages,
         MESSAGE_REGEX,
-        &:to_sym
+        lambda(&:to_sym)
       )
     end
   end
