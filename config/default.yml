@@ -805,7 +805,7 @@ PreCommit:
     requires_files: true
     required_executable: 'solargraph'
     install_command: 'gem install solargraph'
-    command: ['solargraph', 'typecheck', '--level', 'strong']
+    flags: ['typecheck', '--level', 'strong']
     include: '**/*.rb'
 
   Sorbet:
