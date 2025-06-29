@@ -42,7 +42,6 @@ if gemfile
     exit 78 # EX_CONFIG
   end
 end
-# rubocop:enable Style/RescueModifier
 
 begin
   require 'overcommit'
