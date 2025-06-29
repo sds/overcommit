@@ -77,7 +77,8 @@ describe Overcommit::Hook::PreCommit::Solargraph do
             expect(messages.first.line).to eq 36
           end
           it 'parses and returns error message content' do
-            expect(messages.first.content).to eq '/home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer'
+            msg = '/home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer'
+            expect(messages.first.content).to eq msg
           end
         end
       end
@@ -86,9 +87,9 @@ describe Overcommit::Hook::PreCommit::Solargraph do
     context 'but it reports no typechecking issues' do
       let(:stdout) do
         normalize_indent(<<-MSG)
-              Typecheck finished in 8.095239999704063 seconds.
-              0 problems found in 0 of 16 files.
-            MSG
+           Typecheck finished in 8.095239999704063 seconds.
+           0 problems found in 0 of 16 files.
+        MSG
       end
 
       context 'with no stderr output' do
@@ -101,7 +102,7 @@ describe Overcommit::Hook::PreCommit::Solargraph do
       context 'with stderr output' do
         let(:stderr) { 'something' }
         it 'should raise' do
-          expect {  messages }.to raise_error(Overcommit::Exceptions::MessageProcessingError)
+          expect { messages }.to raise_error(Overcommit::Exceptions::MessageProcessingError)
         end
       end
     end
