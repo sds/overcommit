@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.68.0
+
+* Add `Solargraph` pre-commit hook
+
 ## 0.67.1
 
 * Fix `set` gem dependency error when running with `--diff` flag
