@@ -45,18 +45,20 @@ describe Overcommit::Hook::PreCommit::Solargraph do
     end
   end
 
+  # Old Solargraph version
   context 'when Solargraph exits unsucessfully' do
     before do
       result.stub(:success?).and_return(false)
       subject.stub(:execute).and_return(result)
     end
 
+    # New Solargraph version (see: https://github.com/castwide/solargraph/pull/1072)
     context 'and it reports typechecking issues' do
       let(:stdout) do
         normalize_indent(<<-MSG)
-          /home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer
-          /home/username/src/solargraph-rails/file2.rb:44 - Unresolved call to []
-          /home/username/src/solargraph-rails/file2.rb:99 - Unresolved call to []
+          /home/username/src/solargraph-rails/file1.rb:36: Unresolved constant Solargraph::Parser::Legacy::NodeChainer
+          /home/username/src/solargraph-rails/file2.rb:44: Unresolved call to []
+          /home/username/src/solargraph-rails/file2.rb:99: Unresolved call to []
           Typecheck finished in 8.921023999806494 seconds.
           189 problems found in 14 of 16 files.
         MSG
@@ -77,8 +79,43 @@ describe Overcommit::Hook::PreCommit::Solargraph do
             expect(messages.first.line).to eq 36
           end
           it 'parses and returns error message content' do
-            msg = '/home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer'
+            msg = '/home/username/src/solargraph-rails/file1.rb:36: Unresolved constant Solargraph::Parser::Legacy::NodeChainer'
             expect(messages.first.content).to eq msg
+          end
+        end
+      end
+    end
+
+    context 'with old solargraph output format' do
+      context 'and it reports typechecking issues' do
+        let(:stdout) do
+          normalize_indent(<<-MSG)
+          /home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer
+          /home/username/src/solargraph-rails/file2.rb:44 - Unresolved call to []
+          /home/username/src/solargraph-rails/file2.rb:99 - Unresolved call to []
+          Typecheck finished in 8.921023999806494 seconds.
+          189 problems found in 14 of 16 files.
+          MSG
+        end
+
+        ['', 'unexpected output'].each do |stderr_string|
+          context "with stderr output of #{stderr_string.inspect}" do
+            let(:stderr) { stderr_string }
+
+            it { should fail_hook }
+            it 'reports only three errors and assumes stderr is harmless' do
+              expect(messages.size).to eq 3
+            end
+            it 'parses filename' do
+              expect(messages.first.file).to eq '/home/username/src/solargraph-rails/file1.rb'
+            end
+            it 'parses line number of messages' do
+              expect(messages.first.line).to eq 36
+            end
+            it 'parses and returns error message content' do
+              msg = '/home/username/src/solargraph-rails/file1.rb:36 - Unresolved constant Solargraph::Parser::Legacy::NodeChainer'
+              expect(messages.first.content).to eq msg
+            end
           end
         end
       end
