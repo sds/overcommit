@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.69.0
+
+* Fix processor count detection in sandboxed environments
+
 ## 0.68.0
 
 * Add `Solargraph` pre-commit hook
