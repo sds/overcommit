@@ -539,6 +539,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [Mdl](lib/overcommit/hook/pre_commit/mdl.rb)
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
 * [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
+* [OxFmt](lib/overcommit/hook/pre_commit/ox_fmt.rb)
 * [OxLint](lib/overcommit/hook/pre_commit/ox_lint.rb)
 * [PhpCs](lib/overcommit/hook/pre_commit/php_cs.rb)
 * [PhpCsFixer](lib/overcommit/hook/pre_commit/php_cs_fixer.rb)
