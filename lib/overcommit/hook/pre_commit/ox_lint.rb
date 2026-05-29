@@ -19,7 +19,7 @@ module Overcommit::Hook::PreCommit
   # @see https://oxc.rs
   class OxLint < Base
     def run
-      oxlint_regex = /^(?:file:\/\/)?(?<file>[^:]+):(?<line>\d+):\d+:.*?(?<type>Error|Warning)/
+      oxlint_regex = %r{^(?:file://)?(?<file>[^:]+):(?<line>\d+):\d+:.*?(?<type>Error|Warning)}
       result = execute(command, args: applicable_files)
       output = result.stdout.chomp
       messages = output.split("\n").grep(oxlint_regex)
