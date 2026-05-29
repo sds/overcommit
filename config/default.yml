@@ -565,6 +565,13 @@ PreCommit:
     flags: ['-t']
     include: '**/nginx.conf'
 
+  OxLint:
+    enabled: false
+    description: 'Analyze with oxlint'
+    required_executable: 'oxlint'
+    flags: ['--format=unix']
+    install_command: 'npm install -g oxlint'
+
   Pep257:  # Deprecated – use Pydocstyle instead.
     enabled: false
     description: 'Analyze docstrings with pep257'
