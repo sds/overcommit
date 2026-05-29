@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## 0.70.0
+
+* Add `oxfmt` and `oxlint` pre-commit hooks
+
 ## 0.69.0
 
 * Fix processor count detection in sandboxed environments
