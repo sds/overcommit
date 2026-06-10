@@ -24,6 +24,7 @@ module Overcommit::HookContext
       @args = args
       @input = input
       @options = options
+      @input_mutex = Mutex.new
     end
 
     # Executes a command as if it were a regular git hook, passing all
@@ -95,7 +96,13 @@ module Overcommit::HookContext
     #
     # @return [String]
     def input_string
-      @input_string ||= @input.read
+      return @input_string if defined?(@input_string)
+
+      @input_mutex.synchronize do
+        @input_string = @input.read unless defined?(@input_string)
+      end
+
+      @input_string
     end
 
     # Returns an array of lines passed to the hook via the standard input
