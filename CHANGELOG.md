@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.71.0
+
+* Fix race condition when reading input from stdin in hooks
+* Update Solargraph regex matcher
+
 ## 0.70.0
 
 * Add `oxfmt` and `oxlint` pre-commit hooks
