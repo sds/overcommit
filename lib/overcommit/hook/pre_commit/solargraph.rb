@@ -10,7 +10,7 @@ module Overcommit
       #
       # @see https://github.com/castwide/solargraph
       class Solargraph < Base
-        MESSAGE_REGEX = /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+) - /.freeze
+        MESSAGE_REGEX = /^\s*(?<file>(?:\w:)?[^:]+):(?<line>\d+)( -|:) /.freeze
 
         def run
           result = execute(command, args: applicable_files)
