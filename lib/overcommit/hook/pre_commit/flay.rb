@@ -24,6 +24,13 @@ module Overcommit::Hook::PreCommit
       # Run the command for each file
       applicable_files.each do |file|
         result = execute(command, args: [file])
+        # flay exits non-zero both when it finds duplication (with output on
+        # stdout) and when it crashes internally. A crash leaves stdout empty
+        # and writes a backtrace to stderr, so treat that as an error instead
+        # of silently passing.
+        if !result.success? && result.stdout.strip.empty?
+          return :fail, result.stderr
+        end
         results = result.stdout.split("\n\n")
         results.shift
         unless results.empty?
