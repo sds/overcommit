@@ -31,6 +31,7 @@ module Overcommit::Hook::PreCommit
         if !result.success? && result.stdout.strip.empty?
           return :fail, result.stderr
         end
+
         results = result.stdout.split("\n\n")
         results.shift
         unless results.empty?
