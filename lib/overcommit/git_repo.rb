@@ -158,9 +158,12 @@ module Overcommit
       # conflict. This is necessary since stashing removes the merge state.
       if merge_head != 'MERGE_HEAD'
         @merge_head = merge_head
+
+        merge_mode_file = Overcommit::Utils.git_path('MERGE_MODE')
+        @merge_mode = File.open(merge_mode_file).read if File.exist?(merge_mode_file)
       end
 
-      merge_msg_file = File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir)
+      merge_msg_file = Overcommit::Utils.git_path('MERGE_MSG')
       @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
     end
 
@@ -182,17 +185,20 @@ module Overcommit
     # of a merge.
     def restore_merge_state
       if @merge_head
-        FileUtils.touch(File.expand_path('MERGE_MODE', Overcommit::Utils.git_dir))
+        File.open(Overcommit::Utils.git_path('MERGE_MODE'), 'w') do |f|
+          f.write(@merge_mode || '')
+        end
+        @merge_mode = nil
 
-        File.open(File.expand_path('MERGE_HEAD', Overcommit::Utils.git_dir), 'w') do |f|
+        File.open(Overcommit::Utils.git_path('MERGE_HEAD'), 'w') do |f|
           f.write(@merge_head)
         end
         @merge_head = nil
       end
 
       if @merge_msg
-        File.open(File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir), 'w') do |f|
-          f.write("#{@merge_msg}\n")
+        File.open(Overcommit::Utils.git_path('MERGE_MSG'), 'w') do |f|
+          f.write(@merge_msg)
         end
         @merge_msg = nil
       end
@@ -202,8 +208,7 @@ module Overcommit
     # of a cherry-pick.
     def restore_cherry_pick_state
       if @cherry_head
-        File.open(File.expand_path('CHERRY_PICK_HEAD',
-                                   Overcommit::Utils.git_dir), 'w') do |f|
+        File.open(Overcommit::Utils.git_path('CHERRY_PICK_HEAD'), 'w') do |f|
           f.write(@cherry_head)
         end
         @cherry_head = nil
