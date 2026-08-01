@@ -1,7 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
 [![Build Status](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)
 [![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main)](https://coveralls.io/github/sds/overcommit?branch=main)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5da42f7f365e5fef6b4c/maintainability)](https://codeclimate.com/github/sds/overcommit/maintainability)
 [![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=main)](http://inch-ci.org/github/sds/overcommit)
 
 <p align="center">
