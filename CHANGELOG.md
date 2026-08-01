@@ -1,5 +1,12 @@
 # Overcommit Changelog
 
+## 0.72.0
+
+* Fix Solargraph regexp capture warning
+* Fix Flay hook when flay crashes instead of silently passing
+* Fix operation state restoration in linked worktrees
+* Update rexml constraint to patch [CVE-2025-58767](https://github.com/advisories/GHSA-c2f4-jgmc-q2r5)
+
 ## 0.71.0
 
 * Fix race condition when reading input from stdin in hooks
