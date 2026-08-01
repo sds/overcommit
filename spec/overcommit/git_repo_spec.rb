@@ -320,6 +320,57 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe 'operation state in a linked worktree' do
+    around do |example|
+      repo do
+        `git commit --allow-empty -m "Initial commit"`
+        linked_worktree = File.join(File.dirname(Dir.pwd), 'linked-worktree')
+        result = Overcommit::Utils.execute(
+          %W[git worktree add -b linked-worktree #{linked_worktree}],
+        )
+        raise "Unable to create worktree: #{result.stderr}" unless result.success?
+
+        Dir.chdir(linked_worktree) { example.run }
+      end
+    end
+
+    let(:git_dir) { File.expand_path(`git rev-parse --git-dir`.chomp) }
+    let(:common_dir) { File.expand_path(`git rev-parse --git-common-dir`.chomp) }
+    let(:head) { `git rev-parse HEAD`.chomp }
+
+    it 'restores merge state only to the linked worktree' do
+      merge_message = "Merge linked branch\n"
+      File.write(File.join(git_dir, 'MERGE_HEAD'), head)
+      File.write(File.join(git_dir, 'MERGE_MODE'), 'no-ff')
+      File.write(File.join(git_dir, 'MERGE_MSG'), merge_message)
+
+      described_class.store_merge_state
+      FileUtils.rm(
+        %w[MERGE_HEAD MERGE_MODE MERGE_MSG].
+          map { |file| File.join(git_dir, file) },
+      )
+      described_class.restore_merge_state
+
+      File.read(File.join(git_dir, 'MERGE_HEAD')).should == head
+      File.read(File.join(git_dir, 'MERGE_MSG')).should == merge_message
+      File.read(File.join(git_dir, 'MERGE_MODE')).should == 'no-ff'
+      File.exist?(File.join(common_dir, 'MERGE_HEAD')).should == false
+      File.exist?(File.join(common_dir, 'MERGE_MSG')).should == false
+      File.exist?(File.join(common_dir, 'MERGE_MODE')).should == false
+    end
+
+    it 'restores cherry-pick state only to the linked worktree' do
+      File.write(File.join(git_dir, 'CHERRY_PICK_HEAD'), head)
+
+      described_class.store_cherry_pick_state
+      FileUtils.rm(File.join(git_dir, 'CHERRY_PICK_HEAD'))
+      described_class.restore_cherry_pick_state
+
+      File.read(File.join(git_dir, 'CHERRY_PICK_HEAD')).should == head
+      File.exist?(File.join(common_dir, 'CHERRY_PICK_HEAD')).should == false
+    end
+  end
+
   describe '.staged_submodule_removals' do
     subject { described_class.staged_submodule_removals }
 

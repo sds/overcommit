@@ -74,6 +74,31 @@ module Overcommit
           end
       end
 
+      # Returns an absolute path to a file in the current worktree's Git
+      # directory.
+      #
+      # @param path [String]
+      # @return [String]
+      def git_path(path)
+        cmd = %w[git rev-parse]
+        if GIT_VERSION < '2.5'
+          cmd << '--git-dir'
+        else
+          cmd += ['--git-path', path]
+        end
+
+        result = execute(cmd)
+        unless result.success?
+          raise Overcommit::Exceptions::InvalidGitRepo,
+                'Unable to determine Git path. ' \
+                'Not a recognizable Git repository!'
+        end
+
+        resolved_path = result.stdout.chomp("\n")
+        resolved_path = File.join(resolved_path, path) if GIT_VERSION < '2.5'
+        File.expand_path(resolved_path, Dir.pwd)
+      end
+
       # Remove ANSI escape sequences from a string.
       #
       # This is useful for stripping colorized output from external tools.
