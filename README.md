@@ -521,6 +521,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [LicenseFinder](lib/overcommit/hook/pre_commit/license_finder.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
 * [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
+* [HerbLint](lib/overcommit/hook/pre_commit/herb_lint.rb)
 * [Hlint](lib/overcommit/hook/pre_commit/hlint.rb)
 * [HtmlHint](lib/overcommit/hook/pre_commit/html_hint.rb)
 * [HtmlTidy](lib/overcommit/hook/pre_commit/html_tidy.rb)

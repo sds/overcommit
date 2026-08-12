@@ -413,6 +413,12 @@ PreCommit:
       - '**/Makefile'
       - '**/*.go'
 
+  HerbLint:
+    enabled: false
+    description: 'Analyze with herb-lint'
+    required_executable: 'herb-lint'
+    include: '**/*.html.erb'
+
   Hlint:
     enabled: false
     description: 'Analyze with hlint'
