@@ -577,13 +577,59 @@ PreCommit:
     required_executable: 'oxfmt'
     flags: ['--check']
     install_command: 'npm install -g oxfmt'
-
+    include:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.mts'
+      - '**/*.cts'
+      - '**/*.json'
+      - '**/*.jsonc'
+      - '**/*.json5'
+      - '**/*.css'
+      - '**/*.scss'
+      - '**/*.less'
+      - '**/*.pcss'
+      - '**/*.postcss'
+      - '**/*.graphql'
+      - '**/*.gql'
+      - '**/*.graphqls'
+      - '**/*.toml'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.html'
+      - '**/*.htm'
+      - '**/*.xhtml'
+      - '**/*.vue'
+      - '**/*.svelte'
+      - '**/*.md'
+      - '**/*.markdown'
+      - '**/*.mdx'
+      - '**/*.hbs'
+      - '**/*.handlebars'
+      - '**/*.mjml'
+ 
   OxLint:
     enabled: false
     description: 'Analyze with oxlint'
     required_executable: 'oxlint'
     flags: ['--format=unix']
     install_command: 'npm install -g oxlint'
+    include:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.mts'
+      - '**/*.cts'
+      - '**/*.vue'
+      - '**/*.svelte'
+      - '**/*.astro'
 
   Pep257:  # Deprecated – use Pydocstyle instead.
     enabled: false
