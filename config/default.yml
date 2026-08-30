@@ -611,7 +611,7 @@ PreCommit:
       - '**/*.hbs'
       - '**/*.handlebars'
       - '**/*.mjml'
- 
+
   OxLint:
     enabled: false
     description: 'Analyze with oxlint'
