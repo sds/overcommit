@@ -575,7 +575,7 @@ PreCommit:
     enabled: false
     description: 'Analyze with oxfmt'
     required_executable: 'oxfmt'
-    flags: ['--check']
+    flags: ['--check', '--no-error-on-unmatched-pattern']
     install_command: 'npm install -g oxfmt'
     include:
       - '**/*.js'
