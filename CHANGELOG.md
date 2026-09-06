@@ -1,5 +1,11 @@
 # Overcommit Changelog
 
+## 0.73.0
+
+* Add pre-commit hook for [herb-lint](https://herb-tools.dev/projects/linter)
+* Add default file types to oxc hooks
+* Fix `oxfmt` to not fail if no files are matched
+
 ## 0.72.0
 
 * Fix Solargraph regexp capture warning
