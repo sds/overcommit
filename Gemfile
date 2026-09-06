@@ -6,6 +6,7 @@ gemspec
 
 # Development dependencies are listed below
 
+gem 'rake'
 gem 'rspec', '~> 3.0'
 
 gem 'simplecov', '~> 0.21.0'

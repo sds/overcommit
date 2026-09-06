@@ -1,0 +1,41 @@
+name: Release Gem
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    environment: release
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74  # v1.314.0
+        with:
+          ruby-version: '4.0'
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Publish gem
+        uses: rubygems/release-gem@052cc82692552de3ef2b81fd670e41d13cba8092  # v1.4.0
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG_NAME#v}"
+          gh release create "$TAG_NAME" \
+            --title "$VERSION" \
+            --generate-notes
