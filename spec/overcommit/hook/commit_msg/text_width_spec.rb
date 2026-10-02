@@ -73,6 +73,37 @@ describe Overcommit::Hook::CommitMsg::TextWidth do
     it { should warn('Line 3 of commit message has > 72 characters') }
   end
 
+  context 'when a line longer than 72 characters contains only a URL' do
+    let(:commit_msg) { <<-MSG }
+      Some summary
+
+      See:
+      https://example.com/some/very/long/path/that/cannot/be/wrapped/without/breaking/it
+    MSG
+
+    it { should pass }
+  end
+
+  context 'when a line longer than 72 characters is a link reference' do
+    let(:commit_msg) { <<-MSG }
+      Some summary
+
+      [1]: https://example.com/some/very/long/path/that/cannot/be/wrapped/without/breaking
+    MSG
+
+    it { should pass }
+  end
+
+  context 'when a line longer than 72 characters contains a URL and other text' do
+    let(:commit_msg) { <<-MSG }
+      Some summary
+
+      See https://example.com/some/very/long/path/that/cannot/be/wrapped for details
+    MSG
+
+    it { should warn('Line 3 of commit message has > 72 characters') }
+  end
+
   context 'when all lines in the message are fewer than 72 characters' do
     let(:commit_msg) { <<-MSG }
       Some summary
