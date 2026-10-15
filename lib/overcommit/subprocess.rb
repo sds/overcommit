@@ -2,7 +2,6 @@
 
 require 'childprocess'
 require 'tempfile'
-require 'overcommit/os'
 
 module Overcommit
   # Manages execution of a child process, collecting the exit status and
@@ -28,8 +27,6 @@ module Overcommit
       # @option options [String] input string to pass via standard input stream
       # @return [Result]
       def spawn(args, options = {})
-        args = win32_prepare_args(args) if OS.windows?
-
         process = ChildProcess.build(*args)
 
         out, err = assign_output_streams(process)
@@ -58,8 +55,6 @@ module Overcommit
       # Spawns a new process in the background using the given array of
       # arguments (the first element is the command).
       def spawn_detached(args)
-        args = win32_prepare_args(args) if OS.windows?
-
         process = ChildProcess.build(*args)
         process.detach = true
 
@@ -69,20 +64,6 @@ module Overcommit
       end
 
       private
-
-      # Necessary to run commands in the cmd.exe context.
-      # Args are joined to properly handle quotes and special characters.
-      def win32_prepare_args(args)
-        args = args.map do |arg|
-          # Quote args that contain whitespace
-          arg = "\"#{arg}\"" if arg =~ /\s/
-
-          # Escape cmd.exe metacharacters
-          arg.gsub(/[()%!^"<>&|]/, '^\0')
-        end
-
-        %w[cmd.exe /c] + [args.join(' ')]
-      end
 
       # @param process [ChildProcess]
       # @return [Array<IO>]

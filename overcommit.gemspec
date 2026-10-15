@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.6'
 
-  s.add_dependency          'childprocess', '>= 0.6.3', '< 6'
+  s.add_dependency          'childprocess', '>= 5.0.0', '< 6'
   s.add_dependency          'iniparse', '~> 1.4'
   s.add_dependency          'rexml', '>= 3.4.2'
 end
