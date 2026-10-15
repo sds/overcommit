@@ -4,6 +4,11 @@ module Overcommit::Hook::CommitMsg
   # Ensures the number of columns the subject and commit message lines occupy is
   # under the preferred limits.
   class TextWidth < Base
+    # A line consisting only of a URL (optionally as a Markdown-style link
+    # reference such as `[1]: https://...`) cannot be wrapped without breaking
+    # the link, so it is exempt from the body width limit.
+    URL_ONLY_LINE = %r{\A(\[[^\]]+\]:\s*)?[a-z][a-z0-9+.-]*://\S+\z}i.freeze
+
     def run
       return :pass if empty_message?
 
@@ -42,11 +47,15 @@ module Overcommit::Hook::CommitMsg
       max_body_width = config['max_body_width']
 
       lines[2..].each_with_index do |line, index|
-        if line.chomp.size > max_body_width
-          @errors << "Line #{index + 3} of commit message has > " \
-                    "#{max_body_width} characters"
-        end
+        next if line.chomp.size <= max_body_width || url_only_line?(line)
+
+        @errors << "Line #{index + 3} of commit message has > " \
+                  "#{max_body_width} characters"
       end
+    end
+
+    def url_only_line?(line)
+      URL_ONLY_LINE.match?(line.strip)
     end
 
     def special_prefix_length(subject)
