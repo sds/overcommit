@@ -106,6 +106,53 @@ describe Overcommit::Subprocess do
         received_argv(subject).should == ['', 'after']
       end
     end
+
+    context 'once the process has finished' do
+      # Regression test for https://github.com/sds/overcommit/issues/899, where
+      # the temporary files capturing the output were left for the garbage
+      # collector to delete. On Windows that delete fails with `Errno::EACCES`
+      # when a process left behind by the command still holds the file open,
+      # and Ruby prints a backtrace from the finalizer on every hook run.
+      let(:tempfiles) { [] }
+
+      # Records every Tempfile created, passing each one to the block (if given)
+      # so a test can stub it.
+      def record_tempfiles(&block)
+        ::Tempfile.stub(:new).and_wrap_original do |original, *args|
+          original.call(*args).tap do |tempfile|
+            tempfiles << tempfile
+            block&.call(tempfile)
+          end
+        end
+      end
+
+      def expect_tempfiles_deleted
+        tempfiles.size.should == 2
+        tempfiles.each do |tempfile|
+          tempfile.should be_closed
+          tempfile.path.should be_nil # Tempfile#path is nil once unlinked
+        end
+      end
+
+      it 'closes and deletes the files that captured its output' do
+        record_tempfiles
+
+        result = described_class.spawn([ruby, '-e', 'STDOUT.print "out"; STDERR.print "err"'])
+
+        result.stdout.should == 'out'
+        result.stderr.should == 'err'
+        expect_tempfiles_deleted
+      end
+
+      it 'closes and deletes the files when reading the output fails' do
+        record_tempfiles { |tempfile| tempfile.stub(:read).and_raise(IOError, 'read failed') }
+
+        expect { described_class.spawn([ruby, '-e', 'STDOUT.print "out"']) }.
+          to raise_error(IOError, 'read failed')
+
+        expect_tempfiles_deleted
+      end
+    end
   end
 
   # Subprocess no longer branches on platform, but this guards against
