@@ -8,7 +8,7 @@ on:
 jobs:
   rspec:
     timeout-minutes: 15
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}-24.04
 
     strategy:
       fail-fast: false
@@ -53,7 +53,7 @@ jobs:
 
   finish:
     needs: rspec
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Finalize code coverage report
