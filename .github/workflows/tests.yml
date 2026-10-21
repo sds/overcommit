@@ -7,8 +7,9 @@ on:
 
 jobs:
   rspec:
+    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }})
     timeout-minutes: 15
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.runner || format('{0}-latest', matrix.os) }}
 
     strategy:
       fail-fast: false
@@ -28,6 +29,14 @@ jobs:
           # Any contributor is welcome to fix them and enable the Windows build.
           # Please see Issue #836 for more details.
           # - windows
+        include:
+          - os: ubuntu
+            runner: ubuntu-26.04
+          # setup-ruby has no builds of these Rubies for ubuntu-26.04
+          - { ruby-version: "2.6", os: ubuntu, runner: ubuntu-24.04 }
+          - { ruby-version: "2.7", os: ubuntu, runner: ubuntu-24.04 }
+          - { ruby-version: "3.0", os: ubuntu, runner: ubuntu-24.04 }
+          - { ruby-version: "3.1", os: ubuntu, runner: ubuntu-24.04 }
 
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +62,7 @@ jobs:
 
   finish:
     needs: rspec
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Finalize code coverage report
