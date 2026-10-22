@@ -214,8 +214,9 @@ module Overcommit
       return false if ENV['OVERCOMMIT_NO_VERIFY']
       return true if @hash['verify_signatures'] != false
 
+      scope = Overcommit::GitConfig.signature_scope
       result = Overcommit::Utils.execute(
-        %W[git config --local --get #{verify_signature_config_key}]
+        %W[git config #{scope} --get #{verify_signature_config_key}]
       )
 
       if result.status == 1 # Key doesn't exist
@@ -232,13 +233,14 @@ module Overcommit
 
     # Update the currently stored signature for this hook.
     def update_signature!
+      scope = Overcommit::GitConfig.signature_scope
       result = Overcommit::Utils.execute(
-        %w[git config --local] + [signature_config_key, signature]
+        %W[git config #{scope}] + [signature_config_key, signature]
       )
 
       verify_signature_value = @hash['verify_signatures'] ? 1 : 0
       result &&= Overcommit::Utils.execute(
-        %W[git config --local #{verify_signature_config_key} #{verify_signature_value}]
+        %W[git config #{scope} #{verify_signature_config_key} #{verify_signature_value}]
       )
 
       unless result.success?
@@ -325,8 +327,9 @@ module Overcommit
     #
     # @return [String]
     def stored_signature
+      scope = Overcommit::GitConfig.signature_scope
       result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key]
+        %W[git config #{scope} --get] + [signature_config_key]
       )
 
       if result.status == 1 # Key doesn't exist
