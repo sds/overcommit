@@ -131,12 +131,14 @@ module Overcommit
       Overcommit::Utils.execute(%W[git ls-files #{path} --error-unmatch]).success?
     end
 
-    # Returns the names of all files that are tracked by git.
+    # Returns the names of all files that are tracked by git, excluding files
+    # that have been deleted from the working tree.
     #
     # @return [Array<String>] list of absolute file paths
     def all_files
-      `git ls-files`.
-        split(/\n/).
+      deleted_files = `git ls-files --deleted`.split(/\n/)
+
+      (`git ls-files`.split(/\n/) - deleted_files).
         map { |relative_file| File.expand_path(relative_file) }.
         reject { |file| File.directory?(file) } # Exclude submodule directories
     end

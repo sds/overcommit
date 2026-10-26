@@ -293,6 +293,16 @@ describe Overcommit::GitRepo do
 
     it { should include(*%w[tracked staged].map { |file| File.expand_path(file) }) }
     it { should_not include File.expand_path('sub') }
+
+    context 'when a tracked file is deleted but the deletion is not staged' do
+      around do |example|
+        FileUtils.rm 'tracked'
+        example.run
+      end
+
+      it { should_not include File.expand_path('tracked') }
+      it { should include File.expand_path('staged') }
+    end
   end
 
   describe '.initial_commit?' do
