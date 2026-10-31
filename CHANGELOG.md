@@ -1,5 +1,14 @@
 # Overcommit Changelog
 
+## 0.74.0
+
+* Allow URL-only lines to exceed TextWidth body limit
+* Stop wrapping commands in cmd.exe on Windows
+* Delete subprocess output tempfiles once they are read
+* Exclude files deleted from the working tree from all_files
+* Recognize amend aliases on macOS
+* Keep each worktree's signatures separate
+
 ## 0.73.0
 
 * Add pre-commit hook for [herb-lint](https://herb-tools.dev/projects/linter)
