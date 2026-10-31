@@ -708,6 +708,12 @@ and any configuration for the plugin. Thus a change to the plugin's source
 code or your local repo's `.overcommit.yml` file could result in a signature
 change.
 
+Signatures are stored in your local repo's git configuration. If you use
+multiple [worktrees](https://git-scm.com/docs/git-worktree) whose
+configurations differ, enable `extensions.worktreeConfig` (`git config
+extensions.worktreeConfig true`) so that Overcommit stores signatures per
+worktree and signing in one worktree does not invalidate the others.
+
 ### Disabling Signature Checking
 
 In typical usage, your plugins usually don't change too often, so this warning

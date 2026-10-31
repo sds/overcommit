@@ -68,8 +68,9 @@ module Overcommit
 
     # Update the current stored signature for this hook.
     def update_signature!
+      scope = Overcommit::GitConfig.signature_scope
       result = Overcommit::Utils.execute(
-        %w[git config --local] + [signature_config_key, signature]
+        %W[git config #{scope}] + [signature_config_key, signature]
       )
 
       unless result.success?
@@ -103,8 +104,9 @@ module Overcommit
     end
 
     def stored_signature
+      scope = Overcommit::GitConfig.signature_scope
       result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key]
+        %W[git config #{scope} --get] + [signature_config_key]
       )
 
       if result.status == 1 # Key doesn't exist

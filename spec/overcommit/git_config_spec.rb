@@ -93,4 +93,40 @@ describe Overcommit::GitConfig do
       end
     end
   end
+
+  describe '.signature_scope' do
+    subject { described_class.signature_scope }
+
+    context 'when extensions.worktreeConfig is not set' do
+      around do |example|
+        repo do
+          example.run
+        end
+      end
+
+      it { should == '--local' }
+    end
+
+    context 'when extensions.worktreeConfig is false' do
+      around do |example|
+        repo do
+          `git config --local extensions.worktreeConfig false`
+          example.run
+        end
+      end
+
+      it { should == '--local' }
+    end
+
+    context 'when extensions.worktreeConfig is true' do
+      around do |example|
+        repo do
+          `git config --local extensions.worktreeConfig true`
+          example.run
+        end
+      end
+
+      it { should == '--worktree' }
+    end
+  end
 end
