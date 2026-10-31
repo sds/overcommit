@@ -50,6 +50,11 @@ module Overcommit
         out.rewind
 
         Result.new(process.exit_code, out.read, err.read)
+      ensure
+        # Delete the output files now rather than leaving it to the garbage
+        # collector, which on Windows fails (and prints a backtrace) if a process
+        # left behind by the command still has them open.
+        [out, err].each { |stream| stream&.close! }
       end
 
       # Spawns a new process in the background using the given array of
