@@ -4,11 +4,11 @@
 [![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=main)](http://inch-ci.org/github/sds/overcommit)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sds/overcommit/master/logo/horizontal.png" width="65%" alt="Overcommit Logo"/>
+  <img width="65%" alt="Overcommit Logo" src="https://github.com/user-attachments/assets/b0d31df7-1d86-4e09-9c48-c96955e0713e" />
+  <br />
+  <em>A tool to manage and configure</em>
+<a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a>.
 </p>
-
-`overcommit` is a tool to manage and configure
-[Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
