@@ -2,6 +2,8 @@
 
 require 'spec_helper'
 require 'fileutils'
+require 'open3'
+require 'tmpdir'
 
 describe 'template directory' do
   let(:template_dir) { File.join(Overcommit::HOME, 'template-dir') }
@@ -23,6 +25,22 @@ describe 'template directory' do
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         FileUtils.compare_file(File.join(hooks_dir, hook_type),
                                File.join(hooks_dir, 'overcommit-hook')).should == true
+      end
+    end
+
+    it 'reads a non-ASCII .overcommit.yml when the default external encoding is ASCII' do
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, '.overcommit.yml'), "# caf\u00e9\ngemfile: false\n",
+                   encoding: 'UTF-8')
+
+        _stdout, stderr, _status = Open3.capture3(
+          { 'LC_ALL' => 'C', 'LANG' => 'C' },
+          RbConfig.ruby, '-I', File.join(Overcommit::HOME, 'lib'),
+          File.join(hooks_dir, 'pre-commit'),
+          chdir: dir, stdin_data: ''
+        )
+
+        stderr.should_not include('invalid byte sequence')
       end
     end
 

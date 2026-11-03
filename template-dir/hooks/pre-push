@@ -27,7 +27,7 @@ if hook_type == 'overcommit-hook'
 end
 
 # Check if Overcommit should invoke a Bundler context for loading gems
-File.read('.overcommit.yml') =~ /gemfile: (?:false|['"]?(.*)['"]?)/
+File.read('.overcommit.yml', encoding: 'UTF-8') =~ /gemfile: (?:false|['"]?(.*)['"]?)/
 gemfile = Regexp.last_match(1)
 
 if gemfile
