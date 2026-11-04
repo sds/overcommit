@@ -166,9 +166,12 @@ module Overcommit
         return if Process.ppid.zero?
 
         if OS.windows?
-          `wmic process where ProcessId=#{Process.ppid} get CommandLine /FORMAT:VALUE`.
-            strip.
-            slice(/(?<=CommandLine=).+/)
+          result = execute([
+            'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
+            "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
+          ])
+          command = result.stdout.strip
+          command if result.success? && !command.empty?
         elsif OS.cygwin?
           # Cygwin's `ps` command behaves differently than the traditional
           # Linux version, but a comparable `procps` is provided to compensate.

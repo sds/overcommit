@@ -14,6 +14,10 @@ describe Overcommit::Hook::CommitMsg::GerritChangeId do
     context.stub(:commit_message_file).and_return(commit_msg_file.path)
   end
 
+  after do
+    commit_msg_file.close!
+  end
+
   context 'when the commit message contains no Change-Id' do
     let(:commit_msg) { 'Add code to repo' }
 
@@ -21,7 +25,7 @@ describe Overcommit::Hook::CommitMsg::GerritChangeId do
 
     it 'adds a Change-Id to the commit message' do
       subject.run
-      File.open(commit_msg_file.path, 'r').read.should =~ /Change-Id/
+      File.read(commit_msg_file.path).should =~ /Change-Id/
     end
   end
 
@@ -31,9 +35,9 @@ describe Overcommit::Hook::CommitMsg::GerritChangeId do
     it { should pass }
 
     it 'does nothing' do
-      before = File.open(commit_msg_file.path, 'r').read
+      before = File.read(commit_msg_file.path)
       subject.run
-      after = File.open(commit_msg_file.path, 'r').read
+      after = File.read(commit_msg_file.path)
       before.should == after
     end
   end

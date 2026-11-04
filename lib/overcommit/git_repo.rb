@@ -163,10 +163,10 @@ module Overcommit
       end
 
       merge_mode_file = Overcommit::Utils.git_path('MERGE_MODE')
-      @merge_mode = File.open(merge_mode_file).read if File.exist?(merge_mode_file)
+      @merge_mode = File.read(merge_mode_file) if File.exist?(merge_mode_file)
 
       merge_msg_file = Overcommit::Utils.git_path('MERGE_MSG')
-      @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
+      @merge_msg = File.read(merge_msg_file) if File.exist?(merge_msg_file)
     end
 
     # Store any relevant files that are present when repo is in the middle of a

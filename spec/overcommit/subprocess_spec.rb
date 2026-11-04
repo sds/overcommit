@@ -156,9 +156,7 @@ describe Overcommit::Subprocess do
   end
 
   # Subprocess no longer branches on platform, but this guards against
-  # reintroducing a shell wrapper -- if one came back, this would catch it
-  # from CI (which only runs Linux -- see
-  # https://github.com/sds/overcommit/issues/836).
+  # reintroducing a shell wrapper on either Linux or Windows.
   describe 'the argument vector handed to ChildProcess' do
     let(:args) do
       ['git', 'stash', 'save', '--quiet', 'Overcommit: Stash at 2024-04-10 12:34:56 -0700']
