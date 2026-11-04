@@ -179,7 +179,7 @@ module Overcommit
         else
           `ps -ocommand= -p #{Process.ppid}`.chomp
         end
-      rescue Errno::EPERM, Errno::ENOENT
+      rescue Errno::EPERM, Errno::ENOENT, ChildProcess::LaunchError
         # Process information may not be available, such as inside sandboxed environments
         nil
       end
