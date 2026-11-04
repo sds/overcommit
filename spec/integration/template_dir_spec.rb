@@ -3,7 +3,6 @@
 require 'spec_helper'
 require 'fileutils'
 require 'open3'
-require 'tmpdir'
 
 describe 'template directory' do
   let(:template_dir) { File.join(Overcommit::HOME, 'template-dir') }
@@ -29,18 +28,28 @@ describe 'template directory' do
     end
 
     it 'reads a non-ASCII .overcommit.yml when the default external encoding is ASCII' do
-      Dir.mktmpdir do |dir|
-        File.write(File.join(dir, '.overcommit.yml'), "# caf\u00e9\ngemfile: false\n",
-                   encoding: 'UTF-8')
+      repo(template_dir: template_dir) do
+        config = <<~YAML
+          # caf\u00e9
+          gemfile: false
+          PreCommit:
+            ALL:
+              enabled: false
+            AuthorName:
+              enabled: true
+              quiet: false
+        YAML
+        File.write('.overcommit.yml', config, encoding: 'UTF-8')
 
-        _stdout, stderr, _status = Open3.capture3(
+        stdout, stderr, status = Open3.capture3(
           { 'LC_ALL' => 'C', 'LANG' => 'C' },
-          RbConfig.ruby, '-I', File.join(Overcommit::HOME, 'lib'),
-          File.join(hooks_dir, 'pre-commit'),
-          chdir: dir, stdin_data: ''
+          RbConfig.ruby, '-E', 'US-ASCII', '-I', File.join(Overcommit::HOME, 'lib'),
+          File.join('.git', 'hooks', 'pre-commit'),
+          stdin_data: ''
         )
 
-        stderr.should_not include('invalid byte sequence')
+        expect(status.exitstatus).to eq(0), stdout + stderr
+        stdout.should include('AuthorName')
       end
     end
 
