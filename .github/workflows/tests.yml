@@ -25,10 +25,7 @@ jobs:
           - "4.0"
         os:
           - ubuntu
-          # At the moment of this commit various specs fail on Windows.
-          # Any contributor is welcome to fix them and enable the Windows build.
-          # Please see Issue #836 for more details.
-          # - windows
+          - windows
         include:
           - os: ubuntu
             runner: ubuntu-26.04
