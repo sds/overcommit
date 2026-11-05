@@ -1,20 +1,51 @@
 diff --git a/lib/overcommit/utils.rb b/lib/overcommit/utils.rb
-index 3acdfa21..bd311a42 100644
+index 3acdfa21..00c6f8fc 100644
 --- a/lib/overcommit/utils.rb
 +++ b/lib/overcommit/utils.rb
-@@ -166,6 +166,15 @@ module Overcommit
+@@ -166,6 +166,11 @@ module Overcommit
          return if Process.ppid.zero?
  
          if OS.windows?
 +          begin
-+            require 'win32ole'
-+            service = WIN32OLE.connect('winmgmts:root/cimv2')
-+            processes = service.ExecQuery("SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.ppid}")
-+            processes.each { |process| return process.CommandLine }
-+            return
++            return native_windows_parent_command
 +          rescue LoadError, StandardError
 +            # Preserve the PowerShell fallback when OLE is unavailable.
 +          end
            result = execute([
              'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
              "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
+@@ -184,6 +189,14 @@ module Overcommit
+         nil
+       end
+ 
++      def native_windows_parent_command
++        require 'win32ole'
++        service = WIN32OLE.connect('winmgmts:root/cimv2')
++        processes = service.ExecQuery("SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.ppid}")
++        processes.each { |process| return process.CommandLine }
++        nil
++      end
++
+       # Execute a command in a subprocess, capturing exit status and output from
+       # both standard and error streams.
+       #
+diff --git a/spec/overcommit/utils_spec.rb b/spec/overcommit/utils_spec.rb
+index 7c341617..089758aa 100644
+--- a/spec/overcommit/utils_spec.rb
++++ b/spec/overcommit/utils_spec.rb
+@@ -144,6 +144,7 @@ describe Overcommit::Utils do
+     context 'when the Windows process query cannot be launched' do
+       before do
+         Overcommit::OS.stub(:windows?).and_return(true)
++        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
+         described_class.stub(:execute).and_raise(ChildProcess::LaunchError, 'Access denied')
+       end
+ 
+@@ -153,6 +154,7 @@ describe Overcommit::Utils do
+     context 'when the Windows parent has already exited' do
+       before do
+         Overcommit::OS.stub(:windows?).and_return(true)
++        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
+         described_class.stub(:execute).
+           and_return(Overcommit::Subprocess::Result.new(0, '', ''))
+       end
