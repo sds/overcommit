@@ -1,0 +1,37 @@
+name: Windows Script Host query experiment
+on:
+  push:
+    branches: [perf/windows-cscript-experiment]
+jobs:
+  paired:
+    name: cscript (shard ${{ matrix.shard }})
+    runs-on: windows-latest
+    timeout-minutes: 5
+    env:
+      CI: true
+      BUNDLE_WITHOUT: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+          windows-toolchain: none
+      - name: Compare Script Host and PowerShell
+        shell: pwsh
+        run: |
+          $gitRoot = Split-Path (Split-Path (git --exec-path) -Parent) -Parent
+          $env:PATH = (Join-Path $gitRoot 'bin') + ';' + $env:PATH
+          git config --global user.email 'gh-actions@example.com'
+          git config --global user.name 'GitHub Actions'
+          .github/benchmarks/run.ps1 -Variant cscript -Shard ${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cscript-${{ matrix.shard }}
+          path: benchmark-results
+          retention-days: 3

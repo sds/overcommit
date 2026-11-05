@@ -1,0 +1,49 @@
+diff --git a/lib/overcommit/utils.rb b/lib/overcommit/utils.rb
+index 9e9d045e..befb75bc 100644
+--- a/lib/overcommit/utils.rb
++++ b/lib/overcommit/utils.rb
+@@ -294,6 +294,29 @@ module Overcommit
+       rescue LoadError, StandardError
+         # win32ole is optional and absent from newer Ruby distributions.
+         # Fall back when it is unavailable or the COM query is denied.
++        scripted_windows_parent_command
++      end
++
++      def scripted_windows_parent_command
++        begin
++          result = execute([
++            'cscript.exe', '//nologo', '//B', '//U',
++            File.expand_path('../../libexec/overcommit-parent-command.js', __dir__),
++            Process.ppid.to_s,
++          ])
++          if result.success?
++            command = result.stdout.dup.force_encoding('UTF-16LE').encode('UTF-8').
++              delete_prefix("\uFEFF").strip
++            return command unless command.empty?
++            return
++          end
++        rescue Errno::ENOENT, ChildProcess::LaunchError, EncodingError
++          # Preserve PowerShell when Script Host is disabled or unavailable.
++        end
++        powershell_windows_parent_command
++      end
++
++      def powershell_windows_parent_command
+         result = execute([
+           'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
+           "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
+diff --git a/libexec/overcommit-parent-command.js b/libexec/overcommit-parent-command.js
+new file mode 100644
+index 00000000..316283e4
+--- /dev/null
++++ b/libexec/overcommit-parent-command.js
+@@ -0,0 +1,9 @@
++var pid = String(WScript.Arguments(0));
++if (!/^\d+$/.test(pid)) WScript.Quit(2);
++var service = GetObject('winmgmts:root/cimv2');
++var processes = service.ExecQuery('SELECT CommandLine FROM Win32_Process WHERE ProcessId = ' + pid);
++var items = new Enumerator(processes);
++for (; !items.atEnd(); items.moveNext()) {
++  var command = items.item().CommandLine;
++  if (command !== null) WScript.StdOut.WriteLine(command);
++}
