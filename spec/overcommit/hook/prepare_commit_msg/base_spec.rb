@@ -9,6 +9,10 @@ describe Overcommit::Hook::PrepareCommitMsg::Base do
   let(:printer) { double('printer') }
 
   context 'when multiple hooks run simultaneously' do
+    around do |example|
+      directory { example.run }
+    end
+
     let(:hook_1) { described_class.new(config, context) }
     let(:hook_2) { described_class.new(config, context) }
 

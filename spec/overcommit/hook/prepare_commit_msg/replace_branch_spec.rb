@@ -50,6 +50,10 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   subject(:hook)         { hook_for(config, normal_context) }
 
   describe '#run' do
+    around do |example|
+      directory { example.run }
+    end
+
     before { add_file    'COMMIT_EDITMSG', '' }
     after  { remove_file 'COMMIT_EDITMSG' }
 
