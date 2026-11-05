@@ -9,10 +9,11 @@ describe 'running a hook with parallelism disabled' do
   let(:config) { <<-YML }
     concurrency: 20
     CommitMsg:
-      TrailingPeriod:
+      SerialHook:
         enabled: true
         parallelize: false
-        command: ['ruby', '-e', 'sleep 1']
+        required_executable: ruby
+        command: ['ruby', '-e', 'sleep 1; File.write("serial-hook-ran", "done")']
       TextWidth:
         enabled: true
         parallelize: true
@@ -27,14 +28,11 @@ describe 'running a hook with parallelism disabled' do
     end
   end
 
-  # Test fails on Ruby 3.0 on Windows but nothing else. Would glady accept a pull
-  # request that resolves.
-  unless Overcommit::OS.windows? &&
-    Overcommit::Utils::Version.new(RUBY_VERSION) >= '3' &&
-    Overcommit::Utils::Version.new(RUBY_VERSION) < '3.1'
-    it 'does not hang' do
-      result = Timeout.timeout(5) { subject }
-      result.stderr.should_not include 'No live threads left. Deadlock?'
-    end
+  it 'does not hang' do
+    # Include Git and hook interpreter startup in the deadline on slower runners.
+    result = Timeout.timeout(30) { subject }
+    expect(result.status).to eq(0), result.stdout + result.stderr
+    File.read('serial-hook-ran').should == 'done'
+    result.stderr.should_not include 'No live threads left. Deadlock?'
   end
 end

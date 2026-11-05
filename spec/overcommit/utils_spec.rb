@@ -141,6 +141,25 @@ describe Overcommit::Utils do
 
     it { should =~ /rspec/ }
 
+    context 'when the Windows process query cannot be launched' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:execute).and_raise(ChildProcess::LaunchError, 'Access denied')
+      end
+
+      it { should be_nil }
+    end
+
+    context 'when the Windows parent has already exited' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:execute).
+          and_return(Overcommit::Subprocess::Result.new(0, '', ''))
+      end
+
+      it { should be_nil }
+    end
+
     context 'when there is no parent' do
       before do
         Process.stub(:ppid) { 0 }
