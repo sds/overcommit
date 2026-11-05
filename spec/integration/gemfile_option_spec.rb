@@ -65,8 +65,11 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
         Bundler.with_unbundled_env do
           # Reuse the installed test dependencies even when CI installs them
           # outside GEM_HOME. Each fixture still resolves its own Gemfile.
-          ENV['GEM_HOME'] = bundle_path
+          # Keep generated executables private: Bundler rewrites them during
+          # install, while other workers may be executing Overcommit.
+          ENV['GEM_HOME'] = File.join(Dir.pwd, 'gems')
           ENV['GEM_PATH'] = ([bundle_path] + Gem.path).uniq.join(File::PATH_SEPARATOR)
+          ENV['PATH'] = [File.join(ENV['GEM_HOME'], 'bin'), ENV['PATH']].join(File::PATH_SEPARATOR)
           FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
           echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
           touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
