@@ -8,7 +8,7 @@ on:
 jobs:
   rspec:
     name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }})
-    timeout-minutes: 15
+    timeout-minutes: ${{ matrix.os == 'windows' && 30 || 15 }}
     runs-on: ${{ matrix.runner || format('{0}-latest', matrix.os) }}
 
     strategy:
