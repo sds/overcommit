@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.runner || format('{0}-latest', matrix.os) }}
     env:
       BUNDLE_WITHOUT: lint
-      SPEC_WORKERS: 8
+      SPEC_WORKERS: ${{ matrix.os == 'windows' && 4 || 8 }}
 
     strategy:
       fail-fast: false
