@@ -1,0 +1,97 @@
+--- a/spec/overcommit/hook_context/pre_commit_spec.rb
++++ b/spec/overcommit/hook_context/pre_commit_spec.rb
+@@ -103,8 +103,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -146,8 +145,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -279,8 +277,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -323,8 +320,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+--- a/spec/overcommit/hook_context/commit_msg_spec.rb
++++ b/spec/overcommit/hook_context/commit_msg_spec.rb
+@@ -199,8 +199,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -242,8 +241,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -375,8 +373,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+@@ -419,8 +416,7 @@
+         File.open('untracked-file', 'r').read.should == "Hello Again\n"
+       end
+ 
+-      it 'keeps modification times the same' do
+-        sleep 1
++      it 'keeps modification times the same', :fixed_mtimes do
+         expect { subject }.to_not change {
+           [
+             File.mtime('tracked-file'),
+--- /dev/null
++++ b/spec/support/benchmark_mtimes.rb
+@@ -0,0 +1,10 @@
++# frozen_string_literal: true
++
++RSpec.configure do |config|
++  config.before(:each, :fixed_mtimes) do
++    timestamp = Time.at(1_000_000_000)
++    Dir['*'].select { |path| File.file?(path) }.each do |path|
++      File.utime(timestamp, timestamp, path)
++    end
++  end
++end

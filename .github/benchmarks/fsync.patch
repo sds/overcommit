@@ -1,0 +1,10 @@
+--- a/spec/support/git_spec_helpers.rb
++++ b/spec/support/git_spec_helpers.rb
+@@ -33,6 +33,7 @@
+             gpgsign = false
+           [core]
+             symlinks = true
++            fsync = none
+         CONFIG
+       end
+ 

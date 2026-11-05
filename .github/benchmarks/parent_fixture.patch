@@ -1,0 +1,20 @@
+--- a/spec/overcommit/hook_context/pre_commit_spec.rb
++++ b/spec/overcommit/hook_context/pre_commit_spec.rb
+@@ -4,6 +4,7 @@
+ require 'overcommit/hook_context/pre_commit'
+ 
+ describe Overcommit::HookContext::PreCommit do
++  before { Overcommit::Utils.stub(:parent_command).and_return('git commit') }
+   let(:config) { double('config') }
+   let(:args) { [] }
+   let(:input) { double('input') }
+--- a/spec/overcommit/hook_context/commit_msg_spec.rb
++++ b/spec/overcommit/hook_context/commit_msg_spec.rb
+@@ -4,6 +4,7 @@
+ require 'overcommit/hook_context/commit_msg'
+ 
+ describe Overcommit::HookContext::CommitMsg do
++  before { Overcommit::Utils.stub(:parent_command).and_return('git commit') }
+   let(:comment_char) { '#' }
+   let(:config) { double('config') }
+   let(:args) { [commit_message_file] }

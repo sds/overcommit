@@ -1,0 +1,133 @@
+--- a/spec/integration/committing_spec.rb
++++ b/spec/integration/committing_spec.rb
+@@ -19,7 +19,7 @@
+   around do |example|
+     repo do
+       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       example.run
+     end
+   end
+@@ -71,7 +71,7 @@
+ 
+   around do |example|
+     repo do
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
+       File.open('test.txt', 'w') { |f| f.write(file_contents) }
+       `git add test.txt`
+--- a/spec/integration/disable_overcommit_spec.rb
++++ b/spec/integration/disable_overcommit_spec.rb
+@@ -7,7 +7,7 @@
+ 
+   around do |example|
+     repo do
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       Overcommit::Utils.with_environment('OVERCOMMIT_DISABLE' => overcommit_disable) do
+         touch 'blah'
+         `git add blah`
+--- a/spec/integration/configuration_signing_spec.rb
++++ b/spec/integration/configuration_signing_spec.rb
+@@ -29,7 +29,7 @@
+ 
+   around do |example|
+     repo do
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       echo(config.to_yaml, '.overcommit.yml')
+ 
+       `overcommit --sign` if configuration_signed
+--- a/spec/integration/hook_signing_spec.rb
++++ b/spec/integration/hook_signing_spec.rb
+@@ -48,7 +48,7 @@
+     around do |example|
+       repo do
+         echo(config.to_yaml, '.overcommit.yml')
+-        `overcommit --install > #{File::NULL}`
++        install_overcommit_hooks
+ 
+         echo(hook_script, script_path)
+         FileUtils.chmod(0o755, script_path)
+@@ -87,7 +87,7 @@
+     around do |example|
+       repo do
+         echo(config.to_yaml, '.overcommit.yml')
+-        `overcommit --install > #{File::NULL}`
++        install_overcommit_hooks
+ 
+         echo(hook_script, script_path)
+         FileUtils.chmod(0o755, script_path)
+--- a/spec/integration/resolving_merge_conflict_spec.rb
++++ b/spec/integration/resolving_merge_conflict_spec.rb
+@@ -22,7 +22,7 @@
+       `git checkout -q master`
+       `git merge branch1`
+       `git merge branch2` # Results in merge conflict
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       echo('Conflicts Resolved', 'some-file')
+       `git add some-file`
+       example.run
+--- a/spec/integration/protected_branches_spec.rb
++++ b/spec/integration/protected_branches_spec.rb
+@@ -61,7 +61,7 @@
+   end
+ 
+   shared_context 'ProtectedBranches enabled' do
+-    before { `overcommit --install > #{File::NULL}` }
++    before { install_overcommit_hooks }
+   end
+ 
+   shared_examples 'push succeeds' do
+--- a/spec/integration/parallelize_spec.rb
++++ b/spec/integration/parallelize_spec.rb
+@@ -23,7 +23,7 @@
+   around do |example|
+     repo do
+       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       example.run
+     end
+   end
+--- a/spec/integration/worktree_signing_spec.rb
++++ b/spec/integration/worktree_signing_spec.rb
+@@ -33,7 +33,7 @@
+       raise "Unable to create worktree: #{result.stderr}" unless result.success?
+ 
+       echo(config.to_yaml, '.overcommit.yml')
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       `overcommit --sign`
+ 
+       Dir.chdir(linked_worktree) do
+--- a/spec/integration/resolving_cherry_pick_conflict_spec.rb
++++ b/spec/integration/resolving_cherry_pick_conflict_spec.rb
+@@ -30,7 +30,7 @@
+       `git commit -m "Add Branch 2 addition"`
+       `git checkout -q master`
+       `git cherry-pick branch1 > #{File::NULL} 2>&1`
+-      `overcommit --install > #{File::NULL}`
++      install_overcommit_hooks
+       `git cherry-pick branch2 > #{File::NULL} 2>&1` # Results in cherry-pick conflict
+       echo('Conflicts Resolved ', 'some-file') # Fail trailing whitespace hook
+       `git add some-file`
+--- /dev/null
++++ b/spec/support/benchmark_fixture_install.rb
+@@ -0,0 +1,13 @@
++# frozen_string_literal: true
++
++require 'stringio'
++
++module ShellHelpers
++  def install_overcommit_hooks
++    %w[repo_root git_dir].each { |name| Overcommit::Utils.instance_variable_set("@#{name}", nil) }
++    logger = Overcommit::Logger.new(StringIO.new)
++    Overcommit::Installer.new(logger).run(Dir.pwd, action: :install)
++  ensure
++    %w[repo_root git_dir].each { |name| Overcommit::Utils.instance_variable_set("@#{name}", nil) }
++  end
++end

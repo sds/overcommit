@@ -1,0 +1,11 @@
+--- a/spec/support/git_spec_helpers.rb
++++ b/spec/support/git_spec_helpers.rb
+@@ -14,7 +14,7 @@
+   def repo(options = {})
+     directory('some-repo') do
+       create_cmd = %w[git init --initial-branch=master]
+-      create_cmd += ['--template', options[:template_dir]] if options[:template_dir]
++      create_cmd << "--template=#{options[:template_dir] || ''}"
+       create_cmd += ['--separate-git-dir', options[:git_dir]] if options[:git_dir]
+ 
+       result = Overcommit::Utils.execute(create_cmd)
