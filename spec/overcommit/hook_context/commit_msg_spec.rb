@@ -24,11 +24,16 @@ describe Overcommit::HookContext::CommitMsg do
     ]
   end
 
-  let(:commit_message_file) do
+  let(:commit_message_tempfile) do
     Tempfile.new('commit-message').tap do |file|
       file.write(commit_msg.join("\n"))
-      file.fsync
-    end.path
+      file.close
+    end
+  end
+  let(:commit_message_file) { commit_message_tempfile.path }
+
+  after do
+    commit_message_tempfile.close!
   end
 
   describe '#commit_message' do
