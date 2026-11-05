@@ -1,5 +1,10 @@
 # Overcommit Changelog
 
+## 0.75.0
+
+* Gracefully handle hook loading on systems with non-UTF8 locale
+* Re-enable running test suite on Windows environments
+
 ## 0.74.0
 
 * Allow URL-only lines to exceed TextWidth body limit
