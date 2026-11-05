@@ -30,7 +30,7 @@ describe 'resolving cherry-pick conflicts' do
       `git commit -m "Add Branch 2 addition"`
       `git checkout -q master`
       `git cherry-pick branch1 > #{File::NULL} 2>&1`
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       `git cherry-pick branch2 > #{File::NULL} 2>&1` # Results in cherry-pick conflict
       echo('Conflicts Resolved ', 'some-file') # Fail trailing whitespace hook
       `git add some-file`
