@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'etc'
+require 'digest'
 require 'json'
 require 'rbconfig'
 require 'tmpdir'
+require_relative '../spec/support/spec_shard'
 
 if ARGV.first == '--worker'
   require 'rspec/core'
@@ -15,6 +17,7 @@ end
 # spec files don't leave one worker busy after the others have finished.
 workers = Integer(ENV.fetch('SPEC_WORKERS') { [Etc.nprocessors, 8].min.to_s })
 abort 'SPEC_WORKERS must be positive' unless workers > 0
+shard = SpecShard.new(ENV.fetch('SPEC_SHARD', '1/1'))
 
 Dir.chdir(File.expand_path('..', __dir__))
 rspec = [RbConfig.ruby, Gem.bin_path('rspec-core', 'rspec')]
@@ -27,12 +30,16 @@ Dir.mktmpdir('overcommit-specs') do |tmpdir|
                 '--dry-run', '--format', 'json', '--out', discovery)
     abort 'RSpec discovery failed'
   end
-  ids = JSON.parse(File.read(discovery)).fetch('examples').map { |example| example.fetch('id') }
-  abort 'RSpec discovery found no examples' if ids.empty?
+  all_ids = JSON.parse(File.read(discovery)).fetch('examples').map { |example| example.fetch('id') }
+  abort 'RSpec discovery found no examples' if all_ids.empty?
+
+  ids = shard.select(all_ids)
+  abort "Shard #{shard} has no examples" if ids.empty?
+  puts "Discovered #{all_ids.size} examples (SHA256: #{Digest::SHA256.hexdigest(all_ids.join("\n"))})"
 
   groups = Array.new([workers, ids.size].min) { [] }
   ids.each_with_index { |id, index| groups[index % groups.size] << id }
-  puts "Running all #{ids.size} examples in #{groups.size} processes"
+  puts "Running shard #{shard}: #{ids.size}/#{all_ids.size} examples in #{groups.size} processes"
 
   processes = groups.each_with_index.map do |group, index|
     prefix = File.join(tmpdir, "worker-#{index}")
