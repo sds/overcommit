@@ -51,7 +51,7 @@ jobs:
         run: |
           git config --global user.email "gh-actions@example.com"
           git config --global user.name "GitHub Actions"
-          bundle exec ruby script/parallel-rspec
+          bundle exec ruby script/parallel_rspec.rb
 
       - name: Code coverage reporting
         uses: coverallsapp/github-action@v2

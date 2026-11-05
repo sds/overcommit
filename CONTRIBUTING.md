@@ -42,9 +42,9 @@ The best way to see a feature added, however, is to submit a pull request.
   To run the complete suite in parallel, as GitHub Actions does:
 
   ```bash
-  bundle exec ruby script/parallel-rspec
+  bundle exec ruby script/parallel_rspec.rb
   # Optionally choose the number of worker processes (default: up to 8 CPUs):
-  SPEC_WORKERS=4 bundle exec ruby script/parallel-rspec
+  SPEC_WORKERS=4 bundle exec ruby script/parallel_rspec.rb
   ```
 
   Workers run in separate processes because specs change the working directory

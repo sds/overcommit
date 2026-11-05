@@ -59,21 +59,29 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
 
     around do |example|
       repo do
+        bundle_path = Bundler.bundle_path.to_s
         # Since RSpec is being run within a Bundler context we need to clear it
         # in order to not taint the test
         Bundler.with_unbundled_env do
+          # Reuse the installed test dependencies even when CI installs them
+          # outside GEM_HOME. Each fixture still resolves its own Gemfile.
+          ENV['GEM_HOME'] = bundle_path
+          ENV['GEM_PATH'] = ([bundle_path] + Gem.path).uniq.join(File::PATH_SEPARATOR)
           FileUtils.mkdir_p(File.join(fake_gem_path, 'lib'))
           echo(gemspec, File.join(fake_gem_path, 'my_fake_gem.gemspec'))
           touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
 
           echo(gemfile, '.overcommit_gems.rb')
-          `bundle install --local --gemfile=.overcommit_gems.rb`
+          result = shell(%w[bundle install --local --gemfile=.overcommit_gems.rb])
+          raise "Unable to bundle fixture: #{result.stderr}" unless result.success?
 
           echo(config, '.overcommit.yml')
 
           # Set BUNDLE_GEMFILE so we load Overcommit from the current repo
           ENV['BUNDLE_GEMFILE'] = '.overcommit_gems.rb'
-          `bundle exec overcommit --install > #{File::NULL}`
+          result = shell(%w[bundle exec overcommit --install])
+          raise "Unable to install hooks: #{result.stderr}" unless result.success?
+
           FileUtils.mkdir_p(File.join('.git-hooks', 'pre_commit'))
           echo(hook, File.join('.git-hooks', 'pre_commit', 'fake_hook.rb'))
 
