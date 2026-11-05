@@ -144,6 +144,7 @@ describe Overcommit::Utils do
     context 'when the Windows process query cannot be launched' do
       before do
         Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
         described_class.stub(:execute).and_raise(ChildProcess::LaunchError, 'Access denied')
       end
 
@@ -153,11 +154,69 @@ describe Overcommit::Utils do
     context 'when the Windows parent has already exited' do
       before do
         Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
         described_class.stub(:execute).
           and_return(Overcommit::Subprocess::Result.new(0, '', ''))
       end
 
       it { should be_nil }
+    end
+
+    context 'when Windows provides COM support' do
+      let(:service) { double('WMI service') }
+      let(:command) { 'git -C "C:/Users/José/项目" commit --amend' }
+      let(:processes) { [double('process', CommandLine: command)] }
+
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_return(true)
+        stub_const('WIN32OLE', double(connect: service))
+        service.stub(:ExecQuery).
+          with("SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.pid}").
+          and_return(processes)
+      end
+
+      it 'returns the complete Unicode command line without launching PowerShell' do
+        described_class.should_not_receive(:execute)
+        subject.should == command
+      end
+
+      context 'when the process has exited' do
+        let(:processes) { [] }
+
+        it { should be_nil }
+      end
+
+      context 'when the command line is inaccessible' do
+        let(:command) { nil }
+
+        it { should be_nil }
+      end
+
+      context 'when COM access is denied' do
+        before do
+          service.stub(:ExecQuery).and_raise(StandardError, 'Access denied')
+          described_class.stub(:execute).
+            and_return(Overcommit::Subprocess::Result.new(0, "git commit\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == 'git commit'
+        end
+      end
+    end
+
+    context 'when win32ole is not installed' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_raise(LoadError)
+        described_class.stub(:execute).
+          and_return(Overcommit::Subprocess::Result.new(0, "git commit\n", ''))
+      end
+
+      it 'falls back to PowerShell' do
+        subject.should == 'git commit'
+      end
     end
 
     context 'when there is no parent' do

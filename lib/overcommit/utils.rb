@@ -166,12 +166,7 @@ module Overcommit
         return if Process.ppid.zero?
 
         if OS.windows?
-          result = execute([
-            'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
-            "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
-          ])
-          command = result.stdout.strip
-          command if result.success? && !command.empty?
+          windows_parent_command
         elsif OS.cygwin?
           # Cygwin's `ps` command behaves differently than the traditional
           # Linux version, but a comparable `procps` is provided to compensate.
@@ -293,6 +288,29 @@ module Overcommit
       end
 
       private
+
+      def windows_parent_command
+        native_windows_parent_command
+      rescue LoadError, StandardError
+        # win32ole is optional and absent from newer Ruby distributions.
+        # Fall back when it is unavailable or the COM query is denied.
+        result = execute([
+          'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
+          "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
+        ])
+        command = result.stdout.strip
+        command if result.success? && !command.empty?
+      end
+
+      # Avoid starting PowerShell for every query when Ruby provides COM support.
+      def native_windows_parent_command
+        require 'win32ole'
+        service = WIN32OLE.connect('winmgmts:root/cimv2')
+        processes = service.ExecQuery(
+          "SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.ppid}"
+        )
+        processes.to_enum.first&.CommandLine
+      end
 
       # Log debug output.
       #
