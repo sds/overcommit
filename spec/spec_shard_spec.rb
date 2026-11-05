@@ -9,7 +9,7 @@ describe SpecShard do
     described_class.new('1/1').select(examples).should == examples
   end
 
-  [2, 3].each do |total|
+  [2, 3, 5].each do |total|
     context "with #{total} shards" do
       let(:shards) do
         (1..total).map { |index| described_class.new("#{index}/#{total}").select(examples) }
