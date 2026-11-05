@@ -33,6 +33,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Select dependency cache date
+        if: runner.os == 'Windows'
+        id: dependency-cache-date
+        shell: pwsh
+        run: '"date=$([DateTime]::UtcNow.ToString(''yyyy-MM-dd''))" >> $env:GITHUB_OUTPUT'
+
+      - name: Cache Windows dependency lock
+        if: runner.os == 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: Gemfile.lock
+          # Keep testing fresh dependencies daily without resolving on every runner.
+          key: dependency-lock-v1-${{ runner.os }}-ruby${{ matrix.ruby-version }}-${{ steps.dependency-cache-date.outputs.date }}-${{ hashFiles('Gemfile', '*.gemspec', 'lib/overcommit/version.rb') }}
+
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
         with:
