@@ -1,0 +1,35 @@
+--- a/spec/support/git_spec_helpers.rb
++++ b/spec/support/git_spec_helpers.rb
+@@ -40,6 +40,15 @@
+     end
+   end
+ 
++  def protected_branches_template
++    @protected_branches_template ||= repo do
++      `git checkout -b protected > #{File::NULL} 2>&1`
++      `git commit --allow-empty -m "Remote commit"`
++      `git checkout -b unprotected > #{File::NULL} 2>&1`
++      `git checkout -b dummy > #{File::NULL} 2>&1`
++    end
++  end
++
+   # Retrieve sha1 based on git ref
+   #
+   # @param ref [String] git ref
+--- a/spec/integration/protected_branches_spec.rb
++++ b/spec/integration/protected_branches_spec.rb
+@@ -29,11 +29,9 @@
+   YML
+ 
+   around do |example|
+-    remote_repo = repo do
+-      `git checkout -b protected > #{File::NULL} 2>&1`
+-      `git commit --allow-empty -m "Remote commit"`
+-      `git checkout -b unprotected > #{File::NULL} 2>&1`
+-      `git checkout -b dummy > #{File::NULL} 2>&1`
++    remote_repo = directory('remote-repo') do
++      FileUtils.cp_r(File.join(GitSpecHelpers.protected_branches_template, '.'), Dir.pwd,
++                     preserve: true)
+     end
+     repo do
+       File.open('.overcommit.yml', 'w') { |f| f.write(config) }

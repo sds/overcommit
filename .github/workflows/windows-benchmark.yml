@@ -1,0 +1,72 @@
+name: Windows fixture experiments B
+on:
+  push:
+    branches: [perf/windows-experiments-b]
+jobs:
+  paired:
+    name: ${{ matrix.variant }} (shard ${{ matrix.shard }})
+    runs-on: ${{ matrix.variant == 'windows2022' && 'windows-2022' || 'windows-latest' }}
+    timeout-minutes: 10
+    env:
+      CI: true
+      BUNDLE_WITHOUT: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [repo_seed, remote_snapshot, fast_import, windows2022]
+        shard: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+          windows-toolchain: none
+      - name: Prepare Git
+        shell: pwsh
+        run: |
+          $gitRoot = Split-Path (Split-Path (git --exec-path) -Parent) -Parent
+          Join-Path $gitRoot 'bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          git config --global user.email 'gh-actions@example.com'
+          git config --global user.name 'GitHub Actions'
+      - name: Paired benchmark
+        shell: pwsh
+        run: .github/benchmarks/run.ps1 -Variant '${{ matrix.variant }}' -Shard ${{ matrix.shard }}
+      - name: Retain measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.variant }}-${{ matrix.shard }}
+          path: benchmark-results
+          retention-days: 3
+  micro:
+    name: Native query and capture microbench (${{ matrix.ruby }})
+    runs-on: windows-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.3', '3.4', '4.0']
+    env:
+      BUNDLE_WITHOUT: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+          windows-toolchain: none
+      - name: Native Windows probes
+        shell: pwsh
+        run: |
+          $gitRoot = Split-Path (Split-Path (git --exec-path) -Parent) -Parent
+          $env:PATH = (Join-Path $gitRoot 'bin') + ';' + $env:PATH
+          $disk = Get-Command imdisk.exe -ErrorAction SilentlyContinue
+          Write-Output ('RAM disk executable: ' + $disk.Source)
+          bundle exec ruby .github/benchmarks/windows_microbench.rb
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: micro-${{ matrix.ruby }}
+          path: windows-microbench.json
+          retention-days: 3

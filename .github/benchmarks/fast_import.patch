@@ -1,0 +1,29 @@
+--- a/spec/integration/protected_branches_spec.rb
++++ b/spec/integration/protected_branches_spec.rb
+@@ -30,10 +30,22 @@
+ 
+   around do |example|
+     remote_repo = repo do
+-      `git checkout -b protected > #{File::NULL} 2>&1`
+-      `git commit --allow-empty -m "Remote commit"`
+-      `git checkout -b unprotected > #{File::NULL} 2>&1`
+-      `git checkout -b dummy > #{File::NULL} 2>&1`
++      result = Overcommit::Utils.execute(%w[git fast-import --quiet], input: <<~GIT)
++        commit refs/heads/protected
++        committer Overcommit Tester <overcommit@example.com> #{Time.now.to_i} +0000
++        data 14
++        Remote commit
++
++        reset refs/heads/unprotected
++        from refs/heads/protected
++
++        reset refs/heads/dummy
++        from refs/heads/protected
++
++      GIT
++      raise "Unable to create fixture history: #{result.stderr}" unless result.success?
++
++      File.write('.git/HEAD', "ref: refs/heads/dummy\n")
+     end
+     repo do
+       File.open('.overcommit.yml', 'w') { |f| f.write(config) }

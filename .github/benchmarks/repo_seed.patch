@@ -1,0 +1,72 @@
+--- a/spec/support/git_spec_helpers.rb
++++ b/spec/support/git_spec_helpers.rb
+@@ -13,31 +13,48 @@
+   # @return [String] path of the repository
+   def repo(options = {})
+     directory('some-repo') do
+-      create_cmd = %w[git init --initial-branch=master]
+-      create_cmd += ['--template', options[:template_dir]] if options[:template_dir]
+-      create_cmd += ['--separate-git-dir', options[:git_dir]] if options[:git_dir]
+-
+-      result = Overcommit::Utils.execute(create_cmd)
+-      raise "Unable to create repo: #{result.stderr}" unless result.success?
+-
+-      # Append repository-local defaults in one write instead of launching five
+-      # Git processes per example. Later values override any template defaults.
+-      File.open(File.join(options.fetch(:git_dir, '.git'), 'config'), 'a') do |config|
+-        config.puts <<~CONFIG
+-          [user]
+-            name = Overcommit Tester
+-            email = overcommit@example.com
+-          [rerere]
+-            enabled = 0
+-          [commit]
+-            gpgsign = false
+-          [core]
+-            symlinks = true
+-        CONFIG
++      if options.empty?
++        FileUtils.cp_r(GitSpecHelpers.empty_repo_template, '.git')
++      else
++        initialize_repo(options)
+       end
+ 
+       yield if block_given?
+     end
++  end
++
++  # A process-local immutable seed; every example receives a separate copy.
++  def empty_repo_template
++    @empty_repo_template ||= begin
++      root = Dir.mktmpdir('overcommit-empty-repo')
++      Dir.chdir(root) { initialize_repo(template_dir: '') }
++      File.join(root, '.git')
++    end
++  end
++
++  def initialize_repo(options)
++  create_cmd = %w[git init --initial-branch=master]
++  create_cmd += ['--template', options[:template_dir]] if options[:template_dir]
++  create_cmd += ['--separate-git-dir', options[:git_dir]] if options[:git_dir]
++
++  result = Overcommit::Utils.execute(create_cmd)
++  raise "Unable to create repo: #{result.stderr}" unless result.success?
++
++  # Append repository-local defaults in one write instead of launching five
++  # Git processes per example. Later values override any template defaults.
++  File.open(File.join(options.fetch(:git_dir, '.git'), 'config'), 'a') do |config|
++    config.puts <<~CONFIG
++      [user]
++        name = Overcommit Tester
++        email = overcommit@example.com
++      [rerere]
++        enabled = 0
++      [commit]
++        gpgsign = false
++      [core]
++        symlinks = true
++    CONFIG
++  end
+   end
+ 
+   # Retrieve sha1 based on git ref
