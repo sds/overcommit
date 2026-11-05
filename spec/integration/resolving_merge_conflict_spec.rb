@@ -22,7 +22,7 @@ describe 'resolving merge conflicts' do
       `git checkout -q master`
       `git merge branch1`
       `git merge branch2` # Results in merge conflict
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       echo('Conflicts Resolved', 'some-file')
       `git add some-file`
       example.run

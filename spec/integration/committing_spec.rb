@@ -19,7 +19,7 @@ describe 'commiting' do
   around do |example|
     repo do
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       example.run
     end
   end
@@ -71,7 +71,7 @@ describe 'commiting to an empty repo' do
 
   around do |example|
     repo do
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
       File.open('test.txt', 'w') { |f| f.write(file_contents) }
       `git add test.txt`

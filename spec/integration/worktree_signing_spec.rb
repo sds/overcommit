@@ -33,7 +33,7 @@ describe 'configuration file signing with multiple worktrees' do
       raise "Unable to create worktree: #{result.stderr}" unless result.success?
 
       echo(config.to_yaml, '.overcommit.yml')
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       `overcommit --sign`
 
       Dir.chdir(linked_worktree) do

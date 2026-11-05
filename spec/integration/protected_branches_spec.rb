@@ -61,7 +61,7 @@ describe Overcommit::Hook::PrePush::ProtectedBranches,
   end
 
   shared_context 'ProtectedBranches enabled' do
-    before { `overcommit --install > #{File::NULL}` }
+    before { install_overcommit_hooks }
   end
 
   shared_examples 'push succeeds' do

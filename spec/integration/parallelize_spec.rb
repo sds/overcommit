@@ -23,7 +23,7 @@ describe 'running a hook with parallelism disabled' do
   around do |example|
     repo do
       File.open('.overcommit.yml', 'w') { |f| f.write(config) }
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       example.run
     end
   end
