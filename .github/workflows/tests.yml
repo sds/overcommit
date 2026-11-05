@@ -1,19 +1,19 @@
 name: Tests
 on:
   push:
-    branches: [main]
+    branches: [main, perf/asymmetric-shards]
   pull_request:
     branches: [main]
 
 jobs:
   rspec:
-    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }}, shard ${{ matrix.shard }})
-    timeout-minutes: ${{ matrix.os == 'windows' && 30 || 15 }}
-    runs-on: ${{ format('{0}-latest', matrix.os) }}
+    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.target.os }}, shard ${{ matrix.target.shard }})
+    timeout-minutes: ${{ matrix.target.os == 'windows' && 30 || 15 }}
+    runs-on: ${{ format('{0}-latest', matrix.target.os) }}
     env:
       BUNDLE_WITHOUT: lint
-      SPEC_WORKERS: ${{ matrix.os == 'windows' && 4 || 8 }}
-      SPEC_SHARD: ${{ matrix.shard }}
+      SPEC_WORKERS: ${{ matrix.target.os == 'windows' && 4 || 8 }}
+      SPEC_SHARD: ${{ matrix.target.shard }}
 
     strategy:
       fail-fast: false
@@ -22,10 +22,13 @@ jobs:
           - "3.3"
           - "3.4"
           - "4.0"
-        os:
-          - ubuntu
-          - windows
-        shard: ["1/3", "2/3", "3/3"]
+        target:
+          - { os: ubuntu, shard: "1/1" }
+          - { os: windows, shard: "1/5" }
+          - { os: windows, shard: "2/5" }
+          - { os: windows, shard: "3/5" }
+          - { os: windows, shard: "4/5" }
+          - { os: windows, shard: "5/5" }
 
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +59,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
-          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.os }}-shard${{ strategy.job-index }}
+          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.target.os }}-shard${{ strategy.job-index }}
           parallel: true
 
   overcommit:
