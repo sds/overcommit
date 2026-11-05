@@ -46,7 +46,7 @@ The best way to see a feature added, however, is to submit a pull request.
   # Optionally choose the number of worker processes (default: up to 8 CPUs):
   SPEC_WORKERS=4 bundle exec ruby script/parallel_rspec.rb
   # Run one runner's share of the suite (default: 1/1, the whole suite):
-  SPEC_SHARD=1/3 bundle exec ruby script/parallel_rspec.rb
+  SPEC_SHARD=1/5 bundle exec ruby script/parallel_rspec.rb
   ```
 
   Workers run in separate processes because specs change the working directory
@@ -55,6 +55,8 @@ The best way to see a feature added, however, is to submit a pull request.
   examples in a deterministic order; run every shard to cover the complete suite.
   You can also pass spec paths to run a subset. The `lint` dependency group is
   only needed for lint checks; test-only CI jobs install with `BUNDLE_WITHOUT=lint`.
+
+  GitHub Actions runs one Linux shard and five Windows shards per Ruby version.
 
   The final `CI` check depends on all test shards and lint, and finalizes coverage reporting.
   Repository rulesets can require this single check instead of individual matrix jobs.
