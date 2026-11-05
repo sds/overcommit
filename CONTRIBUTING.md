@@ -56,6 +56,9 @@ The best way to see a feature added, however, is to submit a pull request.
   You can also pass spec paths to run a subset. The `lint` dependency group is
   only needed for lint checks; test-only CI jobs install with `BUNDLE_WITHOUT=lint`.
 
+  The final `CI` check depends on all test shards, lint, and coverage reporting.
+  Repository rulesets can require this single check instead of individual matrix jobs.
+
 * Submit your pull request!
 
 All pull requests will be tested against [Travis CI][3], where the following
