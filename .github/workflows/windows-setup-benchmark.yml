@@ -68,8 +68,10 @@ jobs:
           Invoke-WebRequest 'https://static.ltr-data.se/files/imdisk.zip' -OutFile "$target/package.zip"
           Expand-Archive "$target/package.zip" "$target/files"
           $inf = "$target/files/imdisk.inf"
-          & rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 132 $inf
-          if ($LASTEXITCODE -ne 0) { throw "ImDisk install failed: $LASTEXITCODE" }
+          $install = Start-Process rundll32.exe -ArgumentList @('setupapi.dll,InstallHinfSection', 'DefaultInstall', '132', $inf) -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "ImDisk install failed: $($install.ExitCode)" }
+          & net.exe start imdisk
+          if ($LASTEXITCODE -ne 0) { throw "ImDisk driver start failed: $LASTEXITCODE" }
           & "$target/files/cli/amd64/imdisk.exe" -a -t vm -s 1024M -m R: -p '/fs:ntfs /q /y'
           if ($LASTEXITCODE -ne 0) { throw "RAM disk mount failed: $LASTEXITCODE" }
           New-Item -ItemType Directory 'R:\t' | Out-Null
