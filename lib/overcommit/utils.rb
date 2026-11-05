@@ -293,7 +293,29 @@ module Overcommit
         native_windows_parent_command
       rescue LoadError, StandardError
         # win32ole is optional and absent from newer Ruby distributions.
-        # Fall back when it is unavailable or the COM query is denied.
+        # Use Script Host when it is unavailable or the COM query is denied.
+        scripted_windows_parent_command
+      end
+
+      def scripted_windows_parent_command
+        begin
+          result = execute([
+            'cscript.exe', '//nologo', '//B', '//U',
+            File.expand_path('../../libexec/overcommit-parent-command.js', __dir__),
+            Process.ppid.to_s,
+          ])
+          if result.success?
+            command = result.stdout.dup.force_encoding('UTF-16LE').encode('UTF-8').
+              delete_prefix("\uFEFF").strip
+            return command.empty? ? nil : command
+          end
+        rescue Errno::ENOENT, ChildProcess::LaunchError, EncodingError
+          # Preserve PowerShell when Script Host is disabled or unavailable.
+        end
+        powershell_windows_parent_command
+      end
+
+      def powershell_windows_parent_command
         result = execute([
           'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
           "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",

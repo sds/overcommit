@@ -219,6 +219,72 @@ describe Overcommit::Utils do
       end
     end
 
+    context 'when Windows falls back to Script Host' do
+      let(:command) { 'git -C "C:/Users/José/项目" commit --amend' }
+      let(:output) { "\uFEFF#{command}\r\n".encode('UTF-16LE') }
+      let(:script_result) { Overcommit::Subprocess::Result.new(0, output, '') }
+
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_raise(LoadError)
+        described_class.stub(:execute).with(array_including('cscript.exe')).
+          and_return(script_result)
+      end
+
+      it 'decodes the complete Unicode command line and removes its BOM' do
+        described_class.should_not_receive(:execute).with(array_including('powershell.exe'))
+        subject.should == command
+      end
+
+      context 'when the process has exited' do
+        let(:output) { '' }
+
+        it 'returns nil without retrying PowerShell' do
+          described_class.should_not_receive(:execute).with(array_including('powershell.exe'))
+          subject.should be_nil
+        end
+      end
+
+      context 'when the script fails' do
+        let(:script_result) { Overcommit::Subprocess::Result.new(1, '', 'Access denied') }
+
+        before do
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+
+      context 'when Script Host is unavailable' do
+        before do
+          described_class.stub(:execute).with(array_including('cscript.exe')).
+            and_raise(Errno::ENOENT)
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+
+      context 'when Script Host returns invalid Unicode' do
+        let(:output) { "\x00".b }
+
+        before do
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+    end
+
     context 'when there is no parent' do
       before do
         Process.stub(:ppid) { 0 }
