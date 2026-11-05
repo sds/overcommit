@@ -1,0 +1,20 @@
+diff --git a/lib/overcommit/utils.rb b/lib/overcommit/utils.rb
+index 3acdfa21..bd311a42 100644
+--- a/lib/overcommit/utils.rb
++++ b/lib/overcommit/utils.rb
+@@ -166,6 +166,15 @@ module Overcommit
+         return if Process.ppid.zero?
+ 
+         if OS.windows?
++          begin
++            require 'win32ole'
++            service = WIN32OLE.connect('winmgmts:root/cimv2')
++            processes = service.ExecQuery("SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.ppid}")
++            processes.each { |process| return process.CommandLine }
++            return
++          rescue LoadError, StandardError
++            # Preserve the PowerShell fallback when OLE is unavailable.
++          end
+           result = execute([
+             'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
+             "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
