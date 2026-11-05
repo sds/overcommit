@@ -20,12 +20,21 @@ module GitSpecHelpers
       result = Overcommit::Utils.execute(create_cmd)
       raise "Unable to create repo: #{result.stderr}" unless result.success?
 
-      # Need to define user info since some CI contexts don't have defaults set
-      `git config --local user.name "Overcommit Tester"`
-      `git config --local user.email "overcommit@example.com"`
-      `git config --local rerere.enabled 0` # Don't record resolutions in tests
-      `git config --local commit.gpgsign false`
-      `git config --local core.symlinks true`
+      # Append repository-local defaults in one write instead of launching five
+      # Git processes per example. Later values override any template defaults.
+      File.open(File.join(options.fetch(:git_dir, '.git'), 'config'), 'a') do |config|
+        config.puts <<~CONFIG
+          [user]
+            name = Overcommit Tester
+            email = overcommit@example.com
+          [rerere]
+            enabled = 0
+          [commit]
+            gpgsign = false
+          [core]
+            symlinks = true
+        CONFIG
+      end
 
       yield if block_given?
     end

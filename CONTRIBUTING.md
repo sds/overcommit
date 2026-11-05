@@ -39,6 +39,20 @@ The best way to see a feature added, however, is to submit a pull request.
   bundle exec rspec
   ```
 
+  To run the complete suite in parallel, as GitHub Actions does:
+
+  ```bash
+  bundle exec ruby script/parallel_rspec.rb
+  # Optionally choose the number of worker processes (default: up to 8 CPUs):
+  SPEC_WORKERS=4 bundle exec ruby script/parallel_rspec.rb
+  ```
+
+  Workers run in separate processes because specs change the working directory
+  and environment. The runner checks that every discovered example ran exactly
+  once and merges coverage from all workers. You can also pass spec paths to
+  run a subset. The `lint` dependency group is only needed for lint checks;
+  test-only CI jobs install with `BUNDLE_WITHOUT=lint`.
+
 * Submit your pull request!
 
 All pull requests will be tested against [Travis CI][3], where the following
