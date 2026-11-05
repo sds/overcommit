@@ -1,7 +1,7 @@
 name: Tests
 on:
   push:
-    branches: [main, ci/shard-tests]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -59,17 +59,6 @@ jobs:
           flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.os }}-shard${{ strategy.job-index }}
           parallel: true
 
-  finish:
-    needs: rspec
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Finalize code coverage report
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.github_token }}
-          parallel-finished: true
-
   overcommit:
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -96,7 +85,7 @@ jobs:
   ci:
     name: CI
     if: ${{ always() }}
-    needs: [rspec, overcommit, finish]
+    needs: [rspec, overcommit]
     runs-on: ubuntu-latest
     timeout-minutes: 2
 
@@ -105,3 +94,9 @@ jobs:
         env:
           JOB_RESULTS: ${{ toJSON(needs) }}
         run: echo "$JOB_RESULTS" | jq -e 'all(.[]; .result == "success")'
+
+      - name: Finalize code coverage report
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
