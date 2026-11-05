@@ -1,22 +1,14 @@
 # frozen_string_literal: true
 
 require 'bundler'
-require 'simplecov'
-SimpleCov.start do
-  add_filter 'bin/'
-  add_filter 'libexec/'
-  add_filter 'spec/'
-  add_filter 'template-dir/'
-
-  if ENV['CI']
-    require 'simplecov-lcov'
-
-    SimpleCov::Formatter::LcovFormatter.config do |c|
-      c.report_with_single_file = true
-      c.single_report_path = 'coverage/lcov.info'
+unless ENV['OVERCOMMIT_SPEC_DISCOVERY']
+  require_relative 'coverage_config'
+  SimpleCov.start do
+    if ENV['OVERCOMMIT_SPEC_WORKER']
+      coverage_dir ENV.fetch('OVERCOMMIT_SPEC_COVERAGE_DIR')
+      command_name "RSpec worker #{ENV.fetch('OVERCOMMIT_SPEC_WORKER')}"
+      formatter SimpleCov::Formatter::MultiFormatter.new([]) # Only the parent formats coverage.
     end
-
-    formatter SimpleCov::Formatter::LcovFormatter
   end
 end
 

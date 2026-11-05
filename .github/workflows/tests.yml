@@ -10,6 +10,9 @@ jobs:
     name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }})
     timeout-minutes: ${{ matrix.os == 'windows' && 30 || 15 }}
     runs-on: ${{ matrix.runner || format('{0}-latest', matrix.os) }}
+    env:
+      BUNDLE_WITHOUT: lint
+      SPEC_WORKERS: 8
 
     strategy:
       fail-fast: false
@@ -48,7 +51,7 @@ jobs:
         run: |
           git config --global user.email "gh-actions@example.com"
           git config --global user.name "GitHub Actions"
-          bundle exec rspec
+          bundle exec ruby script/parallel-rspec
 
       - name: Code coverage reporting
         uses: coverallsapp/github-action@v2

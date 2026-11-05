@@ -67,7 +67,7 @@ describe 'specifying `gemfile` option in Overcommit configuration' do
           touch(File.join(fake_gem_path, 'lib', 'my_fake_gem.rb'))
 
           echo(gemfile, '.overcommit_gems.rb')
-          `bundle install --gemfile=.overcommit_gems.rb`
+          `bundle install --local --gemfile=.overcommit_gems.rb`
 
           echo(config, '.overcommit.yml')
 
