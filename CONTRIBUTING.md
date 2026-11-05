@@ -45,13 +45,19 @@ The best way to see a feature added, however, is to submit a pull request.
   bundle exec ruby script/parallel_rspec.rb
   # Optionally choose the number of worker processes (default: up to 8 CPUs):
   SPEC_WORKERS=4 bundle exec ruby script/parallel_rspec.rb
+  # Run one runner's share of the suite (default: 1/1, the whole suite):
+  SPEC_SHARD=1/3 bundle exec ruby script/parallel_rspec.rb
   ```
 
   Workers run in separate processes because specs change the working directory
   and environment. The runner checks that every discovered example ran exactly
-  once and merges coverage from all workers. You can also pass spec paths to
-  run a subset. The `lint` dependency group is only needed for lint checks;
-  test-only CI jobs install with `BUNDLE_WITHOUT=lint`.
+  once within its shard and merges coverage from all workers. Shards partition
+  examples in a deterministic order; run every shard to cover the complete suite.
+  You can also pass spec paths to run a subset. The `lint` dependency group is
+  only needed for lint checks; test-only CI jobs install with `BUNDLE_WITHOUT=lint`.
+
+  The final `CI` check depends on all test shards and lint, and finalizes coverage reporting.
+  Repository rulesets can require this single check instead of individual matrix jobs.
 
 * Submit your pull request!
 

@@ -7,12 +7,13 @@ on:
 
 jobs:
   rspec:
-    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }})
+    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }}, shard ${{ matrix.shard }})
     timeout-minutes: ${{ matrix.os == 'windows' && 30 || 15 }}
     runs-on: ${{ format('{0}-latest', matrix.os) }}
     env:
       BUNDLE_WITHOUT: lint
       SPEC_WORKERS: ${{ matrix.os == 'windows' && 4 || 8 }}
+      SPEC_SHARD: ${{ matrix.shard }}
 
     strategy:
       fail-fast: false
@@ -24,6 +25,7 @@ jobs:
         os:
           - ubuntu
           - windows
+        shard: ["1/3", "2/3", "3/3"]
 
     steps:
       - uses: actions/checkout@v4
@@ -54,14 +56,45 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
-          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.os }}
+          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.os }}-shard${{ strategy.job-index }}
           parallel: true
 
-  finish:
-    needs: rspec
-    runs-on: ubuntu-26.04
+  overcommit:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Prepare environment
+        run: |
+          git config --global user.email "gh-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          bundle exec overcommit --sign
+          bundle exec overcommit --sign pre-commit
+
+      - name: Run pre-commit checks
+        run: bundle exec overcommit --run
+
+  ci:
+    name: CI
+    if: ${{ always() }}
+    needs: [rspec, overcommit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Require all jobs to pass
+        env:
+          JOB_RESULTS: ${{ toJSON(needs) }}
+        run: echo "$JOB_RESULTS" | jq -e 'all(.[]; .result == "success")'
+
       - name: Finalize code coverage report
         uses: coverallsapp/github-action@v2
         with:
