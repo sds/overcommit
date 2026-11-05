@@ -9,7 +9,7 @@ jobs:
   rspec:
     name: rspec (${{ matrix.ruby-version }}, ${{ matrix.os }})
     timeout-minutes: ${{ matrix.os == 'windows' && 30 || 15 }}
-    runs-on: ${{ matrix.runner || format('{0}-latest', matrix.os) }}
+    runs-on: ${{ format('{0}-latest', matrix.os) }}
     env:
       BUNDLE_WITHOUT: lint
       SPEC_WORKERS: ${{ matrix.os == 'windows' && 4 || 8 }}
@@ -24,9 +24,6 @@ jobs:
         os:
           - ubuntu
           - windows
-        include:
-          - os: ubuntu
-            runner: ubuntu-26.04
 
     steps:
       - uses: actions/checkout@v4
