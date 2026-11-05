@@ -20,5 +20,3 @@ group :lint do
     gem 'rubocop', '1.77.0'
   end
 end
-
-gem 'ffi' if Gem.win_platform?

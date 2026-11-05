@@ -46,7 +46,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-          # Test dependencies are pure Ruby or ship prebuilt Windows gems.
+          # Test dependencies are pure Ruby; no native build tools are needed.
           windows-toolchain: none
 
       - name: Use Git directly on Windows
