@@ -53,10 +53,14 @@ module Overcommit
     #
     # @return [Overcommit::Configuration]
     def load_repo_config
+      overcommit_local_yml = File.join(Overcommit::Utils.repo_root,
+                                       Overcommit::LOCAL_CONFIG_FILE_NAME)
       overcommit_yml = File.join(Overcommit::Utils.repo_root,
                                  Overcommit::CONFIG_FILE_NAME)
 
-      if File.exist?(overcommit_yml)
+      if File.exist?(overcommit_local_yml) && File.exist?(overcommit_yml)
+        load_file(overcommit_yml, overcommit_local_yml)
+      elsif File.exist?(overcommit_yml)
         load_file(overcommit_yml)
       else
         self.class.default_configuration
@@ -64,9 +68,11 @@ module Overcommit
     end
 
     # Loads a configuration, ensuring it extends the default configuration.
-    def load_file(file)
-      config = self.class.load_from_file(file, default: false, logger: @log)
-      config = self.class.default_configuration.merge(config)
+    def load_file(file, local_file = nil)
+      overcommit_config = self.class.load_from_file(file, default: false, logger: @log)
+      l_config = self.class.load_from_file(local_file, default: false, logger: @log) if local_file
+      config = self.class.default_configuration.merge(overcommit_config)
+      config = config.merge(l_config) if l_config
 
       if @options.fetch(:verify) { config.verify_signatures? }
         verify_signatures(config)
@@ -89,7 +95,7 @@ module Overcommit
               "No previously recorded signature for configuration file.\n" \
               'Run `overcommit --sign` if you trust the hooks in this repository.'
 
-      elsif config.signature_changed?
+      elsif !config.signature_verified?
         raise Overcommit::Exceptions::ConfigurationSignatureChanged,
               "Signature of configuration file has changed!\n" \
               "Run `overcommit --sign` once you've verified the configuration changes."

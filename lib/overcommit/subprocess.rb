@@ -27,8 +27,6 @@ module Overcommit
       # @option options [String] input string to pass via standard input stream
       # @return [Result]
       def spawn(args, options = {})
-        args = win32_prepare_args(args) if OS.windows?
-
         process = ChildProcess.build(*args)
 
         out, err = assign_output_streams(process)
@@ -37,7 +35,8 @@ module Overcommit
         process.start
         if options[:input]
           begin
-            process.io.stdin.puts(options[:input])
+            process.io.stdin.binmode
+            process.io.stdin.write(options[:input])
           rescue StandardError
             # Silently ignore if the standard input stream of the spawned
             # process is closed before we get a chance to write to it. This
@@ -52,13 +51,16 @@ module Overcommit
         out.rewind
 
         Result.new(process.exit_code, out.read, err.read)
+      ensure
+        # Delete the output files now rather than leaving it to the garbage
+        # collector, which on Windows fails (and prints a backtrace) if a process
+        # left behind by the command still has them open.
+        [out, err].each { |stream| stream&.close! }
       end
 
       # Spawns a new process in the background using the given array of
       # arguments (the first element is the command).
       def spawn_detached(args)
-        args = win32_prepare_args(args) if OS.windows?
-
         process = ChildProcess.build(*args)
         process.detach = true
 
@@ -68,20 +70,6 @@ module Overcommit
       end
 
       private
-
-      # Necessary to run commands in the cmd.exe context.
-      # Args are joined to properly handle quotes and special characters.
-      def win32_prepare_args(args)
-        args = args.map do |arg|
-          # Quote args that contain whitespace
-          arg = "\"#{arg}\"" if arg =~ /\s/
-
-          # Escape cmd.exe metacharacters
-          arg.gsub(/[()%!^"<>&|]/, '^\0')
-        end
-
-        %w[cmd.exe /c] + [args.join(' ')]
-      end
 
       # @param process [ChildProcess]
       # @return [Array<IO>]

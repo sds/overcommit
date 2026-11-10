@@ -50,6 +50,10 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
   subject(:hook)         { hook_for(config, normal_context) }
 
   describe '#run' do
+    around do |example|
+      directory { example.run }
+    end
+
     before { add_file    'COMMIT_EDITMSG', '' }
     after  { remove_file 'COMMIT_EDITMSG' }
 
@@ -61,6 +65,34 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
 
       it 'prepends the replacement text' do
         expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
+      end
+
+      context 'when the replacement text contains a space' do
+        let(:config) { new_config('replacement_text' => '[\1] ') }
+
+        it 'prepends the replacement text, including the space' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("[123] \n")
+        end
+      end
+
+      context 'when skip_if exits with a zero status' do
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 0']) }
+
+        it { is_expected.to pass }
+
+        it 'does not change the commit message' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("\n")
+        end
+      end
+
+      context 'when skip_if exits with a non-zero status' do
+        let(:config) { new_config('skip_if' => ['bash', '-c', 'exit 1']) }
+
+        it { is_expected.to pass }
+
+        it 'does change the commit message' do
+          expect(File.read('COMMIT_EDITMSG')).to eq("[#123]\n")
+        end
       end
     end
 

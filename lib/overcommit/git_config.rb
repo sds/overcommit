@@ -17,7 +17,15 @@ module Overcommit
       path = `git config --get core.hooksPath`.chomp
       return File.join(Overcommit::Utils.git_dir, 'hooks') if path.empty?
 
-      File.absolute_path(path, Dir.pwd)
+      File.expand_path(path, Dir.pwd)
+    end
+
+    # Config file option for storing hook signatures: the per-worktree file
+    # when extensions.worktreeConfig is on, so worktrees with different
+    # configurations do not overwrite each other's signatures.
+    def signature_scope
+      enabled = `git config --bool --get extensions.worktreeConfig`.chomp
+      enabled == 'true' ? '--worktree' : '--local'
     end
   end
 end

@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'fileutils'
+require 'open3'
 
 describe 'template directory' do
   let(:template_dir) { File.join(Overcommit::HOME, 'template-dir') }
@@ -23,6 +24,32 @@ describe 'template directory' do
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         FileUtils.compare_file(File.join(hooks_dir, hook_type),
                                File.join(hooks_dir, 'overcommit-hook')).should == true
+      end
+    end
+
+    it 'reads a non-ASCII .overcommit.yml when the default external encoding is ASCII' do
+      repo(template_dir: template_dir) do
+        config = <<~YAML
+          # caf\u00e9
+          gemfile: false
+          PreCommit:
+            ALL:
+              enabled: false
+            AuthorName:
+              enabled: true
+              quiet: false
+        YAML
+        File.write('.overcommit.yml', config, encoding: 'UTF-8')
+
+        stdout, stderr, status = Open3.capture3(
+          { 'LC_ALL' => 'C', 'LANG' => 'C' },
+          RbConfig.ruby, '-E', 'US-ASCII', '-I', File.join(Overcommit::HOME, 'lib'),
+          File.join('.git', 'hooks', 'pre-commit'),
+          stdin_data: ''
+        )
+
+        expect(status.exitstatus).to eq(0), stdout + stderr
+        stdout.should include('AuthorName')
       end
     end
 

@@ -14,7 +14,7 @@ module Overcommit::Hook::PreCommit
         lines = group.split("\n").map(&:strip)
         file = lines[0][/(.+):/, 1]
         extract_messages(
-          lines[1..-1].map { |msg| "#{file}: #{msg}" },
+          lines[1..].map { |msg| "#{file}: #{msg}" },
           /^(?<file>(?:\w:)?[^:]+): line (?<line>\d+)/
         )
       end.flatten

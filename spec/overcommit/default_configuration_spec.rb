@@ -4,7 +4,11 @@ require 'spec_helper'
 
 describe 'default configuration' do
   default_config =
-    YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH).to_hash
+    begin
+      YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH, aliases: true).to_hash
+    rescue ArgumentError
+      YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH).to_hash
+    end
 
   Overcommit::Utils.supported_hook_types.each do |hook_type|
     hook_class = Overcommit::Utils.camel_case(hook_type)

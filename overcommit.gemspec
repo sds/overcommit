@@ -15,6 +15,10 @@ Gem::Specification.new do |s|
   s.post_install_message  =
     'Install hooks by running `overcommit --install` in your Git repository'
 
+  s.metadata = {
+    'changelog_uri' => 'https://github.com/sds/overcommit/blob/main/CHANGELOG.md'
+  }
+
   s.require_paths         = %w[lib]
 
   s.executables           = ['overcommit']
@@ -25,9 +29,9 @@ Gem::Specification.new do |s|
                             Dir['libexec/**/*'] +
                             Dir['template-dir/**/*']
 
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.6'
 
-  s.add_dependency          'childprocess', '>= 0.6.3', '< 5'
+  s.add_dependency          'childprocess', '>= 5.0.0', '< 6'
   s.add_dependency          'iniparse', '~> 1.4'
-  s.add_dependency          'rexml', '~> 3.2'
+  s.add_dependency          'rexml', '>= 3.4.2'
 end

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-if ENV['TRAVIS']
-  # When running in Travis, report coverage stats to Coveralls.
-  require 'coveralls'
-  Coveralls.wear!
-else
-  # Otherwise render coverage information in coverage/index.html and display
-  # coverage percentage in the console.
-  require 'simplecov'
+require 'bundler'
+unless ENV['OVERCOMMIT_SPEC_DISCOVERY']
+  require_relative 'coverage_config'
+  SimpleCov.start do
+    if ENV['OVERCOMMIT_SPEC_WORKER']
+      coverage_dir ENV.fetch('OVERCOMMIT_SPEC_COVERAGE_DIR')
+      command_name "RSpec worker #{ENV.fetch('OVERCOMMIT_SPEC_WORKER')}"
+      formatter SimpleCov::Formatter::MultiFormatter.new([]) # Only the parent formats coverage.
+    end
+  end
 end
 
 require 'overcommit'

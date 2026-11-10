@@ -18,10 +18,13 @@ module Overcommit::HookContext
     # @param config [Overcommit::Configuration]
     # @param args [Array<String>]
     # @param input [IO] standard input stream
-    def initialize(config, args, input)
+    # @param options [Hash] cli options
+    def initialize(config, args, input, **options)
       @config = config
       @args = args
       @input = input
+      @options = options
+      @input_mutex = Mutex.new
     end
 
     # Executes a command as if it were a regular git hook, passing all
@@ -93,7 +96,16 @@ module Overcommit::HookContext
     #
     # @return [String]
     def input_string
-      @input_string ||= @input.read
+      return @input_string if defined?(@input_string)
+
+      @input_mutex.synchronize do
+        unless defined?(@input_string)
+          @input.binmode if @input.respond_to?(:binmode)
+          @input_string = @input.read
+        end
+      end
+
+      @input_string
     end
 
     # Returns an array of lines passed to the hook via the standard input

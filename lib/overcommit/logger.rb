@@ -31,6 +31,11 @@ module Overcommit
       log
     end
 
+    # Flushes the [IO] object for partial lines
+    def flush
+      @out.flush if @out.respond_to? :flush
+    end
+
     # Write a line of output.
     #
     # A newline character will always be appended.

@@ -1,5 +1,9 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
+  NewCops: disable
+  SuggestExtensions: false
 
 Layout/ClosingParenthesisIndentation:
   Enabled: false
@@ -66,7 +70,7 @@ Naming/FileName:
 
 # Renaming `has_something?` to `something?` obfuscates whether it is a "is-a" or
 # a "has-a" relationship.
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: false
 
 # commit_sha1 is indeed how we want to write such a variable, so ignore this cop

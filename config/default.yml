@@ -32,6 +32,10 @@
 # your repository, and then set the `gemfile` option below to the name you gave
 # the file.
 # (Generate lock file by running `bundle install --gemfile=.overcommit_gems.rb`)
+#
+# NOTE: the following line will be parsed by a regexp rather than a proper YAML
+# parser, so avoid any values other than false or a string, and don't use inline
+# comments
 gemfile: false
 
 # Where to store hook plugins specific to a repository. These are loaded in
@@ -409,6 +413,12 @@ PreCommit:
       - '**/Makefile'
       - '**/*.go'
 
+  HerbLint:
+    enabled: false
+    description: 'Analyze with herb-lint'
+    required_executable: 'herb-lint'
+    include: '**/*.html.erb'
+
   Hlint:
     enabled: false
     description: 'Analyze with hlint'
@@ -536,6 +546,16 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
+  MixFormat:
+    enabled: false
+    description: 'Check formatting with mix format'
+    required_executable: 'mix'
+    flags: ['format', '--check-formatted']
+    include:
+      - '**/*.ex'
+      - '**/*.heex'
+      - '**/*.exs'
+
   PuppetMetadataJsonLint:
     enabled: false
     description: 'Checking module metadata'
@@ -550,6 +570,66 @@ PreCommit:
     required_executable: 'nginx'
     flags: ['-t']
     include: '**/nginx.conf'
+
+  OxFmt:
+    enabled: false
+    description: 'Analyze with oxfmt'
+    required_executable: 'oxfmt'
+    flags: ['--check', '--no-error-on-unmatched-pattern']
+    install_command: 'npm install -g oxfmt'
+    include:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.mts'
+      - '**/*.cts'
+      - '**/*.json'
+      - '**/*.jsonc'
+      - '**/*.json5'
+      - '**/*.css'
+      - '**/*.scss'
+      - '**/*.less'
+      - '**/*.pcss'
+      - '**/*.postcss'
+      - '**/*.graphql'
+      - '**/*.gql'
+      - '**/*.graphqls'
+      - '**/*.toml'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.html'
+      - '**/*.htm'
+      - '**/*.xhtml'
+      - '**/*.vue'
+      - '**/*.svelte'
+      - '**/*.md'
+      - '**/*.markdown'
+      - '**/*.mdx'
+      - '**/*.hbs'
+      - '**/*.handlebars'
+      - '**/*.mjml'
+
+  OxLint:
+    enabled: false
+    description: 'Analyze with oxlint'
+    required_executable: 'oxlint'
+    flags: ['--format=unix']
+    install_command: 'npm install -g oxlint'
+    include:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.mts'
+      - '**/*.cts'
+      - '**/*.vue'
+      - '**/*.svelte'
+      - '**/*.astro'
 
   Pep257:  # Deprecated – use Pydocstyle instead.
     enabled: false
@@ -699,11 +779,16 @@ PreCommit:
     install_command: 'pip install restructuredtext_lint'
     include: '**/*.rst'
 
+  RSpec:
+    enabled: false
+    description: 'Run tests with Rspec'
+    required_executable: 'rspec'
+
   RuboCop:
     enabled: false
     description: 'Analyze with RuboCop'
     required_executable: 'rubocop'
-    flags: ['--format=emacs', '--force-exclusion', '--display-cop-names', '--disable-pending-cops']
+    flags: ['--format=emacs', '--force-exclusion', '--display-cop-names']
     install_command: 'gem install rubocop'
     include:
       - '**/*.gemspec'
@@ -779,6 +864,28 @@ PreCommit:
     required_executable: 'slim-lint'
     install_command: 'gem install slim_lint'
     include: '**/*.slim'
+
+  Solargraph:
+    enabled: false
+    description: 'Typecheck with Solargraph'
+    requires_files: true
+    required_executable: 'solargraph'
+    install_command: 'gem install solargraph'
+    flags: ['typecheck', '--level', 'strong']
+    include: '**/*.rb'
+    exclude:
+      - 'spec/**/*.rb'
+      - 'test/**/*.rb'
+      - 'vendor/**/*.rb'
+      - '.bundle/**/*.rb'
+
+  Sorbet:
+    enabled: false
+    description: 'Analyze with Sorbet'
+    required_executable: 'srb'
+    install_command: 'gem install sorbet'
+    command: ['srb', 'tc']
+    include: '**/*.rb'
 
   Sqlint:
     enabled: false
@@ -1315,6 +1422,12 @@ PrePush:
     description: 'Run Minitest test suite'
     command: ['ruby', '-Ilib:test', '-rminitest', "-e 'exit! Minitest.run'"]
     include: 'test/**/*_test.rb'
+
+  MixTest:
+    enabled: false
+    description: 'Run mix test suite'
+    required_executable: 'mix'
+    flags: ['test']
 
   PhpUnit:
     enabled: false

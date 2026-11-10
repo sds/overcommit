@@ -12,7 +12,7 @@ module Overcommit::Hook::PreCommit
       return :pass if result.success?
 
       extract_messages(
-        result.stdout.split("\n\n")[1..-1],
+        result.stdout.split("\n\n")[1..],
         MESSAGE_REGEX
       )
     end

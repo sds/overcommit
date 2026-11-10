@@ -2,13 +2,13 @@
 
 # Utility module which manages the creation of {HookContext}s.
 module Overcommit::HookContext
-  def self.create(hook_type, config, args, input)
+  def self.create(hook_type, config, args, input, **cli_options)
     hook_type_class = Overcommit::Utils.camel_case(hook_type)
     underscored_hook_type = Overcommit::Utils.snake_case(hook_type)
 
     require "overcommit/hook_context/#{underscored_hook_type}"
 
-    Overcommit::HookContext.const_get(hook_type_class).new(config, args, input)
+    Overcommit::HookContext.const_get(hook_type_class).new(config, args, input, **cli_options)
   rescue LoadError, NameError => e
     # Could happen when a symlink was created for a hook type Overcommit does
     # not yet support.

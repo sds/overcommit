@@ -4,9 +4,9 @@ module Overcommit::Hook::PreCommit
   # Runs `php -l` against any modified PHP files.
   class PhpLint < Base
     # Sample String
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     #   PHP Parse error:  syntax error, unexpected 'require_once' (T_REQUIRE_ONCE) in site/sumo.php on line 12
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
     MESSAGE_REGEX = /^(?<type>.+)\:\s+(?<message>.+) in (?<file>.+) on line (?<line>\d+)/.freeze
 
     def run

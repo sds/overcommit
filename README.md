@@ -1,16 +1,14 @@
 [![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
-[![Build Status](https://travis-ci.org/sds/overcommit.svg?branch=master)](https://travis-ci.org/sds/overcommit)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/umui038jlm597ryf?svg=true)](https://ci.appveyor.com/project/sds/overcommit)
-[![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=master)](https://coveralls.io/github/sds/overcommit?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5da42f7f365e5fef6b4c/maintainability)](https://codeclimate.com/github/sds/overcommit/maintainability)
-[![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=master)](http://inch-ci.org/github/sds/overcommit)
+[![Build Status](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main)](https://coveralls.io/github/sds/overcommit?branch=main)
+[![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=main)](http://inch-ci.org/github/sds/overcommit)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sds/overcommit/master/logo/horizontal.png" width="65%" alt="Overcommit Logo"/>
+  <img width="65%" alt="Overcommit Logo" src="https://github.com/user-attachments/assets/b0d31df7-1d86-4e09-9c48-c96955e0713e" />
+  <br />
+  <em>A tool to manage and configure</em>
+<a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a>.
 </p>
-
-`overcommit` is a tool to manage and configure
-[Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks).
 
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
@@ -19,47 +17,50 @@ are stored in source control. You can also easily
 [use some of your existing line-oriented analysis tools](#adding-existing-line-aware-commands) without writing
 any Ruby code.
 
-* [Requirements](#requirements)
-  * [Dependencies](#dependencies)
-* [Installation](#installation)
-  * [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
-* [Usage](#usage)
-* [Continuous Integration](#continuous-integration)
-* [Configuration](#configuration)
-  * [Hook Options](#hook-options)
-  * [Hook Categories](#hook-categories)
-  * [Gemfile](#gemfile)
-  * [Plugin Directory](#plugin-directory)
-  * [Signature Verification](#signature-verification)
-* [Built-In Hooks](#built-in-hooks)
-  * [CommitMsg](#commitmsg)
-  * [PostCheckout](#postcheckout)
-  * [PostCommit](#postcommit)
-  * [PostMerge](#postmerge)
-  * [PostRewrite](#postrewrite)
-  * [PreCommit](#precommit)
-  * [PrePush](#prepush)
-  * [PreRebase](#prerebase)
-* [Repo-Specific Hooks](#repo-specific-hooks)
-  * [Adding Existing Git Hooks](#adding-existing-git-hooks)
-  * [Adding Existing Line-Aware Commands](#adding-existing-line-aware-commands)
-* [Security](#security)
-* [Contributing](#contributing)
-* [Community](#community)
-* [Changelog](#changelog)
-* [License](#license)
+- [Requirements](#requirements)
+  - [Windows](#windows)
+  - [Dependencies](#dependencies)
+- [Installation](#installation)
+  - [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
+- [Usage](#usage)
+  - [Skipping Hooks](#skipping-hooks)
+  - [Disabling Overcommit](#disabling-overcommit)
+  - [Disabling Colorized Output](#disabling-colorized-output)
+- [Continuous Integration](#continuous-integration)
+- [Configuration](#configuration)
+  - [Hook Options](#hook-options)
+  - [Hook Categories](#hook-categories)
+    - [The `ALL` Hook](#the-all-hook)
+  - [Gemfile](#gemfile)
+  - [Plugin Directory](#plugin-directory)
+  - [Quiet Hook Runs](#quiet-hook-runs)
+  - [Concurrency](#concurrency)
+  - [Signature Verification](#signature-verification)
+- [Built-In Hooks](#built-in-hooks)
+  - [CommitMsg](#commitmsg)
+  - [PostCheckout](#postcheckout)
+  - [PostCommit](#postcommit)
+  - [PostMerge](#postmerge)
+  - [PostRewrite](#postrewrite)
+  - [PreCommit](#precommit)
+    - [WARNING: pre-commit hooks cannot have side effects](#warning-pre-commit-hooks-cannot-have-side-effects)
+  - [PrePush](#prepush)
+  - [PreRebase](#prerebase)
+- [Repo-Specific hooks](#repo-specific-hooks)
+  - [Adding Existing Git Hooks](#adding-existing-git-hooks)
+  - [Adding Existing Line-Aware Commands](#adding-existing-line-aware-commands)
+- [Security](#security)
+  - [Disabling Signature Checking](#disabling-signature-checking)
+- [Contributing](#contributing)
+- [Community](#community)
+- [Changelog](#changelog)
+- [License](#license)
 
 ## Requirements
 
-This project aims to support the following Ruby runtimes on both \*nix and Windows:
+This project aims to support the following Ruby runtimes on \*nix (and best effort on Windows):
 
-* Ruby 2.4+
-
-### Windows
-
-If you are using Overcommit on **Windows**, make sure you include the `ffi` gem in your
-list of dependencies. Overcommit does not include the `ffi` gem by default since it
-significantly increases the install time for non-Windows platforms.
+* Ruby 2.6+
 
 ### Dependencies
 
@@ -131,6 +132,7 @@ Command Line Flag         | Description
 `-f`/`--force`            | Don't bail on install if other hooks already exist--overwrite them
 `-l`/`--list-hooks`       | Display all available hooks in the current repository
 `-r`/`--run`              | Run pre-commit hook against all tracked files in repository
+`--diff <ref>`            | Run pre-commit hook against all changed files relative to `<ref>`
 `-t`/`--template-dir`     | Print location of template directory
 `-h`/`--help`             | Show command-line flag documentation
 `-v`/`--version`          | Show version
@@ -157,6 +159,16 @@ place if you're just going to ignore it. If you want to ensure a hook is never
 skipped, set the `required` option to `true` in its configuration. If you
 attempt to skip it, you'll see a warning telling you that the hook is required,
 and the hook will still run.
+
+### Disabling all default hooks
+
+For each hook type, use the special `ALL` hook to disable all hooks by default.
+
+```yaml
+CommitMsg:
+  ALL:
+    enabled: false
+```
 
 ### Disabling Overcommit
 
@@ -210,6 +222,10 @@ PreCommit:
     enabled: true
     command: ['bundle', 'exec', 'rubocop'] # Invoke within Bundler context
 ```
+
+Additionally, you may wish to have repo-specific configurations that are local to your computer that are not part of the shared repo config.
+Adding a `.local-overcommit.yml` file in the top-level directory of the repository adds another configuration file. This file works the same as `.overcommit.yml`.
+Adding this to ignored files in a git repo will allow you to have a local configuration per repo.
 
 ### Hook Options
 
@@ -383,6 +399,20 @@ information on this option and what exactly it controls.
 Currently, Overcommit supports the following hooks out of the box&mdash;simply
 enable them in your `.overcommit.yml`.
 
+Hook names are case-sensitive. For example, use `KtLint` to enable the built-in
+Kotlin hook, which passes only the applicable modified files to `ktlint`:
+
+```yaml
+PreCommit:
+  KtLint:
+    enabled: true
+```
+
+Using `Ktlint` with a `required_executable: ktlint` setting instead defines an
+[ad hoc hook](#adding-existing-git-hooks). Ad hoc hooks receive Git's original
+hook arguments, so this runs `ktlint` without filenames and lets it check its
+default file patterns, including unmodified files.
+
 **Note**: Hooks with a `*` are enabled by default.
 
 **Warning**: This list represents the list of hooks available on the `master`
@@ -518,6 +548,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [LicenseFinder](lib/overcommit/hook/pre_commit/license_finder.rb)
 * [HamlLint](lib/overcommit/hook/pre_commit/haml_lint.rb)
 * [HardTabs](lib/overcommit/hook/pre_commit/hard_tabs.rb)
+* [HerbLint](lib/overcommit/hook/pre_commit/herb_lint.rb)
 * [Hlint](lib/overcommit/hook/pre_commit/hlint.rb)
 * [HtmlHint](lib/overcommit/hook/pre_commit/html_hint.rb)
 * [HtmlTidy](lib/overcommit/hook/pre_commit/html_tidy.rb)
@@ -535,6 +566,8 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [Mdl](lib/overcommit/hook/pre_commit/mdl.rb)
 * [`*`MergeConflicts](lib/overcommit/hook/pre_commit/merge_conflicts.rb)
 * [NginxTest](lib/overcommit/hook/pre_commit/nginx_test.rb)
+* [OxFmt](lib/overcommit/hook/pre_commit/ox_fmt.rb)
+* [OxLint](lib/overcommit/hook/pre_commit/ox_lint.rb)
 * [PhpCs](lib/overcommit/hook/pre_commit/php_cs.rb)
 * [PhpCsFixer](lib/overcommit/hook/pre_commit/php_cs_fixer.rb)
 * [PhpLint](lib/overcommit/hook/pre_commit/php_lint.rb)
@@ -561,6 +594,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [SemiStandard](lib/overcommit/hook/pre_commit/semi_standard.rb)
 * [ShellCheck](lib/overcommit/hook/pre_commit/shell_check.rb)
 * [SlimLint](lib/overcommit/hook/pre_commit/slim_lint.rb)
+* [Sorbet](lib/overcommit/hook/pre_commit/sorbet.rb)
 * [Sqlint](lib/overcommit/hook/pre_commit/sqlint.rb)
 * [Standard](lib/overcommit/hook/pre_commit/standard.rb)
 * [Stylelint](lib/overcommit/hook/pre_commit/stylelint.rb)
@@ -754,16 +788,37 @@ that executes some malicious code. When you fetch and checkout this pull
 request, the `post-checkout` hook will be run on your machine, along with
 the malicious code that you just checked out.
 
-Overcommit attempts to address this problem by storing a signature of your
-configuration and all hook plugin code since the last time it ran. When the
-signature changes, a warning is displayed alerting you to which plugins have
-changed. It is then up to you to manually verify that the changes are not
-malicious, and then continue running the hooks.
+Overcommit stores signatures of configurations and hook plugin code you have
+explicitly approved with `overcommit --sign` and `overcommit --sign <hook-type>`.
+Unrecognized signatures trigger a warning so you can verify the changes before
+running hooks. All previously approved signatures are remembered, so checking
+out an older revision or rebasing through approved configurations does not
+require signing them again.
 
-The signature is derived from the contents of the plugin's source code itself
-and any configuration for the plugin. Thus a change to the plugin's source
-code or your local repo's `.overcommit.yml` file could result in a signature
-change.
+A plugin's signature covers its source code together with its configuration.
+Approving two versions does not approve other combinations of their code and
+configuration.
+
+Approvals are stored under `overcommit-signatures` in your repository's Git
+directory, outside Git's object database. They cannot be committed, pushed, or
+fetched, and Git garbage collection does not remove them. Each approval is a
+small file at `<SHA256 of signature config key>/<SHA256 signature>`, so lookups
+do not scan the history. The file contains the original config key (such as
+`overcommit.configuration.signature` or `overcommit.PreCommit.MyHook.signature`)
+and the approved signature, one per line. There is no history size limit.
+
+To revoke one approval, delete its file. To revoke all approvals, delete the
+`overcommit-signatures` directory. Run `overcommit --sign` and
+`overcommit --sign <hook-type>` to approve the current versions again. Existing
+signatures in local Git config migrate automatically on first use; their old
+keys are removed so deleting approval files also revokes migrated signatures.
+
+By default, linked [worktrees](https://git-scm.com/docs/git-worktree) share
+history in their common Git directory. Enable `extensions.worktreeConfig`
+(`git config extensions.worktreeConfig true`) to keep approvals and the
+`verify_signatures` setting separate in each worktree's Git directory. Use
+`git rev-parse --git-common-dir` to find shared storage, or
+`git rev-parse --git-path overcommit-signatures` to find per-worktree storage.
 
 ### Disabling Signature Checking
 

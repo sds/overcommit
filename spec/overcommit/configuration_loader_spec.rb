@@ -57,5 +57,71 @@ describe Overcommit::ConfigurationLoader do
         end
       end
     end
+
+    context 'when repo only contains a repo level configuration file' do
+      let(:config_contents) { <<-CFG }
+        PreCommit:
+          Rubocop:
+            enabled: true
+      CFG
+
+      around do |example|
+        repo do
+          File.open('.overcommit.yml', 'w') { |f| f.write(config_contents) }
+          example.run
+        end
+      end
+
+      it 'includes default settings' do
+        subject
+        subject.for_hook('CapitalizedSubject', 'CommitMsg').should include('enabled' => true)
+      end
+
+      it 'includes .overwrite.yml configs' do
+        subject
+        subject.for_hook('Rubocop', 'PreCommit').should include('enabled' => true)
+      end
+    end
+
+    context 'when repo also contains a local configuration file' do
+      let(:local_config_contents) { <<-CFG }
+        plugin_directory: 'some-different-directory'
+      CFG
+
+      around do |example|
+        repo do
+          File.open('.overcommit.yml', 'w') { |f| f.write(config_contents) }
+          File.open('.local-overcommit.yml', 'w') { |f| f.write(local_config_contents) }
+          example.run
+        end
+      end
+
+      let(:config_contents) { <<-CFG }
+        PreCommit:
+          ScssLint:
+            enabled: true
+      CFG
+
+      let(:local_config_contents) { <<-CFG }
+        PreCommit:
+          Rubocop:
+            enabled: true
+      CFG
+
+      it 'includes default settings' do
+        subject
+        subject.for_hook('CapitalizedSubject', 'CommitMsg').should include('enabled' => true)
+      end
+
+      it 'includes .overwrite.yml configs' do
+        subject
+        subject.for_hook('ScssLint', 'PreCommit').should include('enabled' => true)
+      end
+
+      it 'includes .local-overwrite.yml configs' do
+        subject
+        subject.for_hook('Rubocop', 'PreCommit').should include('enabled' => true)
+      end
+    end
   end
 end

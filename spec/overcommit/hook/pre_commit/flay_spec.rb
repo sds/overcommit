@@ -57,4 +57,16 @@ Total score (lower is better) = 0
 
     it { should pass }
   end
+
+  context 'flay crashed with no output on stdout' do
+    let(:result) do
+      double(
+        success?: false,
+        stdout: '',
+        stderr: "undefined method `line' for nil:NilClass (NoMethodError)"
+      )
+    end
+
+    it { should fail_hook }
+  end
 end
