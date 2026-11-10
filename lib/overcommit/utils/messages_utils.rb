@@ -41,7 +41,13 @@ module Overcommit::Utils
         return nil if warning_pattern.nil?
 
         lambda do |type|
-          type.include?(warning_pattern) ? :warning : :error
+          warning =
+            if warning_pattern.is_a?(Regexp)
+              type && warning_pattern.match?(type)
+            else
+              type&.include?(warning_pattern)
+            end
+          warning ? :warning : :error
         end
       end
 

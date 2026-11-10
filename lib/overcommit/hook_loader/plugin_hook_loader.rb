@@ -95,15 +95,16 @@ module Overcommit::HookLoader
 
       hook_config = @config.for_hook(hook_name, @context.hook_class_name)
       hook_class =
-        if is_hook_line_aware(hook_config)
+        if hook_config['message_pattern']
+          validate_line_aware_config(hook_config)
           create_line_aware_command_hook_class(hook_base)
         else
           create_git_hook_class(hook_base)
         end
 
-      # Only to avoid warnings in unit tests...:
-      if hook_module.const_defined?(hook_name)
-        return hook_module.const_get(hook_name).new(@config, @context)
+      # A later load may configure the same hook to use a different command format.
+      if hook_module.const_defined?(hook_name, false)
+        hook_module.send(:remove_const, hook_name)
       end
 
       hook_module.const_set(hook_name, hook_class).new(@config, @context)

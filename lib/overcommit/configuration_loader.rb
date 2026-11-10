@@ -28,7 +28,7 @@ module Overcommit
         # default. Explicitly enable aliases if the option is available.
         yaml =
           begin
-            YAML.load_file(file, aliases: true)
+            YAML.load_file(file, permitted_classes: [Regexp, Symbol], aliases: true)
           rescue ArgumentError
             YAML.load_file(file)
           end

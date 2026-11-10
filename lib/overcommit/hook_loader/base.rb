@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'overcommit/utils/messages_utils'
+
 module Overcommit::HookLoader
   # Responsible for loading hooks from a file.
   class Base
@@ -22,34 +24,33 @@ module Overcommit::HookLoader
 
     private
 
-    def is_hook_line_aware(hook_config)
-      hook_config['message_pattern']
+    def validate_line_aware_config(hook_config)
+      pattern = hook_config['message_pattern']
+      unless pattern.is_a?(Regexp) && pattern.names.include?('file')
+        raise Overcommit::Exceptions::HookLoadError,
+              '`message_pattern` must be a Regexp with a named `file` capture group'
+      end
+
+      warning_pattern = hook_config['warning_message_type_pattern']
+      unless warning_pattern.nil? || warning_pattern.is_a?(Regexp) || warning_pattern.is_a?(String)
+        raise Overcommit::Exceptions::HookLoadError,
+              '`warning_message_type_pattern` must be a Regexp or String'
+      end
     end
 
-    def create_line_aware_command_hook_class(hook_base) # rubocop:disable Metrics/MethodLength
+    def create_line_aware_command_hook_class(hook_base)
       Class.new(hook_base) do
-        def line_aware_config
-          {
-            message_pattern: @config['message_pattern'],
-            warning_message_type_pattern: @config['warning_message_type_pattern']
-          }
-        end
-
         def run
           result = execute(command, args: applicable_files)
-
           return :pass if result.success?
+          output = result.stdout.split("\n")
+          return [:fail, result.stderr] if output.empty?
 
-          extract_messages(line_aware_config, result)
-        end
-
-        def extract_messages(line_aware_config, result)
-          warning_message_type_pattern = line_aware_config[:warning_message_type_pattern]
           Overcommit::Utils::MessagesUtils.extract_messages(
-            result.stdout.split("\n"),
-            line_aware_config[:message_pattern],
+            output,
+            @config['message_pattern'],
             Overcommit::Utils::MessagesUtils.create_type_categorizer(
-              warning_message_type_pattern
+              @config['warning_message_type_pattern']
             )
           )
         end
