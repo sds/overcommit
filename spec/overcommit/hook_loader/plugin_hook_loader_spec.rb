@@ -49,7 +49,7 @@ describe Overcommit::HookLoader::PluginHookLoader do
   context 'with a message pattern' do
     let(:hook_config) do
       super().merge(
-        'message_pattern' => /^(?<file>[^:]+):(?<line>\d+): (?<type>\w+):/,
+        'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+): (?<type>\w+):/,
         'warning_message_type_pattern' => /^warn(?:ing)?$/i,
         'flags' => ['--format=emacs'],
         'include' => '**/*.foo',
@@ -70,6 +70,11 @@ describe Overcommit::HookLoader::PluginHookLoader do
       expect(hook.run).to eq([
         Overcommit::Hook::Message.new(:warning, 'file.foo', 2, stdout.chomp)
       ])
+    end
+
+    it 'preserves Windows drive letters in diagnostic paths' do
+      allow(result).to receive(:stdout).and_return("C:/project/file.foo:2: warning: check this\n")
+      expect(hook.run.first.file).to eq('C:/project/file.foo')
     end
 
     it 'fails on errors on modified lines' do
@@ -131,7 +136,7 @@ describe Overcommit::HookLoader::PluginHookLoader do
     end
 
     context 'with a file-only pattern' do
-      let(:config_changes) { { 'message_pattern' => /^(?<file>[^:]+):/ } }
+      let(:config_changes) { { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):/ } }
 
       it 'supports missing line and type captures' do
         message = hook.run.first
@@ -141,7 +146,7 @@ describe Overcommit::HookLoader::PluginHookLoader do
 
     context 'with an unmatched optional type capture' do
       let(:config_changes) do
-        { 'message_pattern' => /^(?<file>[^:]+):(?<line>\d+):(?: (?<type>error):)?/ }
+        { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):(?: (?<type>error):)?/ }
       end
 
       it 'defaults to an error' do
@@ -235,7 +240,7 @@ describe Overcommit::HookLoader::PluginHookLoader do
     hook_config.merge!(
       'command' => [RbConfig.ruby, '-e', 'puts ARGV.first + ":2: warning: check this"; exit 1',
                     '--'],
-      'message_pattern' => /^(?<file>[^:]+):(?<line>\d+): (?<type>\w+):/,
+      'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+): (?<type>\w+):/,
       'warning_message_type_pattern' => /^warning$/
     )
     status, output = hook.run_and_transform
@@ -247,7 +252,7 @@ describe Overcommit::HookLoader::PluginHookLoader do
     loader.load_hooks
     updated_config = config.merge(
       Overcommit::Configuration.new(
-        'PreCommit' => { 'CustomScript' => { 'message_pattern' => /^(?<file>[^:]+):/ } }
+        'PreCommit' => { 'CustomScript' => { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):/ } }
       )
     )
     updated_loader = described_class.new(updated_config, context, Overcommit::Logger.silent)
