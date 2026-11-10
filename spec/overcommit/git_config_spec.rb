@@ -90,6 +90,23 @@ describe Overcommit::GitConfig do
       end
     end
 
+    context 'with a quoted Windows command-line flag' do
+      let(:command) { '"git.exe" "commit" "--cleanup=whitespace" "-m" "Test"' }
+      let(:configured_mode) { 'strip' }
+
+      it 'recognizes the quoted override' do
+        expect(subject).to eq('whitespace')
+      end
+    end
+
+    context 'with a quoted separate value' do
+      let(:command) { '"git.exe" "commit" "--cleanup" "verbatim" "-m" "Test"' }
+
+      it 'recognizes the quoted override' do
+        expect(subject).to eq('verbatim')
+      end
+    end
+
     context 'with repeated command-line flags' do
       let(:command) { 'git commit --cleanup=strip --cleanup=whitespace -m Test' }
 

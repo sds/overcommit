@@ -18,9 +18,12 @@ module Overcommit
     def commit_cleanup_mode
       command = Overcommit::Utils.parent_command.to_s.scrub
       modes = command.scan(
-        /(?:\A|\s)--cleanup(?:=|\s+)(strip|whitespace|verbatim|scissors|default)(?=\s|\z)/
+        /(?:\A|\s)["']?--cleanup
+         (?:=["']?|["']?\s+["']?)
+         (strip|whitespace|verbatim|scissors|default)["']?(?=\s|\z)/x
       )
       mode = modes.last&.first || `git config --get commit.cleanup`.chomp
+      Overcommit::Utils.log&.debug("Commit cleanup mode #{mode.inspect} from #{command.inspect}")
       if mode.empty? || mode == 'default'
         ENV['GIT_EDITOR'] == ':' ? 'whitespace' : 'strip'
       else

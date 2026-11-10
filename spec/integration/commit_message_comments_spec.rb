@@ -28,7 +28,9 @@ describe 'commit messages beginning with the comment character' do
   end
 
   subject(:result) do
-    shell(['git', 'commit', '--allow-empty', *commit_args, '-m', message, *trailing_args])
+    Overcommit::Utils.with_environment('OVERCOMMIT_DEBUG' => '1') do
+      shell(['git', 'commit', '--allow-empty', *commit_args, '-m', message, *trailing_args])
+    end
   end
 
   shared_examples 'preserves the message' do
