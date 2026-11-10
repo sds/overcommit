@@ -136,7 +136,8 @@ module Overcommit
     #
     # @return [Array<String>] list of absolute file paths
     def all_files
-      deleted_files, tracked_files = [%w[git ls-files --deleted], %w[git ls-files]].map do |command|
+      deleted_files, tracked_files = [%w[git ls-files -z --deleted],
+                                      %w[git ls-files -z]].map do |command|
         result = Overcommit::Utils.execute(command)
         unless result.success?
           raise Overcommit::Exceptions::Error,
@@ -145,7 +146,7 @@ module Overcommit
                 "STDERR: #{result.stderr}."
         end
 
-        result.stdout.split(/\n/)
+        result.stdout.split("\0")
       end
 
       (tracked_files - deleted_files).

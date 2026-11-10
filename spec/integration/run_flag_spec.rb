@@ -46,6 +46,20 @@ describe 'overcommit --run' do
       (subject.stdout + subject.stderr).should include('Error listing files')
       subject.stdout.should_not include('All pre-commit hooks passed')
     end
+
+    ['café.rb', 'répertoire/test.rb', 'quote".rb', "tab\t.rb", "line\n.rb"].each do |path|
+      it "checks trailing whitespace in #{path.inspect} with Git path quoting enabled" do
+        if Overcommit::OS.windows? && path.match?(/["\t\n]/)
+          skip 'Windows filenames cannot contain quotes or control characters'
+        end
+
+        shell(%w[git config core.quotePath true]).status.should == 0
+        FileUtils.mkdir_p(File.dirname(path))
+        echo('puts :fixture ', path)
+        shell(['git', 'add', '--', path]).status.should == 0
+        subject.status.should == 65
+      end
+    end
   end
 
   context 'when using an existing pre-commit hook script' do
