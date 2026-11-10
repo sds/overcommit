@@ -293,12 +293,23 @@ describe Overcommit::GitRepo do
 
     it { should include(*%w[tracked staged].map { |file| File.expand_path(file) }) }
     it { should_not include File.expand_path('sub') }
+    it { should_not include File.expand_path('untracked') }
+
+    context 'when the index is empty' do
+      before { shell(%w[git read-tree --empty]).status.should == 0 }
+
+      it { should be_empty }
+    end
 
     context 'when the index is unreadable' do
       before { File.binwrite('.git/index', 'invalid index') }
 
       it 'raises instead of returning an empty file list' do
         expect { subject }.to raise_error(Overcommit::Exceptions::Error, /Error listing files/)
+      end
+
+      it 'includes the Git failure details' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /STDERR: fatal:/)
       end
     end
 

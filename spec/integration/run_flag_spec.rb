@@ -28,6 +28,18 @@ describe 'overcommit --run' do
       subject.status.should == 65
     end
 
+    it 'ignores untracked files with trailing whitespace' do
+      echo('puts :fixture ', 'untracked.rb')
+      subject.status.should == 0
+    end
+
+    it 'ignores tracked files deleted from the working tree' do
+      echo('puts :fixture ', 'deleted.rb')
+      shell(%w[git add deleted.rb]).status.should == 0
+      FileUtils.rm('deleted.rb')
+      subject.status.should == 0
+    end
+
     it 'fails instead of reporting success when the index is corrupt' do
       File.binwrite('.git/index', 'invalid index')
       subject.status.should_not == 0
