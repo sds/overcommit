@@ -317,7 +317,7 @@ describe Overcommit::GitRepo do
       before do
         result = Overcommit::Subprocess::Result.new(128, '', 'fatal')
         allow(Overcommit::Utils).to receive(:execute).and_call_original
-        allow(Overcommit::Utils).to receive(:execute).with(%w[git ls-files]).and_return(result)
+        allow(Overcommit::Utils).to receive(:execute).with(%w[git ls-files -z]).and_return(result)
       end
 
       it 'raises with the Git error' do
@@ -333,6 +333,51 @@ describe Overcommit::GitRepo do
 
       it { should_not include File.expand_path('tracked') }
       it { should include File.expand_path('staged') }
+    end
+
+    context 'when Git quotes tracked filenames' do
+      before { shell(%w[git config core.quotePath true]).status.should == 0 }
+
+      def stage_files(paths)
+        paths.each do |path|
+          FileUtils.mkdir_p(File.dirname(path))
+          touch(path)
+        end
+        shell(%w[git add --] + paths).status.should == 0
+      end
+
+      it 'preserves Unicode, nested Unicode, and space-containing paths' do
+        paths = ['café.rb', 'répertoire/test.rb', 'with spaces.rb']
+        stage_files(paths)
+        subject.should include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'preserves quotes, tabs, newlines, and surrounding whitespace' do
+        skip 'Windows filenames cannot contain quotes or control characters' if Overcommit::OS.windows?
+        paths = ['quote".rb', "tab\t.rb", "line\n.rb", ' padded.rb ']
+        stage_files(paths)
+        subject.should include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'excludes a deleted Unicode path' do
+        stage_files(['café.rb'])
+        FileUtils.rm('café.rb')
+        subject.should_not include(File.expand_path('café.rb'))
+      end
+
+      it 'excludes deleted paths containing quotes or control characters' do
+        skip 'Windows filenames cannot contain quotes or control characters' if Overcommit::OS.windows?
+        paths = ['quote".rb', "tab\t.rb", "line\n.rb"]
+        stage_files(paths)
+        FileUtils.rm(paths)
+        subject.should_not include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'retains a tracked broken symlink with a Unicode name' do
+        symlink('missing-target', 'café.rb')
+        shell(['git', 'add', '--', 'café.rb']).status.should == 0
+        subject.should include(File.expand_path('café.rb'))
+      end
     end
   end
 
