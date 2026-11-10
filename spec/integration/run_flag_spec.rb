@@ -5,6 +5,49 @@ require 'spec_helper'
 describe 'overcommit --run' do
   subject { shell(%w[overcommit --run]) }
 
+  context 'when enumerating tracked files' do
+    around do |example|
+      repo do
+        echo({ 'PreCommit' => {
+          'ALL' => { 'enabled' => false },
+          'TrailingWhitespace' => {
+            'enabled' => true, 'on_warn' => 'fail', 'include' => ['**/*.rb']
+          }
+        } }.to_yaml, '.overcommit.yml')
+        example.run
+      end
+    end
+
+    it 'succeeds for a valid empty index' do
+      subject.status.should == 0
+    end
+
+    it 'fails for a tracked file with trailing whitespace' do
+      echo('puts :fixture ', 'normal.rb')
+      shell(%w[git add normal.rb]).status.should == 0
+      subject.status.should == 65
+    end
+
+    it 'ignores untracked files with trailing whitespace' do
+      echo('puts :fixture ', 'untracked.rb')
+      subject.status.should == 0
+    end
+
+    it 'ignores tracked files deleted from the working tree' do
+      echo('puts :fixture ', 'deleted.rb')
+      shell(%w[git add deleted.rb]).status.should == 0
+      FileUtils.rm('deleted.rb')
+      subject.status.should == 0
+    end
+
+    it 'fails instead of reporting success when the index is corrupt' do
+      File.binwrite('.git/index', 'invalid index')
+      subject.status.should_not == 0
+      (subject.stdout + subject.stderr).should include('Error listing files')
+      subject.stdout.should_not include('All pre-commit hooks passed')
+    end
+  end
+
   context 'when using an existing pre-commit hook script' do
     if Overcommit::OS.windows?
       let(:script_name) { 'test-script.bat' }
