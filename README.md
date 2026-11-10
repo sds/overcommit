@@ -363,6 +363,31 @@ significantly reduces the startup delay in your hook runs. It is thus the
 recommended approach unless your project has a relatively small number of gems
 in your `Gemfile`.
 
+When using your application's `Gemfile`, a checkout or pull can introduce a
+`Gemfile.lock` that requires gems you have not installed yet. Overcommit cannot
+load that bundle, so even `post-checkout` hooks fail with a message such as
+`Problem loading 'Gemfile': Could not find ...`. The checkout has already changed
+your working tree when this happens. During a rebase, a hook error can interrupt
+the operation and leave you with a detached HEAD.
+
+To prevent this, install the updated branch's dependencies before rebasing onto
+it, or use the separate hook Gemfile described above so application dependency
+updates do not prevent Overcommit from loading.
+
+If a rebase is interrupted by missing gems:
+
+1. Run `bundle install --gemfile=Gemfile` (using the path configured in `gemfile`).
+2. Run `git status` to check whether a rebase is in progress. If it is, run
+   `git rebase --abort` to return to your original branch, then retry the rebase.
+   Restarting also handles a failed commit hook leaving a partly replayed commit.
+3. If Git reports no rebase in progress but HEAD is detached, switch back to
+   your original branch and retry the rebase after installing the updated
+   branch's dependencies.
+
+To abandon an in-progress rebase when missing dependencies prevent hooks from
+loading, run `OVERCOMMIT_DISABLE=1 git rebase --abort`. This disables Overcommit
+for that command. Once dependencies are installed, normal hook runs resume.
+
 ### Plugin Directory
 
 You can change the directory that project-specific hooks are loaded from via
