@@ -169,6 +169,7 @@ PreCommit:
     description: 'Check for vulnerable versions of gems'
     required_executable: 'bundle-audit'
     install_command: 'gem install bundler-audit'
+    update: false # Update ruby-advisory-db before checking for vulnerabilities
 
   BundleCheck:
     enabled: false

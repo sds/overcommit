@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Add an opt-in `update` option to `BundleAudit` to refresh ruby-advisory-db before checking (#812).
+
 * Include command file contents in hook signatures when an absolute path is configured.
 
 * Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files (#758).
