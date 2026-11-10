@@ -44,6 +44,23 @@ describe Overcommit::ConfigurationLoader do
         subject.plugin_directory.should == File.expand_path('some-directory')
       end
 
+      context 'and command hooks use regular expressions in YAML' do
+        let(:config_contents) { <<-'CFG' }
+          PreCommit:
+            CustomScript:
+              enabled: true
+              command: custom-script
+              message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>\d+):[ ](?<type>\w+):/
+              warning_message_type_pattern: !ruby/regexp /^warning$/i
+        CFG
+
+        it 'loads both patterns as regular expressions' do
+          hook_config = subject.for_hook('CustomScript', 'PreCommit')
+          expect(hook_config['message_pattern']).to be_a(Regexp)
+          expect(hook_config['warning_message_type_pattern']).to eq(/^warning$/i)
+        end
+      end
+
       context 'and the configuration file contains a hook with no `enabled` option' do
         let(:config_contents) { <<-CFG }
           PreCommit:

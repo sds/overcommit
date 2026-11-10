@@ -13,7 +13,8 @@
 In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
 are stored in source control. You can also easily
-[add your existing hook scripts](#adding-existing-git-hooks) without writing
+[add your existing hook scripts](#adding-existing-git-hooks) or
+[use some of your existing line-oriented analysis tools](#adding-existing-line-aware-commands) without writing
 any Ruby code.
 
 - [Requirements](#requirements)
@@ -47,6 +48,7 @@ any Ruby code.
   - [PreRebase](#prerebase)
 - [Repo-Specific hooks](#repo-specific-hooks)
   - [Adding Existing Git Hooks](#adding-existing-git-hooks)
+  - [Adding Existing Line-Aware Commands](#adding-existing-line-aware-commands)
 - [Security](#security)
   - [Disabling Signature Checking](#disabling-signature-checking)
 - [Contributing](#contributing)
@@ -256,6 +258,8 @@ Option                                  | Description
 `install_command`                       | Command the user can run to install the `required_executable` (or alternately the specified `required_libraries`). This is intended for documentation purposes, as Overcommit does not install software on your behalf since there are too many edge cases where such behavior would result in incorrectly configured installations (e.g. installing a Python package in the global package space instead of in a virtual environment).
 `skip_file_checkout`                    | Whether to skip this hook for file checkouts (e.g. `git checkout some-ref -- file`). Only applicable to `PostCheckout` hooks.
 `skip_if`                               | Array of arguments to be executed to determine whether or not the hook should run. For example, setting this to a value of `['bash', '-c', '! which my-executable']` would allow you to skip running this hook if `my-executable` was not in the bin path.
+`message_pattern`                       | Regex used to parse diagnostics from [line-aware command hooks](#adding-existing-line-aware-commands). Requires a named `file` capture; optional `line` and `type` captures provide line handling and warning classification.
+`warning_message_type_pattern`          | Optional regex (or literal substring) identifying warnings in the `type` capture of a line-aware command hook. All other diagnostics are errors.
 
 In addition to the built-in configuration options, each hook can expose its
 own unique configuration options. The `AuthorEmail` hook, for example, allows
@@ -704,6 +708,52 @@ to understand which arguments are passed to the script depending on the type
 of hook, see the [git-hooks documentation][GHD].
 
 [GHD]: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+
+### Adding Existing Line-Aware Commands
+
+Tools that report file diagnostics can use Overcommit's message handling without
+writing a Ruby hook. Add a `message_pattern` regex to an existing command hook to
+parse each line of its standard output. The command receives the applicable file
+paths after its configured command and flags, instead of Git hook arguments or
+standard input.
+
+`message_pattern` is required to enable this behavior and has no default. It must
+be a Ruby regex with a named `file` capture. An optional `line` capture enables
+`problem_on_unmodified_line` handling. An optional `type` capture can be classified
+using `warning_message_type_pattern`, which accepts a regex or a literal substring.
+Without a matching warning type, diagnostics are errors. Other captures are ignored.
+
+For example, to parse GNU/Emacs-style diagnostics such as
+`file.rb:12: warning: unused variable`:
+
+```yaml
+PreCommit:
+  CustomScript:
+    enabled: true
+    command: './bin/custom-script'
+    include: '**/*.rb'
+    message_pattern: !ruby/regexp /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/
+    warning_message_type_pattern: !ruby/regexp /^warning:/i
+```
+
+The normal `include`, `exclude`, and `requires_files` options control which files
+are passed to the command and whether it runs. `problem_on_unmodified_line`
+controls how diagnostics on unchanged lines affect the result.
+
+A successful command passes. For a failed command, the parsed diagnostics determine
+whether the hook fails or warns. A failed command with no standard output still
+fails and displays its standard error. Unexpected output that does not match
+`message_pattern` raises a message processing error instead of being silently ignored.
+
+Only standard output is parsed. For tools that write diagnostics to standard error,
+use a wrapper script that redirects it with `2>&1`.
+
+These options apply to command hooks without an existing built-in or repository
+Ruby implementation. See the [Ruby regex documentation][RubyRE] for named captures.
+To serialize a regex as YAML, use `require 'yaml'; puts YAML.dump(/MY-REGEXP/)` in
+`irb` and omit the leading `---` from the result.
+
+[RubyRE]: https://ruby-doc.org/core-2.7.3/Regexp.html
 
 ## Security
 

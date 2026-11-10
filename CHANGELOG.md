@@ -1,5 +1,9 @@
 # Overcommit Changelog
 
+## main (unreleased)
+
+* Add configurable line parsing for command hooks (#750).
+
 ## 0.75.0
 
 * Remember all locally approved configuration and hook signatures across rebases
