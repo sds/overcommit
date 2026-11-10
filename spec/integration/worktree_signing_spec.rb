@@ -62,10 +62,9 @@ describe 'configuration file signing with multiple worktrees' do
     context 'and extensions.worktreeConfig is not enabled' do
       let(:worktree_config) { false }
 
-      it 'reports a signature error in the worktree signed first' do
-        result = commit_in_main_worktree
-        result.status.should_not == 0
-        result.stderr.should include 'Signature of configuration file has changed!'
+      it 'remembers both approved configurations in the shared history' do
+        commit_in_main_worktree.status.should == 0
+        commit_in_linked_worktree.status.should == 0
       end
     end
 
@@ -95,6 +94,28 @@ describe 'configuration file signing with multiple worktrees' do
       let(:worktree_config) { true }
 
       it 'requires the linked worktree to record its own verify_signatures setting' do
+        result = commit_in_linked_worktree
+        result.status.should_not == 0
+        result.stderr.should include 'No previously recorded signature for configuration file.'
+      end
+    end
+  end
+
+  context 'when verification is enabled and only the main worktree is signed' do
+    let(:sign_linked_worktree) { false }
+
+    context 'and extensions.worktreeConfig is not enabled' do
+      let(:worktree_config) { false }
+
+      it 'shares approval for an identical configuration' do
+        commit_in_linked_worktree.status.should == 0
+      end
+    end
+
+    context 'and extensions.worktreeConfig is enabled' do
+      let(:worktree_config) { true }
+
+      it 'does not share approval with the unsigned worktree' do
         result = commit_in_linked_worktree
         result.status.should_not == 0
         result.stderr.should include 'No previously recorded signature for configuration file.'

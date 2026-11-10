@@ -190,12 +190,11 @@ module Overcommit
       File.exist?(File.join(plugin_directory, hook_type_name, "#{hook_name}.rb"))
     end
 
-    # Return whether the signature for this configuration has changed since it
-    # was last calculated.
+    # Return whether this configuration has been explicitly trusted before.
     #
     # @return [true,false]
-    def signature_changed?
-      signature != stored_signature
+    def signature_verified?
+      signature_store.include?(signature)
     end
 
     # Return whether a previous signature has been recorded for this
@@ -203,7 +202,7 @@ module Overcommit
     #
     # @return [true,false]
     def previous_signature?
-      !stored_signature.empty?
+      signature_store.recorded?
     end
 
     # Returns whether this configuration should verify itself by checking the
@@ -233,13 +232,10 @@ module Overcommit
 
     # Update the currently stored signature for this hook.
     def update_signature!
+      signature_store.add(signature)
       scope = Overcommit::GitConfig.signature_scope
-      result = Overcommit::Utils.execute(
-        %W[git config #{scope}] + [signature_config_key, signature]
-      )
-
       verify_signature_value = @hash['verify_signatures'] ? 1 : 0
-      result &&= Overcommit::Utils.execute(
+      result = Overcommit::Utils.execute(
         %W[git config #{scope} #{verify_signature_config_key} #{verify_signature_value}]
       )
 
@@ -320,26 +316,8 @@ module Overcommit
       Digest::SHA256.hexdigest(@hash.to_json)
     end
 
-    # Returns the stored signature of this repo's Overcommit configuration.
-    #
-    # This is intended to be compared against the current signature of this
-    # configuration object.
-    #
-    # @return [String]
-    def stored_signature
-      scope = Overcommit::GitConfig.signature_scope
-      result = Overcommit::Utils.execute(
-        %W[git config #{scope} --get] + [signature_config_key]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return ''
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
-      end
-
-      result.stdout.chomp
+    def signature_store
+      @signature_store ||= Overcommit::Signature.new(signature_config_key)
     end
 
     def signature_config_key

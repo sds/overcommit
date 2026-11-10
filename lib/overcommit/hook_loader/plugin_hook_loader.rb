@@ -7,7 +7,7 @@ module Overcommit::HookLoader
   # is running in.
   class PluginHookLoader < Base
     def load_hooks
-      check_for_modified_plugins if @config.verify_signatures?
+      check_for_unverified_plugins if @config.verify_signatures?
 
       hooks = plugin_paths.map do |plugin_path|
         require plugin_path
@@ -22,9 +22,9 @@ module Overcommit::HookLoader
     end
 
     def update_signatures
-      log.success('No plugin signatures have changed') if modified_plugins.empty?
+      log.success('All plugin signatures have been verified') if unverified_plugins.empty?
 
-      modified_plugins.each do |plugin|
+      unverified_plugins.each do |plugin|
         plugin.update_signature!
         log.warning "Updated signature of plugin #{plugin.hook_name}"
       end
@@ -47,20 +47,20 @@ module Overcommit::HookLoader
       @config.enabled_ad_hoc_hooks(@context)
     end
 
-    def modified_plugins
+    def unverified_plugins
       (plugin_hook_names + ad_hoc_hook_names).
         map { |hook_name| Overcommit::HookSigner.new(hook_name, @config, @context) }.
-        select(&:signature_changed?)
+        reject(&:signature_verified?)
     end
 
-    def check_for_modified_plugins
-      return if modified_plugins.empty?
+    def check_for_unverified_plugins
+      return if unverified_plugins.empty?
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
                        'have been added, changed, or had their configuration modified:'
       log.newline
 
-      modified_plugins.each do |signer|
+      unverified_plugins.each do |signer|
         log.warning " * #{signer.hook_name} in #{signer.hook_path}"
       end
 

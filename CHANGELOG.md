@@ -2,6 +2,8 @@
 
 ## 0.75.0
 
+* Remember all locally approved configuration and hook signatures across rebases
+
 * Gracefully handle hook loading on systems with non-UTF8 locale
 * Re-enable running test suite on Windows environments
 
