@@ -13,6 +13,21 @@ module Overcommit
       char
     end
 
+    # Git does not pass cleanup options to commit-msg hooks. Use the invoking
+    # command's override, then configuration, and Git's documented editor marker.
+    def commit_cleanup_mode
+      command = Overcommit::Utils.parent_command.to_s.scrub
+      modes = command.scan(
+        /(?:\A|\s)--cleanup(?:=|\s+)(strip|whitespace|verbatim|scissors|default)(?=\s|\z)/
+      )
+      mode = modes.last&.first || `git config --get commit.cleanup`.chomp
+      if mode.empty? || mode == 'default'
+        ENV['GIT_EDITOR'] == ':' ? 'whitespace' : 'strip'
+      else
+        mode
+      end
+    end
+
     def hooks_path
       path = `git config --get core.hooksPath`.chomp
       return File.join(Overcommit::Utils.git_dir, 'hooks') if path.empty?

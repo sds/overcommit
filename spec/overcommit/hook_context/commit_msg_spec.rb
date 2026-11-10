@@ -11,6 +11,7 @@ describe Overcommit::HookContext::CommitMsg do
   let(:context) { described_class.new(config, args, input) }
   before do
     Overcommit::GitConfig.stub(:comment_character).and_return(comment_char)
+    allow(Overcommit::GitConfig).to receive(:commit_cleanup_mode).and_return('strip')
   end
   let(:commit_msg) do
     [
@@ -41,6 +42,21 @@ describe Overcommit::HookContext::CommitMsg do
 
     it 'strips comments and trailing diff' do
       subject.should == "Some commit message\n"
+    end
+
+    %w[whitespace verbatim scissors].each do |mode|
+      context "with #{mode} cleanup" do
+        let(:commit_msg) { ['#16: This is a sample commit for issue 16'] }
+
+        before do
+          allow(Overcommit::GitConfig).to receive(:commit_cleanup_mode).and_return(mode)
+        end
+
+        it 'preserves the comment-prefixed subject for message hooks' do
+          expect(subject).to eq(commit_msg.first)
+          expect(context.empty_message?).to eq(false)
+        end
+      end
     end
 
     context 'with alternate comment character' do
