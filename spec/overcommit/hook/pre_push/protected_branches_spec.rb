@@ -117,4 +117,26 @@ describe Overcommit::Hook::PrePush::ProtectedBranches do
 
     it { should pass }
   end
+
+  context 'with configured branch names and patterns' do
+    let(:hook_config) { { 'branches' => ['stable'], 'branch_patterns' => ['release/*'] } }
+    let(:pushed_ref_name) { 'stable' }
+
+    before do
+      allow(subject).to receive(:branch_configurations).and_call_original
+      allow(pushed_ref).to receive(:destructive?).and_return(true)
+    end
+
+    it 'protects explicitly named branches' do
+      expect(subject).to fail_hook
+    end
+
+    context 'when the branch matches a configured pattern' do
+      let(:pushed_ref_name) { 'release/1.0' }
+
+      it 'protects matching branches' do
+        expect(subject).to fail_hook
+      end
+    end
+  end
 end

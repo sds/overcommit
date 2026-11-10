@@ -260,4 +260,10 @@ describe Overcommit::HookLoader::PluginHookLoader do
     allow(reloaded).to receive(:execute).and_return(result)
     expect(reloaded.run.first.file).to eq('file.foo')
   end
+
+  it 'wraps missing ad hoc hook base classes in a hook loading error' do
+    hide_const('Overcommit::Hook::PreCommit::Base')
+    expect { loader.load_hooks }.to raise_error(Overcommit::Exceptions::HookLoadError,
+                                                /Unable to load hook 'CustomScript'/)
+  end
 end

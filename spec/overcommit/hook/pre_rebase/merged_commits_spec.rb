@@ -55,6 +55,18 @@ describe Overcommit::Hook::PreRebase::MergedCommits do
       end
 
       it { should fail_hook }
+
+      it 'uses configured protected branches and names them in the failure' do
+        settings = { 'PreRebase' => { 'MergedCommits' => { 'branches' => ['release'] } } }
+        configured = config.merge(Overcommit::Configuration.new(settings))
+        allow(Overcommit::GitRepo).to receive(:branches_containing_commit).
+          with(commit_sha1).and_return(['release'])
+        hook = described_class.new(configured, context)
+
+        expect(hook.run).to eq([
+          :fail, 'Cannot rebase commits that have already been merged into one of release'
+        ])
+      end
     end
   end
 end

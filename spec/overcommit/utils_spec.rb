@@ -211,6 +211,18 @@ describe Overcommit::Utils do
         it { should be_nil }
       end
 
+      context 'when the process ancestry contains only env.exe launchers' do
+        let(:processes) do
+          [double('launcher', Name: 'env.exe', ParentProcessId: Process.pid)]
+        end
+
+        it 'stops after four queries without launching a fallback' do
+          expect(service).to receive(:ExecQuery).exactly(4).times.and_return(processes)
+          expect(described_class).not_to receive(:execute)
+          expect(subject).to be_nil
+        end
+      end
+
       context 'when the command line is inaccessible' do
         let(:command) { nil }
 

@@ -3,6 +3,47 @@
 require 'spec_helper'
 
 describe Overcommit::CommandSplitter do
+  describe 'platform command limits' do
+    around do |example|
+      previous = described_class.instance_variable_get(:@max_command_length)
+      described_class.instance_variable_set(:@max_command_length, nil)
+      example.run
+    ensure
+      described_class.instance_variable_set(:@max_command_length, previous)
+    end
+
+    shared_examples 'a 2048-byte command limit' do
+      it 'splits commands at the platform limit' do
+        argument = 'a' * 2045
+        result = Overcommit::Subprocess::Result.new(0, '', '')
+        expect(Overcommit::Subprocess).to receive(:spawn).with(['cmd', argument], {}).
+          ordered.and_return(result)
+        expect(Overcommit::Subprocess).to receive(:spawn).with(%w[cmd b], {}).
+          ordered.and_return(result)
+
+        expect(described_class.execute(['cmd'], args: [argument, 'b'])).to be_success
+      end
+    end
+
+    context 'on Windows' do
+      before do
+        allow(Gem).to receive(:win_platform?).and_return(true)
+        expect(described_class).not_to receive(:`)
+      end
+
+      include_examples 'a 2048-byte command limit'
+    end
+
+    context 'on Unix' do
+      before do
+        allow(Gem).to receive(:win_platform?).and_return(false)
+        expect(described_class).to receive(:`).with('getconf ARG_MAX').once.and_return("4096\n")
+      end
+
+      include_examples 'a 2048-byte command limit'
+    end
+  end
+
   describe '.execute' do
     let(:args_prefix) { %w[cmd] }
     let(:max_command_length) { 10 }

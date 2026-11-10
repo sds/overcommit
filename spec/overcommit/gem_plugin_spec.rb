@@ -229,6 +229,17 @@ describe Overcommit::GemPlugin do
                                                            /does not satisfy/)
     end
 
+    it 'rejects conflicting versions encountered through a dependency cycle' do
+      dependency.add_runtime_dependency('company-hooks', '>= 1.0')
+      conflicting = specification.dup
+      conflicting.version = '2.0.0'
+      allow(Gem::Specification).to receive(:find_by_name).
+        with('company-hooks', anything).and_return(specification, conflicting)
+
+      expect { plugin.update_signature! }.to raise_error(Overcommit::Exceptions::HookLoadError,
+                                                         /Conflicting versions of company-hooks/)
+    end
+
     it 'activates the resolved gems only when explicitly requested to load them' do
       expect(specification).to receive(:activate)
       expect(dependency).to receive(:activate)
