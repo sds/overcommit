@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Report the saved stash and recovery command when restoring repository state fails (#762).
+
 * Add an opt-in `update` option to `BundleAudit` to refresh ruby-advisory-db before checking (#812).
 
 * Include command file contents in hook signatures when an absolute path is configured.

@@ -99,19 +99,40 @@ require 'overcommit/hook_context/commit_msg'
         end
       end
 
-      it 'preserves the stash for recovery if restoring the staged tree fails' do
-        state = repository_state
-        result = Overcommit::Subprocess::Result.new(128, '', 'fatal: unable to restore index')
-        allow(Overcommit::Utils).to receive(:execute).and_call_original
-        allow(Overcommit::Utils).to receive(:execute).
-          with(%w[git read-tree --reset -u stash@{0}^2]).and_return(result)
+      {
+        'restoring the staged tree' => %w[git read-tree --reset -u stash@{0}^2],
+        'clearing the working tree' => %w[git reset --hard],
+        'restoring the working tree' => %w[git stash pop --index],
+      }.each do |operation, command|
+        it "preserves the stash and explains recovery when #{operation} fails" do
+          state = repository_state
+          result = Overcommit::Subprocess::Result.new(128, '', 'fatal: file is locked')
+          allow(Overcommit::Utils).to receive(:execute).and_call_original
+          allow(Overcommit::Utils).to receive(:execute).with(command).and_return(result)
+          error = if operation == 'restoring the staged tree'
+                    Overcommit::Exceptions::HookSetupFailed
+                  else
+                    Overcommit::Exceptions::HookCleanupFailed
+                  end
 
-        expect { context.setup_environment }.
-          to raise_error(Overcommit::Exceptions::HookSetupFailed, /fatal: unable to restore index/)
+          stash_commit = nil
+          expect do
+            context.setup_environment
+            context.cleanup_environment
+          end.to raise_error(error) { |failure|
+            stash_commit = shell(%w[git rev-parse stash@{0}]).stdout.strip
+            failure.message.should include 'fatal: file is locked'
+            failure.message.should include "git stash branch overcommit-recovery #{stash_commit}"
+          }
 
-        shell(%w[git stash list]).stdout.should include 'Overcommit: Stash of repo state'
-        shell(%w[git stash pop --index]).status.should == 0
-        repository_state.should == state
+          # Release the simulated lock and follow the advertised recovery command.
+          allow(Overcommit::Utils).to receive(:execute).with(command).and_call_original
+          shell(%w[git reset --hard]).status.should == 0
+          shell(['git', 'stash', 'branch', 'overcommit-recovery', stash_commit]).status.should == 0
+          repository_state.reject { |key, _| key == :stashes }.
+            should == state.reject { |key, _| key == :stashes }
+          shell(%w[git stash list]).stdout.should include 'previous-stash'
+        end
       end
 
       it 'leaves the previous stash alone if there are no longer any changes to stash' do

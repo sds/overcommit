@@ -96,6 +96,7 @@ module Overcommit::HookContext
         end
 
         @changes_stashed = `git stash list -1`.include?(stash_message)
+        @stash_commit = `git rev-parse stash@{0}`.strip if @changes_stashed
       end
 
       # Restore the staged tree explicitly: older Git versions' --keep-index
@@ -106,7 +107,7 @@ module Overcommit::HookContext
         unless result.success?
           raise Overcommit::Exceptions::HookSetupFailed,
                 "Unable to restore staged changes for #{hook_script_name} hook run:" \
-                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}#{stash_recovery_message}"
         end
       end
 
@@ -129,7 +130,7 @@ module Overcommit::HookContext
         unless result.success?
           raise Overcommit::Exceptions::HookCleanupFailed,
                 "Unable to cleanup working tree after #{hook_script_name} hooks run:" \
-                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}#{stash_recovery_message}"
         end
 
         # Hard-resetting a staged submodule removal results in the index being
@@ -149,8 +150,16 @@ module Overcommit::HookContext
         unless result.success?
           raise Overcommit::Exceptions::HookCleanupFailed,
                 "Unable to restore working tree after #{hook_script_name} hooks run:" \
-                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}#{stash_recovery_message}"
         end
+      end
+
+      def stash_recovery_message
+        return '' unless @stash_commit
+
+        "\nYour changes are preserved in Git stash #{@stash_commit}.\n" \
+          "Release any file locks and use a clean working tree to recover on a new branch:\n" \
+          "  git stash branch overcommit-recovery #{@stash_commit}\n"
       end
     end
   end
