@@ -17,6 +17,7 @@ module Overcommit::HookContext
         # editors/tools which watch for file changes.
         if !initial_commit? && unstaged_changes?
           stash_changes
+          restore_staged_changes if @changes_stashed
 
           # While running hooks make it appear as if nothing changed
           restore_modified_times
@@ -82,7 +83,7 @@ module Overcommit::HookContext
         stash_message = "Overcommit: Stash of repo state before hook run at #{Time.now}"
         result = Overcommit::Utils.with_environment('GIT_LITERAL_PATHSPECS' => '0') do
           Overcommit::Utils.execute(
-            %w[git -c commit.gpgsign=false stash save --keep-index --quiet] + [stash_message]
+            %w[git -c commit.gpgsign=false stash save --quiet] + [stash_message]
           )
         end
 
@@ -95,6 +96,18 @@ module Overcommit::HookContext
         end
 
         @changes_stashed = `git stash list -1`.include?(stash_message)
+      end
+
+      # Restore the staged tree explicitly: older Git versions' --keep-index
+      # leave deleted files and the old paths of renamed files in the working tree.
+      # read-tree updates both the index and working tree without moving HEAD.
+      def restore_staged_changes
+        result = Overcommit::Utils.execute(%w[git read-tree --reset -u stash@{0}^2])
+        unless result.success?
+          raise Overcommit::Exceptions::HookSetupFailed,
+                "Unable to restore staged changes for #{hook_script_name} hook run:" \
+                "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}"
+        end
       end
 
       # Restores the file modification times for all modified files to make it

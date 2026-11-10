@@ -69,12 +69,14 @@ jobs:
           git config --global user.name "GitHub Actions"
           bundle exec ruby script/parallel_rspec.rb
 
-      - name: Code coverage reporting
-        uses: coverallsapp/github-action@v2
+      - name: Save shard coverage
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
-          github-token: ${{ secrets.github_token }}
-          flag-name: ruby${{ matrix.ruby-version }}-${{ matrix.target.os }}-shard${{ matrix.target.shard }}of${{ matrix.target.shards }}
-          parallel: true
+          name: coverage-ruby${{ matrix.ruby-version }}-${{ matrix.target.os }}-shard${{ matrix.target.shard }}of${{ matrix.target.shards }}
+          path: coverage/lcov.info
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 1
 
   overcommit:
     timeout-minutes: 10
@@ -112,8 +114,18 @@ jobs:
           JOB_RESULTS: ${{ toJSON(needs) }}
         run: echo "$JOB_RESULTS" | jq -e 'all(.[]; .result == "success")'
 
-      - name: Finalize code coverage report
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Collect all shard coverage
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          pattern: coverage-*
+          path: coverage
+
+      # Shard assignments shift when examples are added. Compare the complete
+      # suite's coverage rather than unrelated fractions from individual shards.
+      - name: Report combined code coverage
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
-          parallel-finished: true
+          files: coverage/*/lcov.info

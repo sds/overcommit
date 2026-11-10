@@ -58,7 +58,7 @@ The best way to see a feature added, however, is to submit a pull request.
 
   GitHub Actions runs one Linux shard and five Windows shards per Ruby version.
 
-  The final `CI` check depends on all test shards and lint, and finalizes coverage reporting.
+  The final `CI` check depends on all test shards and lint, and reports their combined coverage.
   Repository rulesets can require this single check instead of individual matrix jobs.
 
 * Submit your pull request!
