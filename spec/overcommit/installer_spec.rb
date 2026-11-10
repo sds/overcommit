@@ -231,8 +231,8 @@ describe Overcommit::Installer do
       context 'which has an external git dir' do
         let(:submodule) { File.join(target, 'submodule') }
         before do
-          system 'git', 'submodule', 'add', target, 'submodule',
-                 chdir: target, out: :close, err: :close
+          system 'git', '-c', 'protocol.file.allow=always', 'submodule', 'add', target,
+                 'submodule', chdir: target, out: :close, err: :close
         end
         let(:submodule_git_file) { File.join(submodule, '.git') }
         let(:submodule_git_dir) do

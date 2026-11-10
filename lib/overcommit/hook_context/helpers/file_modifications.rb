@@ -12,7 +12,9 @@ module Overcommit::HookContext
         cmd = Overcommit::Utils.parent_command
         return unless cmd
 
-        amend_pattern = 'commit(\s.*)?\s--amend(\s|$)'
+        # POSIX character class rather than `\s`, which macOS git's regex
+        # library does not support
+        amend_pattern = 'commit([[:space:]].*)?[[:space:]]--amend([[:space:]]|$)'
 
         # Since the ps command can return invalid byte sequences for commands
         # containing unicode characters, we replace the offending characters,

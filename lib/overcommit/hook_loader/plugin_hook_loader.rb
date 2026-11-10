@@ -7,7 +7,7 @@ module Overcommit::HookLoader
   # is running in.
   class PluginHookLoader < Base
     def load_hooks
-      check_for_modified_plugins if @config.verify_signatures?
+      check_for_unverified_plugins if @config.verify_signatures?
 
       hooks = plugin_paths.map do |plugin_path|
         require plugin_path
@@ -22,9 +22,9 @@ module Overcommit::HookLoader
     end
 
     def update_signatures
-      log.success('No plugin signatures have changed') if modified_plugins.empty?
+      log.success('All plugin signatures have been verified') if unverified_plugins.empty?
 
-      modified_plugins.each do |plugin|
+      unverified_plugins.each do |plugin|
         plugin.update_signature!
         log.warning "Updated signature of plugin #{plugin.hook_name}"
       end
@@ -47,20 +47,20 @@ module Overcommit::HookLoader
       @config.enabled_ad_hoc_hooks(@context)
     end
 
-    def modified_plugins
+    def unverified_plugins
       (plugin_hook_names + ad_hoc_hook_names).
         map { |hook_name| Overcommit::HookSigner.new(hook_name, @config, @context) }.
-        select(&:signature_changed?)
+        reject(&:signature_verified?)
     end
 
-    def check_for_modified_plugins
-      return if modified_plugins.empty?
+    def check_for_unverified_plugins
+      return if unverified_plugins.empty?
 
       log.bold_warning "The following #{@context.hook_script_name} plugins " \
                        'have been added, changed, or had their configuration modified:'
       log.newline
 
-      modified_plugins.each do |signer|
+      unverified_plugins.each do |signer|
         log.warning " * #{signer.hook_name} in #{signer.hook_path}"
       end
 
@@ -95,15 +95,16 @@ module Overcommit::HookLoader
 
       hook_config = @config.for_hook(hook_name, @context.hook_class_name)
       hook_class =
-        if is_hook_line_aware(hook_config)
+        if hook_config['message_pattern']
+          validate_line_aware_config(hook_config)
           create_line_aware_command_hook_class(hook_base)
         else
           create_git_hook_class(hook_base)
         end
 
-      # Only to avoid warnings in unit tests...:
-      if hook_module.const_defined?(hook_name)
-        return hook_module.const_get(hook_name).new(@config, @context)
+      # A later load may configure the same hook to use a different command format.
+      if hook_module.const_defined?(hook_name, false)
+        hook_module.send(:remove_const, hook_name)
       end
 
       hook_module.const_set(hook_name, hook_class).new(@config, @context)

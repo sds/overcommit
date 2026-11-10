@@ -1,0 +1,131 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  rspec:
+    name: rspec (${{ matrix.ruby-version }}, ${{ matrix.target.os }}, shard ${{ matrix.target.shard }}/${{ matrix.target.shards }})
+    timeout-minutes: ${{ matrix.target.os == 'windows' && 30 || 15 }}
+    runs-on: ${{ matrix.target.os == 'ubuntu' && 'ubuntu-26.04' || 'windows-latest' }}
+    env:
+      BUNDLE_WITHOUT: lint
+      SPEC_WORKERS: ${{ matrix.target.os == 'windows' && 4 || 8 }}
+      SPEC_SHARD: ${{ matrix.target.shard }}/${{ matrix.target.shards }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+          - "3.3"
+          - "3.4"
+          - "4.0"
+        target:
+          - { os: ubuntu, shard: 1, shards: 1 }
+          - { os: windows, shard: 1, shards: 5 }
+          - { os: windows, shard: 2, shards: 5 }
+          - { os: windows, shard: 3, shards: 5 }
+          - { os: windows, shard: 4, shards: 5 }
+          - { os: windows, shard: 5, shards: 5 }
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Select dependency cache date
+        if: runner.os == 'Windows'
+        id: dependency-cache-date
+        shell: pwsh
+        run: '"date=$([DateTime]::UtcNow.ToString(''yyyy-MM-dd''))" >> $env:GITHUB_OUTPUT'
+
+      - name: Cache Windows dependency lock
+        if: runner.os == 'Windows'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: Gemfile.lock
+          # Keep testing fresh dependencies daily without resolving on every runner.
+          key: dependency-lock-v1-${{ runner.os }}-ruby${{ matrix.ruby-version }}-${{ steps.dependency-cache-date.outputs.date }}-${{ hashFiles('Gemfile', '*.gemspec', 'lib/overcommit/version.rb') }}
+
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+          # Test dependencies are pure Ruby; no native build tools are needed.
+          windows-toolchain: none
+
+      - name: Use Git directly on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Bypass Git for Windows' bin/git.exe launcher for thousands of calls.
+          $gitRoot = Split-Path (Split-Path (git --exec-path) -Parent) -Parent
+          Join-Path $gitRoot 'bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Run tests
+        run: |
+          git config --global user.email "gh-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          bundle exec ruby script/parallel_rspec.rb
+
+      - name: Save shard coverage
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: coverage-ruby${{ matrix.ruby-version }}-${{ matrix.target.os }}-shard${{ matrix.target.shard }}of${{ matrix.target.shards }}
+          path: coverage/lcov.info
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 1
+
+  overcommit:
+    timeout-minutes: 10
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Prepare environment
+        run: |
+          git config --global user.email "gh-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          bundle exec overcommit --sign
+          bundle exec overcommit --sign pre-commit
+
+      - name: Run pre-commit checks
+        run: bundle exec overcommit --run
+
+  ci:
+    name: CI
+    if: ${{ always() }}
+    needs: [rspec, overcommit]
+    runs-on: ubuntu-26.04
+    timeout-minutes: 2
+
+    steps:
+      - name: Require all jobs to pass
+        env:
+          JOB_RESULTS: ${{ toJSON(needs) }}
+        run: echo "$JOB_RESULTS" | jq -e 'all(.[]; .result == "success")'
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Collect all shard coverage
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          pattern: coverage-*
+          path: coverage
+
+      # Shard assignments shift when examples are added. Compare the complete
+      # suite's coverage rather than unrelated fractions from individual shards.
+      - name: Report combined code coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.github_token }}
+          files: coverage/*/lcov.info

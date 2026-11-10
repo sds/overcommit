@@ -11,6 +11,7 @@ describe Overcommit::HookContext::CommitMsg do
   let(:context) { described_class.new(config, args, input) }
   before do
     Overcommit::GitConfig.stub(:comment_character).and_return(comment_char)
+    allow(Overcommit::GitConfig).to receive(:commit_cleanup_mode).and_return('strip')
   end
   let(:commit_msg) do
     [
@@ -24,11 +25,16 @@ describe Overcommit::HookContext::CommitMsg do
     ]
   end
 
-  let(:commit_message_file) do
+  let(:commit_message_tempfile) do
     Tempfile.new('commit-message').tap do |file|
       file.write(commit_msg.join("\n"))
-      file.fsync
-    end.path
+      file.close
+    end
+  end
+  let(:commit_message_file) { commit_message_tempfile.path }
+
+  after do
+    commit_message_tempfile.close!
   end
 
   describe '#commit_message' do
@@ -36,6 +42,21 @@ describe Overcommit::HookContext::CommitMsg do
 
     it 'strips comments and trailing diff' do
       subject.should == "Some commit message\n"
+    end
+
+    %w[whitespace verbatim scissors].each do |mode|
+      context "with #{mode} cleanup" do
+        let(:commit_msg) { ['#16: This is a sample commit for issue 16'] }
+
+        before do
+          allow(Overcommit::GitConfig).to receive(:commit_cleanup_mode).and_return(mode)
+        end
+
+        it 'preserves the comment-prefixed subject for message hooks' do
+          expect(subject).to eq(commit_msg.first)
+          expect(context.empty_message?).to eq(false)
+        end
+      end
     end
 
     context 'with alternate comment character' do
@@ -298,7 +319,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -317,22 +338,19 @@ describe Overcommit::HookContext::CommitMsg do
       end
     end
 
-    # Git cannot track Windows symlinks
-    unless Overcommit::OS.windows?
-      context 'when a broken symlink is staged' do
-        around do |example|
-          repo do
-            Overcommit::Utils::FileUtils.symlink('non-existent-file', 'symlink')
-            `git add symlink`
-            example.run
-          end
+    context 'when a broken symlink is staged' do
+      around do |example|
+        repo do
+          Overcommit::Utils::FileUtils.symlink('non-existent-file', 'symlink')
+          `git add symlink`
+          example.run
         end
+      end
 
-        it 'does not attempt to update/restore the modification time of the file' do
-          File.should_not_receive(:mtime)
-          File.should_not_receive(:utime)
-          subject
-        end
+      it 'does not attempt to update/restore the modification time of the file' do
+        File.should_not_receive(:mtime)
+        File.should_not_receive(:utime)
+        subject
       end
     end
   end
@@ -474,7 +492,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -500,7 +518,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           echo('Hello World', 'sub/submodule-file')
           `git submodule foreach "git add submodule-file" < #{File::NULL}`
@@ -532,7 +550,7 @@ describe Overcommit::HookContext::CommitMsg do
         end
 
         repo do
-          `git submodule add #{submodule} sub > #{File::NULL} 2>&1`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub > #{File::NULL} 2>&1`
           `git commit -m "Add submodule"`
           `git rm sub`
           example.run
@@ -561,7 +579,7 @@ describe Overcommit::HookContext::CommitMsg do
       end
 
       repo do
-        `git submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} test-sub 2>&1 > #{File::NULL}`
         expect(subject).to_not include File.expand_path('test-sub')
       end
     end
@@ -657,54 +675,51 @@ describe Overcommit::HookContext::CommitMsg do
       end
     end
 
-    # Git cannot track Windows symlinks
-    unless Overcommit::OS.windows?
-      context 'when changing a symlink to a directory during an amendment' do
-        around do |example|
-          repo do
-            `git commit --allow-empty -m "Initial commit"`
-            FileUtils.mkdir 'some-directory'
-            symlink('some-directory', 'some-symlink')
-            `git add some-symlink some-directory`
-            `git commit -m "Add file"`
-            `git rm some-symlink`
-            FileUtils.mkdir 'some-symlink'
-            touch File.join('some-symlink', 'another-file')
-            `git add some-symlink`
-            example.run
-          end
-        end
-
-        before do
-          context.stub(:amendment?).and_return(true)
-        end
-
-        it 'does not include the directory in the list of modified files' do
-          subject.should_not include File.expand_path('some-symlink')
+    context 'when changing a symlink to a directory during an amendment' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          FileUtils.mkdir 'some-directory'
+          symlink('some-directory', 'some-symlink')
+          `git add some-symlink some-directory`
+          `git commit -m "Add file"`
+          `git rm some-symlink`
+          FileUtils.mkdir 'some-symlink'
+          touch File.join('some-symlink', 'another-file')
+          `git add some-symlink`
+          example.run
         end
       end
 
-      context 'when breaking a symlink during an amendment' do
-        around do |example|
-          repo do
-            `git commit --allow-empty -m "Initial commit"`
-            FileUtils.mkdir 'some-directory'
-            touch File.join('some-directory', 'some-file')
-            symlink('some-directory', 'some-symlink')
-            `git add some-symlink some-directory`
-            `git commit -m "Add file"`
-            `git rm -rf some-directory`
-            example.run
-          end
-        end
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
 
-        before do
-          context.stub(:amendment?).and_return(true)
-        end
+      it 'does not include the directory in the list of modified files' do
+        subject.should_not include File.expand_path('some-symlink')
+      end
+    end
 
-        it 'still includes the broken symlink in the list of modified files' do
-          subject.should include File.expand_path('some-symlink')
+    context 'when breaking a symlink during an amendment' do
+      around do |example|
+        repo do
+          `git commit --allow-empty -m "Initial commit"`
+          FileUtils.mkdir 'some-directory'
+          touch File.join('some-directory', 'some-file')
+          symlink('some-directory', 'some-symlink')
+          `git add some-symlink some-directory`
+          `git commit -m "Add file"`
+          `git rm -rf some-directory`
+          example.run
         end
+      end
+
+      before do
+        context.stub(:amendment?).and_return(true)
+      end
+
+      it 'still includes the broken symlink in the list of modified files' do
+        subject.should include File.expand_path('some-symlink')
       end
     end
   end

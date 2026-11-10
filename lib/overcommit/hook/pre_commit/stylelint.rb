@@ -8,11 +8,11 @@ module Overcommit::Hook::PreCommit
     # example of output:
     # index.css: line 4, col 4, error - Expected indentation of 2 spaces (indentation)
 
-    MESSAGE_REGEX = /^(?<file>.+):\D*(?<line>\d+).*$/.freeze
+    MESSAGE_REGEX = /^(?<file>[^:]+):\D*(?<line>\d+).*$/.freeze
 
     def run
       result = execute(command, args: applicable_files)
-      output = result.stdout.chomp
+      output = result.stdout + result.stderr.chomp
       return :pass if result.success? && output.empty?
 
       extract_messages(

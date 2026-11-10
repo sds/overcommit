@@ -4,6 +4,7 @@
 module Overcommit
   HOME = File.expand_path(File.join(File.dirname(__FILE__), '..', '..')).freeze
   CONFIG_FILE_NAME = '.overcommit.yml'
+  LOCAL_CONFIG_FILE_NAME = '.local-overcommit.yml'
 
   HOOK_DIRECTORY = File.join(HOME, 'lib', 'overcommit', 'hook').freeze
 

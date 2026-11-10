@@ -13,6 +13,9 @@ module Overcommit::Exceptions
   # Raised when trying to read/write to/from the local repo git config fails.
   class GitConfigError < Error; end
 
+  # Raised when local signature history cannot be read or written.
+  class SignatureError < Error; end
+
   # Raised when there was a problem reading submodule information for a repo.
   class GitSubmoduleError < Error; end
 

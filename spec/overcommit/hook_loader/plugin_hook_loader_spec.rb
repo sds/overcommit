@@ -2,197 +2,262 @@
 
 require 'spec_helper'
 
-describe 'ad-hoc pre-commit hook' do
-  subject do
-    hook_loader = Overcommit::HookLoader::PluginHookLoader.new(
-      config,
-      context,
-      Overcommit::Logger.new(STDOUT)
-    )
-    hooks = hook_loader.load_hooks
-    hooks.find { |h| h.name == hook_name }
-  end
+describe Overcommit::HookLoader::PluginHookLoader do
+  subject(:hook) { loader.load_hooks.find { |loaded| loaded.name == 'CustomScript' } }
+
+  let(:loader) { described_class.new(config, context, Overcommit::Logger.silent) }
   let(:config) do
-    config = Overcommit::Configuration.new(
-      YAML.safe_load(config_contents, [Regexp]), {
-        validate: false
-      }
+    Overcommit::ConfigurationLoader.default_configuration.merge(
+      Overcommit::Configuration.new(
+        'PreCommit' => { 'CustomScript' => hook_config.merge(config_changes) }
+      )
     )
-    Overcommit::ConfigurationLoader.default_configuration.merge(config)
   end
-  let(:context) do
-    empty_stdin = File.open(File::NULL) # pre-commit hooks don't take input
-    context = Overcommit::HookContext.create('pre-commit', config, applicable_files, empty_stdin)
-    context
-  end
+  let(:hook_config) { { 'enabled' => true, 'command' => %w[custom-script] } }
+  let(:context) { Overcommit::HookContext.create('pre-commit', config, [], StringIO.new) }
+  let(:config_changes) { {} }
+  let(:result) { double(success?: false, stdout: stdout, stderr: '') }
+  let(:stdout) { "file.foo:2: warning: check this\n" }
 
   around do |example|
-    repo do
-      example.run
+    repo { example.run }
+  end
+
+  after do
+    hook_module = Overcommit::Hook::PreCommit
+    if hook_module.const_defined?(:CustomScript, false)
+      hook_module.send(:remove_const, :CustomScript)
     end
   end
 
-  describe 'if not line-aware' do
-    let(:config_contents) do
-      <<-'YML'
-        PreCommit:
-          FooGitHook:
-            enabled: true
-            command: "foocmd"
-      YML
-    end
-    let(:hook_name) { 'FooGitHook' }
-    let(:applicable_files) { nil }
-
+  context 'without a message pattern' do
     before do
-      context.stub(:execute_hook).with(%w[foocmd]).
-        and_return(result)
+      allow(context).to receive(:execute_hook).with(%w[custom-script]).and_return(result)
     end
 
-    context 'when command succeeds' do
-      let(:result) do
-        double(success?: true, stdout: '')
-      end
-
-      it { should pass }
+    it 'preserves the exit status and both output streams for existing Git hooks' do
+      allow(result).to receive(:stderr).and_return('stderr detail')
+      expect(hook.run).to eq([:fail, "#{stdout}stderr detail"])
     end
 
-    context 'when command fails' do
-      let(:result) do
-        double(success?: false, stdout: '', stderr: '')
-      end
-
-      it { should fail_hook }
+    it 'passes when the command succeeds' do
+      allow(result).to receive(:success?).and_return(true)
+      expect(hook.run).to eq(:pass)
     end
   end
 
-  describe 'if line-aware' do
-    let(:config_contents) do
-      <<-'YML'
-        PreCommit:
-          FooLint:
-            enabled: true
-            command: ["foo", "lint"]
-            message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>[0-9]+):(?<type>[^ ]+)/
-            warning_message_type_pattern: warning
-            flags:
-            - "--format=emacs"
-            include: '**/*.foo'
-          FooLintRecommendedPattern:
-            enabled: true
-            command: ["foo", "lint"]
-            message_pattern: !ruby/regexp /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/
-            warning_message_type_pattern: warning
-            flags:
-            - "--format=emacs"
-            include: '**/*.foo'
-          FooLintRecommendedPatternNoWarnings:
-            enabled: true
-            command: ["foo", "lint"]
-            message_pattern: !ruby/regexp /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):[^ ]* (?<type>[^ ]+)/
-            flags:
-            - "--format=emacs"
-            include: '**/*.foo'
-      YML
+  context 'with a message pattern' do
+    let(:hook_config) do
+      super().merge(
+        'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+): (?<type>\w+):/,
+        'warning_message_type_pattern' => /^warn(?:ing)?$/i,
+        'flags' => ['--format=emacs'],
+        'include' => '**/*.foo',
+        'exclude' => 'excluded.foo'
+      )
     end
-    let(:hook_name) { 'FooLint' }
-    let(:applicable_files) { %w[file.foo] }
 
     before do
-      subject.stub(:applicable_files).and_return(applicable_files)
-      subject.stub(:execute).with(%w[foo lint --format=emacs], args: applicable_files).
+      allow(context).to receive(:modified_files).
+        and_return(%w[file.foo excluded.foo other.txt].map { |file| File.expand_path(file) })
+      allow(context).to receive(:modified_lines_in_file).with('file.foo').and_return([2])
+      allow(hook).to receive(:execute).
+        with(%w[custom-script --format=emacs], args: [File.expand_path('file.foo')]).
         and_return(result)
     end
 
-    context 'when command succeeds' do
-      let(:result) do
-        double(success?: true, stdout: '')
-      end
-
-      it { should pass }
+    it 'extracts file, line, type, and original message using configured regexes' do
+      expect(hook.run).to eq([
+        Overcommit::Hook::Message.new(:warning, 'file.foo', 2, stdout.chomp)
+      ])
     end
 
-    context 'when command fails with empty stdout' do
-      let(:result) do
-        double(success?: false, stdout: '', stderr: '')
-      end
-
-      it { should pass }
+    it 'preserves Windows drive letters in diagnostic paths' do
+      allow(result).to receive(:stdout).and_return("C:/project/file.foo:2: warning: check this\n")
+      expect(hook.run.first.file).to eq('C:/project/file.foo')
     end
 
-    context 'when command fails with some warning message' do
-      let(:result) do
-        double(
-          success?: false,
-          stdout: "A:1:warning...\n",
-          stderr: ''
-        )
-      end
-
-      it { should warn }
+    it 'fails on errors on modified lines' do
+      allow(result).to receive(:stdout).and_return("file.foo:2: error: fix this\n")
+      status, output = hook.run_and_transform
+      expect(status).to eq(:fail)
+      expect(output).to include('Errors on modified lines:', 'fix this')
     end
 
-    context 'when command fails with some error message' do
-      let(:result) do
-        double(
-          success?: false,
-          stdout: "A:1:???\n",
-          stderr: ''
-        )
-      end
-
-      it { should fail_hook }
+    it 'warns on warning messages' do
+      expect(hook.run_and_transform.first).to eq(:warn)
     end
 
-    describe '(using recommended pattern)' do
-      let(:hook_name) { 'FooLintRecommendedPattern' }
+    it 'keeps errors and warnings distinct in mixed output' do
+      allow(result).to receive(:stdout).and_return("#{stdout}file.foo:2: error: fix this\n")
+      expect(hook.run.map(&:type)).to eq([:warning, :error])
+      expect(hook.run_and_transform.first).to eq(:fail)
+    end
 
-      context 'when command fails with some warning message' do
-        let(:result) do
-          double(
-            success?: false,
-            stdout: <<-MSG,
-B:1: warning: ???
-            MSG
-            stderr: ''
-          )
+    it 'passes on a successful exit even without output' do
+      allow(result).to receive_messages(success?: true, stdout: '')
+      expect(hook.run).to eq(:pass)
+    end
+
+    it 'fails when the command fails without stdout, preserving stderr' do
+      allow(result).to receive_messages(stdout: '', stderr: 'command crashed')
+      expect(hook.run_and_transform).to eq([:fail, 'command crashed'])
+    end
+
+    it 'fails when the command fails silently' do
+      allow(result).to receive(:stdout).and_return('')
+      expect(hook.run_and_transform.first).to eq(:fail)
+    end
+
+    it 'fails when stdout contains only blank lines' do
+      allow(result).to receive(:stdout).and_return("\n\n")
+      expect(hook.run_and_transform.first).to eq(:fail)
+    end
+
+    it 'reports unexpected output rather than silently discarding it' do
+      allow(result).to receive(:stdout).and_return('unrecognized diagnostic')
+      expect { hook.run }.to raise_error(Overcommit::Exceptions::MessageProcessingError)
+    end
+
+    context 'with a literal warning string' do
+      let(:config_changes) { { 'warning_message_type_pattern' => 'warn' } }
+
+      it 'classifies warnings by substring' do
+        expect(hook.run.first.type).to eq(:warning)
+      end
+    end
+
+    context 'without a warning pattern' do
+      let(:hook_config) { super().reject { |key, _| key == 'warning_message_type_pattern' } }
+
+      it 'defaults to errors' do
+        expect(hook.run.first.type).to eq(:error)
+      end
+    end
+
+    context 'with a file-only pattern' do
+      let(:config_changes) { { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):/ } }
+
+      it 'supports missing line and type captures' do
+        message = hook.run.first
+        expect([message.file, message.line, message.type]).to eq(['file.foo', nil, :error])
+      end
+    end
+
+    context 'with an unmatched optional type capture' do
+      let(:config_changes) do
+        { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+):(?: (?<type>error):)?/ }
+      end
+
+      it 'defaults to an error' do
+        expect(hook.run.first.type).to eq(:error)
+      end
+    end
+
+    context 'with required_executable in place of command' do
+      let(:hook_config) do
+        super().reject { |key, _| key == 'command' }.
+          merge('required_executable' => 'custom-script')
+      end
+
+      it 'executes the configured executable' do
+        expect(hook.run.first.file).to eq('file.foo')
+      end
+    end
+
+    it 'does not run when requires_files is set and no files match' do
+      allow(context).to receive(:modified_files).and_return([File.expand_path('other.txt')])
+      expect(hook.run?).to eq(false)
+    end
+
+    context 'with errors on unmodified lines' do
+      let(:stdout) { "file.foo:1: error: old problem\n" }
+
+      it 'fails by default' do
+        expect(hook.run_and_transform.first).to eq(:fail)
+      end
+
+      context 'when configured to warn about problems' do
+        let(:config_changes) { { 'problem_on_unmodified_line' => 'warn' } }
+
+        it 'warns' do
+          expect(hook.run_and_transform.first).to eq(:warn)
         end
-
-        it { should warn }
       end
 
-      context 'when command fails with some error message' do
-        let(:result) do
-          double(
-            success?: false,
-            stdout: <<-MSG,
-A:1:80: error
-            MSG
-            stderr: ''
-          )
-        end
+      context 'when configured to report problems' do
+        let(:config_changes) { { 'problem_on_unmodified_line' => 'report' } }
 
-        it { should fail_hook }
+        it 'fails' do
+          expect(hook.run_and_transform.first).to eq(:fail)
+        end
+      end
+
+      context 'when configured to ignore problems' do
+        let(:config_changes) { { 'problem_on_unmodified_line' => 'ignore' } }
+
+        it 'passes and omits ignored problems' do
+          expect(hook.run_and_transform).to eq([:pass, ''])
+        end
+      end
+    end
+  end
+
+  context 'with invalid line-aware options' do
+    let(:config_changes) { { 'message_pattern' => pattern } }
+
+    context 'when message_pattern is a string' do
+      let(:pattern) { 'not a Ruby regexp' }
+
+      it 'reports a configuration error' do
+        expect { hook }.to raise_error(Overcommit::Exceptions::HookLoadError, /message_pattern/)
       end
     end
 
-    describe '(using recommended pattern w/o warnings)' do
-      let(:hook_name) { 'FooLintRecommendedPatternNoWarnings' }
+    context 'when message_pattern has no file capture' do
+      let(:pattern) { /(?<line>\d+)/ }
 
-      context 'when command fails with some messages' do
-        let(:result) do
-          double(
-            success?: false,
-            stdout: <<-MSG,
-A:1:80: error
-B:1: warning: ???
-            MSG
-            stderr: ''
-          )
-        end
-
-        it { should fail_hook }
+      it 'explains the required capture' do
+        expect { hook }.to raise_error(Overcommit::Exceptions::HookLoadError, /file/)
       end
     end
+
+    context 'when warning_message_type_pattern is not a string or regexp' do
+      let(:config_changes) do
+        { 'message_pattern' => /(?<file>.+)/, 'warning_message_type_pattern' => true }
+      end
+
+      it 'explains the invalid option' do
+        expect { hook }.to raise_error(Overcommit::Exceptions::HookLoadError,
+                                       /warning_message_type_pattern/)
+      end
+    end
+  end
+
+  it 'runs a real command against staged files and processes its diagnostics' do
+    File.write('file.foo', "first line\nsecond line\n")
+    Overcommit::Utils.execute(%w[git add file.foo])
+    hook_config.merge!(
+      'command' => [RbConfig.ruby, '-e', 'puts ARGV.first + ":2: warning: check this"; exit 1',
+                    '--'],
+      'message_pattern' => /^(?<file>(?:\w:)?[^:]+):(?<line>\d+): (?<type>\w+):/,
+      'warning_message_type_pattern' => /^warning$/
+    )
+    status, output = hook.run_and_transform
+    expect(status).to eq(:warn)
+    expect(output).to include('Warnings on modified lines:', 'file.foo:2: warning: check this')
+  end
+
+  it 'uses the current configuration when reloading the same hook name' do
+    loader.load_hooks
+    updated_config = config.merge(
+      Overcommit::Configuration.new(
+        'PreCommit' => { 'CustomScript' => { 'message_pattern' => /^(?<file>(?:\w:)?[^:]+):/ } }
+      )
+    )
+    updated_loader = described_class.new(updated_config, context, Overcommit::Logger.silent)
+    reloaded = updated_loader.load_hooks.find { |loaded| loaded.name == 'CustomScript' }
+    allow(reloaded).to receive(:execute).and_return(result)
+    expect(reloaded.run.first.file).to eq('file.foo')
   end
 end

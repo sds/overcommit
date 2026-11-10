@@ -9,8 +9,7 @@ module Overcommit::Hook::PreCommit
       messages = []
 
       offending_files.map do |file_name|
-        file = File.open(file_name)
-        begin
+        File.open(file_name) do |file|
           messages += check_file(file, file_name)
         rescue ArgumentError => e
           # File is likely a binary file which this check should ignore, but

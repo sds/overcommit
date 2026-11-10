@@ -26,7 +26,7 @@ module Overcommit::Utils
             raise Overcommit::Exceptions::MessageProcessingError,
                   'Unexpected output: unable to determine line number or type ' \
                   "of error/warning for output:\n" \
-                  "#{output_messages[index..-1].join("\n")}"
+                  "#{output_messages[index..].join("\n")}"
           end
 
           file = extract_file(match, message)
@@ -41,7 +41,13 @@ module Overcommit::Utils
         return nil if warning_pattern.nil?
 
         lambda do |type|
-          type.include?(warning_pattern) ? :warning : :error
+          warning =
+            if warning_pattern.is_a?(Regexp)
+              type && warning_pattern.match?(type)
+            else
+              type&.include?(warning_pattern)
+            end
+          warning ? :warning : :error
         end
       end
 

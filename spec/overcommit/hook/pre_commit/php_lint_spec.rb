@@ -26,13 +26,13 @@ describe Overcommit::Hook::PreCommit::PhpLint do
   context 'when php lint exits unsuccessfully' do
     before do
       # php -l prints the same to both stdout and stderr
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       sample_output = [
         '',
         "Parse error: syntax error, unexpected '0' (T_LNUMBER), expecting variable (T_VARIABLE) or '{' or '$' in sample.php on line 3 ",
         'Errors parsing invalid.php',
       ].join("\n")
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
 
       result = double('result')
       result.stub(:status).and_return(255)

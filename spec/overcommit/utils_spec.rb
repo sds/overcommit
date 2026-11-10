@@ -119,17 +119,17 @@ describe Overcommit::Utils do
   describe '.supported_hook_types' do
     subject { described_class.supported_hook_types }
 
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     it { should =~ %w[commit-msg pre-commit post-checkout post-commit post-merge post-rewrite pre-push pre-rebase prepare-commit-msg] }
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
   end
 
   describe '.supported_hook_type_classes' do
     subject { described_class.supported_hook_type_classes }
 
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     it { should =~ %w[CommitMsg PreCommit PostCheckout PostCommit PostMerge PostRewrite PrePush PreRebase PrepareCommitMsg] }
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
   end
 
   describe '.parent_command' do
@@ -140,6 +140,174 @@ describe Overcommit::Utils do
     end
 
     it { should =~ /rspec/ }
+
+    context 'when the Windows process query cannot be launched' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
+        described_class.stub(:execute).and_raise(ChildProcess::LaunchError, 'Access denied')
+      end
+
+      it { should be_nil }
+    end
+
+    context 'when the Windows parent has already exited' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:native_windows_parent_command).and_raise(LoadError)
+        described_class.stub(:execute).
+          and_return(Overcommit::Subprocess::Result.new(0, '', ''))
+      end
+
+      it { should be_nil }
+    end
+
+    context 'when Windows provides COM support' do
+      let(:service) { double('WMI service') }
+      let(:command) { 'git -C "C:/Users/José/项目" commit --amend' }
+      let(:processes) { [double('process', Name: 'git.exe', CommandLine: command)] }
+
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_return(true)
+        stub_const('WIN32OLE', double(connect: service))
+        service.stub(:ExecQuery).
+          with('SELECT Name, CommandLine, ParentProcessId FROM Win32_Process ' \
+               "WHERE ProcessId = #{Process.pid}").
+          and_return(processes)
+      end
+
+      it 'returns the complete Unicode command line without launching PowerShell' do
+        described_class.should_not_receive(:execute)
+        subject.should == command
+      end
+
+      context 'when an env.exe launcher is between Git and Ruby' do
+        let(:processes) do
+          [double('launcher', Name: 'env.exe', ParentProcessId: 1234)]
+        end
+        let(:git_processes) { [double('git', Name: 'git.exe', CommandLine: command)] }
+
+        before do
+          service.stub(:ExecQuery).
+            with('SELECT Name, CommandLine, ParentProcessId FROM Win32_Process ' \
+                 'WHERE ProcessId = 1234').and_return(git_processes)
+        end
+
+        it 'returns the Git command line' do
+          expect(subject).to eq(command)
+        end
+
+        context 'when Git has exited' do
+          let(:git_processes) { [] }
+
+          it { should be_nil }
+        end
+      end
+
+      context 'when the process has exited' do
+        let(:processes) { [] }
+
+        it { should be_nil }
+      end
+
+      context 'when the command line is inaccessible' do
+        let(:command) { nil }
+
+        it { should be_nil }
+      end
+
+      context 'when COM access is denied' do
+        before do
+          service.stub(:ExecQuery).and_raise(StandardError, 'Access denied')
+          described_class.stub(:execute).
+            and_return(Overcommit::Subprocess::Result.new(0, "git commit\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == 'git commit'
+        end
+      end
+    end
+
+    context 'when win32ole is not installed' do
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_raise(LoadError)
+        described_class.stub(:execute).
+          and_return(Overcommit::Subprocess::Result.new(0, "git commit\n", ''))
+      end
+
+      it 'falls back to PowerShell' do
+        subject.should == 'git commit'
+      end
+    end
+
+    context 'when Windows falls back to Script Host' do
+      let(:command) { 'git -C "C:/Users/José/项目" commit --amend' }
+      let(:output) { "\uFEFF#{command}\r\n".encode('UTF-16LE') }
+      let(:script_result) { Overcommit::Subprocess::Result.new(0, output, '') }
+
+      before do
+        Overcommit::OS.stub(:windows?).and_return(true)
+        described_class.stub(:require).with('win32ole').and_raise(LoadError)
+        described_class.stub(:execute).with(array_including('cscript.exe')).
+          and_return(script_result)
+      end
+
+      it 'decodes the complete Unicode command line and removes its BOM' do
+        described_class.should_not_receive(:execute).with(array_including('powershell.exe'))
+        subject.should == command
+      end
+
+      context 'when the process has exited' do
+        let(:output) { '' }
+
+        it 'returns nil without retrying PowerShell' do
+          described_class.should_not_receive(:execute).with(array_including('powershell.exe'))
+          subject.should be_nil
+        end
+      end
+
+      context 'when the script fails' do
+        let(:script_result) { Overcommit::Subprocess::Result.new(1, '', 'Access denied') }
+
+        before do
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+
+      context 'when Script Host is unavailable' do
+        before do
+          described_class.stub(:execute).with(array_including('cscript.exe')).
+            and_raise(Errno::ENOENT)
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+
+      context 'when Script Host returns invalid Unicode' do
+        let(:output) { "\x00".b }
+
+        before do
+          described_class.stub(:execute).with(array_including('powershell.exe')).
+            and_return(Overcommit::Subprocess::Result.new(0, "#{command}\n", ''))
+        end
+
+        it 'falls back to PowerShell' do
+          subject.should == command
+        end
+      end
+    end
 
     context 'when there is no parent' do
       before do
@@ -177,7 +345,7 @@ describe Overcommit::Utils do
       subject { described_class.execute(arguments, input: input) }
 
       it 'passes the input to the standard input stream' do
-        subject.stdout.should == "Hello world\n"
+        subject.stdout.should == 'Hello world'
       end
     end
 
@@ -190,7 +358,7 @@ describe Overcommit::Utils do
       it 'invokes CommandSplitter.execute' do
         Overcommit::CommandSplitter.
           should_receive(:execute).
-          with(arguments, args: splittable_args).
+          with(arguments, { args: splittable_args }).
           and_return(double(status: 0, stdout: '', stderr: ''))
         subject
       end
@@ -215,7 +383,7 @@ describe Overcommit::Utils do
     end
 
     it 'executes the command' do
-      wait_until { subject.exited? } # Make sure process terminated before checking
+      wait_until(timeout: 5) { subject.exited? } # Make sure process terminated before checking
       File.exist?('some-file').should == true
     end
   end

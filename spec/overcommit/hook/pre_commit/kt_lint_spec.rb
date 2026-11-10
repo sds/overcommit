@@ -15,7 +15,8 @@ describe Overcommit::Hook::PreCommit::KtLint do
     before do
       result = double('result')
       result.stub(:success?).and_return(true)
-      subject.stub(:execute).and_return(result)
+      subject.should_receive(:execute).
+        with(['ktlint'], args: %w[file1.kt file2.kt]).and_return(result)
     end
 
     it { should pass }

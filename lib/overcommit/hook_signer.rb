@@ -58,24 +58,17 @@ module Overcommit
         file.start_with?(Overcommit::Utils.repo_root)
     end
 
-    # Return whether the signature for this hook has changed since it was last
-    # calculated.
+    # Return whether this exact combination of hook code and configuration
+    # has been explicitly trusted before.
     #
     # @return [true,false]
-    def signature_changed?
-      signature != stored_signature
+    def signature_verified?
+      signature_store.include?(signature)
     end
 
-    # Update the current stored signature for this hook.
+    # Remember the current signature without forgetting older approvals.
     def update_signature!
-      result = Overcommit::Utils.execute(
-        %w[git config --local] + [signature_config_key, signature]
-      )
-
-      unless result.success?
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to write to local repo git config: #{result.stderr}"
-      end
+      signature_store.add(signature)
     end
 
     private
@@ -102,19 +95,8 @@ module Overcommit
       File.read(hook_path)
     end
 
-    def stored_signature
-      result = Overcommit::Utils.execute(
-        %w[git config --local --get] + [signature_config_key]
-      )
-
-      if result.status == 1 # Key doesn't exist
-        return ''
-      elsif result.status != 0
-        raise Overcommit::Exceptions::GitConfigError,
-              "Unable to read from local repo git config: #{result.stderr}"
-      end
-
-      result.stdout.chomp
+    def signature_store
+      @signature_store ||= Overcommit::Signature.new(signature_config_key)
     end
 
     def signature_config_key

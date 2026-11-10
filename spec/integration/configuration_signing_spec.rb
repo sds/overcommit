@@ -29,7 +29,7 @@ describe 'configuration file signing' do
 
   around do |example|
     repo do
-      `overcommit --install > #{File::NULL}`
+      install_overcommit_hooks
       echo(config.to_yaml, '.overcommit.yml')
 
       `overcommit --sign` if configuration_signed

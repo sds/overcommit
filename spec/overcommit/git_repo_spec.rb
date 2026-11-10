@@ -24,12 +24,13 @@ describe Overcommit::GitRepo do
         end
 
         submodule = repo do
-          `git submodule add #{nested_submodule} nested-sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add \
+            #{nested_submodule} nested-sub 2>&1 > #{File::NULL}`
           `git commit -m "Add nested submodule"`
         end
 
         repo do
-          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
           example.run
         end
       end
@@ -150,7 +151,7 @@ describe Overcommit::GitRepo do
         end
 
         before do
-          `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+          `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
         end
 
         it { should_not include File.expand_path('sub') }
@@ -178,7 +179,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Submodule commit"`
         end
 
-        `git submodule add #{submodule} #{submodule_dir} 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{submodule} #{submodule_dir} 2>&1 > #{File::NULL}`
         `git commit -m "Add submodule"`
       end
 
@@ -282,7 +284,7 @@ describe Overcommit::GitRepo do
         touch 'tracked'
         `git add tracked`
         `git commit -m "Initial commit"`
-        `git submodule add #{submodule} sub 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} sub 2>&1 > #{File::NULL}`
         touch 'staged'
         `git add staged`
         example.run
@@ -291,6 +293,92 @@ describe Overcommit::GitRepo do
 
     it { should include(*%w[tracked staged].map { |file| File.expand_path(file) }) }
     it { should_not include File.expand_path('sub') }
+    it { should_not include File.expand_path('untracked') }
+
+    context 'when the index is empty' do
+      before { shell(%w[git read-tree --empty]).status.should == 0 }
+
+      it { should be_empty }
+    end
+
+    context 'when the index is unreadable' do
+      before { File.binwrite('.git/index', 'invalid index') }
+
+      it 'raises instead of returning an empty file list' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /Error listing files/)
+      end
+
+      it 'includes the Git failure details' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /STDERR: fatal:/)
+      end
+    end
+
+    context 'when listing tracked files fails after listing deleted files succeeds' do
+      before do
+        result = Overcommit::Subprocess::Result.new(128, '', 'fatal')
+        allow(Overcommit::Utils).to receive(:execute).and_call_original
+        allow(Overcommit::Utils).to receive(:execute).with(%w[git ls-files -z]).and_return(result)
+      end
+
+      it 'raises with the Git error' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /STDERR: fatal/)
+      end
+    end
+
+    context 'when a tracked file is deleted but the deletion is not staged' do
+      around do |example|
+        FileUtils.rm 'tracked'
+        example.run
+      end
+
+      it { should_not include File.expand_path('tracked') }
+      it { should include File.expand_path('staged') }
+    end
+
+    context 'when Git quotes tracked filenames' do
+      before { shell(%w[git config core.quotePath true]).status.should == 0 }
+
+      def stage_files(paths)
+        paths.each do |path|
+          FileUtils.mkdir_p(File.dirname(path))
+          touch(path)
+        end
+        shell(%w[git add --] + paths).status.should == 0
+      end
+
+      it 'preserves Unicode, nested Unicode, and space-containing paths' do
+        paths = ['café.rb', 'répertoire/test.rb', 'with spaces.rb']
+        stage_files(paths)
+        subject.should include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'preserves quotes, tabs, newlines, and surrounding whitespace' do
+        skip 'Windows filenames cannot contain quotes or control characters' if Overcommit::OS.windows?
+        paths = ['quote".rb', "tab\t.rb", "line\n.rb", ' padded.rb ']
+        stage_files(paths)
+        subject.should include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'excludes a deleted Unicode path' do
+        stage_files(['café.rb'])
+        FileUtils.rm('café.rb')
+        subject.should_not include(File.expand_path('café.rb'))
+      end
+
+      it 'excludes deleted paths containing quotes or control characters' do
+        skip 'Windows filenames cannot contain quotes or control characters' if Overcommit::OS.windows?
+        paths = ['quote".rb', "tab\t.rb", "line\n.rb"]
+        stage_files(paths)
+        FileUtils.rm(paths)
+        subject.should_not include(*paths.map { |path| File.expand_path(path) })
+      end
+
+      it 'retains a tracked broken symlink with a Unicode name' do
+        symlink('missing-target', 'café.rb')
+        shell(['git', 'add', '--', 'café.rb']).status.should == 0
+        subject.should include(File.expand_path('café.rb'))
+      end
+    end
   end
 
   describe '.initial_commit?' do
@@ -318,6 +406,57 @@ describe Overcommit::GitRepo do
     end
   end
 
+  describe 'operation state in a linked worktree' do
+    around do |example|
+      repo do
+        `git commit --allow-empty -m "Initial commit"`
+        linked_worktree = File.join(File.dirname(Dir.pwd), 'linked-worktree')
+        result = Overcommit::Utils.execute(
+          %W[git worktree add -b linked-worktree #{linked_worktree}],
+        )
+        raise "Unable to create worktree: #{result.stderr}" unless result.success?
+
+        Dir.chdir(linked_worktree) { example.run }
+      end
+    end
+
+    let(:git_dir) { File.expand_path(`git rev-parse --git-dir`.chomp) }
+    let(:common_dir) { File.expand_path(`git rev-parse --git-common-dir`.chomp) }
+    let(:head) { `git rev-parse HEAD`.chomp }
+
+    it 'restores merge state only to the linked worktree' do
+      merge_message = "Merge linked branch\n"
+      File.write(File.join(git_dir, 'MERGE_HEAD'), head)
+      File.write(File.join(git_dir, 'MERGE_MODE'), 'no-ff')
+      File.write(File.join(git_dir, 'MERGE_MSG'), merge_message)
+
+      described_class.store_merge_state
+      FileUtils.rm(
+        %w[MERGE_HEAD MERGE_MODE MERGE_MSG].
+          map { |file| File.join(git_dir, file) },
+      )
+      described_class.restore_merge_state
+
+      File.read(File.join(git_dir, 'MERGE_HEAD')).should == head
+      File.read(File.join(git_dir, 'MERGE_MSG')).should == merge_message
+      File.read(File.join(git_dir, 'MERGE_MODE')).should == 'no-ff'
+      File.exist?(File.join(common_dir, 'MERGE_HEAD')).should == false
+      File.exist?(File.join(common_dir, 'MERGE_MSG')).should == false
+      File.exist?(File.join(common_dir, 'MERGE_MODE')).should == false
+    end
+
+    it 'restores cherry-pick state only to the linked worktree' do
+      File.write(File.join(git_dir, 'CHERRY_PICK_HEAD'), head)
+
+      described_class.store_cherry_pick_state
+      FileUtils.rm(File.join(git_dir, 'CHERRY_PICK_HEAD'))
+      described_class.restore_cherry_pick_state
+
+      File.read(File.join(git_dir, 'CHERRY_PICK_HEAD')).should == head
+      File.exist?(File.join(common_dir, 'CHERRY_PICK_HEAD')).should == false
+    end
+  end
+
   describe '.staged_submodule_removals' do
     subject { described_class.staged_submodule_removals }
 
@@ -327,7 +466,7 @@ describe Overcommit::GitRepo do
       end
 
       repo do
-        `git submodule add #{submodule} sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add #{submodule} sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Initial commit"`
         example.run
       end
@@ -343,7 +482,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} another-sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{another_submodule} another-sub-repo 2>&1 > #{File::NULL}`
       end
 
       it { should be_empty }
@@ -369,7 +509,8 @@ describe Overcommit::GitRepo do
           `git commit --allow-empty -m "Another submodule"`
         end
 
-        `git submodule add #{another_submodule} yet-another-sub-repo 2>&1 > #{File::NULL}`
+        `git -c protocol.file.allow=always submodule add \
+          #{another_submodule} yet-another-sub-repo 2>&1 > #{File::NULL}`
         `git commit -m "Add yet another submodule"`
         `git rm sub-repo`
         `git rm yet-another-sub-repo`

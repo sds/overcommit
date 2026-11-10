@@ -1,10 +1,124 @@
 # Overcommit Changelog
 
-## master (unreleased)
+## main (unreleased)
+
+* Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files (#758).
+
+* Honor Git commit-message cleanup settings when handling comment-prefixed titles (#736).
+
+* Add configurable line parsing for command hooks (#750).
+
+## 0.75.0
+
+* Remember all locally approved configuration and hook signatures across rebases
+
+* Gracefully handle hook loading on systems with non-UTF8 locale
+* Re-enable running test suite on Windows environments
+
+## 0.74.0
+
+* Allow URL-only lines to exceed TextWidth body limit
+* Stop wrapping commands in cmd.exe on Windows
+* Delete subprocess output tempfiles once they are read
+* Exclude files deleted from the working tree from all_files
+* Recognize amend aliases on macOS
+* Keep each worktree's signatures separate
+
+## 0.73.0
+
+* Add pre-commit hook for [herb-lint](https://herb-tools.dev/projects/linter)
+* Add default file types to oxc hooks
+* Fix `oxfmt` to not fail if no files are matched
+
+## 0.72.0
+
+* Fix Solargraph regexp capture warning
+* Fix Flay hook when flay crashes instead of silently passing
+* Fix operation state restoration in linked worktrees
+* Update rexml constraint to patch [CVE-2025-58767](https://github.com/advisories/GHSA-c2f4-jgmc-q2r5)
+
+## 0.71.0
+
+* Fix race condition when reading input from stdin in hooks
+* Update Solargraph regex matcher
+
+## 0.70.0
+
+* Add `oxfmt` and `oxlint` pre-commit hooks
+
+## 0.69.0
+
+* Fix processor count detection in sandboxed environments
+
+## 0.68.0
+
+* Add `Solargraph` pre-commit hook
+
+## 0.67.1
+
+* Fix `set` gem dependency error when running with `--diff` flag
+
+## 0.67.0
+
+* Fix bug introduced in 0.65.0 that prevented `gemfile: false` from working correctly
+
+## 0.66.0
+
+* Add `--diff` CLI option for running pre-commit hooks against only changed files
+
+## 0.65.0
+
+* Load bundled gems on expected version
+
+## 0.64.1
+
+* Update minimum version of rexml to address [CVE-2024-49761](https://www.ruby-lang.org/en/news/2024/10/28/redos-rexml-cve-2024-49761/)
+
+## 0.64.0
+
+* Add support for `stylelint` 16+
+* Add `changelog_uri` to gemspec
+
+## 0.63.0
+
+* Add `Sorbet` pre-commit hook
+* Add `RSpec` pre-commit hook
+
+## 0.62.0
+
+* Allow version 5 of `childprocess` gem dependency
+
+## 0.61.0
+
+* Allow `ReplaceBranch` to use `skip_if`
+* Fix local Overcommit file merges with existing `.overcommit.yml`
+
+## 0.60.0
+
+* Allow overriding `Gemfile.lock` location for `BundleCheck` pre-commit hook
+* Fix `ReplaceBranch` prepare-commit-msg hook to allow trailing spaces
+* Add `MixFormat` pre-commit hook
+* Add `MixTest` pre-push hook
+* Allow loading custom local configuration from `.local-overcommit.yml`
+* Handle `Psych::DisallowedClass` when running `YamlSyntax` pre-commit hook
+* Add support for specifying custom `encoding` in `RailsSchemaUpToDate` pre-commit hook
+
+## 0.59.1
+
+* Remove `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook.
+* Remove special handling of process output on Windows since it broke on Linux.
+
+## 0.59.0
 
 * Add `--disable-pending-cops` as default flag to `RuboCop` pre-commit hook to ignore non-existent cops. Requires RuboCop `0.82.0` or newer.
-* Add "ad-hoc" line-aware command hooks.
-* Add `Vale` pre-commit hook to check spelling and style in text and source files.
+* Fix deprecation warning for `Bundler.with_clean_env`.
+* Fix handling of some kinds of pronto errors in the `Pronto` hook.
+* Fix encoding of process output on Windows.
+* Add support for specifying hook type to `--run` flag.
+* Fix message regex parser for Stylelint.
+* Fix configuration loading on Ruby 3.1.
+* Fix `YamlSyntax` to support aliases when parsing.
+* Fix run output to explicitly flush partial logs.
 
 ## 0.58.0
 

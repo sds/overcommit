@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
+require 'overcommit/hook/shared/r_spec'
+
 module Overcommit::Hook::PrePush
-  # Runs `rspec` test suite before push
+  # Runs `rspec` test suite
   #
   # @see http://rspec.info/
   class RSpec < Base
-    def run
-      result = execute(command)
-      return :pass if result.success?
-
-      output = result.stdout + result.stderr
-      [:fail, output]
-    end
+    include Overcommit::Hook::Shared::RSpec
   end
 end

@@ -7,12 +7,10 @@ module Overcommit::Hook::PreCommit
       messages = []
 
       applicable_files.each do |file|
-        begin
-          JSON.parse(IO.read(file))
-        rescue JSON::ParserError => e
-          error = "#{e.message} parsing #{file}"
-          messages << Overcommit::Hook::Message.new(:error, file, nil, error)
-        end
+        JSON.parse(IO.read(file))
+      rescue JSON::ParserError => e
+        error = "#{e.message} parsing #{file}"
+        messages << Overcommit::Hook::Message.new(:error, file, nil, error)
       end
 
       messages

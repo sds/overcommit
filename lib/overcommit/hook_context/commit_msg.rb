@@ -14,7 +14,7 @@ module Overcommit::HookContext
       commit_message.strip.empty?
     end
 
-    # User commit message stripped of comments and diff (from verbose output).
+    # User commit message with Git's comment handling and no verbose diff.
     def commit_message
       commit_message_lines.join
     end
@@ -27,9 +27,11 @@ module Overcommit::HookContext
     end
 
     def commit_message_lines
-      raw_commit_message_lines.
-        take_while { |line| !line.start_with?('diff --git') }.
-        reject     { |line| line.start_with?(comment_character) }
+      lines = raw_commit_message_lines.take_while { |line| !line.start_with?('diff --git') }
+      if cleanup_mode == 'strip'
+        lines.reject! { |line| line.start_with?(comment_character) }
+      end
+      lines
     end
 
     def comment_character
@@ -47,6 +49,10 @@ module Overcommit::HookContext
     end
 
     private
+
+    def cleanup_mode
+      @cleanup_mode ||= Overcommit::GitConfig.commit_cleanup_mode
+    end
 
     def raw_commit_message_lines
       ::IO.readlines(commit_message_file)

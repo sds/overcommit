@@ -39,12 +39,12 @@ describe Overcommit::Hook::PreCommit::PhpCs do
 
     context 'and it reports a warning' do
       before do
-        # rubocop:disable Metrics/LineLength
+        # rubocop:disable Layout/LineLength
         sample_output = [
           'File,Line,Column,Type,Message,Source,Severity,Fixable',
           '"/Users/craig/HelpScout/overcommit-testing/invalid.php",5,1,warning,"Possible parse error: FOREACH has no AS statement",Squiz.ControlStructures.ForEachLoopDeclaration.MissingAs,5,0'
         ].join("\n")
-        # rubocop:enable Metrics/LineLength
+        # rubocop:enable Layout/LineLength
         result.stub(:stdout).and_return(sample_output)
       end
 
@@ -53,12 +53,12 @@ describe Overcommit::Hook::PreCommit::PhpCs do
 
     context 'and it reports an error' do
       before do
-        # rubocop:disable Metrics/LineLength
+        # rubocop:disable Layout/LineLength
         sample_output = [
           'File,Line,Column,Type,Message,Source,Severity,Fixable',
           '"/Users/craig/HelpScout/overcommit-testing/invalid.php",5,1,error,"Inline control structures are not allowed",Generic.ControlStructures.InlineControlStructure.NotAllowed,5,1'
         ].join("\n")
-        # rubocop:enable Metrics/LineLength
+        # rubocop:enable Layout/LineLength
         result.stub(:stdout).and_return(sample_output)
       end
 

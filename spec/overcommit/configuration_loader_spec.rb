@@ -44,6 +44,23 @@ describe Overcommit::ConfigurationLoader do
         subject.plugin_directory.should == File.expand_path('some-directory')
       end
 
+      context 'and command hooks use regular expressions in YAML' do
+        let(:config_contents) { <<-'CFG' }
+          PreCommit:
+            CustomScript:
+              enabled: true
+              command: custom-script
+              message_pattern: !ruby/regexp /^(?<file>[^:]+):(?<line>\d+):[ ](?<type>\w+):/
+              warning_message_type_pattern: !ruby/regexp /^warning$/i
+        CFG
+
+        it 'loads both patterns as regular expressions' do
+          hook_config = subject.for_hook('CustomScript', 'PreCommit')
+          expect(hook_config['message_pattern']).to be_a(Regexp)
+          expect(hook_config['warning_message_type_pattern']).to eq(/^warning$/i)
+        end
+      end
+
       context 'and the configuration file contains a hook with no `enabled` option' do
         let(:config_contents) { <<-CFG }
           PreCommit:
@@ -55,6 +72,72 @@ describe Overcommit::ConfigurationLoader do
           subject
           output.string.should =~ /PreCommit::ScssLint.*not.*enabled/i
         end
+      end
+    end
+
+    context 'when repo only contains a repo level configuration file' do
+      let(:config_contents) { <<-CFG }
+        PreCommit:
+          Rubocop:
+            enabled: true
+      CFG
+
+      around do |example|
+        repo do
+          File.open('.overcommit.yml', 'w') { |f| f.write(config_contents) }
+          example.run
+        end
+      end
+
+      it 'includes default settings' do
+        subject
+        subject.for_hook('CapitalizedSubject', 'CommitMsg').should include('enabled' => true)
+      end
+
+      it 'includes .overwrite.yml configs' do
+        subject
+        subject.for_hook('Rubocop', 'PreCommit').should include('enabled' => true)
+      end
+    end
+
+    context 'when repo also contains a local configuration file' do
+      let(:local_config_contents) { <<-CFG }
+        plugin_directory: 'some-different-directory'
+      CFG
+
+      around do |example|
+        repo do
+          File.open('.overcommit.yml', 'w') { |f| f.write(config_contents) }
+          File.open('.local-overcommit.yml', 'w') { |f| f.write(local_config_contents) }
+          example.run
+        end
+      end
+
+      let(:config_contents) { <<-CFG }
+        PreCommit:
+          ScssLint:
+            enabled: true
+      CFG
+
+      let(:local_config_contents) { <<-CFG }
+        PreCommit:
+          Rubocop:
+            enabled: true
+      CFG
+
+      it 'includes default settings' do
+        subject
+        subject.for_hook('CapitalizedSubject', 'CommitMsg').should include('enabled' => true)
+      end
+
+      it 'includes .overwrite.yml configs' do
+        subject
+        subject.for_hook('ScssLint', 'PreCommit').should include('enabled' => true)
+      end
+
+      it 'includes .local-overwrite.yml configs' do
+        subject
+        subject.for_hook('Rubocop', 'PreCommit').should include('enabled' => true)
       end
     end
   end

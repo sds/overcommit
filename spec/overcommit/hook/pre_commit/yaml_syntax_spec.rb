@@ -22,9 +22,26 @@ describe Overcommit::Hook::PreCommit::YamlSyntax do
 
   context 'when YAML file has errors' do
     before do
+      YAML.stub(:load_file).
+        with(staged_file, { permitted_classes: [Regexp, Symbol], aliases: true }).
+        and_raise(ArgumentError)
       YAML.stub(:load_file).with(staged_file).and_raise(ArgumentError)
     end
 
     it { should fail_hook }
+  end
+
+  it 'accepts the regular expressions used by line-aware command hooks' do
+    directory do
+      File.write(staged_file, { 'message_pattern' => /(?<file>.+):/ }.to_yaml)
+      expect(subject).to pass
+    end
+  end
+
+  it 'continues to reject arbitrary Ruby objects' do
+    directory do
+      File.write(staged_file, "--- !ruby/object:Object {}\n")
+      expect(subject).to fail_hook
+    end
   end
 end

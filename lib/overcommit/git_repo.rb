@@ -131,12 +131,25 @@ module Overcommit
       Overcommit::Utils.execute(%W[git ls-files #{path} --error-unmatch]).success?
     end
 
-    # Returns the names of all files that are tracked by git.
+    # Returns the names of all files that are tracked by git, excluding files
+    # that have been deleted from the working tree.
     #
     # @return [Array<String>] list of absolute file paths
     def all_files
-      `git ls-files`.
-        split(/\n/).
+      deleted_files, tracked_files = [%w[git ls-files -z --deleted],
+                                      %w[git ls-files -z]].map do |command|
+        result = Overcommit::Utils.execute(command)
+        unless result.success?
+          raise Overcommit::Exceptions::Error,
+                "Error listing files. EXIT STATUS: #{result.status}.\n" \
+                "STDOUT: #{result.stdout}.\n" \
+                "STDERR: #{result.stderr}."
+        end
+
+        result.stdout.split("\0")
+      end
+
+      (tracked_files - deleted_files).
         map { |relative_file| File.expand_path(relative_file) }.
         reject { |file| File.directory?(file) } # Exclude submodule directories
     end
@@ -160,8 +173,11 @@ module Overcommit
         @merge_head = merge_head
       end
 
-      merge_msg_file = File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir)
-      @merge_msg = File.open(merge_msg_file).read if File.exist?(merge_msg_file)
+      merge_mode_file = Overcommit::Utils.git_path('MERGE_MODE')
+      @merge_mode = File.read(merge_mode_file) if File.exist?(merge_mode_file)
+
+      merge_msg_file = Overcommit::Utils.git_path('MERGE_MSG')
+      @merge_msg = File.read(merge_msg_file) if File.exist?(merge_msg_file)
     end
 
     # Store any relevant files that are present when repo is in the middle of a
@@ -182,17 +198,22 @@ module Overcommit
     # of a merge.
     def restore_merge_state
       if @merge_head
-        FileUtils.touch(File.expand_path('MERGE_MODE', Overcommit::Utils.git_dir))
+        if @merge_mode
+          File.open(Overcommit::Utils.git_path('MERGE_MODE'), 'w') do |f|
+            f.write(@merge_mode)
+          end
+          @merge_mode = nil
+        end
 
-        File.open(File.expand_path('MERGE_HEAD', Overcommit::Utils.git_dir), 'w') do |f|
+        File.open(Overcommit::Utils.git_path('MERGE_HEAD'), 'w') do |f|
           f.write(@merge_head)
         end
         @merge_head = nil
       end
 
       if @merge_msg
-        File.open(File.expand_path('MERGE_MSG', Overcommit::Utils.git_dir), 'w') do |f|
-          f.write("#{@merge_msg}\n")
+        File.open(Overcommit::Utils.git_path('MERGE_MSG'), 'w') do |f|
+          f.write(@merge_msg)
         end
         @merge_msg = nil
       end
@@ -202,8 +223,7 @@ module Overcommit
     # of a cherry-pick.
     def restore_cherry_pick_state
       if @cherry_head
-        File.open(File.expand_path('CHERRY_PICK_HEAD',
-                                   Overcommit::Utils.git_dir), 'w') do |f|
+        File.open(Overcommit::Utils.git_path('CHERRY_PICK_HEAD'), 'w') do |f|
           f.write(@cherry_head)
         end
         @cherry_head = nil

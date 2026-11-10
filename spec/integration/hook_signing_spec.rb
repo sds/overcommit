@@ -48,7 +48,7 @@ describe 'hook signing' do
     around do |example|
       repo do
         echo(config.to_yaml, '.overcommit.yml')
-        `overcommit --install > #{File::NULL}`
+        install_overcommit_hooks
 
         echo(hook_script, script_path)
         FileUtils.chmod(0o755, script_path)
@@ -87,7 +87,7 @@ describe 'hook signing' do
     around do |example|
       repo do
         echo(config.to_yaml, '.overcommit.yml')
-        `overcommit --install > #{File::NULL}`
+        install_overcommit_hooks
 
         echo(hook_script, script_path)
         FileUtils.chmod(0o755, script_path)

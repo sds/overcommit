@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
   #
   # @see http://bundler.io/
   class BundleCheck < Base
-    LOCK_FILE = 'Gemfile.lock'
+    LOCK_FILE = File.basename(ENV['BUNDLE_GEMFILE'] || 'Gemfile') + '.lock'
 
     def run
       # Ignore if Gemfile.lock is not tracked by git
