@@ -51,7 +51,18 @@ describe Overcommit::Subprocess do
 
       it 'passes the input to the standard input stream of the process' do
         subject.should be_success
-        subject.stdout.chomp.should == 'from-stdin'
+        subject.stdout.should == 'from-stdin'
+      end
+    end
+
+    ['', 'no newline', "one line\n", "two\nlines\n", "binary\0\r\n\xFF".b].each do |input|
+      it "preserves input bytes for #{input.inspect}" do
+        result = described_class.spawn(
+          [ruby, '-e', 'STDIN.binmode; STDOUT.print STDIN.read.bytes.join(",")'],
+          input: input,
+        )
+        result.should be_success
+        result.stdout.should == input.bytes.join(',')
       end
     end
 

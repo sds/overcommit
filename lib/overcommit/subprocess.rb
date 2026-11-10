@@ -35,7 +35,8 @@ module Overcommit
         process.start
         if options[:input]
           begin
-            process.io.stdin.puts(options[:input])
+            process.io.stdin.binmode
+            process.io.stdin.write(options[:input])
           rescue StandardError
             # Silently ignore if the standard input stream of the spawned
             # process is closed before we get a chance to write to it. This
