@@ -321,7 +321,7 @@ describe Overcommit::Utils do
       subject { described_class.execute(arguments, input: input) }
 
       it 'passes the input to the standard input stream' do
-        subject.stdout.should == "Hello world\n"
+        subject.stdout.should == 'Hello world'
       end
     end
 

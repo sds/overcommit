@@ -99,7 +99,10 @@ module Overcommit::HookContext
       return @input_string if defined?(@input_string)
 
       @input_mutex.synchronize do
-        @input_string = @input.read unless defined?(@input_string)
+        unless defined?(@input_string)
+          @input.binmode if @input.respond_to?(:binmode)
+          @input_string = @input.read
+        end
       end
 
       @input_string
