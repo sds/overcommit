@@ -318,7 +318,15 @@ module Overcommit
       def powershell_windows_parent_command
         result = execute([
           'powershell.exe', '-NoProfile', '-NonInteractive', '-Command',
-          "(Get-CimInstance Win32_Process -Filter 'ProcessId = #{Process.ppid}').CommandLine",
+          <<~POWERSHELL,
+            $parentId = #{Process.ppid}
+            for ($level = 0; $level -lt 4; $level++) {
+              $process = Get-CimInstance Win32_Process -Filter "ProcessId = $parentId"
+              if (!$process) { break }
+              if ($process.Name -ine 'env.exe') { $process.CommandLine; break }
+              $parentId = $process.ParentProcessId
+            }
+          POWERSHELL
         ])
         command = result.stdout.strip
         command if result.success? && !command.empty?
@@ -328,10 +336,20 @@ module Overcommit
       def native_windows_parent_command
         require 'win32ole'
         service = WIN32OLE.connect('winmgmts:root/cimv2')
-        processes = service.ExecQuery(
-          "SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.ppid}"
-        )
-        processes.to_enum.first&.CommandLine
+        parent_id = Process.ppid
+        # Git for Windows' /usr/bin/env launcher remains between Git and Ruby.
+        4.times do
+          processes = service.ExecQuery(
+            'SELECT Name, CommandLine, ParentProcessId FROM Win32_Process ' \
+            "WHERE ProcessId = #{parent_id}"
+          )
+          process = processes.to_enum.first
+          return unless process
+          return process.CommandLine unless process.Name.to_s.casecmp?('env.exe')
+
+          parent_id = process.ParentProcessId
+        end
+        nil
       end
 
       # Log debug output.

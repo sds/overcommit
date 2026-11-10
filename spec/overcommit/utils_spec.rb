@@ -165,20 +165,44 @@ describe Overcommit::Utils do
     context 'when Windows provides COM support' do
       let(:service) { double('WMI service') }
       let(:command) { 'git -C "C:/Users/José/项目" commit --amend' }
-      let(:processes) { [double('process', CommandLine: command)] }
+      let(:processes) { [double('process', Name: 'git.exe', CommandLine: command)] }
 
       before do
         Overcommit::OS.stub(:windows?).and_return(true)
         described_class.stub(:require).with('win32ole').and_return(true)
         stub_const('WIN32OLE', double(connect: service))
         service.stub(:ExecQuery).
-          with("SELECT CommandLine FROM Win32_Process WHERE ProcessId = #{Process.pid}").
+          with('SELECT Name, CommandLine, ParentProcessId FROM Win32_Process ' \
+               "WHERE ProcessId = #{Process.pid}").
           and_return(processes)
       end
 
       it 'returns the complete Unicode command line without launching PowerShell' do
         described_class.should_not_receive(:execute)
         subject.should == command
+      end
+
+      context 'when an env.exe launcher is between Git and Ruby' do
+        let(:processes) do
+          [double('launcher', Name: 'env.exe', ParentProcessId: 1234)]
+        end
+        let(:git_processes) { [double('git', Name: 'git.exe', CommandLine: command)] }
+
+        before do
+          service.stub(:ExecQuery).
+            with('SELECT Name, CommandLine, ParentProcessId FROM Win32_Process ' \
+                 'WHERE ProcessId = 1234').and_return(git_processes)
+        end
+
+        it 'returns the Git command line' do
+          expect(subject).to eq(command)
+        end
+
+        context 'when Git has exited' do
+          let(:git_processes) { [] }
+
+          it { should be_nil }
+        end
       end
 
       context 'when the process has exited' do
