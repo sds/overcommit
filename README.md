@@ -7,7 +7,7 @@
   <img width="65%" alt="Overcommit Logo" src="https://github.com/user-attachments/assets/b0d31df7-1d86-4e09-9c48-c96955e0713e" />
   <br />
   <em>A tool to manage and configure</em>
-<a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a>.
+<a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a>
 </p>
 
 In addition to supporting a wide variety of hooks that can be used across
@@ -24,6 +24,7 @@ any Ruby code.
   - [Automatically Install Overcommit Hooks](#automatically-install-overcommit-hooks)
 - [Usage](#usage)
   - [Skipping Hooks](#skipping-hooks)
+  - [Disabling all default hooks](#disabling-all-default-hooks)
   - [Disabling Overcommit](#disabling-overcommit)
   - [Disabling Colorized Output](#disabling-colorized-output)
 - [Continuous Integration](#continuous-integration)
@@ -33,6 +34,7 @@ any Ruby code.
     - [The `ALL` Hook](#the-all-hook)
   - [Gemfile](#gemfile)
   - [Plugin Directory](#plugin-directory)
+  - [Gem Plugins](#gem-plugins)
   - [Quiet Hook Runs](#quiet-hook-runs)
   - [Concurrency](#concurrency)
   - [Signature Verification](#signature-verification)
@@ -365,6 +367,29 @@ in your `Gemfile`.
 
 You can change the directory that project-specific hooks are loaded from via
 the `plugin_directory` option. The default directory is `.git-hooks`.
+
+### Gem Plugins
+
+Install a hook gem (include it in your Gemfile when using Bundler), then declare
+its namespace and enable its hooks:
+
+```yaml
+gem_plugins:
+  Company: overcommit-company
+PreCommit:
+  Company::MyHook:
+    enabled: true
+```
+
+Gems provide `lib/overcommit/hooks/pre_commit/my_hook.rb`, defining
+`Overcommit::Hook::PreCommit::Company::MyHook` as a subclass of
+`Overcommit::Hook::PreCommit::Base`; use `require_relative` for helpers.
+Namespaces keep gem hooks separate from built-in and repository hooks.
+No gems load unless declared and enabled. After reviewing changes, run
+`overcommit --sign` and `overcommit --sign pre-commit` (or the relevant hook type).
+Approvals cover gem contents, runtime dependencies, and hook configuration;
+changes require approval again when signature verification is enabled.
+Gem entrypoints are not automatically required, and symlinks are unsupported.
 
 ### Quiet Hook Runs
 

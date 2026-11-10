@@ -52,7 +52,7 @@ module Overcommit::Hook
     end
 
     def name
-      self.class.name.split('::').last
+      self.class.name.split('::')[3..].join('::')
     end
 
     def description

@@ -18,6 +18,7 @@ module Overcommit
 
       hash = convert_nils_to_empty_hashes(hash)
       ensure_hook_type_sections_exist(hash)
+      check_gem_plugins(hash)
       check_hook_name_format(hash)
       check_hook_env(hash)
       check_for_missing_enabled_option(hash) unless @options[:default]
@@ -28,6 +29,19 @@ module Overcommit
     end
 
     private
+
+    # Validate declarations without resolving, activating, or requiring gems.
+    def check_gem_plugins(hash)
+      plugins = hash.fetch('gem_plugins', {})
+      valid = plugins.is_a?(Hash) && plugins.all? do |namespace, gem_name|
+        namespace.is_a?(String) && namespace.match?(/\A[A-Z][A-Za-z0-9]*\z/) &&
+          gem_name.is_a?(String) && gem_name.match?(/\A[a-zA-Z0-9][a-zA-Z0-9_.-]*\z/)
+      end
+      return if valid
+
+      raise Overcommit::Exceptions::ConfigurationError,
+            '`gem_plugins` must map CamelCase namespaces to gem names'
+    end
 
     # Ensures that keys for all supported hook types exist (PreCommit,
     # CommitMsg, etc.)
@@ -102,10 +116,10 @@ module Overcommit
         hash.fetch(hook_type) { {} }.each_key do |hook_name|
           next if hook_name == 'ALL'
 
-          unless hook_name.match?(/\A[A-Za-z0-9]+\z/)
+          unless hook_name.match?(/\A(?:[A-Z][A-Za-z0-9]*::[A-Z][A-Za-z0-9]*|[A-Za-z0-9]+)\z/)
             errors << "#{hook_type}::#{hook_name} has an invalid name " \
-                      "#{hook_name}. It must contain only alphanumeric " \
-                      'characters (no underscores or dashes, etc.)'
+                      "#{hook_name}. Use an alphanumeric name or Namespace::HookName " \
+                      '(no underscores or dashes, etc.)'
           end
         end
       end

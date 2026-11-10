@@ -6,7 +6,8 @@ module Overcommit::HookLoader
     def load_hooks
       @config.enabled_builtin_hooks(@context).map do |hook_name|
         underscored_hook_name = Overcommit::Utils.snake_case(hook_name)
-        require "overcommit/hook/#{@context.hook_type_name}/#{underscored_hook_name}"
+        require File.join(Overcommit::HOOK_DIRECTORY, @context.hook_type_name,
+                          "#{underscored_hook_name}.rb")
         create_hook(hook_name)
       end
     end

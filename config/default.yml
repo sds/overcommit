@@ -43,6 +43,10 @@ gemfile: false
 # to the root of the repository.
 plugin_directory: '.git-hooks'
 
+# Explicit namespaces for gem-provided hooks. No gems are loaded by default.
+# Example: { Company: overcommit-company }
+gem_plugins: {}
+
 # Whether to hide hook output by default. This results in completely silent hook
 # runs except in the case of warning or failure.
 quiet: false
