@@ -721,22 +721,37 @@ that executes some malicious code. When you fetch and checkout this pull
 request, the `post-checkout` hook will be run on your machine, along with
 the malicious code that you just checked out.
 
-Overcommit attempts to address this problem by storing a signature of your
-configuration and all hook plugin code since the last time it ran. When the
-signature changes, a warning is displayed alerting you to which plugins have
-changed. It is then up to you to manually verify that the changes are not
-malicious, and then continue running the hooks.
+Overcommit stores signatures of configurations and hook plugin code you have
+explicitly approved with `overcommit --sign` and `overcommit --sign <hook-type>`.
+Unrecognized signatures trigger a warning so you can verify the changes before
+running hooks. All previously approved signatures are remembered, so checking
+out an older revision or rebasing through approved configurations does not
+require signing them again.
 
-The signature is derived from the contents of the plugin's source code itself
-and any configuration for the plugin. Thus a change to the plugin's source
-code or your local repo's `.overcommit.yml` file could result in a signature
-change.
+A plugin's signature covers its source code together with its configuration.
+Approving two versions does not approve other combinations of their code and
+configuration.
 
-Signatures are stored in your local repo's git configuration. If you use
-multiple [worktrees](https://git-scm.com/docs/git-worktree) whose
-configurations differ, enable `extensions.worktreeConfig` (`git config
-extensions.worktreeConfig true`) so that Overcommit stores signatures per
-worktree and signing in one worktree does not invalidate the others.
+Approvals are stored under `overcommit-signatures` in your repository's Git
+directory, outside Git's object database. They cannot be committed, pushed, or
+fetched, and Git garbage collection does not remove them. Each approval is a
+small file at `<SHA256 of signature config key>/<SHA256 signature>`, so lookups
+do not scan the history. The file contains the original config key (such as
+`overcommit.configuration.signature` or `overcommit.PreCommit.MyHook.signature`)
+and the approved signature, one per line. There is no history size limit.
+
+To revoke one approval, delete its file. To revoke all approvals, delete the
+`overcommit-signatures` directory. Run `overcommit --sign` and
+`overcommit --sign <hook-type>` to approve the current versions again. Existing
+signatures in local Git config migrate automatically on first use; their old
+keys are removed so deleting approval files also revokes migrated signatures.
+
+By default, linked [worktrees](https://git-scm.com/docs/git-worktree) share
+history in their common Git directory. Enable `extensions.worktreeConfig`
+(`git config extensions.worktreeConfig true`) to keep approvals and the
+`verify_signatures` setting separate in each worktree's Git directory. Use
+`git rev-parse --git-common-dir` to find shared storage, or
+`git rev-parse --git-path overcommit-signatures` to find per-worktree storage.
 
 ### Disabling Signature Checking
 

@@ -52,23 +52,23 @@ module Overcommit
 
     def signable_file?(file)
       return unless file
+
       sep = Overcommit::OS.windows? ? '\\' : File::SEPARATOR
       file.start_with?(".#{sep}") ||
         file.start_with?(Overcommit::Utils.repo_root)
     end
 
-    # Return whether the signature for this hook has been verified.
+    # Return whether this exact combination of hook code and configuration
+    # has been explicitly trusted before.
     #
     # @return [true,false]
     def signature_verified?
-      signature_unchanged = signature == stored_signature
-      signature_unchanged || Overcommit::Signature.verified?(object_signatures)
+      signature_store.include?(signature)
     end
 
-    # Update the current stored signature for this hook.
+    # Remember the current signature without forgetting older approvals.
     def update_signature!
-      Overcommit::Signature.verify(object_signatures)
-      Overcommit::GitRepo.set_local_config(signature_config_key, signature)
+      signature_store.add(signature)
     end
 
     private
@@ -79,41 +79,24 @@ module Overcommit
     # This way, if either the plugin code changes or its configuration changes,
     # the hash will change and we can alert the user to this change.
     def signature
-      Overcommit::Signature.sign_signatures(object_signatures)
-    end
+      hook_config = @config.for_hook(@hook_name, @context.hook_class_name).
+                            dup.
+                            tap { |config| IGNORED_CONFIG_KEYS.each { |k| config.delete(k) } }
 
-    # Returns the object signatures of this configuration.
-    #
-    # @return [Hash]
-    def object_signatures
-      sig = Overcommit::Signature.object_signature(hook_config.to_json)
-      content = content_to_sign
-      if content.nil?
-        sig
-      else
-        sig.merge(Overcommit::Signature.object_signature(content))
-      end
-    end
+      content_to_sign =
+        if signable_file?(hook_path) && Overcommit::GitRepo.tracked?(hook_path)
+          hook_contents
+        end
 
-    def hook_config
-      @config.for_hook(@hook_name, @context.hook_class_name).
-        dup.
-        tap { |config| IGNORED_CONFIG_KEYS.each { |k| config.delete(k) } }
-    end
-
-    def content_to_sign
-      if signable_file?(hook_path) && Overcommit::GitRepo.tracked?(hook_path)
-        hook_contents
-      end
+      Digest::SHA256.hexdigest(content_to_sign.to_s + hook_config.to_s)
     end
 
     def hook_contents
       File.read(hook_path)
     end
 
-    def stored_signature
-      signature = Overcommit::GitRepo.get_local_config(signature_config_key)
-      signature || ''
+    def signature_store
+      @signature_store ||= Overcommit::Signature.new(signature_config_key)
     end
 
     def signature_config_key

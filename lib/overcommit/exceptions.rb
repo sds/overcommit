@@ -13,17 +13,14 @@ module Overcommit::Exceptions
   # Raised when trying to read/write to/from the local repo git config fails.
   class GitConfigError < Error; end
 
+  # Raised when local signature history cannot be read or written.
+  class SignatureError < Error; end
+
   # Raised when there was a problem reading submodule information for a repo.
   class GitSubmoduleError < Error; end
 
   # Raised when there was a problem reading git revision information with `rev-list`.
   class GitRevListError < Error; end
-
-  # Raised when there was a problem computing the ID of git repository objects.
-  class GitHashObjectError < StandardError; end
-
-  # Raised when there was a problem retrieving information from git repository objects.
-  class GitCatFileError < StandardError; end
 
   # Raised when a {HookContext} is unable to setup the environment before a run.
   class HookSetupFailed < Error; end

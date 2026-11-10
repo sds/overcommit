@@ -1,102 +1,71 @@
 # frozen_string_literal: true
 
 require 'digest'
+require 'fileutils'
 
 module Overcommit
-  # Calculates, stores, and retrieves stored signatures of git objects.
-  module Signature
-    class << self
-      # Calculates the signature of some _String_.
-      #
-      # @param arg [String]
-      # @return [String]
-      def sign(arg)
-        Digest::SHA256.hexdigest(arg)
-      end
+  # Repository-local approvals, indexed by hook identity and SHA256 signature.
+  # These files are outside Git's object database so fetching cannot add trust.
+  class Signature
+    def initialize(config_key)
+      @config_key = config_key
+      scope = Overcommit::GitConfig.signature_scope
+      root = if scope == '--worktree'
+               Overcommit::Utils.git_path('overcommit-signatures')
+             else
+               File.join(Overcommit::Utils.git_dir, 'overcommit-signatures')
+             end
+      @directory = File.join(root, Digest::SHA256.hexdigest(config_key))
+      migrate_legacy_signature(scope)
+    end
 
-      # Calculates the signature of some _Hash_.
-      #
-      # @param arg [Hash]
-      # @return [String]
-      def sign_signatures(arg)
-        sign(to_blob(arg))
-      end
+    def include?(signature)
+      File.read(path(signature)) == contents(signature)
+    rescue Errno::ENOENT
+      false
+    rescue SystemCallError => e
+      raise Overcommit::Exceptions::SignatureError, "Unable to read signature history: #{e}"
+    end
 
-      # Returns the object signature for some blob.
-      #
-      # @return [Hash]
-      def object_signature(blob)
-        { Overcommit::GitRepo.blob_id(blob) => sign(blob) }
-      end
+    def recorded?
+      File.directory?(@directory)
+    end
 
-      # Stores the object signatures as verified.
-      #
-      # @param object_signatures [Hash] a hash of git object hashes to their signatures
-      def verify(object_signatures)
-        blob = to_blob(object_signatures)
-        Overcommit::GitRepo.blob_id(blob, write: true)
-      end
+    def add(signature)
+      FileUtils.mkdir_p(@directory)
+      File.write(path(signature), contents(signature), mode: 'w', perm: 0o600)
+    rescue SystemCallError => e
+      raise Overcommit::Exceptions::SignatureError, "Unable to write signature history: #{e}"
+    end
 
-      # Have the given object signatures been verified?
-      #
-      # @param object_signatures [Hash] a hash of git object hashes to their signatures
-      # @return [true,false]
-      def verified?(object_signatures)
-        blob = to_blob(object_signatures)
-        object_signatures_id = Overcommit::GitRepo.blob_id(blob)
-        existing_blob = Overcommit::GitRepo.blob_contents(object_signatures_id)
-        # Compare the contents in case of a SHA1 collision.
-        existing_blob == blob
-      end
+    private
 
-      private
+    def path(signature)
+      File.join(@directory, signature)
+    end
 
-      # Converts a Hash of git object hashes and their signatures to a signature blob.
-      #
-      # @example
-      # rubocop:disable Metrics/LineLength
-      # Converts from:
-      #   {
-      #     "333EC19DD1707BA9D10EB18913C7214D701691BB" => "2938858697BE5C7552CD9463DA010E01F01AC3B8AD65FE584975CE4F2FFC1E7E",
-      #     "426637B5CCDA600060C504CCB133D1976576E594" => "9526B9B463BDC1E856C12518998C704D070C0C217F2896959DB22DBEE7345684"
-      #   }
-      # to:
-      #   <<~SIGNATURES.chomp
-      #     333EC19DD1707BA9D10EB18913C7214D701691BB 2938858697BE5C7552CD9463DA010E01F01AC3B8AD65FE584975CE4F2FFC1E7E
-      #     426637B5CCDA600060C504CCB133D1976576E594 9526B9B463BDC1E856C12518998C704D070C0C217F2896959DB22DBEE7345684
-      #   SIGNATURES
-      # rubocop:enable Metrics/LineLength
-      #
-      # @param object_signatures [Hash]
-      # @return [String]
-      def to_blob(object_signatures)
-        lines = object_signatures.map do |git_object_hash, signature|
-          "#{git_object_hash} #{signature}"
-        end
-        lines.join("\n")
-      end
+    def contents(signature)
+      "#{@config_key}\n#{signature}\n"
+    end
 
-      # Converts a signature blob to a Hash of git object hashes and their signatures.
-      #
-      # @example
-      # rubocop:disable Metrics/LineLength
-      # Converts from:
-      #   <<~SIGNATURES.chomp
-      #     333EC19DD1707BA9D10EB18913C7214D701691BB 2938858697BE5C7552CD9463DA010E01F01AC3B8AD65FE584975CE4F2FFC1E7E
-      #     426637B5CCDA600060C504CCB133D1976576E594 9526B9B463BDC1E856C12518998C704D070C0C217F2896959DB22DBEE7345684
-      #   SIGNATURES
-      # to:
-      #   {
-      #     "333EC19DD1707BA9D10EB18913C7214D701691BB" => "2938858697BE5C7552CD9463DA010E01F01AC3B8AD65FE584975CE4F2FFC1E7E",
-      #     "426637B5CCDA600060C504CCB133D1976576E594" => "9526B9B463BDC1E856C12518998C704D070C0C217F2896959DB22DBEE7345684"
-      #   }
-      # rubocop:enable Metrics/LineLength
-      #
-      # @param blob [String]
-      # @return [Hash]
-      def to_hash(blob)
-        Hash[blob.split('\n').each_slice.map { |line| line.split(' ') }]
-      end
+    # Preserve an existing approval before removing its legacy Git config key.
+    # Removing the key means deleting history files actually revokes trust.
+    def migrate_legacy_signature(scope)
+      result = Overcommit::Utils.execute(%W[git config #{scope} --get] + [@config_key])
+      return if result.status == 1
+
+      check_config_result(result)
+      signature = result.stdout.chomp
+      add(signature) if signature.match?(/\A[0-9a-f]{64}\z/)
+      result = Overcommit::Utils.execute(%W[git config #{scope} --unset-all] + [@config_key])
+      check_config_result(result) unless result.status == 5 # Already removed by another process.
+    end
+
+    def check_config_result(result)
+      return if result.success?
+
+      raise Overcommit::Exceptions::GitConfigError,
+            "Unable to migrate local repo git config signature: #{result.stderr}"
     end
   end
 end
