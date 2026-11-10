@@ -9,7 +9,7 @@ jobs:
   rspec:
     name: rspec (${{ matrix.ruby-version }}, ${{ matrix.target.os }}, shard ${{ matrix.target.shard }}/${{ matrix.target.shards }})
     timeout-minutes: ${{ matrix.target.os == 'windows' && 30 || 15 }}
-    runs-on: ${{ format('{0}-latest', matrix.target.os) }}
+    runs-on: ${{ matrix.target.os == 'ubuntu' && 'ubuntu-26.04' || 'windows-latest' }}
     env:
       BUNDLE_WITHOUT: lint
       SPEC_WORKERS: ${{ matrix.target.os == 'windows' && 4 || 8 }}
@@ -31,7 +31,7 @@ jobs:
           - { os: windows, shard: 5, shards: 5 }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Select dependency cache date
         if: runner.os == 'Windows'
@@ -41,7 +41,7 @@ jobs:
 
       - name: Cache Windows dependency lock
         if: runner.os == 'Windows'
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: Gemfile.lock
           # Keep testing fresh dependencies daily without resolving on every runner.
@@ -78,10 +78,10 @@ jobs:
 
   overcommit:
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -103,7 +103,7 @@ jobs:
     name: CI
     if: ${{ always() }}
     needs: [rspec, overcommit]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 2
 
     steps:
