@@ -294,6 +294,26 @@ describe Overcommit::GitRepo do
     it { should include(*%w[tracked staged].map { |file| File.expand_path(file) }) }
     it { should_not include File.expand_path('sub') }
 
+    context 'when the index is unreadable' do
+      before { File.binwrite('.git/index', 'invalid index') }
+
+      it 'raises instead of returning an empty file list' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /Error listing files/)
+      end
+    end
+
+    context 'when listing tracked files fails after listing deleted files succeeds' do
+      before do
+        result = Overcommit::Subprocess::Result.new(128, '', 'fatal')
+        allow(Overcommit::Utils).to receive(:execute).and_call_original
+        allow(Overcommit::Utils).to receive(:execute).with(%w[git ls-files]).and_return(result)
+      end
+
+      it 'raises with the Git error' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::Error, /STDERR: fatal/)
+      end
+    end
+
     context 'when a tracked file is deleted but the deletion is not staged' do
       around do |example|
         FileUtils.rm 'tracked'

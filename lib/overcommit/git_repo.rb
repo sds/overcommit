@@ -136,9 +136,19 @@ module Overcommit
     #
     # @return [Array<String>] list of absolute file paths
     def all_files
-      deleted_files = `git ls-files --deleted`.split(/\n/)
+      deleted_files, tracked_files = [%w[git ls-files --deleted], %w[git ls-files]].map do |command|
+        result = Overcommit::Utils.execute(command)
+        unless result.success?
+          raise Overcommit::Exceptions::Error,
+                "Error listing files. EXIT STATUS: #{result.status}.\n" \
+                "STDOUT: #{result.stdout}.\n" \
+                "STDERR: #{result.stderr}."
+        end
 
-      (`git ls-files`.split(/\n/) - deleted_files).
+        result.stdout.split(/\n/)
+      end
+
+      (tracked_files - deleted_files).
         map { |relative_file| File.expand_path(relative_file) }.
         reject { |file| File.directory?(file) } # Exclude submodule directories
     end
