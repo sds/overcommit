@@ -158,6 +158,16 @@ skipped, set the `required` option to `true` in its configuration. If you
 attempt to skip it, you'll see a warning telling you that the hook is required,
 and the hook will still run.
 
+### Disabling all default hooks
+
+For each hook type, use the special `ALL` hook to disable all hooks by default.
+
+```yaml
+CommitMsg:
+  ALL:
+    enabled: false
+```
+
 ### Disabling Overcommit
 
 If you have scripts that execute `git` commands where you don't want Overcommit
