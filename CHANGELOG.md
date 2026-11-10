@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Honor Git commit-message cleanup settings when handling comment-prefixed titles (#736).
+
 * Add configurable line parsing for command hooks (#750).
 
 ## 0.75.0
