@@ -602,6 +602,7 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [TrailingWhitespace](lib/overcommit/hook/pre_commit/trailing_whitespace.rb)
 * [TravisLint](lib/overcommit/hook/pre_commit/travis_lint.rb)
 * [TsLint](lib/overcommit/hook/pre_commit/ts_lint.rb)
+* [Vale](#vale)
 * [Vint](lib/overcommit/hook/pre_commit/vint.rb)
 * [W3cCss](lib/overcommit/hook/pre_commit/w3c_css.rb)
 * [W3cHtml](lib/overcommit/hook/pre_commit/w3c_html.rb)
@@ -611,6 +612,32 @@ issue](https://github.com/sds/overcommit/issues/238) for more details.
 * [YamlSyntax](lib/overcommit/hook/pre_commit/yaml_syntax.rb)
 * [YardCoverage](lib/overcommit/hook/pre_commit/yard_coverage.rb)
 * [YarnCheck](lib/overcommit/hook/pre_commit/yarn_check.rb)
+
+#### Vale
+
+[Vale](https://vale.sh/) checks spelling and style in text, markup, and source
+files. Install Vale using its [installation instructions](https://vale.sh/docs/install),
+then add a `.vale.ini` and any styles your project needs. Enable the hook in
+`.overcommit.yml`:
+
+```yaml
+PreCommit:
+  Vale:
+    enabled: true
+```
+
+Vale uses a [line-aware command hook](#adding-existing-line-aware-commands)
+configured in [config/default.yml](config/default.yml), so no Ruby plugin is
+needed. It receives matching staged files and runs `vale --output=line`.
+Use `include` and `exclude` to customize the file types and paths checked;
+some formats require additional tools or Vale configuration.
+
+The default line output does not include severity, so all diagnostics from a
+failed Vale command are treated as errors. `problem_on_unmodified_line` controls
+how diagnostics on unchanged lines are handled. To distinguish warnings, use a
+[custom Vale output template](https://github.com/vale-cli/vale/issues/350)
+and configure `flags`, `message_pattern`, and `warning_message_type_pattern`
+as described in the line-aware command documentation.
 
 ### PrePush
 

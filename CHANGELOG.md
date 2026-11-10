@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files (#758).
+
 * Honor Git commit-message cleanup settings when handling comment-prefixed titles (#736).
 
 * Add configurable line parsing for command hooks (#750).

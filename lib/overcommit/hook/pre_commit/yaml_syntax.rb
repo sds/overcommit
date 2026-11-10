@@ -7,7 +7,7 @@ module Overcommit::Hook::PreCommit
       messages = []
 
       applicable_files.each do |file|
-        YAML.load_file(file, aliases: true)
+        YAML.load_file(file, permitted_classes: [Regexp, Symbol], aliases: true)
       rescue ArgumentError
         begin
           YAML.load_file(file)

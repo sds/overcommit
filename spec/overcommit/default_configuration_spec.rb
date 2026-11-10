@@ -5,7 +5,8 @@ require 'spec_helper'
 describe 'default configuration' do
   default_config =
     begin
-      YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH, aliases: true).to_hash
+      YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH,
+                     permitted_classes: [Regexp, Symbol], aliases: true).to_hash
     rescue ArgumentError
       YAML.load_file(Overcommit::ConfigurationLoader::DEFAULT_CONFIG_PATH).to_hash
     end
