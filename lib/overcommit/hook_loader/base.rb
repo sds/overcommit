@@ -64,21 +64,17 @@ module Overcommit::HookLoader
     def create_hook(hook_name)
       hook_type_class = Overcommit::Hook.const_get(@context.hook_class_name)
       hook_base_class = hook_type_class.const_get(:Base)
-      hook_class = hook_type_class.const_get(hook_name)
-      unless hook_class < hook_base_class
+      hook_class = hook_type_class.const_get(hook_name, false)
+      unless hook_class.is_a?(Class) && hook_class < hook_base_class
         raise Overcommit::Exceptions::HookLoadError,
               "Class #{hook_name} is not a subclass of #{hook_base_class}."
       end
 
-      begin
-        Overcommit::Hook.const_get(@context.hook_class_name).
-                         const_get(hook_name).
-                         new(@config, @context)
-      rescue LoadError, NameError => e
-        raise Overcommit::Exceptions::HookLoadError,
-              "Unable to load hook '#{hook_name}': #{e}",
-              e.backtrace
-      end
+      hook_class.new(@config, @context)
+    rescue LoadError, NameError => e
+      raise Overcommit::Exceptions::HookLoadError,
+            "Unable to load hook '#{hook_name}': #{e}",
+            e.backtrace
     end
   end
 end

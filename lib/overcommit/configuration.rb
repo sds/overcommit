@@ -127,12 +127,19 @@ module Overcommit
         select { |hook_name| hook_enabled?(hook_context, hook_name) }
     end
 
+    # Gem hooks are explicitly namespaced; discovery never executes gem code.
+    def enabled_gem_hooks(hook_context)
+      @hash[hook_context.hook_class_name].keys.select do |hook_name|
+        hook_name.include?('::') && hook_enabled?(hook_context, hook_name)
+      end
+    end
+
     # Returns a non-modifiable configuration for a hook.
     def for_hook(hook, hook_type = nil)
       unless hook_type
         components = hook.class.name.split('::')
-        hook = components.last
-        hook_type = components[-2]
+        hook = components[3..].join('::')
+        hook_type = components[2]
       end
 
       # Merge hook configuration with special 'ALL' config
@@ -155,8 +162,9 @@ module Overcommit
     # Applies additional configuration settings based on the provided
     # environment variables.
     def apply_environment!(hook_context, env)
-      skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(/[:, ]/)
-      only_hooks = env.fetch('ONLY') { '' }.split(/[:, ]/)
+      separator = /(?<!:):(?!:)|[, ]/
+      skipped_hooks = "#{env['SKIP']} #{env['SKIP_CHECKS']} #{env['SKIP_HOOKS']}".split(separator)
+      only_hooks = env.fetch('ONLY') { '' }.split(separator)
       hook_type = hook_context.hook_class_name
 
       if only_hooks.any? || skipped_hooks.include?('all') || skipped_hooks.include?('ALL')
@@ -179,6 +187,10 @@ module Overcommit
     end
 
     def plugin_hook?(hook_context_or_type, hook_name)
+      if hook_name.include?('::')
+        return (@hash['gem_plugins'] || {}).key?(hook_name.split('::').first)
+      end
+
       hook_type_name =
         if hook_context_or_type.is_a?(String)
           Overcommit::Utils.snake_case(hook_context_or_type)
@@ -257,11 +269,14 @@ module Overcommit
       # Ad hoc hooks are neither built-in nor have a plugin file written but
       # still have a `command` specified to be run
       !built_in_hook?(hook_context, hook_name) &&
+        !hook_name.include?('::') &&
         !plugin_hook?(hook_context, hook_name) &&
         (ad_hoc_conf['command'] || ad_hoc_conf['required_executable'])
     end
 
     def built_in_hook?(hook_context, hook_name)
+      return false if hook_name.include?('::')
+
       hook_name = Overcommit::Utils.snake_case(hook_name)
 
       File.exist?(File.join(Overcommit::HOME, 'lib', 'overcommit', 'hook',

@@ -17,7 +17,7 @@ module Overcommit
       Overcommit::Utils.log = logger
     end
 
-    def run
+    def run # rubocop:disable Metrics/MethodLength
       parse_arguments
 
       case @options[:action]
@@ -33,6 +33,12 @@ module Overcommit
         diff
       end
     rescue Overcommit::Exceptions::ConfigurationSignatureChanged => e
+      puts e
+      exit 78 # EX_CONFIG
+    rescue Overcommit::Exceptions::InvalidHookSignature
+      exit 78 # EX_CONFIG
+    rescue Overcommit::Exceptions::ConfigurationError,
+           Overcommit::Exceptions::HookLoadError => e
       puts e
       exit 78 # EX_CONFIG
     rescue Overcommit::Exceptions::HookContextLoadError => e

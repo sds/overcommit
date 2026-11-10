@@ -5,11 +5,11 @@ require 'digest'
 module Overcommit::HookLoader
   # Responsible for loading hooks that are specific to the repository Overcommit
   # is running in.
-  class PluginHookLoader < Base
+  class PluginHookLoader < Base # rubocop:disable Metrics/ClassLength
     def load_hooks
       check_for_unverified_plugins if @config.verify_signatures?
 
-      hooks = plugin_paths.map do |plugin_path|
+      hooks = load_gem_hooks + plugin_paths.map do |plugin_path|
         require plugin_path
 
         hook_name = Overcommit::Utils.camel_case(File.basename(plugin_path, '.rb'))
@@ -32,6 +32,34 @@ module Overcommit::HookLoader
 
     private
 
+    def gem_plugins
+      @gem_plugins ||= @config.enabled_gem_hooks(@context).
+        map { |name| name.split('::').first }.uniq.sort.map do |namespace|
+          Overcommit::GemPlugin.new(namespace, @config, @context)
+        end
+    end
+
+    def load_gem_hooks
+      sources = gem_plugins.map { |plugin| [plugin, plugin.hook_paths] }
+      sources.flat_map do |plugin, paths|
+        hook_module = Overcommit::Hook.const_get(@context.hook_class_name)
+        if hook_module.const_defined?(plugin.namespace, false)
+          namespace = hook_module.const_get(plugin.namespace, false)
+          unless namespace.instance_of?(Module)
+            raise Overcommit::Exceptions::HookLoadError,
+                  "Gem namespace #{plugin.namespace} conflicts with an existing hook"
+          end
+        else
+          hook_module.const_set(plugin.namespace, Module.new)
+        end
+        plugin.activate
+        paths.zip(plugin.hook_names).map do |path, name|
+          require path
+          create_hook(name)
+        end
+      end
+    end
+
     def plugin_paths
       directory = File.join(@config.plugin_directory, @context.hook_type_name)
       Dir[File.join(directory, '*.rb')].sort
@@ -48,9 +76,9 @@ module Overcommit::HookLoader
     end
 
     def unverified_plugins
-      (plugin_hook_names + ad_hoc_hook_names).
-        map { |hook_name| Overcommit::HookSigner.new(hook_name, @config, @context) }.
-        reject(&:signature_verified?)
+      signers = (plugin_hook_names + ad_hoc_hook_names).
+        map { |hook_name| Overcommit::HookSigner.new(hook_name, @config, @context) }
+      (gem_plugins + signers).reject(&:signature_verified?)
     end
 
     def check_for_unverified_plugins

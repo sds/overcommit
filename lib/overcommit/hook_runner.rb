@@ -197,7 +197,7 @@ module Overcommit
     end
 
     def load_hooks
-      require "overcommit/hook/#{@context.hook_type_name}/base"
+      require File.join(Overcommit::HOOK_DIRECTORY, @context.hook_type_name, 'base.rb')
 
       @hooks += HookLoader::BuiltInHookLoader.new(@config, @context, @log).load_hooks
 
