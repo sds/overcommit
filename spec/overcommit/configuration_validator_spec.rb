@@ -55,6 +55,15 @@ describe Overcommit::ConfigurationValidator do
       end
     end
 
+    context 'and a variable name contains an equals sign' do
+      let(:env) { { 'INVALID=NAME' => 'value' } }
+
+      it 'rejects the name and explains which variable is invalid' do
+        expect { subject }.to raise_error(Overcommit::Exceptions::ConfigurationError)
+        expect(output.string).to include('variable name `INVALID=NAME` cannot contain `=`')
+      end
+    end
+
     context 'and it is a hash with integer values' do
       let(:env) { { 'OVERCOMMIT_ENV_VAR' => 1, 'OVERCOMMIT_ENV_VAR_2' => 2 } }
 

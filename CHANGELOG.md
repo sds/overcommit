@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Include command file contents in hook signatures when an absolute path is configured.
+
 * Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files (#758).
 
 * Honor Git commit-message cleanup settings when handling comment-prefixed titles (#736).

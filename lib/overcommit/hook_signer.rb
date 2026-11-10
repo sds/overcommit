@@ -45,7 +45,7 @@ module Overcommit
                   'must be tracked by Git in order to be signed'
           end
 
-          File.join(Overcommit::Utils.repo_root, command.first.to_s)
+          File.expand_path(command.first.to_s, Overcommit::Utils.repo_root)
         end
       end
     end
