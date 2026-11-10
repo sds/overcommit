@@ -43,6 +43,7 @@ module Overcommit::HookLoader
         def run
           result = execute(command, args: applicable_files)
           return :pass if result.success?
+
           output = result.stdout.split("\n")
           return [:fail, result.stderr] if output.empty?
 
