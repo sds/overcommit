@@ -3,9 +3,18 @@
 require 'spec_helper'
 
 describe Overcommit::Hook::PreCommit::BundleAudit do
-  let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
+  let(:config) do
+    Overcommit::ConfigurationLoader.default_configuration.merge(
+      Overcommit::Configuration.new('PreCommit' => { 'BundleAudit' => hook_config })
+    )
+  end
+  let(:hook_config) { {} }
   let(:context) { double('context') }
   subject { described_class.new(config, context) }
+
+  it 'defaults to not updating the advisory database' do
+    subject.config['update'].should == false
+  end
 
   context 'when Gemfile.lock is ignored' do
     around do |example|
@@ -19,9 +28,22 @@ describe Overcommit::Hook::PreCommit::BundleAudit do
     end
 
     it { should pass }
+
+    context 'when updating the advisory database is enabled' do
+      let(:hook_config) { { 'update' => true } }
+
+      before do
+        subject.stub(:execute).and_call_original
+        subject.should_not_receive(:execute).with(%w[bundle-audit --update])
+      end
+
+      it { should pass }
+    end
   end
 
   context 'when Gemfile.lock is not ignored' do
+    let(:audit_command) { %w[bundle-audit] }
+
     around do |example|
       repo do
         example.run
@@ -31,7 +53,7 @@ describe Overcommit::Hook::PreCommit::BundleAudit do
     before do
       subject.stub(:execute).with(%w[git ls-files -o -i --exclude-standard -- Gemfile.lock]).
         and_return(double(stdout: ''))
-      subject.stub(:execute).with(%w[bundle-audit]).and_return(result)
+      subject.stub(:execute).with(audit_command).and_return(result)
     end
 
     context 'and it reports some outdated gems' do
@@ -72,6 +94,30 @@ Vulnerabilities found!
     end
 
     it { should warn }
+
+    context 'when updating the advisory database is enabled' do
+      let(:audit_command) { %w[bundle-audit --update] }
+      let(:hook_config) { { 'update' => true } }
+
+      it { should warn(result.stdout) }
+
+      context 'and no vulnerabilities are found' do
+        let(:result) { double(success?: true, stdout: 'No vulnerabilities found') }
+
+        it { should pass }
+      end
+
+      context 'with a custom command and flags' do
+        let(:audit_command) { %w[bundle exec bundle-audit check --ignore CVE-2020-12345 --update] }
+
+        let(:hook_config) do
+          super().merge('command' => %w[bundle exec bundle-audit],
+                        'flags' => %w[check --ignore CVE-2020-12345])
+        end
+
+        it { should warn(result.stdout) }
+      end
+    end
 
     context 'and it reports bundle up to date' do
       let(:result) do
