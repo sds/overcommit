@@ -396,6 +396,20 @@ information on this option and what exactly it controls.
 Currently, Overcommit supports the following hooks out of the box&mdash;simply
 enable them in your `.overcommit.yml`.
 
+Hook names are case-sensitive. For example, use `KtLint` to enable the built-in
+Kotlin hook, which passes only the applicable modified files to `ktlint`:
+
+```yaml
+PreCommit:
+  KtLint:
+    enabled: true
+```
+
+Using `Ktlint` with a `required_executable: ktlint` setting instead defines an
+[ad hoc hook](#adding-existing-git-hooks). Ad hoc hooks receive Git's original
+hook arguments, so this runs `ktlint` without filenames and lets it check its
+default file patterns, including unmodified files.
+
 **Note**: Hooks with a `*` are enabled by default.
 
 **Warning**: This list represents the list of hooks available on the `master`
