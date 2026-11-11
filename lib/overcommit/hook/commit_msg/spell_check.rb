@@ -12,7 +12,11 @@ module Overcommit::Hook::CommitMsg
     MISSPELLING_REGEX = /^[&#]\s(?<word>\w+)(?:.+?:\s(?<suggestions>.*))?/.freeze
 
     def run
-      result = execute(command + [uncommented_commit_msg_file])
+      result = ::Tempfile.create('commit-msg') do |file|
+        file.write(commit_message)
+        file.close
+        execute(command + [file.path])
+      end
       return [:fail, "Error running spellcheck: #{result.stderr.chomp}"] unless result.success?
 
       misspellings = parse_misspellings(result.stdout)
@@ -28,13 +32,6 @@ module Overcommit::Hook::CommitMsg
     end
 
     private
-
-    def uncommented_commit_msg_file
-      ::Tempfile.open('commit-msg') do |file|
-        file.write(commit_message)
-        file.path
-      end
-    end
 
     def parse_misspellings(output)
       output.scan(MISSPELLING_REGEX).map do |word, suggestions|

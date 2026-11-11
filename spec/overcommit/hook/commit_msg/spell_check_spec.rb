@@ -4,11 +4,10 @@ require 'spec_helper'
 
 describe Overcommit::Hook::CommitMsg::SpellCheck do
   let(:config)  { Overcommit::ConfigurationLoader.default_configuration }
-  let(:context) { double('context') }
+  let(:context) { double('context', commit_message: 'Subject') }
   subject { described_class.new(config, context) }
 
   before do
-    subject.stub(:uncommented_commit_msg_file)
     subject.stub(:execute).and_return(result)
   end
 

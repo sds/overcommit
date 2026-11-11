@@ -17,11 +17,29 @@ describe 'Hook configuration edge cases' do
   it 'passes uncommented commit messages to the spelling checker' do
     hook = Overcommit::Hook::CommitMsg::SpellCheck.new(config,
                                                        double('context', commit_message: 'Subject'))
+    message_file = nil
     expect(hook).to receive(:execute) do |command|
-      expect(File).to exist(command.last)
+      message_file = command.last
+      GC.start
+      expect(File).to exist(message_file)
+      expect(File.read(message_file)).to eq('Subject')
       double('result', success?: true, stdout: '')
     end
     expect(hook.run).to eq(:pass)
+    expect(File).not_to exist(message_file)
+  end
+
+  it 'removes the spelling checker message file when execution raises' do
+    hook = Overcommit::Hook::CommitMsg::SpellCheck.new(config,
+                                                       double('context', commit_message: 'Subject'))
+    message_file = nil
+    expect(hook).to receive(:execute) do |command|
+      message_file = command.last
+      expect(File).to exist(message_file)
+      raise 'spell checker failed'
+    end
+    expect { hook.run }.to raise_error('spell checker failed')
+    expect(File).not_to exist(message_file)
   end
 
   it 'checks real submodule statuses with the configured recursive option' do
