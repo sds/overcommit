@@ -1,16 +1,17 @@
-[![Gem Version](https://badge.fury.io/rb/overcommit.svg)](https://badge.fury.io/rb/overcommit)
-[![Build Status](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main)
-[![Coverage Status](https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main)](https://coveralls.io/github/sds/overcommit?branch=main)
-[![Inline docs](http://inch-ci.org/github/sds/overcommit.svg?branch=main)](http://inch-ci.org/github/sds/overcommit)
-
-<p align="center">
+<div align="center">
   <img width="65%" alt="Overcommit Logo" src="https://github.com/user-attachments/assets/b0d31df7-1d86-4e09-9c48-c96955e0713e" />
-  <br />
-  <em>A tool to manage and configure</em>
-<a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a>
-</p>
+  <p>
+    <em>A tool to manage and configure <a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Git hooks</a></em>
+  </p>
+  <p>
+    <a href="https://badge.fury.io/rb/overcommit"><img alt="Gem version" src="https://badge.fury.io/rb/overcommit.svg" /></a>
+    <a href="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main"><img alt="Build status" src="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main"><img alt="Build status" src="https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main" /></a>
+    <a href="http://inch-ci.org/github/sds/overcommit"><img alt="Build status" src="https://inch-ci.org/github/sds/overcommit.svg?branch=main" /></a>
+  </p>
+</div>
 
-In addition to supporting a wide variety of hooks that can be used across
+Overcommit is a framework for defining reusable Git hooks. In addition to supporting a wide variety of hooks that can be used across
 multiple repositories, you can also define hooks specific to a repository which
 are stored in source control. You can also easily
 [add your existing hook scripts](#adding-existing-git-hooks) or
