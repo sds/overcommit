@@ -35,4 +35,11 @@ describe Overcommit::Hook::PreCommit::CaseConflicts do
 
     it { should pass }
   end
+
+  it 'checks only new files on the initial commit' do
+    allow(Overcommit::GitRepo).to receive(:initial_commit?).and_return(true)
+    allow(subject).to receive(:applicable_files).and_return(%w[foo Foo])
+    expect(Overcommit::GitRepo).not_to receive(:list_files)
+    expect(subject.run.map(&:file)).to include('foo', 'Foo')
+  end
 end

@@ -21,8 +21,6 @@ module Overcommit
       parse_arguments
 
       case @options[:action]
-      when :install, :uninstall
-        install_or_uninstall
       when :template_dir
         print_template_directory_path
       when :sign
@@ -31,6 +29,8 @@ module Overcommit
         run_all
       when :diff
         diff
+      else
+        install_or_uninstall
       end
     rescue Overcommit::Exceptions::ConfigurationSignatureChanged => e
       puts e

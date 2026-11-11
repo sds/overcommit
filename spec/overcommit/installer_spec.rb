@@ -250,4 +250,20 @@ describe Overcommit::Installer do
       end
     end
   end
+
+  it 'installs into a repository whose hooks directory is absent' do
+    repo do
+      FileUtils.rm_rf(Overcommit::GitConfig.hooks_path)
+      installer.run(Dir.pwd, action: :install)
+      expect(hook_files_installed?(Overcommit::GitConfig.hooks_path)).to eq(true)
+    end
+  end
+
+  it 'can uninstall when the hooks directory is already absent' do
+    repo do
+      FileUtils.rm_rf(Overcommit::GitConfig.hooks_path)
+      expect { installer.run(Dir.pwd, action: :uninstall) }.not_to raise_error
+      expect(File.directory?(Overcommit::GitConfig.hooks_path)).to eq(false)
+    end
+  end
 end

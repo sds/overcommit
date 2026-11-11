@@ -1,6 +1,8 @@
 # Repository guidance
 
-- Maintain **100% line coverage** across the complete test suite. Add thorough
+- Maintain **100% line and branch coverage**, aggregated across the complete
+  test suite and all CI platforms, Ruby versions, and shards. Individual shards
+  need not reach 100%; the combined coverage report must. Add thorough
   regression tests for new behavior and failure paths; do not exclude production
   code from coverage or lower the threshold to make checks pass.
 - Preserve existing tests unless they specifically test an implementation that

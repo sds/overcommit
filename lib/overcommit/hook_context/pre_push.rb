@@ -79,7 +79,7 @@ module Overcommit::HookContext
 
         result = Overcommit::Subprocess.spawn(%W[git rev-list #{remote_sha1} ^#{local_sha1}])
         if result.success?
-          result.stdout.split("\n")
+          @overwritten_commits = result.stdout.split("\n")
         else
           raise Overcommit::Exceptions::GitRevListError,
                 "Unable to check if commits on the remote ref will be overwritten: #{result.stderr}"

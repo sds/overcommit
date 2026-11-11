@@ -60,4 +60,14 @@ describe Overcommit::Hook::PreCommit::BundleCheck do
       end
     end
   end
+
+  it 'preserves an existing lockfile when bundle check does not change it' do
+    repo do
+      File.write('Gemfile.lock', 'locked dependencies')
+      allow(subject).to receive(:execute).with(%w[git ls-files -o -i --exclude-standard]).
+        and_return(double(stdout: ''))
+      allow(subject).to receive(:execute).with(subject.command).and_return(double(success?: true))
+      expect(subject.run).to eq(:pass)
+    end
+  end
 end

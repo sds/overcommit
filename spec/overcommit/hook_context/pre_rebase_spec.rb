@@ -106,4 +106,11 @@ describe Overcommit::HookContext::PreRebase do
       it { should_not be_empty }
     end
   end
+
+  it 'lists commits from HEAD when rebasing a detached checkout' do
+    allow(context).to receive(:rebased_branch).and_return('')
+    expect(context).to receive(:`).with('git rev-list --topo-order --reverse master..HEAD').
+      and_return("abc123\n")
+    expect(context.rebased_commits).to eq(['abc123'])
+  end
 end

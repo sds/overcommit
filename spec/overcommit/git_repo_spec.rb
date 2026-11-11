@@ -595,4 +595,56 @@ describe Overcommit::GitRepo do
       it { should be_empty }
     end
   end
+
+  describe 'restoring absent operation state' do
+    around do |example|
+      repo do
+        %w[merge_head merge_mode merge_msg cherry_head].each do |name|
+          described_class.instance_variable_set(:"@#{name}", nil)
+        end
+        example.run
+      ensure
+        %w[merge_head merge_mode merge_msg cherry_head].each do |name|
+          described_class.instance_variable_set(:"@#{name}", nil)
+        end
+      end
+    end
+
+    it 'leaves a repository without merge or cherry-pick state unchanged' do
+      described_class.store_merge_state
+      described_class.store_cherry_pick_state
+      described_class.restore_merge_state
+      described_class.restore_cherry_pick_state
+      %w[MERGE_HEAD MERGE_MODE MERGE_MSG CHERRY_PICK_HEAD].each do |name|
+        expect(File.exist?(Overcommit::Utils.git_path(name))).to eq(false)
+      end
+    end
+
+    it 'restores a merge head without requiring a merge mode or message' do
+      File.write(Overcommit::Utils.git_path('MERGE_HEAD'), 'a' * 40)
+      described_class.store_merge_state
+      FileUtils.rm(Overcommit::Utils.git_path('MERGE_HEAD'))
+      described_class.restore_merge_state
+      expect(File.read(Overcommit::Utils.git_path('MERGE_HEAD'))).to eq('a' * 40)
+      expect(File.exist?(Overcommit::Utils.git_path('MERGE_MODE'))).to eq(false)
+    end
+
+    it 'has no staged submodule removals without a gitmodules file' do
+      expect(described_class.staged_submodule_removals).to eq([])
+    end
+  end
+
+  it 'includes existing submodules when using Git older than 1.8.5' do
+    stub_const('Overcommit::GitRepo::GIT_VERSION', Overcommit::Utils::Version.new('1.8.4'))
+    allow(described_class).to receive(:`).and_return(<<~INI)
+      [submodule "example"]
+        path = example
+        url = https://example.com/example.git
+    INI
+    expect(Overcommit::Utils).to receive(:execute).with(%w[git submodule status example]).
+      and_return(double(success?: true))
+    expect(described_class.submodules).to eq([
+      described_class::Submodule.new('example', 'https://example.com/example.git')
+])
+  end
 end

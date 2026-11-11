@@ -89,4 +89,32 @@ describe Overcommit::HookRunner do
       end.to raise_error(Overcommit::Exceptions::HookLoadError, /forget.*gem.*missing/m)
     end
   end
+
+  it 'does not print recovery instructions when the context provides none' do
+    allow(context).to receive(:post_fail_message).and_return(nil)
+    allow(hook).to receive(:run_and_transform).and_return([:fail, nil])
+    expect(printer).not_to receive(:hook_run_failed)
+    expect(runner.run).to eq(false)
+  end
+
+  it 'does not print an end result after the run has been interrupted' do
+    allow(hook).to receive(:run_and_transform) do
+      runner.instance_variable_set(:@interrupted, true)
+      [:pass, nil]
+    end
+    expect(printer).not_to receive(:end_hook)
+    expect(runner.run).to eq(false)
+  end
+
+  it 'does not announce skipped hooks that would not run anyway' do
+    allow(hook).to receive_messages(skip?: true, run?: false)
+    expect(printer).not_to receive(:hook_skipped)
+    expect(runner.run).to eq(true)
+  end
+
+  it 'does not start another hook after interruption' do
+    runner.instance_variable_set(:@interrupted, true)
+    expect(hook).not_to receive(:run_and_transform)
+    expect(runner.send(:should_skip?, hook)).to eq(true)
+  end
 end

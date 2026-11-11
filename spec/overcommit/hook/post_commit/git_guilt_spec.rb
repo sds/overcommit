@@ -49,4 +49,11 @@ describe Overcommit::Hook::PostCommit::GitGuilt do
 
     it { should pass }
   end
+
+  it 'colorizes blame changes when output is a terminal' do
+    allow($stdout).to receive(:tty?).and_return(true)
+    allow(subject).to receive(:initial_commit?).and_return(false)
+    allow(subject).to receive(:execute).and_return(double(success?: true, stdout: 'Tester +++'))
+    expect(subject.run).to eq([:warn, "Tester \e[32m+++\e[0m\e[31m\e[0m"])
+  end
 end

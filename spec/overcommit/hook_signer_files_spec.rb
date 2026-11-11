@@ -49,4 +49,9 @@ describe Overcommit::HookSigner, 'with repository commands' do
 
     include_examples 'a signed repository command'
   end
+
+  it 'recognizes a Windows-relative command path' do
+    allow(Overcommit::OS).to receive(:windows?).and_return(true)
+    expect(signer.signable_file?('.\\hook-script')).to eq(true)
+  end
 end

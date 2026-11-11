@@ -83,4 +83,9 @@ describe Overcommit::Hook::PreCommit::PhpCsFixer do
     end
     it { should fail_hook }
   end
+
+  it 'returns no feedback when no files need processing' do
+    allow(subject).to receive(:applicable_files).and_return([])
+    expect(subject.run).to eq('')
+  end
 end

@@ -237,4 +237,13 @@ describe Overcommit::GitConfig do
       it { should == '--worktree' }
     end
   end
+
+  it 'resolves commit cleanup mode when no logger is configured' do
+    repo do
+      shell(%w[git config commit.cleanup strip])
+      allow(Overcommit::Utils).to receive(:parent_command).and_return('git commit')
+      allow(Overcommit::Utils).to receive(:log).and_return(nil)
+      expect(described_class.commit_cleanup_mode).to eq('strip')
+    end
+  end
 end

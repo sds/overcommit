@@ -42,4 +42,9 @@ describe Overcommit::Hook::PreCommit::Jscs do
       it { should fail_hook }
     end
   end
+
+  it 'passes when jscs succeeds' do
+    allow(subject).to receive(:execute).and_return(double(success?: true))
+    expect(subject.run).to eq(:pass)
+  end
 end

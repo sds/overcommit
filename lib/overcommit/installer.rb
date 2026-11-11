@@ -129,8 +129,6 @@ module Overcommit
     end
 
     def preserve_old_hooks
-      return unless File.directory?(hooks_path)
-
       ensure_directory(old_hooks_path)
       Overcommit::Utils.supported_hook_types.each do |hook_type|
         hook_file = File.join(hooks_path, hook_type)

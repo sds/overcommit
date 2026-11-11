@@ -48,4 +48,10 @@ describe Overcommit::Hook::PrepareCommitMsg::Base do
       expect(File.read(tempfile)).to match(/alpha\n#{initial_content}bravo\n/m)
     end
   end
+
+  it 'requires a block before modifying a commit message' do
+    expect do
+      described_class.new(config, context).modify_commit_message
+    end.to raise_error(RuntimeError, 'This expects a block!')
+  end
 end

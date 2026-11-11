@@ -46,4 +46,12 @@ describe Overcommit::Hook::PreCommit::RubySyntax do
       it { should fail_hook }
     end
   end
+
+  it 'reports Ruby warnings without promoting them to errors' do
+    allow(subject).to receive(:execute).and_return(
+      double(stderr: 'file.rb:3: warning: assigned but unused variable, unused')
+    )
+    message = subject.run.fetch(0)
+    expect([message.type, message.file, message.line]).to eq([:warning, 'file.rb', 3])
+  end
 end

@@ -253,4 +253,10 @@ describe Overcommit::GemPlugin do
                                                 /Unable to activate company-hooks/)
     end
   end
+
+  it 'does not sign Overcommit itself as a plugin dependency' do
+    specification.add_runtime_dependency('overcommit')
+    expect(Gem::Specification).not_to receive(:find_by_name).with('overcommit', anything)
+    expect { plugin.update_signature! }.not_to raise_error
+  end
 end

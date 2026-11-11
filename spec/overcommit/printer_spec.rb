@@ -93,4 +93,10 @@ describe Overcommit::Printer do
       printer.end_hook(hook, :fail, 'Details')
     end
   end
+
+  it 'suppresses the run heading in quiet mode' do
+    config['quiet'] = true
+    expect(logger).not_to receive(:bold)
+    printer.start_run
+  end
 end

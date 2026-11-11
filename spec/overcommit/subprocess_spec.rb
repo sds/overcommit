@@ -197,4 +197,9 @@ describe Overcommit::Subprocess do
       described_class.spawn_detached(args)
     end
   end
+
+  it 'preserves the startup error when no output streams could be assigned' do
+    allow(described_class).to receive(:assign_output_streams).and_raise(IOError, 'No temp space')
+    expect { described_class.spawn([ruby, '-e', '']) }.to raise_error(IOError, 'No temp space')
+  end
 end

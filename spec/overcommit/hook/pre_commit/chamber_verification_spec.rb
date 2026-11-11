@@ -54,4 +54,16 @@ describe Overcommit::Hook::PreCommit::ChamberVerification do
 
     it { should warn }
   end
+
+  context 'with an approver email configured' do
+    before do
+      allow(subject).to receive(:config).and_return(subject.config.dup)
+      subject.config['approver_email'] = 'approver@example.com'
+      allow(subject).to receive(:execute).and_return(
+        double(stdout: 'Signature mismatch', stderr: '')
+      )
+    end
+
+    it { should warn /your approver \(approver@example.com\)/ }
+  end
 end

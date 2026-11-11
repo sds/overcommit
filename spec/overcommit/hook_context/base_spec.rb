@@ -82,4 +82,11 @@ describe Overcommit::HookContext::Base do
 
     it { should be_nil }
   end
+
+  it 'reads input only once across repeated calls' do
+    input = double('input')
+    expect(input).to receive(:read).once.and_return('hook input')
+    context = described_class.new(nil, [], input)
+    2.times { expect(context.input_string).to eq('hook input') }
+  end
 end

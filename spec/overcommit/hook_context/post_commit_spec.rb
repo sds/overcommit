@@ -143,4 +143,10 @@ describe Overcommit::HookContext::PostCommit do
       it { should == true }
     end
   end
+
+  it 'caches whether this is the initial commit' do
+    expect(Overcommit::Utils).to receive(:execute).once.with(%w[git rev-parse HEAD~]).
+      and_return(double(success?: false))
+    2.times { expect(context.initial_commit?).to eq(true) }
+  end
 end

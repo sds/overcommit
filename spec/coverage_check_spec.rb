@@ -59,3 +59,72 @@ describe 'combined coverage check' do
     result.status.should_not == 0
   end
 end
+
+describe 'combined branch coverage check' do
+  let(:script) { File.expand_path('../script/check_coverage.rb', __dir__) }
+
+  def check_branches(*reports)
+    result = nil
+    directory do
+      paths = reports.each_with_index.map do |report, index|
+        path = "coverage-#{index}.info"
+        File.write(path, report)
+        path
+      end
+      result = shell([Gem.ruby, script, '--branches'] + paths)
+    end
+    result
+  end
+
+  it 'combines complementary branch hits across platforms and shards' do
+    result = check_branches(
+      "SF:a.rb\nDA:1,1\nBRDA:1,0,0,1\nBRDA:1,0,1,-\nend_of_record\n",
+      "SF:a.rb\nDA:1,0\nBRDA:1,0,0,0\nBRDA:1,0,1,2\nend_of_record\n",
+    )
+    expect(result.status).to eq(0)
+    expect(result.stdout).to include('Line coverage: 100% (1/1)', 'Branch coverage: 100% (2/2)')
+  end
+
+  ['0', '-'].each do |hits|
+    it "fails for an uncovered branch recorded as #{hits.inspect}" do
+      result = check_branches("SF:a.rb\nDA:1,1\nBRDA:1,0,0,99999\nBRDA:1,0,1,#{hits}\n")
+      expect(result.status).not_to eq(0)
+      expect(result.stderr).to include('a.rb:1 (block 0, branch 1)',
+                                       '100% branch coverage is required')
+    end
+  end
+
+  it 'keeps files, lines, blocks, and branch identities separate' do
+    reports = [
+      "SF:a.rb\nDA:1,1\nBRDA:1,0,0,1\nBRDA:1,0,1,1\nBRDA:1,1,0,1\nBRDA:2,0,0,1\n",
+      "SF:b.rb\nDA:1,1\nBRDA:1,0,0,0\n",
+    ]
+    result = check_branches(*reports)
+    expect(result.status).not_to eq(0)
+    expect(result.stderr).to include('b.rb:1 (block 0, branch 0)')
+  end
+
+  it 'requires branch records when enforcing branch coverage' do
+    result = check_branches("SF:a.rb\nDA:1,1\nend_of_record\n")
+    expect(result.status).not_to eq(0)
+    expect(result.stderr).to include('No branch coverage found')
+  end
+
+  it 'rejects branch records without a source file' do
+    result = check_branches("BRDA:1,0,0,1\n")
+    expect(result.status).not_to eq(0)
+    expect(result.stderr).to include('Branch coverage without a source file')
+  end
+
+  it 'resets the branch source at the end of each record' do
+    result = check_branches("SF:a.rb\nDA:1,1\nend_of_record\nBRDA:1,0,0,1\n")
+    expect(result.status).not_to eq(0)
+    expect(result.stderr).to include('Branch coverage without a source file')
+  end
+
+  it 'continues enforcing line coverage when every branch is covered' do
+    result = check_branches("SF:a.rb\nDA:1,0\nBRDA:1,0,0,1\n")
+    expect(result.status).not_to eq(0)
+    expect(result.stderr).to include('100% line coverage is required')
+  end
+end

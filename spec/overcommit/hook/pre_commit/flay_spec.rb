@@ -69,4 +69,21 @@ Total score (lower is better) = 0
 
     it { should fail_hook }
   end
+
+  context 'when liberal matching is enabled' do
+    let(:result) { double(success?: true, stdout: 'Total score = 0') }
+    let(:config) do
+      default = Overcommit::ConfigurationLoader.default_configuration
+      allow(default).to receive(:for_hook).and_return(
+        default.for_hook('Flay', 'PreCommit').merge('liberal' => true)
+      )
+      default
+    end
+
+    it 'passes the liberal flag to flay' do
+      expect(subject).to receive(:execute).
+        with(%w[flay --mass 16 --fuzzy 1 --liberal], args: applicable_files).and_return(result)
+      expect(subject.run).to eq([])
+    end
+  end
 end
