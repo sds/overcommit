@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'timeout'
 
 describe Overcommit::Configuration do
   let(:hash) { {} }
@@ -46,6 +47,36 @@ describe Overcommit::Configuration do
     end
 
     it { should == File.expand_path('some-directory') }
+  end
+
+  describe '#concurrency' do
+    before { allow(Overcommit::Utils).to receive(:processor_count).and_return(4) }
+
+    {
+      '%<processors>d + 2' => 6,
+      '12 - 3' => 9,
+      '3 * 4' => 12,
+      '12 / 3' => 4,
+      'prefix 12 + 3 suffix 4 * 5' => 15,
+      '7' => 7,
+      8 => 8,
+      'invalid' => 0,
+    }.each do |expression, expected|
+      it "evaluates #{expression.inspect}" do
+        config = described_class.new({ 'concurrency' => expression }, validate: false)
+        expect(config.concurrency).to eq(expected)
+      end
+    end
+
+    it 'handles long digit runs without an arithmetic operator' do
+      config = described_class.new({ 'concurrency' => "#{'0' * 100_000}1" }, validate: false)
+      Timeout.timeout(2) { expect(config.concurrency).to eq(1) }
+    end
+
+    it 'preserves division errors' do
+      config = described_class.new({ 'concurrency' => '4 / 0' }, validate: false)
+      expect { config.concurrency }.to raise_error(ZeroDivisionError)
+    end
   end
 
   describe '#enabled_builtin_hooks' do

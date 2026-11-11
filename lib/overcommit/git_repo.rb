@@ -292,10 +292,11 @@ module Overcommit
     # @param commit_ref [String] git tree ref that resolves to a commit
     # @return [Array<String>] list of branches containing the given commit
     def branches_containing_commit(commit_ref)
-      `git branch --column=dense --contains #{commit_ref}`.
-        sub(/\((HEAD )?detached (from|at) .*?\)/, ''). # ignore detached HEAD
-        split(/\s+/).
-        reject { |s| s.empty? || s == '*' }
+      result = Overcommit::Utils.execute(
+        ['git', 'for-each-ref', '--format=%(refname)', "--contains=#{commit_ref}",
+         'refs/heads/']
+      )
+      result.stdout.split("\n").map { |ref| ref.delete_prefix('refs/heads/') }
     end
 
     # Returns the name of the currently checked out branch.

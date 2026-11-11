@@ -554,6 +554,36 @@ describe Overcommit::GitRepo do
       end
     end
 
+    context 'when HEAD is detached at a commit contained in branches' do
+      let(:commit_ref) { 'master' }
+
+      before do
+        `git checkout --detach > #{File::NULL} 2>&1`
+        `git config column.branch always`
+        `git config color.branch always`
+      end
+
+      it 'returns only branch names regardless of display settings' do
+        expect(subject.sort).to eq(%w[master topic])
+      end
+    end
+
+    context 'when a tag has the same name as a branch' do
+      let(:commit_ref) { 'HEAD~1' }
+
+      before { `git -c tag.gpgSign=false tag topic` }
+
+      it 'returns the branch name without a disambiguating prefix' do
+        expect(subject.sort).to eq(%w[master topic])
+      end
+    end
+
+    context 'when the commit does not exist' do
+      let(:commit_ref) { 'nonexistent' }
+
+      it { should be_empty }
+    end
+
     context 'when no branches contain the commit' do
       let(:commit_ref) { 'HEAD' }
 

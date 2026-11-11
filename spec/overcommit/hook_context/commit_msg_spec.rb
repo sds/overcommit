@@ -40,6 +40,22 @@ describe Overcommit::HookContext::CommitMsg do
   describe '#commit_message' do
     subject { context.commit_message }
 
+    it 'reads a pipe-prefixed filename literally' do
+      skip 'Windows filenames cannot contain pipes' if Overcommit::OS.windows?
+
+      repo do
+        file = '|echo injected'
+        File.write(file, "Literal message\n")
+        context = described_class.new(config, [file], input)
+        expect(context.commit_message).to eq("Literal message\n")
+      end
+    end
+
+    it 'reports a missing file without executing a command' do
+      context = described_class.new(config, ['|echo injected'], input)
+      expect { context.commit_message }.to raise_error(SystemCallError)
+    end
+
     it 'strips comments and trailing diff' do
       subject.should == "Some commit message\n"
     end

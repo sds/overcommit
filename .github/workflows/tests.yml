@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   rspec:
     name: rspec (${{ matrix.ruby-version }}, ${{ matrix.target.os }}, shard ${{ matrix.target.shard }}/${{ matrix.target.shards }})
