@@ -45,7 +45,7 @@ describe Overcommit::Printer do
 
   it 'explains how to recover from an interrupted run' do
     expect(logger).to receive(:warning).with('⚠  Hook run interrupted by user')
-    expect(logger).to receive(:warning).with(/check your stash/)
+    expect(logger).to receive(:warning).with(/Hook changes are kept.*recovery instructions/)
     printer.run_interrupted
   end
 

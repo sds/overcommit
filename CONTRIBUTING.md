@@ -61,6 +61,11 @@ The best way to see a feature added, however, is to submit a pull request.
   The final `CI` check depends on all test shards and lint, and reports their combined coverage.
   Repository rulesets can require this single check instead of individual matrix jobs.
 
+* Maintain **100% line coverage** across the complete suite, including failure
+  paths. CI merges coverage across all test shards and platforms and rejects any
+  uncovered lines. Do not lower coverage thresholds or exclude production code
+  to make a check pass.
+
 * Submit your pull request!
 
 All pull requests will be tested against [Travis CI][3], where the following

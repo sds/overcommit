@@ -282,9 +282,8 @@ describe Overcommit::HookContext::CommitMsg do
         end
       end
 
-      it 'does not stash changes' do
-        expect(context.private_methods).to include :stash_changes
-        expect(context).not_to receive(:stash_changes)
+      it 'does not rewrite files' do
+        expect(context).not_to receive(:apply_unstaged_changes)
         subject
       end
     end
@@ -460,10 +459,7 @@ describe Overcommit::HookContext::CommitMsg do
       end
 
       it 'does not touch the working tree' do
-        expect(context.private_methods).to include :clear_working_tree
-        expect(context.private_methods).to include :restore_working_tree
-        expect(context).not_to receive(:clear_working_tree)
-        expect(context).not_to receive(:restore_working_tree)
+        expect(context).not_to receive(:apply_unstaged_changes)
         subject
       end
     end

@@ -1,5 +1,11 @@
 # Overcommit Changelog
 
+## Unreleased
+
+* Support hooks that modify files and the index, preserving their changes while
+  hiding/restoring unstaged edits without Git stash or hard resets
+* Retain a recovery patch when unstaged edits conflict with hook changes
+
 ## 0.76.0
 
 * Add configurable line parsing for command hooks
