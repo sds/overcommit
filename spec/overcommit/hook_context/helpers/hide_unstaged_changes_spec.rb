@@ -342,6 +342,22 @@ require 'overcommit/hook_context/commit_msg'
       File.mtime('link').should == time
     end
 
+    [false, true].each do |windows|
+      it "quotes recovery paths for #{windows ? 'PowerShell' : 'POSIX shells'}" do
+        allow(Overcommit::OS).to receive(:windows?).and_return(windows)
+        path = "C:/path with 'quotes'/backup.patch"
+        context.instance_variable_set(:@unstaged_patch, path)
+        result = Overcommit::Subprocess::Result.new(1, '', 'conflict')
+        expected = windows ? "'C:/path with ''quotes''/backup.patch'" : Shellwords.escape(path)
+        expect do
+          context.send(:check_patch_result, result, Overcommit::Exceptions::HookCleanupFailed)
+        end.to raise_error(Overcommit::Exceptions::HookCleanupFailed) { |error|
+          error.message.should include expected
+          error.message.should include 'in PowerShell' if windows
+        }
+      end
+    end
+
     it 'caches the initial commit check, including false results' do
       expect(Overcommit::GitRepo).to receive(:initial_commit?).once.and_return(false)
       2.times { context.initial_commit?.should == false }

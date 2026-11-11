@@ -79,13 +79,23 @@ module Overcommit::HookContext
 
         recovery = if @unstaged_patch
                      "\nYour unstaged changes are preserved in #{@unstaged_patch}.\n" \
-                       "Hook changes are preserved. Resolve any conflicts, then run:\n" \
+                       'Hook changes are preserved. Resolve any conflicts, then run' \
+                       "#{Overcommit::OS.windows? ? ' in PowerShell' : ''}:\n" \
                        '  git apply --whitespace=nowarn -- ' \
-                       "#{Shellwords.escape(@unstaged_patch)}\n"
+                       "#{quoted_patch_path}\n"
                    end
         raise error,
               "Unable to restore or hide unstaged changes for #{hook_script_name} hooks:" \
               "\nSTDOUT:#{result.stdout}\nSTDERR:#{result.stderr}#{recovery}"
+      end
+
+      def quoted_patch_path
+        if Overcommit::OS.windows?
+          # Quote for PowerShell, including literal apostrophes in directory names.
+          "'#{@unstaged_patch.gsub("'", "''")}'"
+        else
+          Shellwords.escape(@unstaged_patch)
+        end
       end
 
       def store_modified_times
