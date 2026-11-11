@@ -55,7 +55,7 @@ module Overcommit::HookContext
     end
 
     def raw_commit_message_lines
-      ::IO.readlines(commit_message_file)
+      ::File.readlines(commit_message_file)
     end
   end
 end

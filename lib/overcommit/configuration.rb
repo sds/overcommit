@@ -47,7 +47,7 @@ module Overcommit
           if content.is_a?(String)
             concurrency_expr = content % { processors: cores }
 
-            a, op, b = concurrency_expr.scan(%r{(\d+)\s*([+\-*\/])\s*(\d+)})[0]
+            a, op, b = concurrency_expr.scan(%r{(?<!\d)(\d++)\s*([+\-*\/])\s*(\d+)})[0]
             if a
               a.to_i.send(op, b.to_i)
             else

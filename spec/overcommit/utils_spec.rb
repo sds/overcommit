@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'timeout'
 require 'securerandom'
 
 describe Overcommit::Utils do
@@ -90,6 +91,20 @@ describe Overcommit::Utils do
   describe '.snake_case' do
     it 'converts camel case to underscores' do
       described_class.snake_case('HelloWorld').should == 'hello_world'
+    end
+
+    it 'preserves acronym boundaries and namespaces' do
+      expect(described_class.snake_case('HTTPServer::XMLParser-API')).
+        to eq('http_server/xml_parser_api')
+      expect(described_class.snake_case('ABcDEFg')).to eq('a_bc_de_fg')
+    end
+
+    it 'handles long uppercase names without backtracking' do
+      Timeout.timeout(2) do
+        expect(described_class.snake_case('A' * 100_000)).to eq('a' * 100_000)
+        expect(described_class.snake_case("#{'A' * 100_000}Word")).
+          to eq("#{'a' * 100_000}_word")
+      end
     end
 
     it 'leaves underscored strings as is' do

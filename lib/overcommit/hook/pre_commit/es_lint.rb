@@ -19,7 +19,7 @@ module Overcommit::Hook::PreCommit
   # @see http://eslint.org/
   class EsLint < Base
     def run
-      eslint_regex = /^(?<file>[^\s](?:\w:)?[^:]+):[^\d]+(?<line>\d+).*?(?<type>Error|Warning)/
+      eslint_regex = /^(?<file>[^\s](?:\w:)?[^:]+):[^\d]+(?<line>\d++).*?(?<type>Error|Warning)/
       result = execute(command, args: applicable_files)
       output = result.stdout.chomp
       messages = output.split("\n").grep(eslint_regex)

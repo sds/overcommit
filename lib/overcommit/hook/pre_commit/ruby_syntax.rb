@@ -19,7 +19,7 @@ module Overcommit::Hook::PreCommit
       #   path/to/file.rb:1: syntax error, unexpected '^'
       extract_messages(
         result_lines,
-        /^(?<file>[^:]+):(?<line>\d+):\s*(?<type>[^,]+),\s*(?<message>.+)/,
+        /^(?<file>[^:]+):(?<line>\d+):\s*+(?<type>[^,]+),\s*+(?<message>.+)/,
         MESSAGE_TYPE_CATEGORIZER
       )
     end
