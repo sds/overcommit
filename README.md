@@ -554,20 +554,27 @@ commit message editor is displayed. If a hook fails, the commit will not be
 created. These hooks are ideal for syntax checkers, linters, and other checks
 that you want to run before you allow a commit to even be created.
 
-#### WARNING: pre-commit hooks cannot have side effects
+#### Hooks that modify files
 
-`pre-commit` hooks currently do not support hooks with side effects (such as
-modifying files and adding them to the index with `git add`). This is a
-consequence of Overcommit's pre-commit hook stashing behavior to ensure hooks
-are run against _only the changes you are about to commit_.
+`pre-commit` hooks can modify, create, delete, and stage files. Overcommit
+preserves these changes even if a hook fails. Hooks must explicitly use `git add`
+or `git rm` to include their changes in the commit; Overcommit does not stage
+hook edits automatically. Set `parallelize: false` for hooks that modify files
+or the Git index so they run without other hooks accessing those resources.
 
-Without Overcommit, the proper way to write a `pre-commit` hook would be to
-extract the staged changes into temporary files and lint those files
-instead of whatever contents are in your working tree (as you don't want
-unstaged changes to taint your results). Overcommit takes care
-of this for you, but to do it in a generalized way introduces this
-limitation. See the [thread tracking this
-issue](https://github.com/sds/overcommit/issues/238) for more details.
+Overcommit temporarily hides unstaged changes to tracked files, so hooks see
+only staged contents at their original paths. Untracked files and submodule
+working trees remain available. This also works for the initial commit.
+Unstaged changes are saved as a patch in the current worktree's Git directory,
+then reapplied after the hooks finish. Overcommit does not use the Git stash or
+reset the index, HEAD, or merge/cherry-pick state.
+
+If hook edits conflict with the saved patch, Overcommit aborts the commit and
+keeps both the hook edits and the recovery patch. Follow the error's recovery
+instructions after resolving the conflict. The patch is removed only after
+successful restoration. If the process is forcibly terminated, recovery patches
+remain as `overcommit-unstaged-*.patch` beside the worktree's Git index; inspect
+and apply the patch from the repository root, then delete it when recovered.
 
 * [`*`AuthorEmail](lib/overcommit/hook/pre_commit/author_email.rb)
 * [`*`AuthorName](lib/overcommit/hook/pre_commit/author_name.rb)

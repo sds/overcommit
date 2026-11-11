@@ -2,7 +2,7 @@
 
 require 'fileutils'
 require 'set'
-require_relative 'helpers/stash_unstaged_changes'
+require_relative 'helpers/hide_unstaged_changes'
 require_relative 'helpers/file_modifications'
 
 module Overcommit::HookContext
@@ -12,7 +12,7 @@ module Overcommit::HookContext
   # etc. It is also responsible for saving/restoring the state of the repo so
   # hooks only inspect staged changes.
   class PreCommit < Base
-    include Overcommit::HookContext::Helpers::StashUnstagedChanges
+    include Overcommit::HookContext::Helpers::HideUnstagedChanges
     include Overcommit::HookContext::Helpers::FileModifications
   end
 end

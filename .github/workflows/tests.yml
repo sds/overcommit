@@ -122,6 +122,9 @@ jobs:
           pattern: coverage-*
           path: coverage
 
+      - name: Require 100% combined line coverage
+        run: ruby script/check_coverage.rb coverage/*/lcov.info
+
       # Shard assignments shift when examples are added. Compare the complete
       # suite's coverage rather than unrelated fractions from individual shards.
       - name: Report combined code coverage
