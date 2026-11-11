@@ -1,20 +1,14 @@
 # Overcommit Changelog
 
-## main (unreleased)
+## 0.76.0
 
-* Skip prepending in the `ReplaceBranch` prepare-commit-msg hook when the commit message already starts with the replacement text or with an autosquash prefix, and document a ticket ID config (#875).
-
-* Report the saved stash and recovery command when restoring repository state fails (#762).
-
-* Add an opt-in `update` option to `BundleAudit` to refresh ruby-advisory-db before checking (#812).
-
-* Include command file contents in hook signatures when an absolute path is configured.
-
-* Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files (#758).
-
-* Honor Git commit-message cleanup settings when handling comment-prefixed titles (#736).
-
-* Add configurable line parsing for command hooks (#750).
+* Add configurable line parsing for command hooks
+* Honor Git commit-message cleanup settings when handling comment-prefixed titles
+* Add a configurable `Vale` pre-commit hook to check spelling and style in text and source files
+* Include command file contents in hook signatures when an absolute path is configured
+* Add an opt-in `update` option to `BundleAudit` to refresh ruby-advisory-db before checking
+* Report the saved stash and recovery command when restoring repository state fails
+* Skip prepending in the `ReplaceBranch` prepare-commit-msg hook when the commit message already starts with the replacement text or with an autosquash prefix, and document a ticket ID config
 
 ## 0.75.0
 
