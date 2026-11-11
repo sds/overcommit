@@ -3,6 +3,8 @@
 require 'simplecov'
 
 SimpleCov.configure do
+  enable_coverage :branch
+
   add_filter 'bin/'
   add_filter 'libexec/'
   add_filter 'spec/'

@@ -48,7 +48,7 @@ jobs:
           key: dependency-lock-v1-${{ runner.os }}-ruby${{ matrix.ruby-version }}-${{ steps.dependency-cache-date.outputs.date }}-${{ hashFiles('Gemfile', '*.gemspec', 'lib/overcommit/version.rb') }}
 
       - name: Set up Ruby ${{ matrix.ruby-version }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199  # v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199  # v1
         with:
           ruby-version: 3.3
           bundler-cache: true
@@ -128,7 +128,7 @@ jobs:
       # Shard assignments shift when examples are added. Compare the complete
       # suite's coverage rather than unrelated fractions from individual shards.
       - name: Report combined code coverage
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329  # v2
         with:
           github-token: ${{ secrets.github_token }}
           files: coverage/*/lcov.info

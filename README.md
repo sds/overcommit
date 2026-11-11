@@ -6,7 +6,7 @@
   <p>
     <a href="https://badge.fury.io/rb/overcommit"><img alt="Gem version" src="https://badge.fury.io/rb/overcommit.svg" /></a>
     <a href="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main"><img alt="Build status" src="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
-    <a href="https://github.com/sds/overcommit/actions/workflows/tests.yml/badge.svg?branch=main"><img alt="Build status" src="https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main" /></a>
+    <a href="https://coveralls.io/github/sds/overcommit?branch=main"><img alt="Coverage status" src="https://coveralls.io/repos/github/sds/overcommit/badge.svg?branch=main" /></a>
     <a href="http://inch-ci.org/github/sds/overcommit"><img alt="Build status" src="https://inch-ci.org/github/sds/overcommit.svg?branch=main" /></a>
   </p>
 </div>
