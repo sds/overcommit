@@ -180,4 +180,9 @@ describe Overcommit::Logger do
       let(:color_code) { '1;33' }
     end
   end
+
+  it 'can flush an output stream that does not implement flush' do
+    logger = described_class.new(double('output', tty?: false))
+    expect { logger.flush }.not_to raise_error
+  end
 end

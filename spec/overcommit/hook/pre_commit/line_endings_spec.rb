@@ -75,4 +75,25 @@ describe Overcommit::Hook::PreCommit::LineEndings do
 
     it { should warn }
   end
+
+  context 'when Git cannot list line endings' do
+    let(:contents) { "text\n" }
+
+    it 'raises rather than silently skipping files' do
+      allow(subject).to receive(:execute).and_return(double(success?: false))
+      expect { subject.run }.to raise_error(RuntimeError, 'Unable to access git tree')
+    end
+  end
+
+  context 'when Git reports matching or binary line endings' do
+    let(:contents) { "text\n" }
+
+    ['l/-text', 'l/lf'].each do |index_info|
+      it "ignores #{index_info} entries" do
+        output = "#{index_info} w/lf attr/\t#{staged_file}\0"
+        allow(subject).to receive(:execute).and_return(double(success?: true, stdout: output))
+        expect(subject.run).to eq([])
+      end
+    end
+  end
 end

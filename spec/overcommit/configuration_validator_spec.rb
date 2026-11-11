@@ -124,4 +124,15 @@ describe Overcommit::ConfigurationValidator do
       end
     end
   end
+
+  context 'when processor counts are invalid and no logger is supplied' do
+    let(:options) { {} }
+    let(:config_hash) do
+      { 'concurrency' => 1, 'PreCommit' => { 'Example' => { 'processors' => 2 } } }
+    end
+
+    it 'still raises a configuration error' do
+      expect { subject }.to raise_error(Overcommit::Exceptions::ConfigurationError, /processor/)
+    end
+  end
 end

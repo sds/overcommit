@@ -91,4 +91,27 @@ describe Overcommit::CLI, 'command results and errors' do
     expect { cli.run }.to raise_error(SystemExit)
     expect(output.string).to include('Example: enabled (plugin)', 'Other: disabled')
   end
+
+  it 'runs an explicitly selected hook context' do
+    arguments.concat(['--run', 'pre-push'])
+    config = double('config', apply_environment!: nil)
+    context = double('context')
+    allow(cli).to receive(:config).and_return(config)
+    expect(Overcommit::HookContext).to receive(:create).
+      with('pre-push', config, [], an_instance_of(File)).and_return(context)
+    allow(Overcommit::Printer).to receive(:new).and_return(double('printer'))
+    allow(Overcommit::HookRunner).to receive(:new).and_return(double(run: true))
+    expect { cli.run }.to raise_error(SystemExit) { |error| expect(error.status).to eq(0) }
+  end
+
+  it 'exits successfully after diff hooks pass' do
+    arguments << '--diff'
+    config = double('config', apply_environment!: nil)
+    context = double('context')
+    allow(cli).to receive(:config).and_return(config)
+    allow(Overcommit::HookContext).to receive(:create).and_return(context)
+    allow(Overcommit::Printer).to receive(:new).and_return(double('printer'))
+    allow(Overcommit::HookRunner).to receive(:new).and_return(double(run: true))
+    expect { cli.run }.to raise_error(SystemExit) { |error| expect(error.status).to eq(0) }
+  end
 end

@@ -67,4 +67,19 @@ describe Overcommit::Hook::PreCommit::ExecutePermissions do
 
     it_behaves_like 'a file permission hook'
   end
+
+  it 'raises when the Git tree cannot be read' do
+    allow(context).to receive(:initial_commit?).and_return(false)
+    allow(subject).to receive(:execute).with(%w[git ls-tree HEAD --], args: [staged_file]).
+      and_return(double(success?: false))
+    expect { subject.run }.to raise_error(RuntimeError, 'Unable to access git tree')
+  end
+
+  it 'raises when the Git index cannot be read' do
+    allow(context).to receive(:initial_commit?).and_return(true)
+    allow(subject).to receive(:execute).
+      with(%w[git diff --raw --cached --no-color --], args: [staged_file]).
+      and_return(double(success?: false))
+    expect { subject.run }.to raise_error(RuntimeError, 'Unable to access git index')
+  end
 end

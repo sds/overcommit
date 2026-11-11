@@ -17,4 +17,10 @@ describe Overcommit::Utils::MessagesUtils do
     expect { described_class.extract_messages(['file'], /(?<file>.*)/, ->(_) { :invalid }) }.
       to raise_error(Overcommit::Exceptions::MessageProcessingError, /Invalid message type/)
   end
+
+  it 'categorizes missing types as errors with a string warning pattern' do
+    categorizer = described_class.create_type_categorizer('warning')
+    messages = described_class.extract_messages(['file.rb'], /(?<file>.*)/, categorizer)
+    expect(messages.first.type).to eq(:error)
+  end
 end

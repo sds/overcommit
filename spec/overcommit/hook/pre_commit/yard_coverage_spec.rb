@@ -96,4 +96,17 @@ describe Overcommit::Hook::PreCommit::YardCoverage do
       it { should fail_hook }
     end
   end
+
+  it 'reports undocumented objects even when no minimum percentage is configured' do
+    allow(subject).to receive(:config).and_return(
+      subject.config.merge('min_coverage_percentage' => nil)
+    )
+    output = (['Stats'] * 6 + ['50% documented', 'Undocumented Objects:', 'Example (file.rb:2)']).
+      join("\n")
+    allow(subject).to receive(:execute).and_return(double(stdout: output))
+    messages = subject.run
+    expect(messages.last.file).to eq('file.rb')
+    expect(messages.last.line).to eq('2')
+    expect(messages.last.type).to eq(:error)
+  end
 end

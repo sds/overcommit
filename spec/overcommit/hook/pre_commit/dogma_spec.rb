@@ -48,4 +48,11 @@ describe Overcommit::Hook::PreCommit::Dogma do
       it { should fail_hook }
     end
   end
+
+  it 'returns no messages when unsuccessful output has no file groups' do
+    allow(subject).to receive(:execute).and_return(
+      double(success?: false, stdout: 'No matching files')
+    )
+    expect(subject.run).to eq([])
+  end
 end

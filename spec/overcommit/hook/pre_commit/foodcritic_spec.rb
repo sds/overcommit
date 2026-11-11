@@ -123,4 +123,22 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
       end
     end
   end
+
+  context 'with an absolute cookbook directory' do
+    let(:config) { Overcommit::ConfigurationLoader.default_configuration }
+    let(:applicable_files) { [] }
+
+    it 'uses absolute cookbook paths without joining them to the repository root' do
+      cookbook_directory = File.join(File::SEPARATOR, 'cookbooks')
+      allow(subject).to receive(:config).and_return(
+        subject.config.merge('cookbooks_directory' => cookbook_directory)
+      )
+      files = ["#{cookbook_directory}/example/recipe.rb"]
+      allow(subject).to receive(:applicable_files).and_return(files)
+      expect(subject).to receive(:execute).
+        with(subject.command, args: ['-B', "#{cookbook_directory}/example"]).
+        and_return(double(success?: true))
+      expect(subject.run).to eq(:pass)
+    end
+  end
 end

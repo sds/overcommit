@@ -17,9 +17,7 @@ module Overcommit::Hook::PreCommit
         output = result.stdout.chomp
         exit_status_sum += result.status
 
-        if result.status
-          messages = output.lstrip.split("\n")
-        end
+        messages = output.lstrip.split("\n")
       end
 
       unless messages.empty?

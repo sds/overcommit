@@ -472,4 +472,17 @@ describe Overcommit::HookContext::PrePush do
       end
     end
   end
+
+  it 'caches an empty push as not deleting a remote ref' do
+    expect(input).to receive(:read).once.and_return('')
+    2.times { expect(context.remote_ref_deletion?).to eq(false) }
+  end
+
+  it 'reuses the remote history query when checking a pushed ref repeatedly' do
+    ref = described_class::PushedRef.new('local', 'a' * 40, 'remote', 'b' * 40)
+    expect(Overcommit::Subprocess).to receive(:spawn).once.
+      with(['git', 'rev-list', 'b' * 40, "^#{'a' * 40}"]).
+      and_return(double(success?: true, stdout: "overwritten-commit\n"))
+    2.times { expect(ref.forced?).to eq(true) }
+  end
 end

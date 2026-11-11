@@ -289,4 +289,12 @@ describe Overcommit::MessageProcessor do
       end
     end
   end
+
+  it 'retains file-wide errors when ignoring unmodified lines' do
+    hook = double('hook', modified_lines_in_file: Set.new)
+    message = Overcommit::Hook::Message.new(:error, 'file.rb', nil, 'File-wide error')
+    processor = described_class.new(hook, 'ignore')
+    expect(hook).not_to receive(:modified_lines_in_file)
+    expect(processor.hook_result([message])).to eq([:fail, "Errors:\nFile-wide error\n"])
+  end
 end

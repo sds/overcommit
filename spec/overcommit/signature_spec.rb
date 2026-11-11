@@ -209,4 +209,13 @@ describe Overcommit::Signature do
     expect { store }.to raise_error(Overcommit::Exceptions::GitConfigError, /cannot lock config/)
     File.read(signature_file).should include(signature)
   end
+
+  it 'tolerates another process removing a legacy signature during migration' do
+    allow(Overcommit::Utils).to receive(:execute).and_call_original
+    allow(Overcommit::Utils).to receive(:execute).with(%w[git config --local --get] + [key]).
+      and_return(Overcommit::Subprocess::Result.new(0, signature, ''))
+    allow(Overcommit::Utils).to receive(:execute).with(%w[git config --local --unset-all] + [key]).
+      and_return(Overcommit::Subprocess::Result.new(5, '', ''))
+    expect(store.include?(signature)).to eq(true)
+  end
 end

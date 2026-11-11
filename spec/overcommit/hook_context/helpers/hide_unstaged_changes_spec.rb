@@ -444,3 +444,15 @@ describe Overcommit::HookContext::PreCommit, 'repository variants' do
     end
   end
 end
+
+describe Overcommit::HookContext::PreCommit, 'timestamp collection' do
+  it 'ignores missing files while storing modification times' do
+    repo do
+      context = described_class.new(nil, [], nil)
+      allow(context).to receive(:modified_files).and_return(['missing.rb'])
+      allow(Overcommit::GitRepo).to receive(:modified_files).with(staged: false).and_return([])
+      expect(File).not_to receive(:mtime)
+      expect { context.send(:store_modified_times) }.not_to raise_error
+    end
+  end
+end

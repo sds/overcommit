@@ -663,4 +663,20 @@ describe Overcommit::HookContext::PreCommit do
       it { should == Set.new(1..4) }
     end
   end
+
+  it 'does not infer an amendment when the parent process is unavailable' do
+    allow(Overcommit::Utils).to receive(:parent_command).and_return(nil)
+    expect(context.amendment?).to be_nil
+  end
+
+  it 'reuses the modified file list and modified lines within one run' do
+    allow(context).to receive(:amendment?).and_return(false)
+    expect(Overcommit::GitRepo).to receive(:modified_files).once.with(staged: true).and_return([])
+    expect(Overcommit::GitRepo).to receive(:extract_modified_lines).once.
+      with('file.rb', staged: true).and_return(Set[2])
+    2.times do
+      expect(context.modified_files).to eq([])
+      expect(context.modified_lines_in_file('file.rb')).to eq(Set[2])
+    end
+  end
 end

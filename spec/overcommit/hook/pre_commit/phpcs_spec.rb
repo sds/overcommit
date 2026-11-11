@@ -65,4 +65,16 @@ describe Overcommit::Hook::PreCommit::PhpCs do
       it { should fail_hook }
     end
   end
+
+  it 'fails when phpcs fails without reporting any offenses' do
+    allow(subject).to receive(:execute).and_return(
+      double(status: 1, success?: false, stdout: '')
+    )
+    expect(subject.run).to eq(:fail)
+  end
+
+  it 'fails when phpcs terminates without an exit status' do
+    allow(subject).to receive(:execute).and_return(double(status: nil, success?: false))
+    expect(subject.run).to eq(:fail)
+  end
 end

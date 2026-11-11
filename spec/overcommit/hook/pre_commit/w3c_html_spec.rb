@@ -75,4 +75,15 @@ describe Overcommit::Hook::PreCommit::W3cHtml do
       it { should fail_hook }
     end
   end
+
+  it 'uses validator defaults when optional settings are nil' do
+    allow(subject).to receive(:config).and_return(subject.config.dup)
+    subject.config['charset'] = nil
+    subject.config['doctype'] = nil
+    validator = double('validator', validate_file: double(errors: [], warnings: []))
+    factory = double('validator class', new: validator)
+    stub_const('W3CValidators::MarkupValidator', factory)
+    expect(validator).to receive(:set_debug!)
+    expect(subject.run).to eq([])
+  end
 end

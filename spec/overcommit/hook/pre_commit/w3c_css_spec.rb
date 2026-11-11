@@ -75,4 +75,16 @@ describe Overcommit::Hook::PreCommit::W3cCss do
       it { should fail_hook }
     end
   end
+
+  it 'uses validator defaults when optional settings are nil' do
+    allow(subject).to receive(:config).and_return(subject.config.dup)
+    subject.config['language'] = nil
+    subject.config['profile'] = nil
+    subject.config['warn_level'] = nil
+    validator = double('validator', validate_file: double(errors: [], warnings: []))
+    factory = double('validator class', new: validator)
+    stub_const('W3CValidators::CSSValidator', factory)
+    expect(validator).not_to receive(:set_language!)
+    expect(subject.run).to eq([])
+  end
 end

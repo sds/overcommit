@@ -91,4 +91,19 @@ describe Overcommit::Hook::PreCommit::HerbLint do
       it { should fail_hook }
     end
   end
+
+  it 'reports warning offenses with their location and rule' do
+    offense = {
+      'severity' => 'warning', 'filename' => 'view.html.erb',
+      'location' => { 'start' => { 'line' => 3 } },
+      'message' => 'Use a local variable', 'code' => 'no-instance-variables',
+    }
+    allow(subject).to receive(:execute).and_return(
+      double(success?: false, stdout: JSON.generate('offenses' => [offense]))
+    )
+    message = subject.run.fetch(0)
+    expect([message.type, message.file, message.line, message.content]).to eq(
+      [:warning, 'view.html.erb', 3, 'view.html.erb:3 no-instance-variables Use a local variable']
+    )
+  end
 end

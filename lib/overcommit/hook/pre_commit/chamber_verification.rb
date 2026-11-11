@@ -4,7 +4,7 @@ module Overcommit::Hook::PreCommit
   # Runs `chamber sign --verify`.
   #
   # @see https://github.com/thekompanee/chamber/wiki/Git-Commit-Hooks#chamber-verification-pre-commit-hook
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
   class ChamberVerification < Base
     def run
       approver_name  = config.fetch('approver_name') { 'your approver' }
@@ -22,7 +22,7 @@ module Overcommit::Hook::PreCommit
         compact.
         join("\n\n")
 
-      output = "\n\n#{output}" unless output.empty?
+      output = "\n\n#{output}"
 
       [
         :warn,
@@ -32,5 +32,5 @@ module Overcommit::Hook::PreCommit
       ]
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity
 end

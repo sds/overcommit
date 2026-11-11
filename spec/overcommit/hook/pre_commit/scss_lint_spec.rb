@@ -94,4 +94,18 @@ describe Overcommit::Hook::PreCommit::ScssLint do
       it { should pass }
     end
   end
+
+  it 'reports command failures with both output streams' do
+    allow(subject).to receive(:execute).and_return(
+      double(status: 64, stdout: 'Usage: scss-lint', stderr: 'Invalid option')
+    )
+    expect(subject.run).to eq([:fail, 'Usage: scss-lintInvalid option'])
+  end
+
+  it 'reports a syntax error without a linter name' do
+    output = { 'test.scss' => [{ 'line' => 2, 'severity' => 'error', 'reason' => 'Syntax error' }] }
+    allow(subject).to receive(:execute).and_return(double(status: 2, stdout: JSON.generate(output)))
+    message = subject.run.fetch(0)
+    expect([message.type, message.content]).to eq([:error, 'test.scss:2 Syntax error'])
+  end
 end

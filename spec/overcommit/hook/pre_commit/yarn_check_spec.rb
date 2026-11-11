@@ -86,4 +86,15 @@ STDERR
       it { should fail_hook }
     end
   end
+
+  it 'preserves an existing lockfile when yarn does not change it' do
+    repo do
+      File.write('yarn.lock', 'locked dependencies')
+      allow(subject).to receive(:execute).with(%w[git ls-files -o -i --exclude-standard]).
+        and_return(double(stdout: ''))
+      allow(subject).to receive(:execute).with(subject.command).and_return(double(stderr: ''))
+      expect(subject.run).to eq(:pass)
+      expect(File.read('yarn.lock')).to eq('locked dependencies')
+    end
+  end
 end

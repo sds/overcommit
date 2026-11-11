@@ -65,8 +65,6 @@ module Overcommit::Utils
       end
 
       def extract_line(match, message)
-        return unless match.names.include?('line')
-
         Integer(match[:line])
       rescue ArgumentError, TypeError
         raise Overcommit::Exceptions::MessageProcessingError,

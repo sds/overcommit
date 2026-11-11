@@ -335,4 +335,14 @@ describe Overcommit::Hook::PrepareCommitMsg::ReplaceBranch do
       end
     end
   end
+
+  it 'recognizes an exact prefix that ends in a word character' do
+    allow(hook).to receive(:new_template).and_return('PROJ-12 ')
+    expect(hook.keep_message?('PROJ-12')).to eq(true)
+  end
+
+  it 'uses the default pattern when the configured pattern is absent' do
+    allow(hook).to receive(:config).and_return(hook.config.merge('branch_pattern' => nil))
+    expect(hook.branch_pattern).to eq(described_class::DEFAULT_BRANCH_PATTERN)
+  end
 end
