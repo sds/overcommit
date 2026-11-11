@@ -571,7 +571,7 @@ describe Overcommit::GitRepo do
     context 'when a tag has the same name as a branch' do
       let(:commit_ref) { 'HEAD~1' }
 
-      before { `git tag topic` }
+      before { `git -c tag.gpgSign=false tag topic` }
 
       it 'returns the branch name without a disambiguating prefix' do
         expect(subject.sort).to eq(%w[master topic])
