@@ -2,6 +2,8 @@
 
 ## main (unreleased)
 
+* Skip prepending in the `ReplaceBranch` prepare-commit-msg hook when the commit message already starts with the replacement text or with an autosquash prefix, and document a ticket ID config (#875).
+
 * Report the saved stash and recovery command when restoring repository state fails (#762).
 
 * Add an opt-in `update` option to `BundleAudit` to refresh ruby-advisory-db before checking (#812).

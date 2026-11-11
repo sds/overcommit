@@ -17,6 +17,28 @@ module Overcommit::Hook::PrepareCommitMsg
   #
   # Similarly, a replacement text of `[\1][\2]` would result in `[123][topic]`.
   #
+  # The hook does not prepend the text if the commit message already starts
+  # with it, or with an autosquash prefix (`fixup! `, `squash! `, `amend! `).
+  # This matters when you remove `message` or `commit` from
+  # `skipped_commit_types`: `git commit -m '[#123] Fix'`, `--amend`, and
+  # `--fixup` then keep one prefix.
+  #
+  # === Ticket IDs
+  #
+  # This config prepends `[PROJ-123] ` on a branch such as
+  # `task/PROJ-123/fix-login`, also for `-m` and `--amend` commits:
+  #
+  #    PrepareCommitMsg:
+  #      ReplaceBranch:
+  #        enabled: true
+  #        branch_pattern: '\A.*?([A-Z][A-Z0-9]+-\d+).*\z'
+  #        replacement_text: '[\1] '
+  #        skipped_commit_types: ['template', 'merge', 'squash']
+  #        on_warn: pass # do not warn on branches without a ticket ID
+  #
+  # It keeps `template` skipped, because a commit template can start with a
+  # `#` comment line, and the prefix would turn that line into the subject.
+  #
   # == When to run this hook
   #
   # You can configure this to run only for specific types of commits by setting
@@ -31,6 +53,10 @@ module Overcommit::Hook::PrepareCommitMsg
   class ReplaceBranch < Base
     DEFAULT_BRANCH_PATTERN = /\A(\d+)-(\w+).*\z/.freeze
 
+    # `git rebase --autosquash` finds these commits only when the prefix starts
+    # the subject.
+    AUTOSQUASH_PREFIX = /\A(?:fixup|squash|amend)! /.freeze
+
     def run
       return :pass if skip?
 
@@ -40,10 +66,14 @@ module Overcommit::Hook::PrepareCommitMsg
 
       return :warn unless branch_pattern.match?(Overcommit::GitRepo.current_branch)
 
-      Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
-
       modify_commit_message do |old_contents|
-        "#{new_template}#{old_contents}"
+        if keep_message?(old_contents)
+          Overcommit::Utils.log.debug("Keeping #{commit_message_filename} unchanged")
+          old_contents
+        else
+          Overcommit::Utils.log.debug("Writing #{commit_message_filename} with #{new_template}")
+          "#{new_template}#{old_contents}"
+        end
       end
 
       :pass
@@ -55,6 +85,25 @@ module Overcommit::Hook::PrepareCommitMsg
           curr_branch = Overcommit::GitRepo.current_branch
           curr_branch.gsub(branch_pattern, replacement_text)
         end
+    end
+
+    # Compare bytes: String methods such as `lstrip` raise on a message that is
+    # not valid in the default encoding, for example an amended Latin-1 commit.
+    def keep_message?(contents)
+      message = contents.b.lstrip
+      message.match?(AUTOSQUASH_PREFIX) || starts_with_new_template?(message)
+    end
+
+    # Strip the template, because users type the prefix with or without the
+    # trailing space of `replacement_text`. Without that space, a template that
+    # ends in a word character, such as `PROJ-12`, must not match `PROJ-123`.
+    # A blank template never matches, so a whitespace-only `replacement_text`
+    # is still prepended as before.
+    def starts_with_new_template?(message)
+      template = new_template.b.strip
+      return false if template.empty? || !message.start_with?(template)
+
+      !(template.match?(/\w\z/) && message[template.size]&.match?(/\w/))
     end
 
     def branch_pattern
