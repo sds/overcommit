@@ -129,7 +129,7 @@ describe Overcommit::Hook::PreCommit::Foodcritic do
     let(:applicable_files) { [] }
 
     it 'uses absolute cookbook paths without joining them to the repository root' do
-      cookbook_directory = File.expand_path('cookbooks')
+      cookbook_directory = File.join(File::SEPARATOR, 'cookbooks')
       allow(subject).to receive(:config).and_return(
         subject.config.merge('cookbooks_directory' => cookbook_directory)
       )
